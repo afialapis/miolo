@@ -19,7 +19,6 @@
   },
   "author": "Afialapis <info@afialapis.com>",
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "isomorphic-fetch": "^3.0.0"
   },
