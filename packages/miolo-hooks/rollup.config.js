@@ -73,5 +73,26 @@ module.exports = [
     file: minifyExtension(packageJSON.module),
     format: 'es',
     exports: 'named'
-  }, true, true)
+  }, true, true),
+  //
+  // UMD
+  //  
+  baseCfg({
+    file: packageJSON.browser,
+    format: 'umd',
+    name: 'miolo',
+    globals: {
+      'react': 'React',
+      'miolo-tools': 'mioloTools',
+    }
+  }, false),
+  baseCfg({
+    file: minifyExtension(packageJSON.browser),
+    format: 'umd',
+    name: 'miolo',
+    globals: {
+      'react': 'React',
+      'miolo-tools': 'mioloTools',
+    }
+  }, true) 
 ]

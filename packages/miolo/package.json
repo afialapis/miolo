@@ -16,7 +16,6 @@
   },
   "author": "Afialapis <info@afialapis.com>",
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "@babel/core": "^7.16.7",
     "@babel/eslint-parser": "^7.16.5",

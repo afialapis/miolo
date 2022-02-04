@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "cjs": "dist/miolo-hooks.cjs.js",
   "module": "dist/miolo-hooks.es.js",  
+  "browser": "dist/miolo-hooks.umd.js",  
   "scripts": {
     "lint": "eslint src",
 
@@ -21,12 +22,8 @@
   },
   "author": "Afialapis <info@afialapis.com>",
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "react": "^17.0.2",
-    "miolo-tools": "workspace:../miolo-tools"
-  },
-  "peerDependencies": {
     "miolo-tools": "workspace:../miolo-tools"
   },
   "devDependencies": {

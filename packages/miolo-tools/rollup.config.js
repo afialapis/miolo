@@ -73,5 +73,24 @@ module.exports = [
     file: minifyExtension(packageJSON.module),
     format: 'es',
     exports: 'named'
-  }, true, true)
+  }, true, true),
+  //
+  // UMD
+  //  
+  baseCfg({
+    file: packageJSON.browser,
+    format: 'umd',
+    name: 'mioloTools',
+    globals: {
+      'isomorphic-fetch': 'fetch'
+    }
+  }, false),
+  baseCfg({
+    file: minifyExtension(packageJSON.browser),
+    format: 'umd',
+    name: 'mioloTools',
+    globals: {
+      'isomorphic-fetch': 'fetch'
+    }
+  }, true)    
 ]

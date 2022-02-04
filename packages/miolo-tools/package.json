@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "cjs": "dist/miolo-tools.cjs.js",
   "module": "dist/miolo-tools.es.js",  
+  "browser": "dist/miolo-tools.umd.js",  
   "scripts": {
     "lint": "eslint src",
     "lib-clean": "rm -rf lib && mkdir lib",
