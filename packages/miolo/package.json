@@ -1,0 +1,53 @@
+{
+  "name": "miolo",
+  "version": "0.0.1",
+  "description": "miolo",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "eslint src",
+
+    "lib-clean": "rm -rf lib && mkdir lib",
+    "lib-cp-server-statics": "cp -R ./src/server/static ./lib/server/static && cp ./src/server/routes/fallback_index.html ./lib/server/routes",
+    "lib-build": "babel src -d lib && npm run lib-cp-server-statics",
+    "lib": "npm run lib-clean && npm run lib-build",
+
+    "clean": "npm run lib-clean",
+    "prepare": "npm run lint && npm run lib"    
+  },
+  "author": "Afialapis <info@afialapis.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@babel/core": "^7.16.7",
+    "@babel/eslint-parser": "^7.16.5",
+    "@babel/preset-env": "7.16.8",
+    "@babel/register": "7.16.9",
+    "@koa/router": "^10.1.1",
+    "assign-deep": "^1.0.1",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "basic-auth": "^2.0.1",
+    "cron": "^1.8.2",
+    "calustra-conn": "0.0.12",
+    "calustra-router": "0.0.12",
+    "diskspace": "^2.0.0",
+    "eslint": "^8.7.0",
+    "farrapa-colors": "^1.0.0",
+    "koa": "^2.13.4",
+    "koa-better-body": "^3.3.9",
+    "koa-bodyparser": "^4.3.0",
+    "koa-compress": "^5.1.0",
+    "koa-convert": "^2.0.0",
+    "koa-favicon": "^2.1.0",
+    "koa-mount": "^4.0.0",
+    "koa-passport": "^4.1.4",
+    "koa-redis": "^4.0.1",
+    "koa-session": "^6.2.0",    
+    "koa-socket-2": "2.0.0",
+    "koa-static": "^5.0.0",
+    "nodemailer": "^6.7.2",
+    "redis": "^4.0.2",
+    "passport-local": "^1.0.0",
+    "socket.io": "^4.4.1",
+    "winston": "^3.4.0"
+  }
+}

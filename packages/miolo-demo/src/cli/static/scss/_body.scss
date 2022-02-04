@@ -1,0 +1,14 @@
+div.page-body {
+  // Positioning
+  position: relative;
+  padding: calc(var(--header-grid-height)) 2em 0 2em;
+  width: 100%;
+  overflow-y: hidden;
+    
+  @media screen and (max-width: 600px) {
+    margin-top: calc(var(--header-grid-height-resp) + 2em);
+    padding: 0 1em;
+  }
+}
+
+
