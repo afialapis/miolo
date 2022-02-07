@@ -7,9 +7,11 @@ let REQUEST_COUNTER= 1
  * Middleware for feed and log the request
  */
 
-function init_request_middleware(app, logger) {
+function init_request_middleware(app) {
   
   async function request_middleware(ctx, next) {
+
+    const logger = ctx.miolo.logger
 
     REQUEST_COUNTER+= 1
     ctx.requestId= REQUEST_COUNTER    

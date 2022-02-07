@@ -1,9 +1,11 @@
 import { BLUE, RED } from 'farrapa-colors'
 import Router    from '@koa/router'
 
-function init_route_catch_js_error(app, route, logger) {
+function init_route_catch_js_error(app, route) {
+  
   async function catch_js_error(ctx) {
     const { error, path, agent } = ctx.request.body
+    const logger = ctx.miolo.logger
 
     const msg= 
       `${RED('[JS Error]')} on ${BLUE(path)}: ${error.msg}` +

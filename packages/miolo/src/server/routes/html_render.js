@@ -7,10 +7,12 @@ import Router    from '@koa/router'
 const indexHTMLPath= resolve(__dirname, 'fallback_index.html')
 const indexHTML = fs.readFileSync(indexHTMLPath, 'utf8')
 
-function init_route_html_render(app, html, logger) {
+function init_route_html_render(app, html) {
 
   // Server-side render
   async function html_render(ctx) {
+    const logger= ctx.miolo.logger
+
     const reqid= ctx.requestId
     const ip= ctx.headers["x-real-ip"] || '127.0.0.1'
     const method= ctx.request.method

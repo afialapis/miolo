@@ -5,9 +5,11 @@ import { init_logger } from 'src/logger'
 import { init_cron } from './engines/cron'
 // import {init_socket} from './engines/socket'
 
+import { init_context_middleware } from './middleware/context'
+import { init_body_middleware } from './middleware/body'
 import { init_catcher_middleware } from './middleware/catcher'
 import { init_static_middleware } from './middleware/static'
-import { init_body_middleware } from './middleware/body'
+
 import { init_db_connection } from 'src/db/conn'
 
 import { init_request_middleware } from './middleware/request'
@@ -23,8 +25,15 @@ async function miolo(sconfig, render) {
   const emailer = init_emailer(config.mail.options, config.mail.defaults)
   const logger = init_logger(config.log, emailer)
   
+  let conn
+  if (config.database) {
+    conn= init_db_connection(config.database)
+  }
+
   const app = new Koa()
 
+  // Assign miolo stuff to ctx
+  init_context_middleware(app, config, logger, emailer, conn)
   // Compress and body parser
   init_body_middleware(app)
 
@@ -35,16 +44,16 @@ async function miolo(sconfig, render) {
   init_static_middleware(app, config.http?.static)
 
   // Feed and log request
-  init_request_middleware(app, logger)
+  init_request_middleware(app)
 
   // Create context/session
-  init_session_middleware(app, config?.session, logger)
+  init_session_middleware(app, config?.session)
 
   // attach the default robots.txt
   init_route_robots(app)
 
   // Middleware for caching JS errors
-  init_route_catch_js_error(app, '/sys/jserror', logger)
+  init_route_catch_js_error(app, '/sys/jserror')
 
   // auth middleware
   if (config?.auth?.basic) {
@@ -58,11 +67,6 @@ async function miolo(sconfig, render) {
   }
 
   // Routes to /crud
-  let conn
-  if (config.database) {
-    conn= init_db_connection(config.database)
-  }
-
   if (config?.routes?.crud) {
     const {init_crud_router} = require('./routes/crud')
     await init_crud_router(app, conn, config.routes.crud)
@@ -80,7 +84,7 @@ async function miolo(sconfig, render) {
 
   // Middleware for html render
   if (render==undefined || render.html!=undefined) {
-    init_route_html_render(app, render?.html, logger)
+    init_route_html_render(app, render?.html)
   } else if (render.middleware != undefined) {
     app.use(render.middleware)
   }
