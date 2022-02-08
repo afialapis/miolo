@@ -2,7 +2,7 @@ import { LIGHT_CYAN, LIGHT_BLUE, LIGHT_GREEN, YELLOW, LIGHT_RED, RED } from 'far
 /* https://github.com/winstonjs/winston/issues/925 */
 /* https://github.com/winstonjs/winston/issues/287 */
 const { createLogger, format, transports } = require('winston')
-const { combine, timestamp, _label, printf } = format
+const { combine, timestamp, _label, printf, errors } = format
 
 
 const init_logger = (config, emailer) => {
@@ -20,7 +20,10 @@ const init_logger = (config, emailer) => {
     const tm = new Date(info.timestamp)
     const ts= tm.toLocaleString(config?.format?.locale || 'en')
     //const ts= tm.toString().substr(4, 20)
-    return `[miolo] ${lc(ts)} ${lc(info.level)} ${info.message}`
+    const log= `[miolo] ${lc(ts)} ${lc(info.level)} ${info.message}`
+    return info.stack
+      ? `${log}\n${info.stack}`
+      : log;    
   })
 
 
@@ -78,6 +81,7 @@ const init_logger = (config, emailer) => {
   const logger = createLogger({
     level: config?.level || 'silly',
     format: combine(
+      format.errors({ stack: true }),
       timestamp(),
       myFormat
     ),
