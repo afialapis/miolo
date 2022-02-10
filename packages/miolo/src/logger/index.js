@@ -1,4 +1,4 @@
-import { LIGHT_CYAN, LIGHT_BLUE, LIGHT_GREEN, YELLOW, LIGHT_RED, RED } from 'farrapa-colors'
+import { red, blue, cyan, magenta, yellow, gray } from 'farrapa-colors'
 /* https://github.com/winstonjs/winston/issues/925 */
 /* https://github.com/winstonjs/winston/issues/287 */
 const { createLogger, format, transports } = require('winston')
@@ -7,12 +7,12 @@ const { combine, timestamp, _label, printf, errors } = format
 
 const init_logger = (config, emailer) => {
   const LEVEL_COLORS= {
-    silly  : LIGHT_CYAN,
-    debug  : LIGHT_BLUE,
-    verbose: LIGHT_GREEN,
-    info   : YELLOW,
-    warn   : LIGHT_RED,
-    error  : RED
+    silly  : gray,
+    debug  : magenta,
+    verbose: cyan,
+    info   : blue,
+    warn   : yellow,
+    error  : red
   }
 
   const myFormat = printf(info => {
@@ -81,7 +81,7 @@ const init_logger = (config, emailer) => {
   const logger = createLogger({
     level: config?.level || 'silly',
     format: combine(
-      format.errors({ stack: true }),
+      errors({ stack: true }),
       timestamp(),
       myFormat
     ),

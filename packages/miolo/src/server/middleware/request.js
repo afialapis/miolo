@@ -1,5 +1,5 @@
 import { performance } from 'perf_hooks'
-import { CYAN, GREEN, YELLOW, RED } from 'farrapa-colors'
+import { cyan, green, yellow, red } from 'farrapa-colors'
 
 let REQUEST_COUNTER= 1
 
@@ -24,7 +24,7 @@ function init_request_middleware(app) {
 
     ctx.request.ip = ip
     
-    logger.info(`req begin ${ctx.requestId} - ip ${ip} - ${CYAN(ctx.request.method)} ${CYAN(ctx.request.url)} ${ctx.request.body!=undefined ? JSON.stringify(ctx.request.body) : ''}`)
+    logger.info(`req begin ${ctx.requestId} - ip ${ip} - ${cyan(ctx.request.method)} ${cyan(ctx.request.url)} ${ctx.request.body!=undefined ? JSON.stringify(ctx.request.body) : ''}`)
 
     await next()
     
@@ -34,10 +34,10 @@ function init_request_middleware(app) {
     const elapsed = parseFloat( (performance.now() - started) / 1000.0 ).toFixed(2)
 
     const tcolor= elapsed < 1.0
-                  ? GREEN
+                  ? green
                   : elapsed < 2.0
-                    ? YELLOW
-                    : RED
+                    ? yellow
+                    : red
 
     logger.info(`req end ${ctx.requestId} ${user ? ` - uid ${user.id}` : ''} => ${tcolor(`DONE in ${elapsed} seconds`)}`)
   }

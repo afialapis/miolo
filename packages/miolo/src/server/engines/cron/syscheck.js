@@ -1,6 +1,6 @@
 const os = require('os')
 const diskspace = require('diskspace')
-import { CYAN, GREEN, YELLOW } from 'farrapa-colors'
+import { cyan, green, yellow } from 'farrapa-colors'
 
 function init_sys_check_and_log(logger) {
   function toMB(bytes) {
@@ -22,9 +22,9 @@ function init_sys_check_and_log(logger) {
     const perc= Math.round( (used*100)/total, 2)
 
     if (perc>80) {
-      logger.error(`[SERVER][${CYAN('SysCheck')}] RAM ${YELLOW(used)} MB used of ${GREEN(total)} MB (${YELLOW(perc)} %)`)
+      logger.error(`[SERVER][${cyan('SysCheck')}] RAM ${yellow(used)} MB used of ${green(total)} MB (${yellow(perc)} %)`)
     } else {
-      logger.info(`[SERVER][${CYAN('SysCheck')}] RAM ${YELLOW(used)} MB used of ${GREEN(total)} MB (${YELLOW(perc)} %)`)
+      logger.info(`[SERVER][${cyan('SysCheck')}] RAM ${yellow(used)} MB used of ${green(total)} MB (${yellow(perc)} %)`)
     }
     
 
@@ -35,9 +35,9 @@ function init_sys_check_and_log(logger) {
       const free = Math.round(toGB(result.free), 2)
 
       if (free<1) {
-        logger.error(`[SERVER][${CYAN('SysCheck')}] DISK ${YELLOW(used)} GB used of ${GREEN(total)} MB (${YELLOW(free)} GB free)`)
+        logger.error(`[SERVER][${cyan('SysCheck')}] DISK ${yellow(used)} GB used of ${green(total)} MB (${yellow(free)} GB free)`)
       } else {
-        logger.info(`[SERVER][${CYAN('SysCheck')}] DISK ${YELLOW(used)} GB used of ${GREEN(total)} MB (${YELLOW(free)} GB free)`)
+        logger.info(`[SERVER][${cyan('SysCheck')}] DISK ${yellow(used)} GB used of ${green(total)} MB (${yellow(free)} GB free)`)
       }
     });  
   }

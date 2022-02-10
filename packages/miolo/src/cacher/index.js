@@ -1,22 +1,22 @@
 import redis from 'redis'
 import { promisify } from 'util'
-import { RED, PURPLE } from 'farrapa-colors'
+import { red, magenta } from 'farrapa-colors'
 
 function init_cacher(config) {
 
   const client = redis.createClient(config.redis.port, config.redis.host)
                 .on('connect', function () {
-                  console.info(`${PURPLE('REDIS')} Connection established!`)
+                  console.info(`${magenta('REDIS')} Connection established!`)
                 })
                 .on('error', function (err) {
                   let msg
                   try {
                     if (err instanceof redis.ReplyError)
-                      msg = `${PURPLE('REDIS')} ${RED('Error ' + err.code)} Command: ${err.command} ${err.toString()}`
+                      msg = `${magenta('REDIS')} ${red('Error ' + err.code)} Command: ${err.command} ${err.toString()}`
                     else
-                      msg = `${PURPLE('REDIS')} ${RED('Error ' + err.code)} ${err.toString()}`
+                      msg = `${magenta('REDIS')} ${red('Error ' + err.code)} ${err.toString()}`
                   } catch(e) {
-                    msg = `${PURPLE('REDIS')} ${RED('Error ')} ${e}`
+                    msg = `${magenta('REDIS')} ${red('Error ')} ${e}`
                   }
                   console.error(msg)
                 })

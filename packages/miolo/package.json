@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "miolo",
   "main": "lib/index.js",
   "scripts": {
@@ -26,11 +26,11 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "basic-auth": "^2.0.1",
     "cron": "^1.8.2",
-    "calustra-conn": "0.0.12",
-    "calustra-router": "0.0.12",
+    "calustra": "0.0.16",
+    "calustra-router": "0.0.16",
     "diskspace": "^2.0.0",
     "eslint": "^8.7.0",
-    "farrapa-colors": "^1.0.0",
+    "farrapa-colors": "^1.0.2",
     "koa": "^2.13.4",
     "koa-better-body": "^3.3.9",
     "koa-bodyparser": "^4.3.0",

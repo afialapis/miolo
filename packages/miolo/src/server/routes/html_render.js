@@ -1,7 +1,7 @@
 
 import fs from 'fs'
 import { resolve } from 'path'
-import { CYAN } from 'farrapa-colors'
+import { cyan } from 'farrapa-colors'
 import Router    from '@koa/router'
 
 const indexHTMLPath= resolve(__dirname, 'fallback_index.html')
@@ -20,7 +20,7 @@ function init_route_html_render(app, html) {
     const what = html!=undefined 
                  ? 'provided html'
                  : 'fallback page'
-    logger.info(`${reqid} - ${ip} : ${CYAN(method)} ${CYAN(url)} => Rendering ${what}`)
+    logger.info(`${reqid} - ${ip} : ${cyan(method)} ${cyan(url)} => Rendering ${what}`)
 
     ctx.body = html || indexHTML
   }
