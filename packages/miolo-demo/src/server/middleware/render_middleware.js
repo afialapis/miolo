@@ -4,8 +4,8 @@ import { resolve } from 'path'
 import main from '../../config/main'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server'
-import { ssr_data_for_location } from '../ssr/data'
-import { ssr_render_for_location } from '../ssr/render'
+import { ssr_data_for_location } from '../ssr/loader'
+import { ssr_render_for_location } from '../ssr/renderer'
 
 const indexHTMLPath=  process.env.NODE_ENV === 'production'
   ? resolve(__dirname, '../../../build/index.html')  // the one created by HtmlWebpackPlugin
@@ -24,13 +24,13 @@ async function render_middleware(ctx) {
 
   const ssr_data = await ssr_data_for_location(ctx.url, ctx.state.user, ctx.isAuthenticated())
 
-  const state= {
+  const context= {
     user : ctx.state.user,
     authenticated: ctx.isAuthenticated(),
     ssr_data: ssr_data
   }
 
-  const ssr_comp = ssr_render_for_location(ctx.url, state)
+  const ssr_comp = ssr_render_for_location(ctx.url, context)
 
   const ssr_html= renderToString(
     <StaticRouter location={ctx.url}>
@@ -38,13 +38,13 @@ async function render_middleware(ctx) {
     </StaticRouter> 
   )
 
-  const win_state = {
-    ...state,
+  const win_context = {
+    ...context,
     ssr_data: ssr_data
   }
 
   const html = indexHTML
-    .replace('{state}', JSON.stringify(win_state, null, 2))  
+    .replace('{context}', JSON.stringify(win_context, null, 2))  
     .replace(/{bundleURL}/g, bundleURL)
     .replace('{children}', ssr_html)
     .replace('{styles}', cssURL)

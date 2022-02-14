@@ -1,29 +1,28 @@
 {
   "name": "miolo-hooks",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "react hooks for miolo",
   "main": "lib/index.js",
   "cjs": "dist/miolo-hooks.cjs.js",
-  "module": "dist/miolo-hooks.es.js",  
-  "browser": "dist/miolo-hooks.umd.js",  
+  "module": "dist/miolo-hooks.es.js",
+  "browser": "dist/miolo-hooks.umd.js",
   "scripts": {
     "lint": "eslint src",
-
     "lib-clean": "rm -rf lib && mkdir lib",
     "lib-build": "babel src -d lib",
     "lib": "npm run lib-clean && npm run lib-build",
-
     "dist-clean": "rm -rf dist && mkdir dist",
-    "dist-build": "rollup -c",    
+    "dist-build": "rollup -c",
     "dist": "npm run dist-clean && npm run dist-build",
-    
     "clean": "npm run lib-clean && npm run dist-clean",
-    "prepare": "npm run lint && npm run lib && npm run dist"    
+    "prepare": "npm run lint && npm run lib && npm run dist"
   },
   "author": "Afialapis <info@afialapis.com>",
   "license": "MIT",
   "dependencies": {
     "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.1",
     "miolo-tools": "workspace:../miolo-tools"
   },
   "devDependencies": {
@@ -42,7 +41,6 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "rollup": "^2.58.0",
     "rollup-plugin-node-externals": "^2.2.0",
-    "rollup-plugin-node-polyfills": "^0.2.1",
-    "rollup-plugin-terser": "^7.0.2" 
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

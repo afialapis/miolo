@@ -1,12 +1,14 @@
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
 import Index from 'cli/ui/Index'
+import {AppBrowser} from 'miolo-hooks'
+
+
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Index state={window.__STATE}/>
-    </BrowserRouter>
+    <AppBrowser>
+      <Index/>
+    </AppBrowser>
   )
 }
 

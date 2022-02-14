@@ -11,7 +11,7 @@ const ToolbarLink = ({path, name}) => {
   )
 }
 
-const Header = ({state}) => {
+const Header = ({context}) => {
   return (
     <>
       <div className="grid">
@@ -22,7 +22,7 @@ const Header = ({state}) => {
         </div>
         <div className="toolbar">
           <ToolbarLink name='Todos' path='/todos'/>
-          {state?.authenticated
+          {context?.authenticated
            ? <ToolbarLink name='Logout' path='/logout'/>
            : <ToolbarLink name='Login' path='/login'/>
           }

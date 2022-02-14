@@ -18,7 +18,7 @@ import { init_route_robots } from './routes/robots'
 import { init_route_catch_js_error} from './routes/catch_js_error'
 import { init_route_html_render} from './routes/html_render'
 
-async function miolo(sconfig, render) {
+async function miolo(sconfig, render, callback) {
   
   // Init some pieces
   const config = init_config(sconfig)
@@ -92,7 +92,13 @@ async function miolo(sconfig, render) {
   app.listen(config.http.port, function () {
     logger.info('miolo is listening on port ' + config.http.port)
     init_cron(logger)
+
+    if (callback!=undefined) {
+      callback()
+    }
   })
+
+  return app
     
 }
 

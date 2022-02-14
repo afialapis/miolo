@@ -22,7 +22,7 @@ async function render_middleware(ctx) {
     ? `<link href="//localhost:${main.dev_port}/build/bundle.css" rel="stylesheet" media="all"></link>`
     : ''
 
-  const state= {
+  const context= {
     user : ctx.state.user,
     authenticated: ctx.isAuthenticated()
   }
@@ -30,7 +30,7 @@ async function render_middleware(ctx) {
 
 
   const html = indexHTML
-    .replace('{state}', JSON.stringify(state, null, 2))  
+    .replace('{context}', JSON.stringify(context, null, 2))  
     .replace(/{bundleURL}/g, bundleURL)
     .replace('{children}', loading)
     .replace('{styles}', cssURL)

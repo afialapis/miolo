@@ -4,5 +4,6 @@ import config from './config/server'
 // const html= render_html()
 // miolo(config, {html})
 
-import {render_middleware} from './middleware/render_middleware'
-miolo(config, {middleware: render_middleware})
+//import {render_middleware} from './middleware/render_middleware'
+import init_render_middleware from './middleware/init_render_middleware'
+miolo(config, {middleware: init_render_middleware()})

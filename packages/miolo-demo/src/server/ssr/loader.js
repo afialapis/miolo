@@ -1,6 +1,6 @@
 import { todos_read } from "../db/io/todos"
 
-const ssr_data_for_location = async (location, user, authenticated) => {
+const loader = async (ctx) => {
   const todoList= await todos_read()
   
   const data = {todoList}
@@ -9,6 +9,6 @@ const ssr_data_for_location = async (location, user, authenticated) => {
 }
 
 
-export {ssr_data_for_location}
+export {loader}
 
 

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {withContext, useFetcher} from 'miolo-hooks'
 import LoginForm from './LoginForm'
 
-const Login = ({setState}) => {
+const Login = ({setContext}) => {
   const fetcher = useFetcher()
   const navigate = useNavigate()
   const [message, setMessage]= useState(undefined)
@@ -12,14 +12,14 @@ const Login = ({setState}) => {
     const {data} = await fetcher.post('/login', {username, password})
 
     if (data.authenticated) {
-      setState(data)
-      navigate("/")
+      setContext(data)
       setMessage(undefined)
+      navigate("/")
     } else {
       setMessage(data.info)
     }
     
-  }, [fetcher, setState, navigate]) 
+  }, [fetcher, setContext, navigate]) 
 
   return (
     <LoginForm

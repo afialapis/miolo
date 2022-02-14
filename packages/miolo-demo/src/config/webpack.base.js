@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const src_path= path.join(__dirname, '..')
 const sources = (location) => path.join(src_path, location)
 
-console.log(`[Webpack} for ${process.env.NODE_ENV}`)
+console.log(`[miolo-demo] webpack for ${process.env.NODE_ENV}`)
 
 
 module.exports = {

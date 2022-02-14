@@ -28,13 +28,7 @@ const init_basic_auth_middleware = ( app, options ) => {
       return unauth_err()
     }
 
-    console.log('authing........')
-
     const user = await auth_user(au_user.name, au_user.pass)
-
-    console.log('authed authed')
-    console.log(user)
-
 
     if (user === false || user == undefined) {
       return unauth_err()

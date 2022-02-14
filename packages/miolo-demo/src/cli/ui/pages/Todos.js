@@ -10,9 +10,9 @@ function show_title  (title) {
   }
 }
 
-const Todos = ({state}) => {
+const Todos = ({context}) => {
   const fetcher = useFetcher()
-  const [todoList, setTodoList] = useSsrData(state, 'todoList', [])
+  const [todoList, setTodoList] = useSsrData(context, 'todoList', [])
   
   const refreshTodos = useCallback(() => {
     async function fetchData() {
@@ -102,7 +102,7 @@ const Todos = ({state}) => {
 
   return (
     <TodosList
-      authenticated  = {state.authenticated}
+      authenticated  = {context.authenticated}
       todoList       = {todoList}
       addTodo        = {addTodo}
       toggleTodo     = {toggleTodo}

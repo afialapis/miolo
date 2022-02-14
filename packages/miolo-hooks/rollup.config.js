@@ -14,7 +14,9 @@ const input = './src/index.js';
 
 const baseCfg= (output, withReplace, withTerser) => {
   let plugins= [
-    autoExternal()
+    autoExternal({
+      deps: true
+    })
   ]
   if (withReplace) {
     plugins.push(
@@ -42,7 +44,7 @@ const baseCfg= (output, withReplace, withTerser) => {
   return {
     input: input,
     output: output,
-    external: ['react', 'miolo-tools'],
+    external: ['react', 'react-dom', 'react-router-dom', 'miolo-tools'],
     plugins: plugins  
   }
 }
@@ -83,7 +85,11 @@ module.exports = [
     name: 'miolo',
     globals: {
       'react': 'React',
-      'miolo-tools': 'mioloTools',
+      'react-dom': 'ReactDom',
+      'react-dom/server': 'ReactDOMServer',
+      'react-router-dom': 'ReactRouterDOM',
+      'react-router-dom/server': 'ReactRouterDOMServer',
+      'miolo-tools': 'mioloTools'
     }
   }, false),
   baseCfg({
@@ -92,7 +98,11 @@ module.exports = [
     name: 'miolo',
     globals: {
       'react': 'React',
-      'miolo-tools': 'mioloTools',
+      'react-dom': 'ReactDom',
+      'react-dom/server': 'ReactDOMServer',
+      'react-router-dom': 'ReactRouterDOM',
+      'react-router-dom/server': 'ReactRouterDOMServer',
+      'miolo-tools': 'mioloTools'
     }
   }, true) 
 ]
