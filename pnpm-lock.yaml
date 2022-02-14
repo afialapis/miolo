@@ -7,8 +7,8 @@ importers:
 
   packages/miolo:
     specifiers:
-      '@babel/core': ^7.16.7
-      '@babel/eslint-parser': ^7.16.5
+      '@babel/core': ^7.17.2
+      '@babel/eslint-parser': ^7.17.0
       '@babel/preset-env': 7.16.8
       '@babel/register': 7.16.9
       '@koa/router': ^10.1.1
@@ -19,8 +19,8 @@ importers:
       calustra-router: 0.0.17
       cron: ^1.8.2
       diskspace: ^2.0.0
-      eslint: ^8.7.0
-      farrapa-colors: ^1.0.3
+      eslint: ^8.9.0
+      farrapa-colors: ^1.0.4
       koa: ^2.13.4
       koa-better-body: ^3.3.9
       koa-bodyparser: ^4.3.0
@@ -35,9 +35,9 @@ importers:
       koa-static: ^5.0.0
       nodemailer: ^6.7.2
       passport-local: ^1.0.0
-      redis: ^4.0.2
+      redis: ^4.0.3
       socket.io: ^4.4.1
-      winston: ^3.4.0
+      winston: ^3.6.0
     dependencies:
       '@babel/core': 7.17.2
       '@babel/eslint-parser': 7.17.0_@babel+core@7.17.2+eslint@8.9.0
@@ -52,7 +52,7 @@ importers:
       cron: 1.8.2
       diskspace: 2.0.0
       eslint: 8.9.0
-      farrapa-colors: 1.0.3
+      farrapa-colors: 1.0.4
       koa: 2.13.4
       koa-better-body: 3.3.9
       koa-bodyparser: 4.3.0
@@ -73,8 +73,8 @@ importers:
 
   packages/miolo-demo:
     specifiers:
-      '@babel/core': ^7.16.7
-      '@babel/eslint-parser': ^7.16.5
+      '@babel/core': ^7.17.2
+      '@babel/eslint-parser': ^7.17.0
       '@babel/preset-env': 7.16.8
       '@babel/preset-react': 7.16.7
       '@babel/register': 7.16.9
@@ -82,7 +82,7 @@ importers:
       babel-loader: ^8.2.3
       babel-plugin-module-resolver: ^4.1.0
       css-loader: 6.5.1
-      eslint: ^8.7.0
+      eslint: ^8.9.0
       eslint-plugin-import: ^2.25.4
       eslint-plugin-react: ^7.28.0
       eslint-plugin-react-hooks: ^4.3.0
@@ -90,11 +90,11 @@ importers:
       file-loader: 6.2.0
       fs-extra-promise: ^1.0.1
       html-webpack-plugin: ^5.5.0
-      intre: ^1.0.2
-      mini-css-extract-plugin: ^2.5.1
-      miolo: workspace:../miolo
-      miolo-hooks: workspace:../miolo-hooks
-      miolo-tools: workspace:../miolo-tools
+      intre: ^1.0.3
+      mini-css-extract-plugin: ^2.5.3
+      miolo: workspace:^0.0.6
+      miolo-hooks: workspace:^0.0.6
+      miolo-tools: workspace:^0.0.6
       node-sass: ^7.0.1
       nodemon: ^2.0.15
       react: ^17.0.2
@@ -102,9 +102,9 @@ importers:
       react-router-dom: ^6.2.1
       sass-loader: 12.4.0
       url-loader: 4.1.1
-      webpack: ^5.66.0
+      webpack: ^5.68.0
       webpack-bundle-analyzer: ^4.5.0
-      webpack-dev-server: ^4.7.3
+      webpack-dev-server: ^4.7.4
     dependencies:
       farrapa-collections: 1.0.3
       miolo-hooks: link:../miolo-hooks
@@ -129,7 +129,7 @@ importers:
       file-loader: 6.2.0_webpack@5.68.0
       fs-extra-promise: 1.0.1
       html-webpack-plugin: 5.5.0_webpack@5.68.0
-      intre: 1.0.2
+      intre: 1.0.3
       mini-css-extract-plugin: 2.5.3_webpack@5.68.0
       miolo: link:../miolo
       node-sass: 7.0.1
@@ -142,24 +142,24 @@ importers:
 
   packages/miolo-hooks:
     specifiers:
-      '@babel/cli': ^7.15.7
-      '@babel/core': ^7.16.7
-      '@babel/eslint-parser': ^7.16.5
+      '@babel/cli': ^7.17.0
+      '@babel/core': ^7.17.2
+      '@babel/eslint-parser': ^7.17.0
       '@babel/preset-env': 7.16.8
       '@babel/preset-react': 7.16.7
       '@rollup/plugin-babel': ^5.3.0
-      '@rollup/plugin-commonjs': ^21.0.0
-      '@rollup/plugin-node-resolve': ^13.0.5
-      '@rollup/plugin-replace': ^3.0.0
-      eslint: ^8.7.0
+      '@rollup/plugin-commonjs': ^21.0.1
+      '@rollup/plugin-node-resolve': ^13.1.3
+      '@rollup/plugin-replace': ^3.1.0
+      eslint: ^8.9.0
       eslint-plugin-import: ^2.25.4
       eslint-plugin-react: ^7.28.0
       eslint-plugin-react-hooks: ^4.3.0
-      miolo-tools: workspace:../miolo-tools
+      miolo-tools: workspace:^0.0.6
       react: ^17.0.2
       react-dom: ^17.0.2
       react-router-dom: ^6.2.1
-      rollup: ^2.58.0
+      rollup: ^2.67.2
       rollup-plugin-node-externals: ^2.2.0
       rollup-plugin-terser: ^7.0.2
     dependencies:
@@ -187,18 +187,18 @@ importers:
 
   packages/miolo-tools:
     specifiers:
-      '@babel/cli': ^7.15.7
-      '@babel/core': ^7.16.7
-      '@babel/eslint-parser': ^7.16.5
+      '@babel/cli': ^7.17.0
+      '@babel/core': ^7.17.2
+      '@babel/eslint-parser': ^7.17.0
       '@babel/preset-env': 7.16.8
       '@rollup/plugin-babel': ^5.3.0
-      '@rollup/plugin-commonjs': ^21.0.0
-      '@rollup/plugin-node-resolve': ^13.0.5
-      '@rollup/plugin-replace': ^3.0.0
-      eslint: ^8.7.0
+      '@rollup/plugin-commonjs': ^21.0.1
+      '@rollup/plugin-node-resolve': ^13.1.3
+      '@rollup/plugin-replace': ^3.1.0
+      eslint: ^8.9.0
       eslint-plugin-import: ^2.25.4
       isomorphic-fetch: ^3.0.0
-      rollup: ^2.58.0
+      rollup: ^2.67.2
       rollup-plugin-node-externals: ^2.2.0
       rollup-plugin-node-polyfills: ^0.2.1
       rollup-plugin-terser: ^7.0.2
@@ -2472,7 +2472,7 @@ packages:
     resolution: {integrity: sha512-4jpnEOOlwqTyTELLHlFyg3K1BP+CytnSjlxiV87y7zdp73Wg45kyZyWMYT1YFnRXkvdChJ1zYZmOwZztLWJiZA==}
     dependencies:
       calustra: 0.0.17
-      intre: 1.0.2
+      intre: 1.0.3
     transitivePeerDependencies:
       - pg-native
     dev: false
@@ -2480,7 +2480,7 @@ packages:
   /calustra-query/0.0.17:
     resolution: {integrity: sha512-noDVMh2NvgQjsHKnit7NmOKEeFBL/Zrs7tG0j0hlZAjYG2CY/nrJ1KTQnQDKzeuYIJJb2p24ciWNQ3e8PWbVOA==}
     dependencies:
-      farrapa-colors: 1.0.3
+      farrapa-colors: 1.0.4
     dev: false
 
   /calustra-router/0.0.17:
@@ -2498,7 +2498,7 @@ packages:
     resolution: {integrity: sha512-qXm2ypCw0ZuQFDzPqatcXyG3TS0hhJ69YwMtq3f/EnY6r2gZKLF2v1pOpq70KIQHDjwUt/ZDP0zQ1Eq2L8Nv3g==}
     dependencies:
       calustra-query: 0.0.17
-      farrapa-colors: 1.0.3
+      farrapa-colors: 1.0.4
       pg-promise: 10.11.1
       sqlite3: 5.0.2
     transitivePeerDependencies:
@@ -3598,8 +3598,8 @@ packages:
       farrapa-numbers: 1.0.3
     dev: false
 
-  /farrapa-colors/1.0.3:
-    resolution: {integrity: sha512-5QmOY+2uKNgaBXmH5lvgfMHcLDLZmp9/anVS0Kl9sZbfdiF3KjmwDdtGjmC7vCCIGgzfXDT7yIFIJglSZYyKVA==}
+  /farrapa-colors/1.0.4:
+    resolution: {integrity: sha512-Cp7CiYWZxgrIPmv0THh/euNo1nrYTI8OWfGMkmN/jvGPClz5CTIuXVD2Aki/cPFZxferTj5yu0k50NgxjMN+zQ==}
     dev: false
 
   /farrapa-numbers/1.0.3:
@@ -4395,8 +4395,8 @@ packages:
       side-channel: 1.0.4
     dev: true
 
-  /intre/1.0.2:
-    resolution: {integrity: sha512-NpO4WRmgg/8svaJnOKCSF2Ex3Dr/tI1ayXNTJWgZdhkkkZalU4yxIZrunhuLqnALftEseb4sbU9j23yLdYyL7A==}
+  /intre/1.0.3:
+    resolution: {integrity: sha512-pDIv/W5dRDHgdB4R752u+k+aWMEH+Ux4RNMoFyh+tCRzOBjvtQ4sM0we7+34JTOKJ0gdQsAyLxQRpgT2jLDTxA==}
     dependencies:
       moment: 2.29.1
 
