@@ -24,15 +24,19 @@ const def_local_auth_user = (username, password, done) => {
 
 
 const init_passport_auth_middleware = ( app, options ) => {
-    
-  const {get_user_id, find_user_by_id, local_auth_user} = options
+  const {get_user_id, find_user_by_id, local_auth_user, 
+         url_login, url_logout, url_logout_redirect} = options
 
   //const local_options = {}
 
   const get_user_id_f = get_user_id || def_get_user_id
   const find_user_by_id_f = find_user_by_id || def_find_user_by_id
   const local_auth_user_f = local_auth_user || def_local_auth_user
+  const url_login_f = url_login || '/login'
+  const url_logout_f = url_logout || '/logout'
 
+
+  
   const serialize_user = (user, done) => {
     process.nextTick(function() {
       get_user_id_f(user, done)
@@ -60,13 +64,13 @@ const init_passport_auth_middleware = ( app, options ) => {
 
 
   const login_router = new Router()
-  /*login_router.post('/login', passport.authenticate('local', {
+  /*login_router.post(url_login_f, passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/', // /login
     //failureMessage: true
   }))*/
-
-  login_router.post('/login', function(ctx, next) {
+  
+  login_router.post(url_login_f, function(ctx, next) {
 
     return passport.authenticate('local', function(err, user, info, status) {
       // console.log('[PASS AUTH] Error', err)
@@ -93,10 +97,12 @@ const init_passport_auth_middleware = ( app, options ) => {
     })(ctx)
   })
 
-  login_router.post('/logout', async (ctx) => {
+  login_router.post(url_logout_f, async (ctx) => {
     if (ctx.isAuthenticated()) {
       ctx.logout()
-      ctx.redirect('/')
+      if (url_logout_redirect!=undefined) {
+        ctx.redirect(url_logout_redirect)
+      }
     } else {
       ctx.body = { 
         success: false 

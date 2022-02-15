@@ -194,9 +194,9 @@ module.exports= {
     //  find_user_by_id: (id, done) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
     //  local_auth_user: (username, password, done) => done(null, {id: 1})
     //                   // auth=> done(null, user) noauth=> done(null, false, {message: ''}) err=> done(error, null)
-    //  url_login: '/login',
-    //  url_login: '/login',
-    //  url_login: '/login',
+    //  url_login : '/login',
+    //  url_logout: '/logout',
+    //  url_logout_redirect: '/
     //}
   }
 

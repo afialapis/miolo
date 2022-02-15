@@ -37,4 +37,11 @@ const local_auth_user = (username, password, done) => {
   })
 }
 
-export {get_user_id, find_user_by_id, local_auth_user}
+module.exports= {
+  get_user_id, 
+  find_user_by_id, 
+  local_auth_user,
+  url_login : '/login',
+  url_logout: '/logout',
+  url_logout_redirect: '/'
+}
