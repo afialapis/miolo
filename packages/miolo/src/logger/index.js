@@ -1,4 +1,4 @@
-import { red, blue, cyan, magenta, yellow, gray } from 'farrapa-colors'
+import { red, cyan, magenta, yellow, gray, red_light } from 'farrapa-colors'
 /* https://github.com/winstonjs/winston/issues/925 */
 /* https://github.com/winstonjs/winston/issues/287 */
 const { createLogger, format, transports } = require('winston')
@@ -10,8 +10,8 @@ const init_logger = (config, emailer) => {
     silly  : gray,
     debug  : magenta,
     verbose: cyan,
-    info   : blue,
-    warn   : yellow,
+    info   : yellow,
+    warn   : red_light,
     error  : red
   }
 
