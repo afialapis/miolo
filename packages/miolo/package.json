@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "miolo",
   "main": "lib/index.js",
   "scripts": {

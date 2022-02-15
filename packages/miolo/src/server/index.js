@@ -89,8 +89,8 @@ async function miolo(sconfig, render, callback) {
     app.use(render.middleware)
   }
 
-  app.listen(config.http.port, function () {
-    logger.info('miolo is listening on port ' + config.http.port)
+  app.listen(config.http.port, config.http.hostname, function () {
+    logger.info(`miolo is listening on ${config.http.hostname}:${config.http.port}`)
     init_cron(logger)
 
     if (callback!=undefined) {
