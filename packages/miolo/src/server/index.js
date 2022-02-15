@@ -5,17 +5,19 @@ import { init_logger } from 'src/logger'
 import { init_cron } from './engines/cron'
 // import {init_socket} from './engines/socket'
 
+import { init_db_connection } from 'src/db/conn'
+
 import { init_context_middleware } from './middleware/context'
 import { init_body_middleware } from './middleware/body'
 import { init_catcher_middleware } from './middleware/catcher'
 import { init_static_middleware } from './middleware/static'
-
-import { init_db_connection } from 'src/db/conn'
+import { init_extra_middlewares } from './middleware/extra'
 
 import { init_request_middleware } from './middleware/request'
 import { init_session_middleware } from './middleware/session'
 import { init_route_robots } from './routes/robots'
 import { init_route_catch_js_error} from './routes/catch_js_error'
+
 import { init_route_html_render} from './routes/html_render'
 
 async function miolo(sconfig, render, callback) {
@@ -34,6 +36,7 @@ async function miolo(sconfig, render, callback) {
 
   // Assign miolo stuff to ctx
   init_context_middleware(app, config, logger, emailer, conn)
+
   // Compress and body parser
   init_body_middleware(app)
 
@@ -81,6 +84,12 @@ async function miolo(sconfig, render, callback) {
   // Socket.io
   // const io= init_socket(logger)
   // io.attach(app)
+
+  // extra middlewares
+  const extra_middlewares= config?.middlewares
+  if (extra_middlewares) {
+    init_extra_middlewares(app, extra_middlewares)
+  }
 
   // Middleware for html render
   if (render==undefined || render.html!=undefined) {

@@ -198,7 +198,9 @@ module.exports= {
     //  url_logout: '/logout',
     //  url_logout_redirect: '/
     //}
-  }
-
+  },
+  middlewares: [
+    // (ctx) => {}
+  ]
 };
 
