@@ -22,8 +22,9 @@ class Fetcher {
     this.request = _FetcherRequester
   }
 
-  log_error = (msg) => {
+  log_error = (msg, e) => {
     console.error(msg)
+    console.error(e)
   }
 
   async get(url, params = {}, options= {}) {
@@ -32,7 +33,7 @@ class Fetcher {
       const resp = await this.request.get(url, params)
       return resp
     } catch(e) {
-      this.log_error(`Error on GET ${url} ${JSON.stringify(e)}`)  
+      this.log_error(`Error on GET ${url}`, e)  
       return {
         data: undefined,
         status: -1
@@ -45,7 +46,7 @@ class Fetcher {
       const resp = await this.request.post(url, params)
       return resp
     } catch(e) {
-      this.log_error(`Error on POST ${url} ${JSON.stringify(e)}`)  
+      this.log_error(`Error on POST ${url}`, e)  
       return {
         data: undefined,
         status: -1

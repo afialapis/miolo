@@ -43,5 +43,6 @@ module.exports= {
   local_auth_user,
   url_login : '/login',
   url_logout: '/logout',
+  url_login_redirect : undefined,
   url_logout_redirect: '/'
 }

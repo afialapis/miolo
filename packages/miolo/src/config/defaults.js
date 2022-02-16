@@ -196,7 +196,8 @@ module.exports= {
     //                   // auth=> done(null, user) noauth=> done(null, false, {message: ''}) err=> done(error, null)
     //  url_login : '/login',
     //  url_logout: '/logout',
-    //  url_logout_redirect: '/
+    //  url_login_redirect: undefined
+    //  url_logout_redirect: '/'
     //}
   },
   middlewares: [

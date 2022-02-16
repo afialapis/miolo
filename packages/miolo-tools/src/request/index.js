@@ -22,7 +22,7 @@ import {trim_left} from './utils'
  function _response_handle(response) {
   if (response.redirected) {
     window.location.replace(response.url)
-    return Promise.reject()
+    return Promise.resolve()
   }
 
   if (response.headers.get('content-type').indexOf('json') >= 0) {
@@ -40,6 +40,7 @@ import {trim_left} from './utils'
       status: response.status
     }
   })
+
 }
 
 

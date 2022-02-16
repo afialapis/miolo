@@ -25,18 +25,18 @@ const def_local_auth_user = (username, password, done) => {
 
 const init_passport_auth_middleware = ( app, options ) => {
   const {get_user_id, find_user_by_id, local_auth_user, 
-         url_login, url_logout, url_logout_redirect} = options
+         url_login, url_logout, url_login_redirect, url_logout_redirect} = options
 
   //const local_options = {}
 
+  // fallback funcs
   const get_user_id_f = get_user_id || def_get_user_id
   const find_user_by_id_f = find_user_by_id || def_find_user_by_id
   const local_auth_user_f = local_auth_user || def_local_auth_user
   const url_login_f = url_login || '/login'
   const url_logout_f = url_logout || '/logout'
-
-
   
+  // init passport
   const serialize_user = (user, done) => {
     process.nextTick(function() {
       get_user_id_f(user, done)
@@ -53,7 +53,6 @@ const init_passport_auth_middleware = ( app, options ) => {
     (username, password, done) => {
       local_auth_user_f(username, password, done)
   })
-
   
   passport.serializeUser(serialize_user)
   passport.deserializeUser(deserialize_user)
@@ -61,22 +60,11 @@ const init_passport_auth_middleware = ( app, options ) => {
 
   app.use(passport.initialize())
   app.use(passport.session())
-
-
-  const login_router = new Router()
-  /*login_router.post(url_login_f, passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/', // /login
-    //failureMessage: true
-  }))*/
   
-  login_router.post(url_login_f, function(ctx, next) {
 
+  // handle auth routes
+  const handleLogIn = (ctx, next) => {
     return passport.authenticate('local', function(err, user, info, status) {
-      // console.log('[PASS AUTH] Error', err)
-      // console.log('[PASS AUTH] User', user)
-      // console.log('[PASS AUTH] Info', info)
-      // console.log('[PASS AUTH] Status', status)
       if (user === false) {
         ctx.body = { 
           success: false,
@@ -92,14 +80,21 @@ const init_passport_auth_middleware = ( app, options ) => {
           user : user,
           authenticated: true
         }
+        if (url_login_redirect!=undefined) {
+          ctx.redirect(url_login_redirect)
+        }
+
         return ctx.login(user)
       }
     })(ctx)
-  })
+  }
 
-  login_router.post(url_logout_f, async (ctx) => {
+  const handleLogOut = async (ctx) => {
     if (ctx.isAuthenticated()) {
       ctx.logout()
+      ctx.body = { 
+        success: true 
+      }      
       if (url_logout_redirect!=undefined) {
         ctx.redirect(url_logout_redirect)
       }
@@ -109,7 +104,13 @@ const init_passport_auth_middleware = ( app, options ) => {
       }
       ctx.throw(401)
     }
-  })
+  }
+  
+  // Init the router
+  const login_router = new Router()
+  login_router.post(url_login_f,  handleLogIn)
+  login_router.get (url_logout_f, handleLogOut)
+  login_router.post(url_logout_f, handleLogOut)
   
   app.use(login_router.routes())
 }
