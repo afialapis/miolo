@@ -66,7 +66,7 @@ class Fetcher {
 
   async name_list(url, params, options= {}) {
     const result = await this.key_list(url, params, options)
-    return Object.values(result.data)
+    return Object.values(result)
   }
 
   async find(url, id, options= {}) {
@@ -101,5 +101,8 @@ class Fetcher {
     return result.data
   }
 }
+
+Fetcher.keyList= Fetcher.key_list
+Fetcher.nameList= Fetcher.name_list
 
 export { Fetcher }

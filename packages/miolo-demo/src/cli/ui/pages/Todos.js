@@ -17,8 +17,7 @@ const Todos = ({context}) => {
   const refreshTodos = useCallback(() => {
     async function fetchData() {
       show_title('loading todos...')
-      const nTodoList = await fetcher.read('crud/todos')
-      
+      const nTodoList = await fetcher.read('crud/todos')     
       setTodoList(nTodoList)
 
       show_title('todos loaded!')
