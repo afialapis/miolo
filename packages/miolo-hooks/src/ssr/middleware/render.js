@@ -30,7 +30,8 @@ function init_render_middleware(html, port, loader, renderer) {
     try {
       res= await loader(ctx)
     } catch(e) {
-      ctx.miolo.logger.error('Missing loader in the render middleware')
+      ctx.miolo.logger.error('Error produced by loader in the render middleware')
+      ctx.miolo.logger.error(e)
     }
     return res  
   }
