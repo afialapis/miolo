@@ -26,7 +26,9 @@ module.exports = {
   session: {
     salt: 'SUPER_SALTY_YES?',
     secret: 'SUPER_SECRET_KEY_KERE',
-    expires: 9 * 3600 * 1000 // 9 hours
+    options: {
+      maxAge: 86400000
+    }
   },  
   database: {
     connection : {

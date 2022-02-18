@@ -9,7 +9,13 @@ import redis_store from './store'
 function init_session_middleware(app, config) {
   
   app.keys = [config.secret || '*secret*']
-  app.use(koa_session({ redis_store }, app))
+
+  const options= {
+    store: redis_store,
+    ...config.options || {}
+  }
+
+  app.use(koa_session(options, app))
 
 }
 

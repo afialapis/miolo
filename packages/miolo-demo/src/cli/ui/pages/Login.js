@@ -12,9 +12,9 @@ const Login = ({setContext}) => {
     const {data} = await fetcher.post('/login', {username, password})
 
     if (data.authenticated) {
-      setContext(data)
       setMessage(undefined)
       navigate("/")
+      setContext(data)
     } else {
       setMessage(data.info)
     }
