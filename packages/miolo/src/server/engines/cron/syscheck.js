@@ -35,9 +35,9 @@ function init_sys_check_and_log(logger) {
       const free = Math.round(toGB(result.free), 2)
 
       if (free<1) {
-        logger.error(`[SERVER][${cyan('SysCheck')}] DISK ${yellow(used)} GB used of ${green(total)} MB (${yellow(free)} GB free)`)
+        logger.error(`[SERVER][${cyan('SysCheck')}] DISK ${yellow(used)} GB used of ${green(total)} GB (${yellow(free)} GB free)`)
       } else {
-        logger.info(`[SERVER][${cyan('SysCheck')}] DISK ${yellow(used)} GB used of ${green(total)} MB (${yellow(free)} GB free)`)
+        logger.info(`[SERVER][${cyan('SysCheck')}] DISK ${yellow(used)} GB used of ${green(total)} GB (${yellow(free)} GB free)`)
       }
     });  
   }
