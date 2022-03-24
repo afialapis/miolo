@@ -17,7 +17,8 @@ async function init_crud_router (app, conn, config) {
         return uid
       }      
       return undefined
-    }
+    },
+    ...config.options
   }
   
   const router= await calustraRouter(conn, config.routes, config.path, 'public', routerOptions)

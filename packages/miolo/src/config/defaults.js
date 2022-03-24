@@ -65,7 +65,7 @@ module.exports= {
   routes: {
     //  crud: {
     //    path: '/crud',
-    //    auth: {...},
+    //    options: {...},
     //    routes: [
     //      {
     //        name: 'todos',
