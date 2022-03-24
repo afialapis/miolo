@@ -81,13 +81,17 @@ module.exports= {
     //      }
     //    ],  
     //  },
-    //  queries: [
-    //    {
-    //      path: '/crud/fo/bar',
-    //      method: 'GET',
-    //      callback: method_receiving_params_ctx_conn
-    //    }
-    //  ]
+    //  queries: {
+    //    options: {...},
+    //    routes: [    
+    //      {
+    //        path: '/crud/fo/bar',
+    //        auth: {...},
+    //        method: 'GET',
+    //        callback: method_receiving_params_ctx_conn
+    //      }
+    //    ]
+    //  }
   },
   cacher: {
     redis: {

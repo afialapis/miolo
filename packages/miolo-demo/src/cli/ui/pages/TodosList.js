@@ -69,9 +69,12 @@ const TodosList = ({authenticated, todoList, addTodo, toggleTodo, removeTodo, ch
         <div className="question" onClick={() => checkLastHour()}>
           Tell me how many todos I have added in the last hour
         </div>
-        <div className="question" onClick={() => insertFakeTodo()}>
-          Insert a fake one
-        </div>
+        {authenticated
+          ?
+          <div className="question" onClick={() => insertFakeTodo()}>
+            Insert a fake one
+          </div>
+          : null}
       </div>        
     </div>
   )
