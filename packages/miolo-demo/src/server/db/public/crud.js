@@ -3,6 +3,12 @@ module.exports= {
   routes: [
     {
       name: 'todos',
+      /*
+      auth: {
+        require: true,
+        action: 'redirect',
+        redirect_path: '/'
+      },*/
       options: {
         useDates: false,
         //checkBeforeDelete: ["edition.agent_id"],

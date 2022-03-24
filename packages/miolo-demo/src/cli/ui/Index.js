@@ -8,6 +8,10 @@ import Login from 'cli/ui/pages/Login'
 import Logout from 'cli/ui/pages/Logout'
 
 const Index = ({context}) => {
+
+  console.log('miolo-demo UI Index ')
+  console.log(context)
+  
   return (
 
     <Routes> 

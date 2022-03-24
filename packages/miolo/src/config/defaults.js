@@ -19,7 +19,7 @@ module.exports= {
       /** (number || 'session') maxAge in ms (default is 1 days) */
       /** 'session' will result in a cookie that expires when session/browser is closed */
       /** Warning: If a session cookie is stolen, this cookie will never expire */
-      maxAge: 86400000,
+      maxAge: 10000, //86400000,
       
       /** (boolean) automatically commit headers (default true) */
       //autoCommit: true, 

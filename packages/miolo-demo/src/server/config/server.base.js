@@ -27,7 +27,7 @@ module.exports = {
     salt: 'SUPER_SALTY_YES?',
     secret: 'SUPER_SECRET_KEY_KERE',
     options: {
-      maxAge: 86400000
+      maxAge: 10000, //86400000
     }
   },  
   database: {
