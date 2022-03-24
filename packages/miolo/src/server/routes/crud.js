@@ -8,7 +8,7 @@ async function init_crud_router (app, conn, config) {
 
   const routerOptions= {
     body_field: undefined,
-    get_uid: (ctx) => {
+    get_user_id: (ctx) => {
       try {
         return ctx.state.user.id
       } catch(e) {}

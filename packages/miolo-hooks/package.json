@@ -1,6 +1,6 @@
 {
   "name": "miolo-hooks",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "react hooks for miolo",
   "main": "lib/index.js",
   "cjs": "dist/miolo-hooks.cjs.js",
