@@ -45,11 +45,18 @@ async function init_queries_router (app, conn, queries) {
   routes.map(route => {
     
     async function route_callback(ctx) {
-      const auth= {
-        ...global_auth,
-        ...route.auth || {}
+      
+      ctx.miolo.logger.log(`[queries] ${route.path}`)
+      try {
+        const auth= {
+          ...global_auth,
+          ...route.auth || {}
+        }
+        _check_auth(ctx, auth, route.method)
+      } catch(e) {
+        ctx.miolo.logger.error(`[queries] error on ${route.path}`)
+        ctx.miolo.logger.error(e)
       }
-      _check_auth(ctx, auth, route.method)
 
       const result= await route.callback(ctx, conn)
       return result
