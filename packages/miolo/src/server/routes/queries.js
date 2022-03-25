@@ -46,7 +46,7 @@ async function init_queries_router (app, conn, queries) {
     
     async function route_callback(ctx) {
       
-      ctx.miolo.logger.log(`[queries] ${route.path}`)
+      ctx.miolo.logger.debug(`[queries] ${route.path}`)
       try {
         const auth= {
           ...global_auth,
