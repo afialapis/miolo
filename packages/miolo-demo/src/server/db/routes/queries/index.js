@@ -1,29 +1,21 @@
 const {q_todos_count_last_hour, q_todos_insert_fake} = require('./todos')
 
 module.exports = {
-  options: {
-    /*
-    auth: {
-      require: 'read-only',
-      action: 'redirect',
-      redirect_path: '/'
-    },
-    */    
-  },
+  prefix: '/crud',
   routes: [
     {
-      path: '/crud/todos/last_hour',
+      url: '/todos/last_hour',
       method: 'GET',
       callback: q_todos_count_last_hour
     },
     {
-      path: '/crud/todos/fake',
+      url: '/todos/fake',
       method: 'POST',
       callback: q_todos_insert_fake,
-      auth: {
+      authUser: {
         require: true,
         action: 'redirect',
-        redirect_path: '/'
+        redirect_url: '/'
       },         
     }
   ]

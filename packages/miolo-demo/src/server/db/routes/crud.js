@@ -1,13 +1,12 @@
 module.exports= {
-  path: '/crud',
+  prefix: '/crud',
   routes: [
     {
       name: 'todos',
-      
-      auth: {
+      authUser: {
         require: 'read-only',
         action: 'redirect',
-        redirect_path: '/'
+        redirect_url: '/'
       },
       options: {
         useDates: false,

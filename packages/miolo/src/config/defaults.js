@@ -63,35 +63,31 @@ module.exports= {
     },
   },
   routes: {
-    //  crud: {
-    //    path: '/crud',
-    //    options: {...},
-    //    routes: [
-    //      {
-    //        name: 'todos',
-    //        auth: {...},
-    //        options: {
-    //          useDates: true,
-    //          checkBeforeDelete: ["edition.agent_id"],
-    //          customHooks: {
-    //            beforeInsert: beforeInsertTest,
-    //            beforeUpdate: beforeUpdateTest
-    //          }
-    //        }
-    //      }
-    //    ],  
-    //  },
-    //  queries: {
-    //    options: {...},
-    //    routes: [    
-    //      {
-    //        path: '/crud/fo/bar',
-    //        auth: {...},
-    //        method: 'GET',
-    //        callback: method_receiving_params_ctx_conn
-    //      }
-    //    ]
-    //  }
+    body_field: undefined,
+  
+    getUserId: (ctx) => {
+      try {
+        return ctx.state.user.id
+      } catch(e) {}
+      let uid= ctx.headers['user-id']
+      if (uid!=undefined) {
+        return uid
+      }      
+      return undefined
+    },
+  
+    // authUser: {
+    //   require: false,     // true / false / 'read-only'
+    //   action: 'redirect', // 'error'
+    //   redirect_url: '/',
+    //   error_code: 401
+    // }, 
+    
+    crud: {
+      prefix: '',
+      routes: '*'
+    },
+    queries: undefined
   },
   cacher: {
     redis: {

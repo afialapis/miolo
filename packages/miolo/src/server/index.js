@@ -70,17 +70,10 @@ async function miolo(sconfig, render, callback) {
   }
 
   // Routes to /crud
-  if (config?.routes?.crud) {
-    const {init_crud_router} = require('./routes/crud')
-    await init_crud_router(app, conn, config.routes.crud)
+  if (config?.routes) {
+    const {init_calustra_router} = require('./routes/calustra')
+    await init_calustra_router(app, conn, config.routes)
   }
-
-  // Queries routes
-  if (config?.routes?.queries) {
-    const {init_queries_router} = require('./routes/queries')
-    await init_queries_router(app, conn, config.routes.queries)
-  }
-
   // Socket.io
   // const io= init_socket(logger)
   // io.attach(app)

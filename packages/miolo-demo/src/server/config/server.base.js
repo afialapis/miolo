@@ -3,8 +3,7 @@ const main = require('../../config/main')
 const path = require('path')
 const root = (dir) => path.resolve(__dirname, '../../..', dir)
 
-const db_crud = require('../db/public/crud')
-const db_queries = require('../db/public/queries')
+const routes = require('../db/routes')
 const passport = require('../auth/passport')
 
 module.exports = {
@@ -27,7 +26,7 @@ module.exports = {
     salt: 'SUPER_SALTY_YES?',
     secret: 'SUPER_SECRET_KEY_KERE',
     options: {
-      maxAge: 1000, //86400000
+      maxAge: 86400000
     }
   },  
   database: {
@@ -46,10 +45,7 @@ module.exports = {
       log: 'info'
     },
   },
-  routes: {    
-    crud: db_crud, 
-    queries: db_queries
-  },
+  routes: routes,
   redis: {
     host: '127.0.0.1',
     port: 6379
