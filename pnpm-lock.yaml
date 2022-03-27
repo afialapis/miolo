@@ -15,8 +15,8 @@ importers:
       assign-deep: ^1.0.1
       babel-plugin-module-resolver: ^4.1.0
       basic-auth: ^2.0.1
-      calustra: 0.0.26
-      calustra-router: 0.0.26
+      calustra: 0.0.27
+      calustra-router: 0.0.27
       cron: ^1.8.2
       diskspace: ^2.0.0
       eslint: ^8.9.0
@@ -47,8 +47,8 @@ importers:
       assign-deep: 1.0.1
       babel-plugin-module-resolver: 4.1.0
       basic-auth: 2.0.1
-      calustra: 0.0.26
-      calustra-router: 0.0.26
+      calustra: 0.0.27
+      calustra-router: 0.0.27
       cron: 1.8.2
       diskspace: 2.0.0
       eslint: 8.12.0
@@ -2460,36 +2460,36 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  /calustra-orm/0.0.26:
-    resolution: {integrity: sha512-5JnSyYSf+g8ZLGDn1slznoD4nqKsfqnWEhFkyXTSmb1UZpjNxqWdJq5EOmQxpviAV+u9HNOHN9a7PLb56txedw==}
+  /calustra-orm/0.0.27:
+    resolution: {integrity: sha512-gkD8BLZZZa6MMh+4BnspY7ppq02ta7d8ftgDS7onc+rAdqURn02oph5P7dzCcMMtUTC1/NRRsyzA0Z5KFbeEow==}
     dependencies:
-      calustra: 0.0.26
+      calustra: 0.0.27
       intre: 1.0.3
     transitivePeerDependencies:
       - pg-native
     dev: false
 
-  /calustra-query/0.0.26:
-    resolution: {integrity: sha512-6vJ8JcRpwHkYYN/yL7s8Bq067+T7nC7HAbxJxZiWLmLmnyPY0yUvLP66eEW2sjPteK1TQuOvxoPXgasuFVe1nw==}
+  /calustra-query/0.0.27:
+    resolution: {integrity: sha512-aPn8pXDl0d4em+T3oR2lv5+VeZ9lC6pAkrLnbzilz+IDKxhD5kVa0MhdP5lHtBxQBUE9H53bg9k5JLrLXJdkrw==}
     dependencies:
       farrapa-colors: 1.0.4
     dev: false
 
-  /calustra-router/0.0.26:
-    resolution: {integrity: sha512-S3hptLHK/ysqYrZWmvC9M2FSDhqMmwlAwpUQJIvc6z0kRbMZR3Cu2UWgOHaqtvX5DiRM7OBgSIic9ZLT7SHKGA==}
+  /calustra-router/0.0.27:
+    resolution: {integrity: sha512-qYNumkISkoPSxEzV5KmbO8hu7adPevEuEGKaSVXOYDeuh/LZ7CwxZfkDkDjdHtjp8HyozIi7ieWc9uyYT5Fhmg==}
     dependencies:
-      calustra: 0.0.26
-      calustra-orm: 0.0.26
+      calustra: 0.0.27
+      calustra-orm: 0.0.27
       koa-router: 10.1.1
     transitivePeerDependencies:
       - pg-native
       - supports-color
     dev: false
 
-  /calustra/0.0.26:
-    resolution: {integrity: sha512-RA+rEUvGVbiR2dSZcGCW436GplVtNe0A+tOGxK+VLrRpf1QmW8OJou7UprKoMHQqVwdY/ClCCOA7sPImwflRWA==}
+  /calustra/0.0.27:
+    resolution: {integrity: sha512-EINet6/syEJ4OQKNI/usfRRIGuTr6o1QIJ3j4BkHvoabIq6m72dbgj+iDq2qSuvkT893lkoIXGIHB3eZ5JoveQ==}
     dependencies:
-      calustra-query: 0.0.26
+      calustra-query: 0.0.27
       farrapa-colors: 1.0.4
       pg-promise: 10.11.1
       sqlite3: 5.0.2
