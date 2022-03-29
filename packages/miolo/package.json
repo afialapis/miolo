@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "miolo",
   "main": "lib/index.js",
   "scripts": {
@@ -23,8 +23,8 @@
     "assign-deep": "^1.0.1",
     "babel-plugin-module-resolver": "^4.1.0",
     "basic-auth": "^2.0.1",
-    "calustra": "0.0.27",
-    "calustra-router": "0.0.27",
+    "calustra": "0.0.28",
+    "calustra-router": "0.0.28",
     "cron": "^1.8.2",
     "diskspace": "^2.0.0",
     "eslint": "^8.9.0",
