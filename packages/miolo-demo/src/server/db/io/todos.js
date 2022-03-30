@@ -5,8 +5,8 @@ async function todos_read() {
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const Todos = await getModelFromCache('miolo', 'todos')
-  const todos = Todos.read(options)
+  const Todos = getModelFromCache('miolo', 'todos')
+  const todos = await Todos.read(options)
 
   return todos
 }
@@ -33,7 +33,7 @@ async function todos_insert_fake(conn) {
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const Todos = await getModelFromCache('miolo', 'todos')
+  const Todos = getModelFromCache('miolo', 'todos')
 
   const d= {
     name: 'Fake todo',
