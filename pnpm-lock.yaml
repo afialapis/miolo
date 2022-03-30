@@ -15,8 +15,9 @@ importers:
       assign-deep: ^1.0.1
       babel-plugin-module-resolver: ^4.1.0
       basic-auth: ^2.0.1
-      calustra: 0.0.28
-      calustra-router: 0.0.28
+      calustra: 0.0.34
+      calustra-orm: 0.0.34
+      calustra-router: 0.0.34
       cron: ^1.8.2
       diskspace: ^2.0.0
       eslint: ^8.9.0
@@ -47,8 +48,9 @@ importers:
       assign-deep: 1.0.1
       babel-plugin-module-resolver: 4.1.0
       basic-auth: 2.0.1
-      calustra: 0.0.28
-      calustra-router: 0.0.28
+      calustra: 0.0.34
+      calustra-orm: 0.0.34
+      calustra-router: 0.0.34
       cron: 1.8.2
       diskspace: 2.0.0
       eslint: 8.12.0
@@ -2367,7 +2369,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001322
-      electron-to-chromium: 1.4.99
+      electron-to-chromium: 1.4.102
       escalade: 3.1.1
       node-releases: 2.0.2
       picocolors: 1.0.0
@@ -2460,36 +2462,36 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  /calustra-orm/0.0.28:
-    resolution: {integrity: sha512-X7qkslkq50Ak6n47d8HfgmHw9JBtgJSX8T/qn3DqB0jX2MadTEEXcnE/Pyvyy02gaH/Z8wsC0NIS/aYWCdOJSQ==}
+  /calustra-orm/0.0.34:
+    resolution: {integrity: sha512-9ZDroiH6JBcdbSVS99ki5WjPO6LJ5diOZKkOvvp29Nh2XpWfBsAOrzNsOn+WIb1moB2pMS0lpwWuS9efSCFbpg==}
     dependencies:
-      calustra: 0.0.28
+      calustra: 0.0.34
       intre: 1.0.3
     transitivePeerDependencies:
       - pg-native
     dev: false
 
-  /calustra-query/0.0.28:
-    resolution: {integrity: sha512-NzJjpFIFhZ2pyxYfvHx9ggf92ygEMNWZqhe/ZKpumd/8eLM9fyXr0cBDHnUnMySN3xGCh8SbvotflrwcLHhNnQ==}
+  /calustra-query/0.0.34:
+    resolution: {integrity: sha512-Yf+TkrF461KBtBLJiXltjaRKt3BM8Dmh0KlhFU5JSFKD/iL6DxS46HP8JNnQD6UTOkvWgxXOBX4smLWaxUUirA==}
     dependencies:
       farrapa-colors: 1.0.4
     dev: false
 
-  /calustra-router/0.0.28:
-    resolution: {integrity: sha512-ub0Dw7maAkWdzGAtSUGpLqkvAo2BFjiZrjZCaA8dM6SBAcCfj3LT6W/m8M8iTnnNSx9Gs00NORMgfZRA3iE6Mw==}
+  /calustra-router/0.0.34:
+    resolution: {integrity: sha512-1SKgXFYhGwUI/Birn+zpYjH6x3qT5VeoGeOz2N/BArMuCdqUVeP1FFPvMVBHT1ROCjDRE2Jy4MJRmW+5mOCWdQ==}
     dependencies:
-      calustra: 0.0.28
-      calustra-orm: 0.0.28
+      calustra: 0.0.34
+      calustra-orm: 0.0.34
       koa-router: 10.1.1
     transitivePeerDependencies:
       - pg-native
       - supports-color
     dev: false
 
-  /calustra/0.0.28:
-    resolution: {integrity: sha512-9HVrhNi6KQTMdXDu1D8x0VAUibXccGGow0xv1A94DVDtFi81/uxCWewYL4ZgfeX92Tt0LM86eIAnWEOjoq4iuQ==}
+  /calustra/0.0.34:
+    resolution: {integrity: sha512-UYsbkUW1dr4iMLSyXJQcND7W3xm05qdiBEhAIMlS1PdRSDG3epxp+KWH5ggay9j3h8j9/2dIsHfXqJB2SvWxLg==}
     dependencies:
-      calustra-query: 0.0.28
+      calustra-query: 0.0.34
       farrapa-colors: 1.0.4
       pg-promise: 10.11.1
       sqlite3: 5.0.2
@@ -3141,8 +3143,8 @@ packages:
   /ee-first/1.1.1:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
 
-  /electron-to-chromium/1.4.99:
-    resolution: {integrity: sha512-YXMzbvlo6pW12KWw0bj6cIGCJi1Moy8PLCuuzgRzg6WYIcHILK3szU+HHnHFx2b373qRv+cfmHhbmRbatyAbPA==}
+  /electron-to-chromium/1.4.102:
+    resolution: {integrity: sha512-MuWg3/gLTk6PSjC7ZrTgT8aAYZmUYd+gRtD95vN77KMBwZXiGdHHa8Y7ppMc/zwNumZtoIBLS0rzZyjEHd7sNw==}
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -5452,8 +5454,8 @@ packages:
       whatwg-url: 5.0.0
     dev: false
 
-  /node-forge/1.3.0:
-    resolution: {integrity: sha512-08ARB91bUi6zNKzVmaj3QO7cr397uiDT2nJ63cHjyNtCTWIgvS47j3eT0WfzUwS9+6Z5YshRaoasFkXCKrIYbA==}
+  /node-forge/1.3.1:
+    resolution: {integrity: sha512-dPEtOeMvF9VMcYV/1Wb8CPoVAXtp6MKMlcbAt4ddqmGqUJ6fQZFXkNZNkNlfevtNkGtaSoXf/vNNNSvgrdXwtA==}
     engines: {node: '>= 6.13.0'}
     dev: true
 
@@ -6150,7 +6152,7 @@ packages:
     dependencies:
       icss-utils: 5.1.0_postcss@8.4.12
       postcss: 8.4.12
-      postcss-selector-parser: 6.0.9
+      postcss-selector-parser: 6.0.10
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -6161,7 +6163,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       postcss: 8.4.12
-      postcss-selector-parser: 6.0.9
+      postcss-selector-parser: 6.0.10
     dev: true
 
   /postcss-modules-values/4.0.0_postcss@8.4.12:
@@ -6174,8 +6176,8 @@ packages:
       postcss: 8.4.12
     dev: true
 
-  /postcss-selector-parser/6.0.9:
-    resolution: {integrity: sha512-UO3SgnZOVTwu4kyLR22UQ1xZh086RyNZppb7lLAKBFK8a32ttG5i87Y/P3+2bRSjZNyJ1B7hfFNo273tKe9YxQ==}
+  /postcss-selector-parser/6.0.10:
+    resolution: {integrity: sha512-IQ7TZdoaqbT+LCpShg46jnZVlhWD2w6iQYAcYXfHARZ7X1t/UGhhceQDs5X0cGqKvYlHNOuv7Oa1xmb0oQuA3w==}
     engines: {node: '>=4'}
     dependencies:
       cssesc: 3.0.0
@@ -6817,7 +6819,7 @@ packages:
     resolution: {integrity: sha512-LmME957M1zOsUhG+67rAjKfiWFox3SBxE/yymatMZsAx+oMrJ0YQ8AToOnyCm7xbeg2ep37IHLxdu0o2MavQOQ==}
     engines: {node: '>=10'}
     dependencies:
-      node-forge: 1.3.0
+      node-forge: 1.3.1
     dev: true
 
   /semver-diff/3.1.1:

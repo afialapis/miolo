@@ -47,7 +47,7 @@ module.exports= {
     }
   },
   database: {
-    connection : {
+    db: {
       dialect:  'postgres',
       host:     'localhost',
       port:     5432,
@@ -58,9 +58,7 @@ module.exports= {
       min:      0,          // Minimum number of connection in pool
       idleTimeoutMillis: 10000,  // The maximum time, in milliseconds, that a connection can be idle before being released. Use with combination of evict for proper working, for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
     },
-    options: {
-      log: 'info'
-    },
+    log: 'info'
   },
   routes: {
     body_field: undefined,

@@ -1,10 +1,10 @@
-import {getDb} from 'miolo'
+import {getConnectionFromCache} from 'miolo'
 
 
 async function find_user_by_id(uid) {
   // TODO : handle transactions
   const options= {transaction: undefined}
-  const conn = getDb('postgres')
+  const conn = getConnectionFromCache('postgres')
 
   const query = `
     SELECT id, username, name, created
@@ -22,7 +22,7 @@ async function find_user_by_id(uid) {
 async function auth_user(username, password) {
   // TODO : handle transactions
   const options= {transaction: undefined}
-  const conn = getDb('postgres')
+  const conn = getConnectionFromCache('postgres')
 
   const query = `
     SELECT id, username, name, created

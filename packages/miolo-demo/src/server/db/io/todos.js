@@ -1,11 +1,11 @@
 import {epoch_now} from 'intre'
-import {getModel} from 'miolo'
+import {getModelFromCache} from 'miolo'
 
 async function todos_read() {
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const Todos = await getModel('miolo', 'todos')
+  const Todos = await getModelFromCache('miolo', 'todos')
   const todos = Todos.read(options)
 
   return todos
@@ -33,7 +33,7 @@ async function todos_insert_fake(conn) {
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const Todos = await getModel('miolo', 'todos')
+  const Todos = await getModelFromCache('miolo', 'todos')
 
   const d= {
     name: 'Fake todo',

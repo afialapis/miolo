@@ -5,7 +5,7 @@ import { init_logger } from 'src/logger'
 import { init_cron } from './engines/cron'
 // import {init_socket} from './engines/socket'
 
-import { init_db_connection } from 'src/db/conn'
+import { getConnection } from 'calustra'
 
 import { init_context_middleware } from './middleware/context'
 import { init_body_middleware } from './middleware/body'
@@ -29,7 +29,7 @@ async function miolo(sconfig, render, callback) {
   
   let conn
   if (config.database) {
-    conn= init_db_connection(config.database)
+    conn= getConnection(config.database)
   }
 
   const app = new Koa()
