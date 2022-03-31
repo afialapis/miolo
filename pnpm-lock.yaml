@@ -15,9 +15,9 @@ importers:
       assign-deep: ^1.0.1
       babel-plugin-module-resolver: ^4.1.0
       basic-auth: ^2.0.1
-      calustra: 0.0.34
-      calustra-orm: 0.0.34
-      calustra-router: 0.0.34
+      calustra: 0.0.35
+      calustra-orm: 0.0.35
+      calustra-router: 0.0.35
       cron: ^1.8.2
       diskspace: ^2.0.0
       eslint: ^8.9.0
@@ -48,9 +48,9 @@ importers:
       assign-deep: 1.0.1
       babel-plugin-module-resolver: 4.1.0
       basic-auth: 2.0.1
-      calustra: 0.0.34
-      calustra-orm: 0.0.34
-      calustra-router: 0.0.34
+      calustra: 0.0.35
+      calustra-orm: 0.0.35
+      calustra-router: 0.0.35
       cron: 1.8.2
       diskspace: 2.0.0
       eslint: 8.12.0
@@ -2368,8 +2368,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001322
-      electron-to-chromium: 1.4.102
+      caniuse-lite: 1.0.30001323
+      electron-to-chromium: 1.4.103
       escalade: 3.1.1
       node-releases: 2.0.2
       picocolors: 1.0.0
@@ -2462,36 +2462,36 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  /calustra-orm/0.0.34:
-    resolution: {integrity: sha512-9ZDroiH6JBcdbSVS99ki5WjPO6LJ5diOZKkOvvp29Nh2XpWfBsAOrzNsOn+WIb1moB2pMS0lpwWuS9efSCFbpg==}
+  /calustra-orm/0.0.35:
+    resolution: {integrity: sha512-oZOoDIpVltAF2RgxDCEK0cPsNYqG3z0F62Axd99mVZWS/SQbevS+4hzTf+67MNx650J6AFQlDvyPlpmjDWcW8A==}
     dependencies:
-      calustra: 0.0.34
+      calustra: 0.0.35
       intre: 1.0.3
     transitivePeerDependencies:
       - pg-native
     dev: false
 
-  /calustra-query/0.0.34:
-    resolution: {integrity: sha512-Yf+TkrF461KBtBLJiXltjaRKt3BM8Dmh0KlhFU5JSFKD/iL6DxS46HP8JNnQD6UTOkvWgxXOBX4smLWaxUUirA==}
+  /calustra-query/0.0.35:
+    resolution: {integrity: sha512-gzOMua2JltMK45huTuarn436sNJLeGFGLK7J68cpwIVNMLFwV1dKi6o6XDkn4SYUjLl0eVhzqfCqlMyzeyG95Q==}
     dependencies:
       farrapa-colors: 1.0.4
     dev: false
 
-  /calustra-router/0.0.34:
-    resolution: {integrity: sha512-1SKgXFYhGwUI/Birn+zpYjH6x3qT5VeoGeOz2N/BArMuCdqUVeP1FFPvMVBHT1ROCjDRE2Jy4MJRmW+5mOCWdQ==}
+  /calustra-router/0.0.35:
+    resolution: {integrity: sha512-X+I/8iB+pWVTEP7FTsiFwUbumdlZG22ONEjcc2yHSO3GEPvyA+AnmjQQkHDxI+Y0fTBr86PYvowMg/fFwORWXQ==}
     dependencies:
-      calustra: 0.0.34
-      calustra-orm: 0.0.34
+      calustra: 0.0.35
+      calustra-orm: 0.0.35
       koa-router: 10.1.1
     transitivePeerDependencies:
       - pg-native
       - supports-color
     dev: false
 
-  /calustra/0.0.34:
-    resolution: {integrity: sha512-UYsbkUW1dr4iMLSyXJQcND7W3xm05qdiBEhAIMlS1PdRSDG3epxp+KWH5ggay9j3h8j9/2dIsHfXqJB2SvWxLg==}
+  /calustra/0.0.35:
+    resolution: {integrity: sha512-c2vYAD0ZewFnQ1tGTizFFIjrlgjLzuyVdLV8tCyIbaHxMYKOw/6GsWaw8wTzRh0kH3voU3E1SotqcGMwVi4Apg==}
     dependencies:
-      calustra-query: 0.0.34
+      calustra-query: 0.0.35
       farrapa-colors: 1.0.4
       pg-promise: 10.11.1
       sqlite3: 5.0.2
@@ -2525,8 +2525,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /caniuse-lite/1.0.30001322:
-    resolution: {integrity: sha512-neRmrmIrCGuMnxGSoh+x7zYtQFFgnSY2jaomjU56sCkTA6JINqQrxutF459JpWcWRajvoyn95sOXq4Pqrnyjew==}
+  /caniuse-lite/1.0.30001323:
+    resolution: {integrity: sha512-e4BF2RlCVELKx8+RmklSEIVub1TWrmdhvA5kEUueummz1XyySW0DVk+3x9HyhU9MuWTa2BhqLgEuEmUwASAdCA==}
 
   /caseless/0.12.0:
     resolution: {integrity: sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=}
@@ -3143,8 +3143,8 @@ packages:
   /ee-first/1.1.1:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
 
-  /electron-to-chromium/1.4.102:
-    resolution: {integrity: sha512-MuWg3/gLTk6PSjC7ZrTgT8aAYZmUYd+gRtD95vN77KMBwZXiGdHHa8Y7ppMc/zwNumZtoIBLS0rzZyjEHd7sNw==}
+  /electron-to-chromium/1.4.103:
+    resolution: {integrity: sha512-c/uKWR1Z/W30Wy/sx3dkZoj4BijbXX85QKWu9jJfjho3LBAXNEGAEW3oWiGb+dotA6C6BzCTxL2/aLes7jlUeg==}
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}

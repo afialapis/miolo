@@ -97,7 +97,7 @@ class Fetcher {
 
   async remove(url, id, options= {}) {
     const params = { id: id }
-    const result = await this.post(`${url}/remove`, params, options)
+    const result = await this.post(`${url}/delete`, params, options)
     return result.data
   }
 }
