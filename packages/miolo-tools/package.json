@@ -1,6 +1,6 @@
 {
   "name": "miolo-tools",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "cli tools for miolo",
   "main": "lib/index.js",
   "cjs": "dist/miolo-tools.cjs.js",

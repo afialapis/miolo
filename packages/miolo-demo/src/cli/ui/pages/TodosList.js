@@ -3,7 +3,8 @@ import { collSort } from 'farrapa-collections'
 
 const TodosList = ({authenticated, todoList, addTodo, toggleTodo, removeTodo, checkLastHour, insertFakeTodo}) => {
   const [inputText, setInputText] = useState('')
-
+  
+  const throwAnError = () => { throw Error('(Bad) Surprise!') }
   return (
     <div className="todos">
       <div className="todos-header">
@@ -69,6 +70,9 @@ const TodosList = ({authenticated, todoList, addTodo, toggleTodo, removeTodo, ch
         <div className="question" onClick={() => checkLastHour()}>
           Tell me how many todos I have added in the last hour
         </div>
+        <div className="question" onClick={() => throwAnError()}>
+          Throw some error
+        </div>        
         {authenticated
           ?
           <div className="question" onClick={() => insertFakeTodo()}>

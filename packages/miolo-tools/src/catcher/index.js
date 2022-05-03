@@ -17,7 +17,9 @@ function miolo_catcher_init () {
       
       make_request('POST', CATCH_LOG_URL, params, false)
 
-    } catch(e) {}
+    } catch(e) {
+      console.error(e)
+    }
   }
 }
 

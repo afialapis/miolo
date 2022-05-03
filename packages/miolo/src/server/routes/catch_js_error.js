@@ -8,11 +8,11 @@ function init_route_catch_js_error(app, route) {
     const logger = ctx.miolo.logger
 
     const msg= 
-      `${red('[JS Error]')} on ${blue(path)}: ${error.msg}` +
-      `${red('[JS Error]')} File  => ${error.file}` +
-      `${red('[JS Error]')} Line  => ${error.line}` + 
-      `${red('[JS Error]')} Col   => ${error.col}` + 
-      `${red('[JS Error]')} Error => ${JSON.stringify(error.error)}` + 
+      `${red('[JS Error]')} on ${blue(path)}: ${error.msg}\n` +
+      `${red('[JS Error]')} File  => ${error.file}\n` +
+      `${red('[JS Error]')} Line  => ${error.line}\n` + 
+      `${red('[JS Error]')} Col   => ${error.col}\n` + 
+      `${red('[JS Error]')} Error => ${JSON.stringify(error.error)}\n` + 
       `${red('[JS Error]')} Agent => ${agent}`
 
     logger.error(msg)
