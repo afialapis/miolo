@@ -2,16 +2,10 @@ const nodemailer = require('nodemailer')
 
 function init_emailer(options, defaults, silent= false) {
 
-
   const nmailer = nodemailer.createTransport(options, defaults)
 
   function send_email(mail, cb) {
-    if (process.env.NODE_ENV != 'production') {
-      console.info('*********************************')
-      console.info('This mail would be sent if you were in production:')
-      console.info(mail)
-      console.info('*********************************')
-    } else if (silent) {
+    if (silent) {
       console.info('*********************************')
       console.info('This mail will not be send (emailing is disabled):')
       console.info(mail)
@@ -29,8 +23,7 @@ function init_emailer(options, defaults, silent= false) {
             console.log(info)
           } 
         } 
-      }
-      
+      }      
 
       nmailer.sendMail(mail, cb)
     }
@@ -53,7 +46,10 @@ function init_emailer(options, defaults, silent= false) {
 
   const emailer= {
     send: send_email, 
-    verify: verify_emailer
+    verify: verify_emailer,
+    options, 
+    defaults, 
+    silent
   }
   return emailer
 }

@@ -29,7 +29,10 @@ async function miolo(sconfig, render, callback) {
   
   let conn
   if (config.database) {
-    conn= getConnection(config.database)
+    conn= getConnection({
+      ...config.database,
+      log: logger
+    })
   }
 
   const app = new Koa()

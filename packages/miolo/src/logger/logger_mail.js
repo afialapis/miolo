@@ -10,10 +10,9 @@ function init_logger_to_mail(config, emailer) {
       winston.Transport.call(this, options);
       options = options || {};
 
-      this.silent= options.silent || false
-      this.level = options.level  || 'info'
-      this.to    = options.to     || config.to,
-      this.from  = config.from
+      this.level = config.level  || 'info'
+      this.to    = config.to     || emailer.defaults.to
+      this.from  = config.from   || emailer.defaults.from
       this.humanReadableUnhandledException = options.humanReadableUnhandledException || true;
       this.handleExceptions                = options.handleExceptions || true;
       this.json                            = options.json || false;
@@ -36,8 +35,6 @@ function init_logger_to_mail(config, emailer) {
   MailerLogger.prototype.log = function (info, callback) {
       let self = this;
 
-      if (this.silent) return callback(null, true);
-
       let tit= '';
       try {
         tit= info.message.split("\n")[0]
@@ -50,6 +47,7 @@ function init_logger_to_mail(config, emailer) {
       let subject = config.name + ': [' + info.level.toUpperCase() + '] ' + tit;
 
       let mail= {
+        from    : this.from,
         to      : this.to,
         subject : subject, 
         text    : uncolor(info.message)

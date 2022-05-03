@@ -18,11 +18,11 @@ module.exports= merge(config, {
     },
     file: {
       enabled: true,
-      level: 'silly',
+      level: 'debug',
       filename: '/var/log/miolo.log'
     },
     mail: {
-      enabled: false,
+      enabled: true,
       level: 'warn',
       name: 'miolo',
       from: 'bonafide@afialapis.com',

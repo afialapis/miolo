@@ -60,9 +60,11 @@ module.exports = {
     },
     file: {
       enabled: false,
+      level: 'debug',
+      filename: '/var/log/miolo.log'
     },
     mail: {
-      enabled: false,
+      enabled: true,
     }
   },
   mail: {

@@ -38,7 +38,7 @@ const init_logger = (config, emailer) => {
     _log_transports.push(
         new transports.Console({
           humanReadableUnhandledException: true,
-          level    : config.console.level ,
+          level    : config?.console?.level || config?.level || 'silly',
           handleExceptions: true
     }))
   }
@@ -50,7 +50,7 @@ const init_logger = (config, emailer) => {
     _log_transports.push(
       new transports.File({ 
         filename : config.file.filename, 
-        level    : config.file.level ,
+        level    : config?.file?.level || config?.level || 'info' ,
         humanReadableUnhandledException: true,
         handleExceptions: true})
     )
@@ -68,7 +68,6 @@ const init_logger = (config, emailer) => {
 
     _log_transports.push(
       new transports.MailerLogger({
-        level    : config.mail.level,
         humanReadableUnhandledException: true,
         handleExceptions: true    
       })

@@ -110,6 +110,8 @@ module.exports= {
     mail: {
       enabled: process.env.NODE_ENV === 'production',
       level: 'warn',
+      from: 'miolo@afialapis.com',
+      to: 'devel@afialapis.com'      
     }
   },
   mail: {
