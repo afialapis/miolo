@@ -11,6 +11,7 @@ function init_logger_to_mail(config, emailer) {
       options = options || {};
 
       this.level = config.level  || 'info'
+      this.ename = config?.name  || emailer.defaults.name
       this.to    = config.to     || emailer.defaults.to
       this.from  = config.from   || emailer.defaults.from
       this.humanReadableUnhandledException = options.humanReadableUnhandledException || true;

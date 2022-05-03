@@ -1,6 +1,6 @@
 {
   "name": "miolo-demo",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "miolo demo",
   "main": "run.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "author": "Afialapis <info@afialapis.com>",
   "license": "MIT",
   "dependencies": {
-    "farrapa-collections": "1.0.3",
+    "farrapa-collections": "1.0.7",
     "miolo-hooks": "workspace:../miolo-hooks",
     "miolo-tools": "workspace:../miolo-tools",
     "react": "^17.0.2",

@@ -24,7 +24,6 @@ module.exports= merge(config, {
     mail: {
       enabled: true,
       level: 'warn',
-      name: 'miolo',
       from: 'bonafide@afialapis.com',
       to: 'devel@afialapis.com'      
     }  
