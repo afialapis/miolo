@@ -43,9 +43,11 @@ function init_render_middleware(html, port, loader, renderer) {
     const ssr_data = await def_loader(ctx)
     const ssr_comp = def_renderer(ctx)
 
+    const isAuthed = ctx?.isAuthenticated() === true
+
     const context= {
-      user : ctx.state.user,
-      authenticated: ctx.isAuthenticated(),
+      user : ctx?.state?.user,
+      authenticated: isAuthed,
       ssr_data: ssr_data
     }
 

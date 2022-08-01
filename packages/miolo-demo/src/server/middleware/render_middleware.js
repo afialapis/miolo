@@ -21,12 +21,13 @@ async function render_middleware(ctx) {
     const cssURL= process.env.NODE_ENV === 'development' 
     ? `<link href="//localhost:${main.dev_port}/build/bundle.css" rel="stylesheet" media="all"></link>`
     : ''
-
-  const ssr_data = await ssr_data_for_location(ctx.url, ctx.state.user, ctx.isAuthenticated())
+  
+  const isAuthed = ctx?.isAuthenticated() === true
+  const ssr_data = await ssr_data_for_location(ctx.url, ctx.state.user, isAuthed)
 
   const context= {
-    user : ctx.state.user,
-    authenticated: ctx.isAuthenticated(),
+    user : ctx?.state?.user,
+    authenticated: isAuthed,
     ssr_data: ssr_data
   }
 
