@@ -38,12 +38,15 @@ function init_render_middleware(html, port, loader, renderer) {
 
   async function render_middleware(ctx) {
     /*
-     ctx.url, ctx.state.user, ctx.isAuthenticated()
+      
     */
     const ssr_data = await def_loader(ctx)
     const ssr_comp = def_renderer(ctx)
 
-    const isAuthed = ctx?.isAuthenticated() === true
+    let isAuthed = false
+    try {
+      isAuthed = ctx?.isAuthenticated() === true
+    } catch(e) {}
 
     const context= {
       user : ctx?.state?.user,

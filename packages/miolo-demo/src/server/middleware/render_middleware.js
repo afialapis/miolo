@@ -22,7 +22,11 @@ async function render_middleware(ctx) {
     ? `<link href="//localhost:${main.dev_port}/build/bundle.css" rel="stylesheet" media="all"></link>`
     : ''
   
-  const isAuthed = ctx?.isAuthenticated() === true
+  let isAuthed = false
+  try {
+    isAuthed = ctx?.isAuthenticated() === true
+  } catch(e) {}
+  
   const ssr_data = await ssr_data_for_location(ctx.url, ctx.state.user, isAuthed)
 
   const context= {
