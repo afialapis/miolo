@@ -65,8 +65,17 @@ module.exports= {
   
     getUserId: (ctx) => {
       try {
-        return ctx.state.user.id
+        const from_pport= ctx.state.user.id
+        if (from_pport!=undefined) {
+          return from_pport
+        }
       } catch(e) {}
+      try {
+        const from_auth= ctx.user.id
+        if (from_auth!=undefined) {
+          return from_auth
+        }
+      } catch(e) {}      
       let uid= ctx.headers['user-id']
       if (uid!=undefined) {
         return uid

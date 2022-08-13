@@ -40,6 +40,7 @@ const init_guest_auth_middleware = ( app, options, session, logger ) => {
 
     if (token) {
       token = await _make_guest_token()
+      logger.debug(`Guest token conceeded`)
     }
 
     ctx.cookies.set('token', token)

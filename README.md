@@ -28,7 +28,7 @@ render:
   ctx.isUnauthenticated()
   await ctx.login()
   ctx.logout()
-  ctx.state.user
+  ctx.state.user or ctx.user
 
 
 

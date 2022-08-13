@@ -27,12 +27,20 @@ async function render_middleware(ctx) {
     isAuthed = ctx?.isAuthenticated() === true
   } catch(e) {}
   
-  const ssr_data = await ssr_data_for_location(ctx.url, ctx.state.user, isAuthed)
+  let user = undefined
+  try {
+    user= ctx.state.user
+  } catch(_) {
+    user= ctx?.user
+  }
+
+  const ssr_data = await ssr_data_for_location(ctx.url, user, isAuthed)
 
   const context= {
-    user : ctx?.state?.user,
+    user : user,
     authenticated: isAuthed,
-    ssr_data: ssr_data
+    ssr_data: ssr_data,
+    extra: ctx?.extra
   }
 
   const ssr_comp = ssr_render_for_location(ctx.url, context)

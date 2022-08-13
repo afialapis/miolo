@@ -48,8 +48,15 @@ function init_render_middleware(html, port, loader, renderer) {
       isAuthed = ctx?.isAuthenticated() === true
     } catch(e) {}
 
+    let user = undefined
+    try {
+      user= ctx.state.user
+    } catch(_) {
+      user= ctx?.user
+    }    
+
     const context= {
-      user : ctx?.state?.user,
+      user : user,
       authenticated: isAuthed,
       ssr_data: ssr_data,
       extra: ctx?.extra

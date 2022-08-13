@@ -28,8 +28,22 @@ function init_request_middleware(app) {
 
     await next()
     
-    
-    const user = ctx?.state?.user || {}
+
+    let user = undefined
+    try {
+      user= ctx.state.user
+    } catch(_) {
+      user= ctx?.user
+    }  
+
+    let uid_desc= ''
+    if (user != undefined) {
+      if (user?.id) {
+        uid_desc= ` - uid ${user?.id}`
+      } else if (user?.token) {
+        uid_desc= ` - token ${user?.token}`
+      }
+    }
 
     const elapsed = parseFloat( (performance.now() - started) / 1000.0 ).toFixed(2)
 
@@ -39,7 +53,7 @@ function init_request_middleware(app) {
                     ? yellow
                     : red
 
-    logger.info(`req end ${ctx.requestId} ${user ? ` - uid ${user.id}` : ''} => ${tcolor(`DONE in ${elapsed} seconds`)}`)
+    logger.info(`req end ${ctx.requestId}${uid_desc} => ${tcolor(`DONE in ${elapsed} seconds`)}`)
   }
 
   app.use(request_middleware)

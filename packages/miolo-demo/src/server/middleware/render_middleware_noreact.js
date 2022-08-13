@@ -1,6 +1,8 @@
 import fs from 'fs'
 import { resolve } from 'path'
 import main from '../../config/main'
+import { ssr_data_for_location } from '../ssr/loader'
+//import { ssr_render_for_location } from '../ssr/renderer'
 
 const indexHTMLPath=  process.env.NODE_ENV === 'production'
   ? resolve(__dirname, '../../../build/index.html')  // the one created by HtmlWebpackPlugin
@@ -26,10 +28,21 @@ async function render_middleware(ctx) {
   try {
     isAuthed = ctx?.isAuthenticated() === true
   } catch(e) {}
+
+  let user = undefined
+  try {
+    user= ctx.state.user
+  } catch(_) {
+    user= ctx?.user
+  }  
+
+  const ssr_data = await ssr_data_for_location(ctx.url, user, isAuthed)
   
   const context= {
-    user : ctx?.state?.user,
-    authenticated: isAuthed
+    user : user,
+    authenticated: isAuthed,    
+    ssr_data: ssr_data,
+    extra: ctx?.extra
   }
 
 
