@@ -233,7 +233,7 @@ module.exports= {
     //}
   },
   middlewares: [
-    // (ctx) => {}
+    // async (ctx) => {}
   ]
 };
 

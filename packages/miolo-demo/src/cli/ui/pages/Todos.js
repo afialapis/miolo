@@ -1,8 +1,6 @@
-import React, {useCallback, useEffect} from 'react'
-import {withContext, useFetcher} from 'miolo-hooks'
+import React, {useCallback} from 'react'
+import {withContext, useFetcher, useSsrData} from 'miolo-hooks'
 import TodosList from './TodosList'
-import { assertSsrData, useSsrData} from 'cli/ssr'
-
 
 function show_title  (title) {
   if (document!=undefined) {
@@ -11,32 +9,17 @@ function show_title  (title) {
 }
 
 const Todos = ({context}) => {
+
   const fetcher = useFetcher()
-  const [todoList, setTodoList] = useSsrData(context, 'todoList', [])
-  
-  const refreshTodos = useCallback(() => {
-    async function fetchData() {
-      show_title('loading todos...')
-      const nTodoList = await fetcher.read('crud/todos')     
-      setTodoList(nTodoList)
 
-      show_title('todos loaded!')
-    }
+  async function todoListLoader() {
+    show_title('loading todos...')
+    const nTodoList = await fetcher.read('crud/todos')     
+    show_title('todos loaded!')
+    return nTodoList
+  }
 
-    fetchData()
-       
-    
-  }, [fetcher, setTodoList]) 
-
-  
-  useEffect(() => {
-    try {
-      if (! assertSsrData('todoList')) {
-        refreshTodos()
-      }
-    } catch(e) {}
-  }, [refreshTodos]) 
-  
+  const [todoList, setTodoList, refreshTodoList] = useSsrData(context, 'todoList', [], todoListLoader)
 
   const addTodo = useCallback((text) => {
 
@@ -96,8 +79,8 @@ const Todos = ({context}) => {
 
   const insertFakeTodo = useCallback(async () => {
     const _tid= await fetcher.post('crud/todos/fake')
-    refreshTodos()
-  }, [fetcher, refreshTodos])
+    refreshTodoList()
+  }, [fetcher, refreshTodoList])
 
   return (
     <TodosList

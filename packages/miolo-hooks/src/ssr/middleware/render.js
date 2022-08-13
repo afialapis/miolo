@@ -51,7 +51,8 @@ function init_render_middleware(html, port, loader, renderer) {
     const context= {
       user : ctx?.state?.user,
       authenticated: isAuthed,
-      ssr_data: ssr_data
+      ssr_data: ssr_data,
+      extra: ctx?.extra
     }
 
     const ssr_html= renderToString(

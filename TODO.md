@@ -1,11 +1,24 @@
 handle login errors
 
 
+# extra middlewares
+
+querrán extender {ctx} con nuevos datos
+esto lo estamos renderizando con miolo-hooks a traves de init_render_middleware.
+pero, como mejorar?
 
 
 
+# render midlleware
+
+dejar claro que template strings ha de tener el index.html
 
 
+# publicar assertSsrData y useSsrData en miolo-hooks
+  ====> ESTO, luego publicar
+	====> actualizar relatares
+	====> revisar extra middlew (async y ctx.extra)
+	==> hacer tambien un useCtxExtraData??
 
 
 # Auth
@@ -18,6 +31,8 @@ handle login errors
 
 	· AT WHAT MOMENT WINDOW.STATE CAN BE EMPTY?
 	  (necesitariamos el primer useEffect solo al F5)
+
+	· 
 
 # WebPack
   1- simplificar config

@@ -7,7 +7,7 @@ const init_extra_middlewares = ( app, middlewares  ) => {
   middlewares.map(midw => {
 
     async function extra_middleware(ctx, next) {
-      midw(ctx) 
+      await midw(ctx) 
       await next()
     }
   
