@@ -231,6 +231,9 @@ module.exports= {
     //  url_login_redirect: undefined
     //  url_logout_redirect: '/'
     //}
+    guest: {
+      make_guest_token: undefined // (session) => ''
+    }
   },
   middlewares: [
     // async (ctx) => {}

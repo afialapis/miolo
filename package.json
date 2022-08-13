@@ -12,35 +12,30 @@
     "miolo:lint": "pnpm run lint --filter ./packages/miolo",
     "miolo:lib": "pnpm run lib --filter ./packages/miolo",
     "miolo:prepare": "pnpm run prepare --filter ./packages/miolo",
-
     "tools:clean": "pnpm run clean --filter miolo-tools",
     "tools:lint": "pnpm run lint --filter miolo-tools",
     "tools:lib": "pnpm run lib --filter miolo-tools",
     "tools:dist": "pnpm run dist --filter miolo-tools",
     "tools:prepare": "pnpm run prepare --filter miolo-tools",
-        
     "hooks:clean": "pnpm run clean --filter miolo-hooks",
     "hooks:lint": "pnpm run lint --filter miolo-hooks",
     "hooks:lib": "pnpm run lib --filter miolo-hooks",
     "hooks:dist": "pnpm run dist --filter miolo-hooks",
     "hooks:prepare": "pnpm run prepare --filter miolo-hooks",
-    
     "demo:clean": "pnpm run clean --filter miolo-demo",
     "demo:lint": "pnpm run lint --filter miolo-demo",
     "demo:run": "pnpm run demo --filter miolo-demo",
     "demo:prepare": "pnpm run prepare --filter miolo-demo",
-
     "all:clean": "pnpm run miolo:clean && pnpm run tools:clean && pnpm run hooks:clean && pnpm run demo:clean",
     "all:lint": "pnpm run miolo:lint && pnpm run tools:lint && pnpm run hooks:lint  && pnpm run demo:lint",
     "all:lib": "pnpm run miolo:lib && pnpm run tools:lib && pnpm run hooks:lib",
     "all:dist": "pnpm run tools:dist && pnpm run hooks:dist",
     "all:prepare": "pnpm run miolo:prepare && pnpm run tools:prepare && pnpm run hooks:prepare && pnpm run demo:prepare",
     "all:publish": "pnpm publish --filter miolo && pnpm publish --filter miolo-tools && pnpm publish --filter miolo-hooks && pnpm publish --filter miolo-demo",
-
     "purge": "pnpm run all:clean && rm -fr pnpm-lock.yaml node_modules packages/miolo/node_modules packages/miolo-tools/node_modules packages/miolo-demo/node_modules",
     "reset": "pnpm run purge && pnpm i"
   },
   "devDependencies": {
-
+    "jwt-simple": "^0.5.6"
   }
 }

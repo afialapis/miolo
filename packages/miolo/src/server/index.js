@@ -62,6 +62,11 @@ async function miolo(sconfig, render, callback) {
   init_route_catch_js_error(app, '/sys/jserror')
 
   // auth middleware
+  if (config?.auth?.guest) {
+    const {init_guest_auth_middleware} = require('./middleware/auth/guest')
+    init_guest_auth_middleware(app, config.auth.guest, config?.session, logger)
+  }  
+
   if (config?.auth?.basic) {
     const {init_basic_auth_middleware} = require('./middleware/auth/basic')
     init_basic_auth_middleware(app, config.auth.basic)

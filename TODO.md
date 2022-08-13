@@ -7,6 +7,15 @@ querrán extender {ctx} con nuevos datos
 esto lo estamos renderizando con miolo-hooks a traves de init_render_middleware.
 pero, como mejorar?
 
+# token
+
+cuando auth esta deshabilitada, igualmente crear ctx.user, que será:
+
+ctx.user= {
+	token: guest_token
+}
+
+se almacena en cookies tambien y se mantiene across the session
 
 
 # render midlleware
