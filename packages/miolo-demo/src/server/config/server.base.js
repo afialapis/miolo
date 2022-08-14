@@ -101,11 +101,12 @@ module.exports = {
     }
   },
   auth: {
+    guest: {},
     //basic: {
     //  auth_user: async (username, password) => { return false /*{id: 1}*/ },
     //  realm: 'demo.demo',
     //  paths: ['/api']
     //},
-    passport
+    //passport
   }
 }

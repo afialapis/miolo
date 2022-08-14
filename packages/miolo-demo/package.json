@@ -1,6 +1,6 @@
 {
   "name": "miolo-demo",
-  "version": "0.0.38",
+  "version": "0.0.39",
   "description": "miolo demo",
   "main": "run.js",
   "scripts": {
