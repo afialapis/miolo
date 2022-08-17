@@ -31,10 +31,16 @@ function init_request_middleware(app) {
 
     let user = undefined
     try {
-      user= ctx.state.user
-    } catch(_) {
-      user= ctx?.user
-    }  
+      if (ctx.state.user != undefined) {
+        user= ctx.state.user
+      }
+    } catch(_) {}
+
+    try {
+      if (ctx.user != undefined) {
+        user= ctx.user
+      }
+    } catch(_) {} 
 
     let uid_desc= ''
     if (user != undefined) {

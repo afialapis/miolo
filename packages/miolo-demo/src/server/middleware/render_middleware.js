@@ -29,10 +29,16 @@ async function render_middleware(ctx) {
   
   let user = undefined
   try {
-    user= ctx.state.user
-  } catch(_) {
-    user= ctx?.user
-  }
+    if (ctx.state.user != undefined) {
+      user= ctx.state.user
+    }
+  } catch(_) {}
+
+  try {
+    if (ctx.user != undefined) {
+      user= ctx.user
+    }
+  } catch(_) {} 
 
   const ssr_data = await ssr_data_for_location(ctx.url, user, isAuthed)
 

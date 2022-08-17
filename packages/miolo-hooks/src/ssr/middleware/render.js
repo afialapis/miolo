@@ -50,10 +50,16 @@ function init_render_middleware(html, port, loader, renderer) {
 
     let user = undefined
     try {
-      user= ctx.state.user
-    } catch(_) {
-      user= ctx?.user
-    }    
+      if (ctx.state.user != undefined) {
+        user= ctx.state.user
+      }
+    } catch(_) {}
+
+    try {
+      if (ctx.user != undefined) {
+        user= ctx.user
+      }
+    } catch(_) {}     
 
     const context= {
       user : user,

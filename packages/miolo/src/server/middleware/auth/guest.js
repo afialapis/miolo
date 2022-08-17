@@ -48,7 +48,7 @@ const init_guest_auth_middleware = ( app, options, session, logger ) => {
     // Try to get our token from headers (server) or cookies (client)
     let token= ctx.cookies.get('token') || ctx.headers['token']
 
-    if (! token) {
+    if (token===undefined || token.length==0) {
       token = await _make_guest_token()
       logger.debug(`Guest token conceeded`)
     }
