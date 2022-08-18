@@ -7,7 +7,6 @@ const _getDataFromWindow = (name) => {
       
       if (ssr_data!=undefined) {
         if (ssr_data[name]!=undefined) {
-          //window.__CONTEXT.ssr_data[name] = undefined
           return ssr_data[name]
         }
       }
@@ -17,13 +16,11 @@ const _getDataFromWindow = (name) => {
   return undefined
 }
 
-const _assertSsrData = (name) => _getDataFromWindow(name) != undefined
-
-const _getSsrData = (context, name, defval) => {
-  let data= defval!=undefined ? defval : {}
+const _getSsrDataFromContext = (context, name) => {
+  let data= undefined
 
   if (context?.ssr_data != undefined && context?.ssr_data[name]!=undefined) {
-    data= context.ssr_data[name]    
+    data= context.ssr_data[name]
   } else {
     const wdata= _getDataFromWindow(name)
     if (wdata != undefined) {
@@ -37,7 +34,9 @@ const _getSsrData = (context, name, defval) => {
 
 const useSsrData = (context, name, defval, loader) => {
 
-  const [ssrData, setSsrData] = useState(_getSsrData(context, name, defval))
+  const ssrDataFromContext = _getSsrDataFromContext(context, name)
+  const [ssrData, setSsrData] = useState(ssrDataFromContext != undefined ? ssrDataFromContext : defval)
+  const [needToRefresh, setNeedToRefresh] = useState(ssrDataFromContext == undefined)
 
   const refreshSsrData = useCallback(() => {
     async function fetchData() {
@@ -49,15 +48,15 @@ const useSsrData = (context, name, defval, loader) => {
 
     fetchData()
   }, [loader]) 
-
   
   useEffect(() => {
     try {
-      if (! _assertSsrData(name)) {
+      if (needToRefresh) {
+        setNeedToRefresh(false)
         refreshSsrData()
       }
     } catch(e) {}
-  }) 
+  }, [needToRefresh, refreshSsrData]) 
 
   return [ssrData, setSsrData, refreshSsrData]
 }
