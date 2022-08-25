@@ -7,7 +7,7 @@ import 'cli/static/scss/style.scss'
 
 // Catch window errors
 import {miolo_catcher_init} from 'miolo-tools'
-miolo_catcher_init()
+miolo_catcher_init('sys/jserror')
 
 hydrate(<App/>, 
         document.getElementById('root'))

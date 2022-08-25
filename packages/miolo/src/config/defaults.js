@@ -71,15 +71,23 @@ module.exports= {
         }
       } catch(e) {}
       try {
-        const from_auth= ctx.user.id
-        if (from_auth!=undefined) {
-          return from_auth
+        const from_basic_auth= ctx.user.id
+        if (from_basic_auth!=undefined) {
+          return from_basic_auth
         }
-      } catch(e) {}      
+      } catch(e) {}
+      try {
+        if (ctx.user.name == 'guest') {
+          const from_guest_auth= ctx.user.token
+          if (from_guest_auth!=undefined) {
+            return from_guest_auth
+          }
+        }
+      } catch(e) {}          
       let uid= ctx.headers['user-id']
       if (uid!=undefined) {
         return uid
-      }      
+      }
       return undefined
     },
   
@@ -96,6 +104,7 @@ module.exports= {
     },
     queries: undefined
   },
+  catcher: '/sys/jserror',
   cacher: {
     redis: {
       host: '127.0.0.1',

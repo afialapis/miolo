@@ -58,8 +58,11 @@ async function miolo(sconfig, render, callback) {
   // attach the default robots.txt
   init_route_robots(app)
 
-  // Middleware for caching JS errors
-  init_route_catch_js_error(app, '/sys/jserror')
+  // Middleware for catching and logging JS errors
+  const catcher_url= config?.catcher
+  if (catcher_url) {
+    init_route_catch_js_error(app, catcher_url)
+  }
 
   // auth middleware
   if (config?.auth?.guest) {

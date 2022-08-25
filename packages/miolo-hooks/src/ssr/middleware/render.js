@@ -47,6 +47,11 @@ function init_render_middleware(html, port, loader, renderer) {
     try {
       isAuthed = ctx?.isAuthenticated() === true
     } catch(e) {}
+    try {
+      if (! isAuthed) {
+        isAuthed = (ctx.user.name==='guest') && (ctx.user.token != undefined)
+      }
+    } catch(e) {}    
 
     let user = undefined
     try {

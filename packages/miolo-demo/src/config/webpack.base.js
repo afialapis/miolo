@@ -73,7 +73,7 @@ module.exports = {
 
   output: {
     filename: process.env.NODE_ENV === 'production'
-              ? 'bundle.[hash].js'
+              ? 'bundle.[contenthash].js'
               : 'bundle.js',
     sourcePrefix: ''
   },
@@ -117,7 +117,7 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: process.env.NODE_ENV === 'production'
-                ? 'bundle.[hash].css'
+                ? 'bundle.[contenthash].css'
                 : 'bundle.css',
       // deprecated
       // allChunks: true

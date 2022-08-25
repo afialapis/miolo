@@ -1,8 +1,8 @@
 import {make_request} from '../request'
 
-const CATCH_LOG_URL= '/sys/jserror'
+const _DEF_CATCH_LOG_URL= '/sys/jserror'
 
-function miolo_catcher_init () {
+function miolo_catcher_init (catch_log_url) {
 
   window.onerror = function(msg, file, line, col, error) {
     try {
@@ -15,7 +15,7 @@ function miolo_catcher_init () {
         'agent': agent,
       }
       
-      make_request('POST', CATCH_LOG_URL, params, false)
+      make_request('POST', catch_log_url || _DEF_CATCH_LOG_URL, params, false)
 
     } catch(e) {
       console.error(e)
