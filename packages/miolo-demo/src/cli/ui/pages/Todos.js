@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react'
-import {withContext, useFetcher, useSsrData} from 'miolo-hooks'
+import {withContext, useFetcher, useSsrDataOrReload} from 'miolo-hooks'
 import TodosList from './TodosList'
 
 function show_title  (title) {
@@ -19,7 +19,7 @@ const Todos = ({context}) => {
     return nTodoList
   }
 
-  const [todoList, setTodoList, refreshTodoList] = useSsrData(context, 'todoList', [], todoListLoader)
+  const [todoList, setTodoList, refreshTodoList] = useSsrDataOrReload(context, 'todoList', [], todoListLoader)
 
   const addTodo = useCallback((text) => {
 
