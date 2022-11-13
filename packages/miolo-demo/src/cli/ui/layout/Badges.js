@@ -9,12 +9,14 @@ const Badges = () =>
               src={`https://badge.fury.io/js/miolo.svg`}/>
       </a>
     </span>
+    {/*
     <span className="badge">
       <a href={`https://david-dm.org/afialapis/miolo`}>
         <img alt="Dependency Status" 
               src={`https://david-dm.org/afialapis/miolo.svg`}/>
       </a>
     </span>
+    */}
     <span className="badge">
       <a href={`https://www.npmjs.com/package/miolo`}>
         <img alt="NPM Downloads" 

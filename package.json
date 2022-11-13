@@ -24,7 +24,7 @@
     "hooks:prepare": "pnpm run prepare --filter miolo-hooks",
     "demo:clean": "pnpm run clean --filter miolo-demo",
     "demo:lint": "pnpm run lint --filter miolo-demo",
-    "demo:run": "pnpm run demo --filter miolo-demo",
+    "demo:run": "pnpm run all:lib && pnpm run demo --filter miolo-demo",
     "all:clean": "pnpm run miolo:clean && pnpm run tools:clean && pnpm run hooks:clean && pnpm run demo:clean",
     "all:lint": "pnpm run miolo:lint && pnpm run tools:lint && pnpm run hooks:lint  && pnpm run demo:lint",
     "all:lib": "pnpm run miolo:lib && pnpm run tools:lib && pnpm run hooks:lib",

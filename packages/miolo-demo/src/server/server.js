@@ -6,4 +6,9 @@ import config from './config/server'
 
 //import {render_middleware} from './middleware/render_middleware'
 import init_render_middleware from './middleware/init_render_middleware'
-miolo(config, {middleware: init_render_middleware()})
+
+const app= miolo(config, {middleware: init_render_middleware()})
+
+export default app
+
+

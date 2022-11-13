@@ -64,7 +64,7 @@ const init_passport_auth_middleware = ( app, options ) => {
 
   // handle auth routes
   const handleLogIn = (ctx, next) => {
-    return passport.authenticate('local', function(err, user, info, status) {
+    return passport.authenticate('local', function(err, user, info, _status) {
       if (user === false) {
         ctx.body = { 
           success: false,
@@ -84,12 +84,14 @@ const init_passport_auth_middleware = ( app, options ) => {
           ctx.redirect(url_login_redirect)
         }
 
-        return ctx.login(user)
+        //return ctx.login(user)
+        ctx.login(user)
+        next()
       }
     })(ctx)
   }
 
-  const handleLogOut = async (ctx) => {
+  const handleLogOut = async (ctx, next) => {
     if (ctx.isAuthenticated()) {
       ctx.logout()
       ctx.body = { 
@@ -98,6 +100,7 @@ const init_passport_auth_middleware = ( app, options ) => {
       if (url_logout_redirect!=undefined) {
         ctx.redirect(url_logout_redirect)
       }
+      next()
     } else {
       ctx.body = { 
         success: false 

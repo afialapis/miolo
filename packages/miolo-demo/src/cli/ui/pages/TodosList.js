@@ -71,7 +71,7 @@ const TodosList = ({authenticated, todoList, addTodo, toggleTodo, removeTodo, ch
           Tell me how many todos I have added in the last hour
         </div>
         <div className="question" onClick={() => throwAnError()}>
-          Throw some error
+          Throw some JS error (server will receive it)
         </div>        
         {authenticated
           ?

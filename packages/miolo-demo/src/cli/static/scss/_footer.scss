@@ -1,6 +1,6 @@
-.main > footer.page-footer {
-  display: none;
-}
+//.main > footer.page-footer {
+//  display: none;
+//}
 
 @media screen and (max-width: 600px) {
   .main > footer.page-footer {
@@ -22,6 +22,8 @@ footer.page-footer {
 
   .badges {
     padding: 1em 0;
+    display: flex;
+    justify-content: center;
 
     span.badge {
       display: block;
@@ -35,10 +37,5 @@ footer.page-footer {
       }
     
     }        
-  }
-
-  a {
-    color: white;
-    text-decoration: underline;
   }
 }

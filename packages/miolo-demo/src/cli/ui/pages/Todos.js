@@ -74,7 +74,7 @@ const Todos = ({context}) => {
   
   const checkLastHour = useCallback(async () => {
     const res= await fetcher.get('crud/todos/last_hour')
-    alert(res)
+    alert(`You have added ${res.data} todos in the last hour`)
   }, [fetcher])
 
   const insertFakeTodo = useCallback(async () => {

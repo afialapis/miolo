@@ -5,7 +5,8 @@ import { init_logger } from 'src/logger'
 import { init_cron } from './engines/cron'
 // import {init_socket} from './engines/socket'
 
-import { getConnection } from 'calustra'
+import { getConnection, getModel } from 'calustra-router'
+
 
 import { init_context_middleware } from './middleware/context'
 import { init_body_middleware } from './middleware/body'
@@ -20,22 +21,40 @@ import { init_route_catch_js_error} from './routes/catch_js_error'
 
 import { init_route_html_render} from './routes/html_render'
 
-async function miolo(sconfig, render, callback) {
+function miolo(sconfig, render, callback) {
   
   // Init some pieces
   const config = init_config(sconfig)
   const emailer = init_emailer(config.mail.options, config.mail.defaults)
   const logger = init_logger(config.log, emailer)
-  
-  let conn
-  if (config.database) {
-    conn= getConnection({
-      ...config.database,
-      log: logger
-    })
+
+  const miolo_getConnection = () => {
+    let conn
+    if (config.database) {
+      conn= getConnection(config.database, {log: logger})
+    }
+    return conn
   }
+  const miolo_getModel = (tableName, options) => {
+    let model
+    if (config.database) {
+      model= getModel(config.database, tableName, options)
+    }
+    return model    
+  }
+  const conn = miolo_getConnection()  
 
   const app = new Koa()
+
+  // attach to app some custom miolo methods
+  app.miolo = {
+    config: {...config},
+    emailer,
+    logger,
+    getConnection: miolo_getConnection,
+    getModel: miolo_getModel
+  }
+
 
   // Assign miolo stuff to ctx
   init_context_middleware(app, config, logger, emailer, conn)
@@ -83,7 +102,7 @@ async function miolo(sconfig, render, callback) {
   // Routes to /crud
   if (config?.routes) {
     const {init_calustra_router} = require('./routes/calustra')
-    await init_calustra_router(app, conn, config.routes)
+    init_calustra_router(app, conn, config.routes)
   }
   // Socket.io
   // const io= init_socket(logger)
@@ -110,6 +129,7 @@ async function miolo(sconfig, render, callback) {
       callback()
     }
   })
+
 
   return app
     
