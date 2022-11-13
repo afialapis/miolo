@@ -84,9 +84,7 @@ const init_passport_auth_middleware = ( app, options ) => {
           ctx.redirect(url_login_redirect)
         }
 
-        //return ctx.login(user)
-        ctx.login(user)
-        next()
+        return ctx.login(user)
       }
     })(ctx)
   }
@@ -100,7 +98,6 @@ const init_passport_auth_middleware = ( app, options ) => {
       if (url_logout_redirect!=undefined) {
         ctx.redirect(url_logout_redirect)
       }
-      next()
     } else {
       ctx.body = { 
         success: false 
