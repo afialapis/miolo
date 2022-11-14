@@ -56,8 +56,8 @@ function miolo(sconfig, render, callback) {
   }
 
 
-  // Assign miolo stuff to ctx
-  init_context_middleware(app, config, logger, emailer, conn)
+  // Assign this miolo stuff also to ctx
+  init_context_middleware(app, app.miolo)
 
   // Compress and body parser
   init_body_middleware(app)

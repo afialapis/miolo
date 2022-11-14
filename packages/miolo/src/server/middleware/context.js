@@ -1,15 +1,9 @@
 
-const init_context_middleware = ( app, config, logger, emailer, conn  ) => {
+const init_context_middleware = ( app, miolo ) => {
   async function context_middleware(ctx, next) {
 
     // Assign miolo stuff to ctx
-    ctx.miolo= {
-      config,
-      logger,
-      emailer,
-      conn
-    }
-
+    ctx.miolo= miolo
     await next()
 
   }
