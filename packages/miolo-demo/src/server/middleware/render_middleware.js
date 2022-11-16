@@ -73,7 +73,8 @@ async function render_middleware(ctx) {
     .replace('{children}', ssr_html)
     .replace('{styles}', cssURL)
     .replace('{bundle}', bundleURL)
-
+  
+  ctx.ssr_data= ssr_data
   ctx.body= html
 }
 
