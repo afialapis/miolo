@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars*/
 const passport = require('koa-passport');
 const LocalStrategy = require('passport-local').Strategy;
-
 const Router = require('@koa/router')
+
 
 // passport: {
 //   get_user_id:     (user, done) => done(null, user.id), // default
@@ -10,14 +11,15 @@ const Router = require('@koa/router')
 //                    // auth=> done(null, user) noauth=> done(null, false, {message: ''}) err=> done(error, null)
 // }
 
-const def_get_user_id = (user, done) => done(null, user.id)
 
-const def_find_user_by_id = (id, done) => {
+const def_get_user_id = (user, done, miolo) => done(null, user.id)
+
+const def_find_user_by_id = (id, done, miolo) => {
   const err = Error('You need to define auth.passport.find_user_by_id')
   done(err, null)
 }
 
-const def_local_auth_user = (username, password, done) => {
+const def_local_auth_user = (username, password, done, miolo) => {
   const err = Error('You need to define auth.passport.local_auth_user')
   done(err, null)
 }
@@ -39,19 +41,19 @@ const init_passport_auth_middleware = ( app, options ) => {
   // init passport
   const serialize_user = (user, done) => {
     process.nextTick(function() {
-      get_user_id_f(user, done)
+      get_user_id_f(user, done, app.context.miolo)
     })
   }
 
   const deserialize_user = (id, done) => {
     process.nextTick(function() {
-      find_user_by_id_f(id, done)
+      find_user_by_id_f(id, done, app.context.miolo)
     })
   }
 
   const local_strategy= new LocalStrategy(
     (username, password, done) => {
-      local_auth_user_f(username, password, done)
+      local_auth_user_f(username, password, done, app.context.miolo)
   })
   
   passport.serializeUser(serialize_user)

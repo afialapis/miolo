@@ -5,10 +5,8 @@ import { init_logger } from 'src/logger'
 import { init_cron } from './engines/cron'
 // import {init_socket} from './engines/socket'
 
-import { getConnection, getModel } from 'calustra-router'
+import { useCalustraDbContext, useCalustraRouter } from 'calustra-router'
 
-
-import { init_context_middleware } from './middleware/context'
 import { init_body_middleware } from './middleware/body'
 import { init_catcher_middleware } from './middleware/catcher'
 import { init_static_middleware } from './middleware/static'
@@ -28,36 +26,21 @@ function miolo(sconfig, render, callback) {
   const emailer = init_emailer(config.mail.options, config.mail.defaults)
   const logger = init_logger(config.log, emailer)
 
-  const miolo_getConnection = () => {
-    let conn
-    if (config.database) {
-      conn= getConnection(config.database, {log: logger})
-    }
-    return conn
-  }
-  const miolo_getModel = (tableName, options) => {
-    let model
-    if (config.database) {
-      model= getModel(config.database, tableName, options)
-    }
-    return model    
-  }
-  const conn = miolo_getConnection()  
+  const db_options= {log: logger}
 
   const app = new Koa()
 
+
+  // attach to app calustra's db methods
+  useCalustraDbContext(app, config.database, db_options)
+
   // attach to app some custom miolo methods
-  app.miolo = {
+  app.context.miolo = {
     config: {...config},
     emailer,
     logger,
-    getConnection: miolo_getConnection,
-    getModel: miolo_getModel
-  }
-
-
-  // Assign this miolo stuff also to ctx
-  init_context_middleware(app, app.miolo)
+    db: app.context.db
+  } 
 
   // Compress and body parser
   init_body_middleware(app)
@@ -101,8 +84,11 @@ function miolo(sconfig, render, callback) {
 
   // Routes to /crud
   if (config?.routes) {
-    const {init_calustra_router} = require('./routes/calustra')
-    init_calustra_router(app, conn, config.routes)
+    useCalustraRouter(app, config.database, {
+      ...db_options,
+      ...config.routes
+    })
+
   }
   // Socket.io
   // const io= init_socket(logger)

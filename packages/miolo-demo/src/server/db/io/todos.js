@@ -1,11 +1,10 @@
 import {epoch_now} from 'intre'
-import app from '../../server'
 
-async function todos_read() {
+async function todos_read(conn) {
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const Todos = app.miolo.getModel('todos')
+  const Todos = conn.getModel('todos')
   const todos = await Todos.read(options)
 
   return todos
@@ -29,11 +28,11 @@ async function todos_count_last_hour(conn) {
   return res
 }
 
-async function todos_insert_fake(_conn) {
+async function todos_insert_fake(conn) {
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const Todos = app.miolo.getModel('todos')
+  const Todos = conn.getModel('todos')
 
   const d= {
     name: 'Fake todo',

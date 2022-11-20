@@ -1,7 +1,9 @@
+
 import {find_user_by_id as q_find_user_by_id, 
         auth_user as q_auth_user} from 'server/db/io/users'
 
-const get_user_id = (user, done) => {
+// eslint-disable-next-line no-unused-vars
+const get_user_id = (user, done, miolo) => { 
   console.log('[miolo-demo][passport] get_user_id()', user)
   const uid= user?.id
   if (uid!=undefined) {
@@ -11,9 +13,11 @@ const get_user_id = (user, done) => {
   }
 }
 
-const find_user_by_id = (id, done) => {
+const find_user_by_id = (id, done, miolo) => {
   console.log('[miolo-demo][passport] find_user_by_id()', id)
-  q_find_user_by_id(id).then(user => {
+  const conn= miolo.db.getConnection()
+
+  q_find_user_by_id(conn, id).then(user => {
     if (user==undefined) {
       done('User not found', null)
     } else {
@@ -22,13 +26,15 @@ const find_user_by_id = (id, done) => {
   })
 }
 
-const local_auth_user = (username, password, done) => {
+const local_auth_user = (username, password, done, miolo) => {
   // auth=> done(null, user) 
   // noauth=> done(null, false, {message: ''}) 
   // err=> done(error, null)
 
   console.log('[miolo-demo][passport] local_auth_user()', username, password)
-  q_auth_user(username, password).then(user => {
+
+  const conn= miolo.db.getConnection()
+  q_auth_user(conn, username, password).then(user => {
     if (user==undefined) {
       done(null, false, 'Invalid credentials')
     } else {

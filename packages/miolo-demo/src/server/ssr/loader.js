@@ -1,7 +1,8 @@
 import { todos_read } from "../db/io/todos"
 
 const loader = async (ctx) => {
-  const todoList= await todos_read()
+  const conn= ctx.db.getConnection()
+  const todoList= await todos_read(conn)
   
   const data = {todoList}
 
