@@ -18,7 +18,7 @@ importers:
       assign-deep: ^1.0.1
       babel-plugin-module-resolver: ^4.1.0
       basic-auth: ^2.0.1
-      calustra-router: 0.2.1
+      calustra-router: 0.2.2
       cron: ^1.8.2
       diskspace: ^2.0.0
       eslint: ^8.9.0
@@ -49,7 +49,7 @@ importers:
       assign-deep: 1.0.1
       babel-plugin-module-resolver: 4.1.0
       basic-auth: 2.0.1
-      calustra-router: 0.2.1
+      calustra-router: 0.2.2
       cron: 1.8.2
       diskspace: 2.0.0
       eslint: 8.28.0
@@ -2442,11 +2442,11 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  /calustra-orm/0.2.1:
-    resolution: {integrity: sha512-R4Y1hxk3FBOfhdB26yvxHSo6Jq/hJqVOP9Viw8sY0527sWIqBKm9KUhNru7vzl6EqEawopcexlXfTAkDkDMvLA==}
+  /calustra-orm/0.2.2:
+    resolution: {integrity: sha512-ENZMCwwvZGkrglaBXUeVA9b9LzrTglBqUxi+9EKZUEEH6y837vrwWY/K0lmYEx036pDGJA1cyDY5w9GyZFg4Pg==}
     dependencies:
       cacheiro: 0.0.5
-      calustra: 0.2.1
+      calustra: 0.2.2
       intre: 1.0.7
     transitivePeerDependencies:
       - encoding
@@ -2454,16 +2454,16 @@ packages:
       - supports-color
     dev: false
 
-  /calustra-query/0.2.1:
-    resolution: {integrity: sha512-is4/ipoYFB4E9E6mId6jSCPXp15GUjqiG0RA+PLspEWnB953DvSPgZLIzKL4XXBya2IF7p3FEqpqVXWVtnnyKw==}
+  /calustra-query/0.2.2:
+    resolution: {integrity: sha512-pcfwjMpndFbNmvaAofoJMRwb3+xZqy+K85ynwgCepa3gIra+o9qDEDr2NmzFSJZVM+JY3AxY3UkfbKJ3Q9Pw6g==}
     dependencies:
       farrapa-colors: 1.0.7
     dev: false
 
-  /calustra-router/0.2.1:
-    resolution: {integrity: sha512-7kV9JNttn6hPgjBy4cqhww32gK4pvhklfQ8JO3UlFxrRoOiogSHwpeiERyL36p3bzy6ghKxWGiWdPcL8fKimCg==}
+  /calustra-router/0.2.2:
+    resolution: {integrity: sha512-fBdUh18D2rEQfpdGe87FVQ3OOmICO7fDEXKNu0XJ0Sn2u87cj3ENcTMCynPcanfgl+/XdXnKWKNt71x379VpYQ==}
     dependencies:
-      calustra-orm: 0.2.1
+      calustra-orm: 0.2.2
       koa-router: 10.1.1
     transitivePeerDependencies:
       - encoding
@@ -2471,11 +2471,11 @@ packages:
       - supports-color
     dev: false
 
-  /calustra/0.2.1:
-    resolution: {integrity: sha512-ttFyyzlg9S2YBt06JHXsDY5+UomytLXHEATPZ2KIS1FJfxfKFvkForLd195alVaqD0xrDFZugS5I0+5NqE6yeQ==}
+  /calustra/0.2.2:
+    resolution: {integrity: sha512-5VZC5lZxxkWsGrt4881cCY0Z/mQah5857BMuxOEm+U8v9hIRCWfMf74KzuiZyss91krpdyoctwGpVGabdNUQyw==}
     dependencies:
       cacheiro: 0.0.5
-      calustra-query: 0.2.1
+      calustra-query: 0.2.2
       farrapa-colors: 1.0.7
       pg-promise: 10.15.2
       sqlite3: 5.1.2
