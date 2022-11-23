@@ -18,7 +18,7 @@ importers:
       assign-deep: ^1.0.1
       babel-plugin-module-resolver: ^4.1.0
       basic-auth: ^2.0.1
-      calustra-router: 0.1.5
+      calustra-router: 0.2.1
       cron: ^1.8.2
       diskspace: ^2.0.0
       eslint: ^8.9.0
@@ -49,7 +49,7 @@ importers:
       assign-deep: 1.0.1
       babel-plugin-module-resolver: 4.1.0
       basic-auth: 2.0.1
-      calustra-router: 0.1.5
+      calustra-router: 0.2.1
       cron: 1.8.2
       diskspace: 2.0.0
       eslint: 8.28.0
@@ -69,7 +69,7 @@ importers:
       nodemailer: 6.8.0
       passport-local: 1.0.0
       redis: 4.5.0
-      socket.io: 4.5.3
+      socket.io: 4.5.4
       winston: 3.8.2
 
   packages/miolo-demo:
@@ -2076,8 +2076,8 @@ packages:
     resolution: {integrity: sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A==}
     dev: false
 
-  /anymatch/3.1.2:
-    resolution: {integrity: sha512-P43ePfOAIupkguHUycrc4qJ9kz8ZiuOUijaETwX7THt0Y/GNK7v0aa8rY816xWjZ7rJdA5XdMcpVFTKMq+RvWg==}
+  /anymatch/3.1.3:
+    resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
     dependencies:
       normalize-path: 3.0.0
@@ -2363,7 +2363,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001431
+      caniuse-lite: 1.0.30001434
       electron-to-chromium: 1.4.284
       node-releases: 2.0.6
       update-browserslist-db: 1.0.10_browserslist@4.21.4
@@ -2442,11 +2442,11 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  /calustra-orm/0.1.5:
-    resolution: {integrity: sha512-4YVnkQSReZeMo6NTSSwmyqsyrxUIsC5taXgeMm/h8ZBoHmIFoMqAk/k5FECVbcPQOpaon6xp4i7KgsZkKX5GBg==}
+  /calustra-orm/0.2.1:
+    resolution: {integrity: sha512-R4Y1hxk3FBOfhdB26yvxHSo6Jq/hJqVOP9Viw8sY0527sWIqBKm9KUhNru7vzl6EqEawopcexlXfTAkDkDMvLA==}
     dependencies:
       cacheiro: 0.0.5
-      calustra: 0.1.5
+      calustra: 0.2.1
       intre: 1.0.7
     transitivePeerDependencies:
       - encoding
@@ -2454,16 +2454,16 @@ packages:
       - supports-color
     dev: false
 
-  /calustra-query/0.1.5:
-    resolution: {integrity: sha512-5KYz8rrEF/07K5RorbGgzpCeSFq9PVgV7B4L5OKikp5zCxCEDJsy4hQXVClUtsJpo+VUpeqp0xS0snirzjoOJQ==}
+  /calustra-query/0.2.1:
+    resolution: {integrity: sha512-is4/ipoYFB4E9E6mId6jSCPXp15GUjqiG0RA+PLspEWnB953DvSPgZLIzKL4XXBya2IF7p3FEqpqVXWVtnnyKw==}
     dependencies:
       farrapa-colors: 1.0.7
     dev: false
 
-  /calustra-router/0.1.5:
-    resolution: {integrity: sha512-ocvwNpK54/nJsHV1WzdkKC1x7W1RndyBhBqslY9Xvb6A1muPlUsZgssD31wG9H6JRzFeWuNjqEFDn8EDgXS3og==}
+  /calustra-router/0.2.1:
+    resolution: {integrity: sha512-7kV9JNttn6hPgjBy4cqhww32gK4pvhklfQ8JO3UlFxrRoOiogSHwpeiERyL36p3bzy6ghKxWGiWdPcL8fKimCg==}
     dependencies:
-      calustra-orm: 0.1.5
+      calustra-orm: 0.2.1
       koa-router: 10.1.1
     transitivePeerDependencies:
       - encoding
@@ -2471,13 +2471,13 @@ packages:
       - supports-color
     dev: false
 
-  /calustra/0.1.5:
-    resolution: {integrity: sha512-agnp7QeUHEr/DGUh1ALj/6tvLxPayFjGLBHgvnFNq5BZ7Ix9FAxoHdKgqtNrbLuiazRmyA6q322IX7Hw2qSfLg==}
+  /calustra/0.2.1:
+    resolution: {integrity: sha512-ttFyyzlg9S2YBt06JHXsDY5+UomytLXHEATPZ2KIS1FJfxfKFvkForLd195alVaqD0xrDFZugS5I0+5NqE6yeQ==}
     dependencies:
       cacheiro: 0.0.5
-      calustra-query: 0.1.5
+      calustra-query: 0.2.1
       farrapa-colors: 1.0.7
-      pg-promise: 10.15.0
+      pg-promise: 10.15.2
       sqlite3: 5.1.2
     transitivePeerDependencies:
       - encoding
@@ -2506,8 +2506,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite/1.0.30001431:
-    resolution: {integrity: sha512-zBUoFU0ZcxpvSt9IU66dXVT/3ctO1cy4y9cscs1szkPlcWb6pasYM144GqrUygUbT+k7cmUCW61cvskjcv0enQ==}
+  /caniuse-lite/1.0.30001434:
+    resolution: {integrity: sha512-aOBHrLmTQw//WFa2rcF1If9fa3ypkC1wzqqiKHgfdrXTWcU8C4gKVZT77eQAPWN1APys3+uQ0Df07rKauXGEYA==}
 
   /caseless/0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
@@ -2532,7 +2532,7 @@ packages:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
     engines: {node: '>= 8.10.0'}
     dependencies:
-      anymatch: 3.1.2
+      anymatch: 3.1.3
       braces: 3.0.2
       glob-parent: 5.1.2
       is-binary-path: 2.1.0
@@ -3101,8 +3101,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /enhanced-resolve/5.10.0:
-    resolution: {integrity: sha512-T0yTFjdpldGY8PmuXXR0PyQ1ufZpEGiHVrp7zHKB7jdR4qlmZHhONVM5AQOAWXuF/w3dnHbEQVrNptJgt7F+cQ==}
+  /enhanced-resolve/5.11.0:
+    resolution: {integrity: sha512-0Gcraf7gAJSQoPg+bTSXNhuzAYtXqLc4C011vb8S3B8XUSEkGYNBk20c68X9291VF4vvsCD8SPkr6Mza+DwU+g==}
     engines: {node: '>=10.13.0'}
     dependencies:
       graceful-fs: 4.2.10
@@ -3328,7 +3328,7 @@ packages:
       imurmurhash: 0.1.4
       is-glob: 4.0.3
       is-path-inside: 3.0.3
-      js-sdsl: 4.1.5
+      js-sdsl: 4.2.0
       js-yaml: 4.1.0
       json-stable-stringify-without-jsonify: 1.0.1
       levn: 0.4.1
@@ -4449,8 +4449,8 @@ packages:
     resolution: {integrity: sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==}
     dev: true
 
-  /js-sdsl/4.1.5:
-    resolution: {integrity: sha512-08bOAKweV2NUC1wqTtf3qZlnpOX/R2DU9ikpjOHs0H+ibQv3zpncVQg6um4uYtRtrwIX8M4Nh3ytK4HGlYAq7Q==}
+  /js-sdsl/4.2.0:
+    resolution: {integrity: sha512-dyBIzQBDkCqCu+0upx25Y2jGdbTGxE9fshMsCdK0ViOongpV+n5tXRcZY9v7CaVQ79AGS9KA1KHtojxiM7aXSQ==}
 
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -5555,8 +5555,8 @@ packages:
       pg: 8.8.0
     dev: false
 
-  /pg-promise/10.15.0:
-    resolution: {integrity: sha512-8Nog2y0s7+bGx15d7IQowGIrA/kdQGgdA8Fm+A7KA5uF7OeDu9fw+tosQaQP4uSv8FPvX1Fup9O/Mfq2JNx26Q==}
+  /pg-promise/10.15.2:
+    resolution: {integrity: sha512-UtaNn/WLEvvtqFB8DGjXMP6ZMvqhRlF0kVI8gMdd9xPUkcAofKXz4s2I2VlxkbQM3p/C1ttuiQzFc4JiClSagg==}
     engines: {node: '>=12.0'}
     dependencies:
       assert-options: 0.8.0
@@ -6452,8 +6452,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /socket.io/4.5.3:
-    resolution: {integrity: sha512-zdpnnKU+H6mOp7nYRXH4GNv1ux6HL6+lHL8g7Ds7Lj8CkdK1jJK/dlwsKDculbyOHifcJ0Pr/yeXnZQ5GeFrcg==}
+  /socket.io/4.5.4:
+    resolution: {integrity: sha512-m3GC94iK9MfIEeIBfbhJs5BqFibMtkRk8ZpKwG2QwxV0m/eEhPIV4ara6XCF1LWNAus7z58RodiZlAH71U3EhQ==}
     engines: {node: '>=10.0.0'}
     dependencies:
       accepts: 1.3.8
@@ -7166,7 +7166,7 @@ packages:
       acorn-import-assertions: 1.8.0_acorn@8.8.1
       browserslist: 4.21.4
       chrome-trace-event: 1.0.3
-      enhanced-resolve: 5.10.0
+      enhanced-resolve: 5.11.0
       es-module-lexer: 0.9.3
       eslint-scope: 5.1.1
       events: 3.3.0

@@ -46,19 +46,27 @@ module.exports= {
       sameSite: process.env.NODE_ENV != 'development' ? null : 'strict', 
     }
   },
-  database: {
-    dialect:  'postgres',
-    host:     'localhost',
-    port:     5432,
-    database: 'miolo',
-    user:     'postgres',
-    password: 'postgres',
-    max:      5,          // Maximum number of connection in pool
-    min:      0,          // Minimum number of connection in pool
-    idleTimeoutMillis: 10000,  // The maximum time, in milliseconds, that a connection can be idle before being released. Use with combination of evict for proper working, for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
+  db: {
+    connection: {
+      database: {
+        dialect:  'postgres',
+        host:     'localhost',
+        port:     5432,
+        database: 'miolo',
+        user:     'postgres',
+        password: 'postgres',
+        max:      5,          // Maximum number of connection in pool
+        min:      0,          // Minimum number of connection in pool
+        idleTimeoutMillis: 10000,  // The maximum time, in milliseconds, that a connection can be idle before being released. Use with combination of evict for proper working, for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
+      },
+      options: {
+        log: 'silly' //  will be updated on the fly with miolo logger
+      }
+    },
+    tables: []
   },
   routes: {
-    body_field: undefined,
+    bodyField: undefined,
   
     getUserId: (ctx) => {
       try {

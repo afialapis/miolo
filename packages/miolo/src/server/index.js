@@ -20,19 +20,20 @@ import { init_route_catch_js_error} from './routes/catch_js_error'
 import { init_route_html_render} from './routes/html_render'
 
 function miolo(sconfig, render, callback) {
+
   
   // Init some pieces
   const config = init_config(sconfig)
   const emailer = init_emailer(config.mail.options, config.mail.defaults)
   const logger = init_logger(config.log, emailer)
 
-  const db_options= {log: logger}
-
+  config.db.connection.options.log= logger
+  
   const app = new Koa()
 
 
   // attach to app calustra's db methods
-  useCalustraDbContext(app, config.database, db_options)
+  useCalustraDbContext(app, config.db)
 
   // attach to app some custom miolo methods
   app.context.miolo = {
@@ -84,10 +85,7 @@ function miolo(sconfig, render, callback) {
 
   // Routes to /crud
   if (config?.routes) {
-    useCalustraRouter(app, config.database, {
-      ...db_options,
-      ...config.routes
-    })
+    useCalustraRouter(app, config.db, config.routes)
 
   }
   // Socket.io
