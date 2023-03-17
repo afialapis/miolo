@@ -1,4 +1,4 @@
-import { red, cyan, magenta, yellow, gray, red_light } from 'farrapa-colors'
+import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
 /* https://github.com/winstonjs/winston/issues/925 */
 /* https://github.com/winstonjs/winston/issues/287 */
 const { createLogger, format, transports } = require('winston')

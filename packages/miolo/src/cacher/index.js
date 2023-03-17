@@ -1,6 +1,6 @@
 import redis from 'redis'
 import { promisify } from 'util'
-import { red, magenta } from 'farrapa-colors'
+import { red, magenta } from 'tinguir'
 
 function init_cacher(config) {
 

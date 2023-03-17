@@ -1,5 +1,5 @@
 import { performance } from 'perf_hooks'
-import { cyan, green, yellow, red } from 'farrapa-colors'
+import { cyan, green, yellow, red } from 'tinguir'
 
 let REQUEST_COUNTER= 1
 

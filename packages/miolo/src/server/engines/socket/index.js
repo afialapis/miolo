@@ -1,5 +1,5 @@
 import IO from 'koa-socket-2'
-import { blue } from 'farrapa-colors'
+import { blue } from 'tinguir'
 
 function init_socket(logger) {
 

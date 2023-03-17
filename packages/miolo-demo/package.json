@@ -12,7 +12,7 @@
   "author": "Afialapis <info@afialapis.com>",
   "license": "MIT",
   "dependencies": {
-    "farrapa-collections": "1.0.7",
+    "farrapa": "2.0.1",
     "miolo-hooks": "workspace:../miolo-hooks",
     "miolo-tools": "workspace:../miolo-tools",
     "react": "^17.0.2",
@@ -36,7 +36,7 @@
     "file-loader": "6.2.0",
     "fs-extra-promise": "^1.0.1",
     "html-webpack-plugin": "^5.5.0",
-    "intre": "^1.0.3",
+    "intre": "^1.1.6",
     "mini-css-extract-plugin": "^2.5.3",
     "miolo": "workspace:../miolo",
     "node-sass": "^7.0.1",

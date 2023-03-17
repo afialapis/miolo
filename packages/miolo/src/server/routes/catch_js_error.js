@@ -1,4 +1,4 @@
-import { blue, red } from 'farrapa-colors'
+import { blue, red } from 'tinguir'
 import Router    from '@koa/router'
 
 function init_route_catch_js_error(app, route) {

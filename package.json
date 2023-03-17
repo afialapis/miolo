@@ -33,8 +33,5 @@
     "all:publish": "pnpm publish --filter miolo && pnpm publish --filter miolo-tools && pnpm publish --filter miolo-hooks && pnpm publish --filter miolo-demo",
     "purge": "pnpm run all:clean && rm -fr pnpm-lock.yaml node_modules packages/miolo/node_modules packages/miolo-tools/node_modules packages/miolo-demo/node_modules",
     "reset": "pnpm run purge && pnpm i"
-  },
-  "devDependencies": {
-    "jwt-simple": "^0.5.6"
   }
 }

@@ -1,6 +1,6 @@
 const os = require('os')
 const diskspace = require('diskspace')
-import { cyan, green, yellow } from 'farrapa-colors'
+import { cyan, green, yellow } from 'tinguir'
 
 function init_sys_check_and_log(logger) {
   function toMB(bytes) {

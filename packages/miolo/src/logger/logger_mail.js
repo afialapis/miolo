@@ -1,7 +1,7 @@
 "use strict";
 let util    = require("util");
 let winston = require("winston");
-import { uncolor } from 'farrapa-colors'
+import { uncolor } from 'tinguir'
 
 function init_logger_to_mail(config, emailer) {
 

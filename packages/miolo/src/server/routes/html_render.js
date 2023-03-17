@@ -1,7 +1,7 @@
 
 import fs from 'fs'
 import { resolve } from 'path'
-import { cyan } from 'farrapa-colors'
+import { cyan } from 'tinguir'
 import Router    from '@koa/router'
 
 const indexHTMLPath= resolve(__dirname, 'fallback_index.html')

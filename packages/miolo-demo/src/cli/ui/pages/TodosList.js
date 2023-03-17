@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { collSort } from 'farrapa-collections'
+import { collSort } from 'farrapa/collections'
 
 const TodosList = ({authenticated, todoList, addTodo, toggleTodo, removeTodo, checkLastHour, insertFakeTodo}) => {
   const [inputText, setInputText] = useState('')
