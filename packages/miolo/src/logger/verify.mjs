@@ -1,4 +1,4 @@
-import {make_logger} from './index'
+import {make_logger} from './index.mjs'
 
 
 function verify_logger(config) {

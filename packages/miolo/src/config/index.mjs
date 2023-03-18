@@ -1,5 +1,5 @@
-const merge = require('assign-deep')
-const base_config = require('./defaults.js')
+import merge from 'assign-deep'
+import base_config from './defaults.mjs'
 
 
 function init_config(config) {

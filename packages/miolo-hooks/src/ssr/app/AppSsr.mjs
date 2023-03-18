@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { StaticRouter } from 'react-router-dom/server'
-import AppContext from './AppContext'
+import AppContext from './AppContext.mjs'
 
 const AppSsr = ({url, context, children}) => {
   

@@ -1,4 +1,4 @@
-import {make_request} from '../request'
+import {make_request} from '../request/index.mjs'
 
 const _DEF_CATCH_LOG_URL= '/sys/jserror'
 

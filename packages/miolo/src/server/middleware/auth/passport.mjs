@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars*/
-const passport = require('koa-passport');
-const LocalStrategy = require('passport-local').Strategy;
-const Router = require('@koa/router')
+import passport from 'koa-passport'
+import LocalStrategy from 'passport-local'
+import Router from '@koa/router'
 
 
 // passport: {
@@ -51,7 +51,7 @@ const init_passport_auth_middleware = ( app, options ) => {
     })
   }
 
-  const local_strategy= new LocalStrategy(
+  const local_strategy= new LocalStrategy.Strategy (
     (username, password, done) => {
       local_auth_user_f(username, password, done, app.context.miolo)
   })

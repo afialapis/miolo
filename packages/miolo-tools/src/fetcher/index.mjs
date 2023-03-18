@@ -1,7 +1,7 @@
 
 
-import {make_request} from '../request'
-import {omit_nil} from './utils'
+import {make_request} from '../request/index.mjs'
+import {omit_nil} from './utils.mjs'
 
 
 const _FetcherRequester = {

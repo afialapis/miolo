@@ -19,7 +19,7 @@ import { init_route_catch_js_error} from './routes/catch_js_error'
 
 import { init_route_html_render} from './routes/html_render'
 
-function miolo(sconfig, render, callback) {
+async function miolo(sconfig, render, callback) {
 
   
   // Init some pieces
@@ -69,17 +69,17 @@ function miolo(sconfig, render, callback) {
 
   // auth middleware
   if (config?.auth?.guest) {
-    const {init_guest_auth_middleware} = require('./middleware/auth/guest')
+    const {init_guest_auth_middleware} = await import('./middleware/auth/guest.mjs')
     init_guest_auth_middleware(app, config.auth.guest, config?.session, logger)
   }  
 
   if (config?.auth?.basic) {
-    const {init_basic_auth_middleware} = require('./middleware/auth/basic')
+    const {init_basic_auth_middleware} = await import('./middleware/auth/basic.mjs')
     init_basic_auth_middleware(app, config.auth.basic)
   }
 
   if (config?.auth?.passport) {
-    const {init_passport_auth_middleware} = require('./middleware/auth/passport')
+    const {init_passport_auth_middleware} = await import('./middleware/auth/passport.mjs')
     init_passport_auth_middleware(app, config.auth.passport)
   }
 

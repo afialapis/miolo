@@ -1,5 +1,5 @@
 import {useState, useCallback, useEffect} from 'react'
-import getSsrDataFromContext from './getSsrDataFromContext'
+import getSsrDataFromContext from './getSsrDataFromContext.mjs'
 
 const useSsrDataOrReload = (context, name, defval, loader) => {
 

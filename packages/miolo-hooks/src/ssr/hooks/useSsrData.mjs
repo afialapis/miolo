@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import getSsrDataFromContext from './getSsrDataFromContext'
+import getSsrDataFromContext from './getSsrDataFromContext.mjs'
 
 
 const useSsrData = (context, name, defval) => {

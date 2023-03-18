@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch'
-import {json_to_query_string} from './queryString'
-import {trim_left} from './utils'
+import {json_to_query_string} from './queryString.mjs'
+import {trim_left} from './utils.mjs'
 
 
 /**

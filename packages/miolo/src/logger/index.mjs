@@ -1,7 +1,7 @@
 import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
 /* https://github.com/winstonjs/winston/issues/925 */
 /* https://github.com/winstonjs/winston/issues/287 */
-const { createLogger, format, transports } = require('winston')
+import { createLogger, format, transports } from 'winston'
 const { combine, timestamp, _label, printf, errors } = format
 
 
@@ -91,7 +91,7 @@ const init_logger = (config, emailer) => {
 }
 
 
-module.exports= {init_logger}
+export {init_logger}
 
 
 

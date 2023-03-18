@@ -1,4 +1,4 @@
-import {init_sys_check_and_log} from './syscheck'
+import {init_sys_check_and_log} from './syscheck.mjs'
 const CronJob = require('cron').CronJob
 
 

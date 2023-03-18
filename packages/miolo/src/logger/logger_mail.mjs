@@ -1,6 +1,6 @@
-"use strict";
-let util    = require("util");
-let winston = require("winston");
+// "use strict";
+import util from 'util'
+import winston from 'winston'
 import { uncolor } from 'tinguir'
 
 function init_logger_to_mail(config, emailer) {
@@ -66,4 +66,4 @@ function init_logger_to_mail(config, emailer) {
   return MailerLogger
 }
 
-module.exports = {init_logger_to_mail}
+export {init_logger_to_mail}

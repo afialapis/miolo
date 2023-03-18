@@ -1,5 +1,5 @@
 import koa_session from 'koa-session'
-import redis_store from './store'
+import redis_store from './store.mjs'
 
 /**
  * Middleware for session

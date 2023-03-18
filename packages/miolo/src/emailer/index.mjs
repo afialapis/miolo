@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer')
+import nodemailer from 'nodemailer'
 
 function init_emailer(options, defaults, silent= false) {
 

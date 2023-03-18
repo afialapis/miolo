@@ -1,5 +1,5 @@
-const os = require('os')
-const diskspace = require('diskspace')
+import os from 'os'
+import diskspace from 'diskspace'
 import { cyan, green, yellow } from 'tinguir'
 
 function init_sys_check_and_log(logger) {

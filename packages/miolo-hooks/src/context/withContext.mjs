@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import Context from './Context'
+import Context from './Context.mjs'
 
 /* eslint react/display-name:0 */
 const withContext = BaseComponent => (props) => {

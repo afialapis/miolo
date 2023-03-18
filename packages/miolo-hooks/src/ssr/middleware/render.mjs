@@ -1,7 +1,7 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import AppSsr from '../app/AppSsr'
-import ErrMessage from './fallbacks/ErrMessage'
+import AppSsr from '../app/AppSsr.mjs'
+import ErrMessage from './fallbacks/ErrMessage.mjs'
 import {html as f_html} from './fallbacks/index.html'
 
 function init_render_middleware(html, port, loader, renderer) {

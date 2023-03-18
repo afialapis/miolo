@@ -1,4 +1,4 @@
-import { make_cacher } from './index'
+import { make_cacher } from './index.mjs'
 
 async function verify_cacher(config) {
   const cacher= make_cacher(config)
