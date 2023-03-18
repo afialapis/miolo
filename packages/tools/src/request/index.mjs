@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch'
+//import fetch from 'isomorphic-fetch'
 import {json_to_query_string} from './queryString.mjs'
 import {trim_left} from './utils.mjs'
 

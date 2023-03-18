@@ -29,7 +29,7 @@
     "require": "./dist/miolo-tools.cjs",
     "default": "./lib/index.cjs"
   },
-  "dependencies": {
+  "XXX__dependencies": {
     "isomorphic-fetch": "^3.0.0"
   }
 }
