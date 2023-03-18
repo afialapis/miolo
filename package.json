@@ -16,7 +16,8 @@
     "miolo:reset": "npm run miolo:purge && cd packages/miolo && npm i",
     "miolo:lint": "npx xeira lint --filter=miolo --folder=src",
     "miolo:test": "npx xeira test --files=./test/index.mjs --filter=miolo",
-    "miolo:lib": "npm run miolo:clean lib && npx xeira transpile --filter=miolo",
+    "miolo:cp-server-statics": "cd packages/miolo && cp -R ./src/server/static ./lib/server/static && cp ./src/server/routes/fallback_index.html ./lib/server/routes",
+    "miolo:lib": "npm run miolo:clean lib && npx xeira transpile --filter=miolo && npm run miolo:cp-server-statics",
     "miolo:dist": "npm run miolo:clean dist && npx xeira bundle --filter=miolo",
     "miolo:site": "npm run miolo:clean arredemo && npx xeira site --filter=miolo",
     "miolo:prepare": "npm run miolo:lint && npm run miolo:test && npm run miolo:lib && npm run miolo:dist && npm run miolo:site",
@@ -98,5 +99,8 @@
     "x_purge": "pnpm run all:clean && rm -fr pnpm-lock.yaml node_modules packages/miolo/node_modules packages/miolo-tools/node_modules packages/miolo-demo/node_modules",
     "x_reset": "pnpm run purge && pnpm i"
 
+  },
+  "devDependencies": {
+    "xeira": "^0.2.0"
   }
 }

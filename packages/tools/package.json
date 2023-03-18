@@ -2,8 +2,6 @@
   "name": "miolo-tools",
   "version": "0.0.51",
   "description": "cli tools for miolo",
-
-
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
     "Donato Lorenzo <donato@afialapis.com>"
