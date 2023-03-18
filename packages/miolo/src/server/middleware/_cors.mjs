@@ -127,4 +127,4 @@ export default function(options) {
       ctx.status = 204;
     }
   };
-};
+}

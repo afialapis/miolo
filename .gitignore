@@ -22,3 +22,5 @@ npm-debug.log*
 **/TODO.lst
 **/.old
 **/test/bundle.js
+
+**/arredemo
