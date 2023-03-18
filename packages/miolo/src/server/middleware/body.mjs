@@ -2,6 +2,7 @@ import koa_body_parser from 'koa-better-body'
 //import koa_body_parser from 'koa-bodyparser'
 import koa_convert from 'koa-convert'
 import koa_compress from 'koa-compress'
+import {Z_SYNC_FLUSH} from 'zlib'
 
 const init_body_middleware = ( app ) => {
   // Compress
@@ -11,7 +12,7 @@ const init_body_middleware = ( app ) => {
       return content_type=='application/json' || content_type=='text/html'
     },
     //threshold: 2048,
-    flush: require('zlib').Z_SYNC_FLUSH
+    flush: Z_SYNC_FLUSH
   }))
 
   // body parser - koa-better-body

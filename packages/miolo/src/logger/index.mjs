@@ -1,7 +1,10 @@
 import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
 /* https://github.com/winstonjs/winston/issues/925 */
 /* https://github.com/winstonjs/winston/issues/287 */
+import {init_logger_to_mail} from './logger_mail.mjs'
 import { createLogger, format, transports } from 'winston'
+
+
 const { combine, timestamp, _label, printf, errors } = format
 
 
@@ -59,12 +62,9 @@ const init_logger = (config, emailer) => {
   //
   // Mail transport
   //
-  if (config.mail.enabled) {
-    let winston = require("winston");
-    const {init_logger_to_mail}= require('./logger_mail')
-    
+  if (config.mail.enabled) {    
     const MailerLogger= init_logger_to_mail(config.mail, emailer)
-    winston.transports.MailerLogger = MailerLogger;
+    transports.MailerLogger = MailerLogger;
 
     _log_transports.push(
       new transports.MailerLogger({

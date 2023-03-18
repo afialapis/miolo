@@ -1,6 +1,5 @@
 import {init_sys_check_and_log} from './syscheck.mjs'
-const CronJob = require('cron').CronJob
-
+import {CronJob} from 'cron'
 
 function init_cron(logger) {
   
