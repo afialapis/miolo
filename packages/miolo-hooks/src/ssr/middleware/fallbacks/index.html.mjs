@@ -1,4 +1,4 @@
-module.exports= {
+export default {
 	html: `
 		<!DOCTYPE html>
 		<html lang="en">

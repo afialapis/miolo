@@ -14,7 +14,7 @@
  * @return {Function} cors middleware
  * @api public
  */
-module.exports = function(options) {
+export default function(options) {
   const defaults = {
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
   };
