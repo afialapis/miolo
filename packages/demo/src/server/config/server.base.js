@@ -1,4 +1,4 @@
-const main = require('../../config/main')
+const main = require('./main')
 
 const path = require('path')
 const root = (dir) => path.resolve(__dirname, '../../..', dir)

@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>t-d-demo-rollup demo</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+</head>
+<body>
+  <div id="demo-container"></div> 
+
+  <script src="dist/bundle.js"></script>
+  <script>
+    // Sanity-check the component loaded...
+    setTimeout(function () {
+      var content = document.querySelector("#demo-container");
+      var warning = "If you can see this, something is broken (or JS is not enabled)!";
+      if (!content.innerHTML) {
+        content.innerHTML = warning;
+      }
+    }, 500);
+  </script>
+</body>
+</html>

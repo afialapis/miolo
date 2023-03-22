@@ -16,7 +16,7 @@
     "miolo:reset": "npm run miolo:purge && cd packages/miolo && npm i",
     "miolo:lint": "npx xeira lint --filter=miolo --folder=src",
     "miolo:cp-server-statics": "cd packages/miolo && cp -R ./src/server/static ./lib/server/static && cp ./src/server/routes/fallback_index.html ./lib/server/routes",
-    "miolo:lib": "npm run miolo:clean lib && npx xeira transpile --filter=miolo && npm run miolo:cp-server-statics",
+    "miolo:lib": "npm run miolo:clean lib && npx xeira transpile --filter=miolo --minifier=none && npm run miolo:cp-server-statics",
     "miolo:dist": "npm run miolo:clean dist && npx xeira bundle --filter=miolo",
     "miolo:site": "npm run miolo:clean arredemo && npx xeira site --filter=miolo",
     "miolo:prepare": "npm run miolo:lint && npm run miolo:lib && npm run miolo:dist && npm run miolo:site",
@@ -26,7 +26,7 @@
     "server-tools:purge": "npm run server-tools:clean lib dist arredemo node_modules package-lock.json",
     "server-tools:reset": "npm run server-tools:purge && cd packages/server-tools && npm i",
     "server-tools:lint": "npx xeira lint --filter=server-tools --folder=src",
-    "server-tools:lib": "npm run server-tools:clean lib && npx xeira transpile --filter=server-tools",
+    "server-tools:lib": "npm run server-tools:clean lib && npx xeira transpile --filter=server-tools --minifier=none",
     "server-tools:dist": "npm run server-tools:clean dist && npx xeira bundle --filter=server-tools",
     "server-tools:site": "npm run server-tools:clean arredemo && npx xeira site --filter=server-tools",
     "server-tools:prepare": "npm run server-tools:lint && npm run server-tools:lib && npm run server-tools:dist && npm run server-tools:site",
@@ -36,7 +36,7 @@
     "cli-tools:purge": "npm run cli-tools:clean lib dist arredemo node_modules package-lock.json",
     "cli-tools:reset": "npm run cli-tools:purge && cd packages/cli-tools && npm i",
     "cli-tools:lint": "npx xeira lint --filter=cli-tools --folder=src",
-    "cli-tools:lib": "npm run cli-tools:clean lib && npx xeira transpile --filter=cli-tools",
+    "cli-tools:lib": "npm run cli-tools:clean lib && npx xeira transpile --filter=cli-tools --minifier=none",
     "cli-tools:dist": "npm run cli-tools:clean dist && npx xeira bundle --filter=cli-tools",
     "cli-tools:site": "npm run cli-tools:clean arredemo && npx xeira site --filter=cli-tools",
     "cli-tools:prepare": "npm run cli-tools:lint && npm run cli-tools:lib && npm run cli-tools:dist && npm run cli-tools:site",
@@ -70,6 +70,6 @@
     "all:publish": "npm run pkg:publish"
   },
   "devDependencies": {
-    "xeira": "^0.2.3"
+    "xeira": "^0.2.5"
   }
 }

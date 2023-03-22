@@ -43,7 +43,7 @@
     "@koa/router": "^10.1.1",
     "assign-deep": "^1.0.1",
     "basic-auth": "^2.0.1",
-    "calustra-router": "0.2.7",
+    "calustra-router": "^0.2.8",
     "cron": "^1.8.2",
     "diskspace": "^2.0.0",
     "jwt-simple": "^0.5.6",

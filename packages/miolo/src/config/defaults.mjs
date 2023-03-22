@@ -1,9 +1,9 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __my_filename = fileURLToPath(import.meta.url)
+const __my_dirname = path.dirname(__my_filename)
 
-const favicon = path.resolve(__dirname, '../server/static/ig/favicon.ico')
+const favicon = path.resolve(__my_dirname, '../server/static/ig/favicon.ico')
 
 export default {
   name: 'miolo',
