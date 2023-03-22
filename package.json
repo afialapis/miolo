@@ -77,6 +77,6 @@
     "all:publish": "npm run pkg:publish"
   },
   "devDependencies": {
-    "xeira": "^0.2.5"
+    "xeira": "^0.2.6"
   }
 }
