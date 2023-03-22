@@ -1,5 +1,5 @@
 import React from 'react'
-import Index from 'cli/ui/Index'
+import Index from '../../cli/ui/Index'
 
 const renderer = (ctx) => {
   

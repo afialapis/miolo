@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from "react-router-dom"
-import { withContext } from 'miolo-hooks'
+import { withContext } from 'miolo-cli-tools'
 
 const ToolbarLink = ({path, name}) => {
   return (

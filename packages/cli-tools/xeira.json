@@ -12,5 +12,5 @@
   "test_folder": null,
   "demo_mode": null,
   "demo_demoer": null,
-  "verbose": true
+  "verbose": false
 }

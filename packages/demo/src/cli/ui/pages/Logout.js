@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react'
-import {useFetcher} from 'miolo-hooks'
+import {useFetcher} from 'miolo-cli-tools'
 import LogoutForm from './LogoutForm'
 
 const Logout = () => {

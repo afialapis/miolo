@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { resolve } from 'path'
-import main from '../../config/main'
-import { init_render_middleware } from "miolo-cli-tools"
+import main from '../config/main'
+import { init_render_middleware } from "miolo-server-tools"
 import { loader } from '../ssr/loader'
 import { renderer } from '../ssr/renderer'
 

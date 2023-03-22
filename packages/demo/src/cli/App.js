@@ -1,6 +1,6 @@
 import React from 'react'
-import Index from 'cli/ui/Index'
-import {AppBrowser} from 'miolo-hooks'
+import Index from './ui/Index'
+import {AppBrowser} from 'miolo-cli-tools'
 
 
 

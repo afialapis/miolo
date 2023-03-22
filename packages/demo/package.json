@@ -1,6 +1,6 @@
 {
   "name": "miolo-demo",
-  "version": "0.0.51",
+  "private": true,
   "description": "miolo demo",
   "main": "run.js",
   "scripts": {
@@ -14,8 +14,8 @@
   "type": "commonjs",
   "dependencies": {
     "farrapa": "2.0.1",
-    "miolo-cli-tools": "file:../cli-hooks",
-    "miolo-server-tools": "file:../server-tools",
+    "miolo-cli-tools": "*",
+    "miolo-server-tools": "*",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.1"
@@ -27,7 +27,7 @@
     "@babel/preset-react": "7.16.7",    
     "assign-deep": "^1.0.1",
     "intre": "^1.1.5",
-    "miolo": "file:../miolo"
+    "miolo": "*"
   },
   "eslintConfig": {
     "extends": [

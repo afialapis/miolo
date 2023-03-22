@@ -7,13 +7,18 @@
     "Donato Lorenzo <donato@afialapis.com>"
   ],
   "license": "MIT",
+  "workspaces": [
+    "packages/miolo",
+    "packages/server-tools",
+    "packages/cli-tools",
+    "packages/demo"
+  ],
   "scripts": {
     "main:purge": "rm -fr node_modules package-lock.json npm-lock.yaml",
     "main:reset": "npm run main:purge && npm i",
 
-    "miolo:clean": "cd packages/miolo && rm -fr $1",
-    "miolo:purge": "npm run miolo:clean lib dist arredemo node_modules package-lock.json",
-    "miolo:reset": "npm run miolo:purge && cd packages/miolo && npm i",
+    "miolo:clean": "cd packages/miolo && rm -fr $@",
+    "miolo:purge": "npm run miolo:clean lib dist",
     "miolo:lint": "npx xeira lint --filter=miolo --folder=src",
     "miolo:cp-server-statics": "cd packages/miolo && cp -R ./src/server/static ./lib/server/static && cp ./src/server/routes/fallback_index.html ./lib/server/routes",
     "miolo:lib": "npm run miolo:clean lib && npx xeira transpile --filter=miolo --minifier=none && npm run miolo:cp-server-statics",
@@ -22,9 +27,14 @@
     "miolo:prepare": "npm run miolo:lint && npm run miolo:lib && npm run miolo:dist && npm run miolo:site",
     "miolo:publish": "cd packages/miolo && npm publish",
 
-    "server-tools:clean": "cd packages/server-tools && rm -fr $1",
-    "server-tools:purge": "npm run server-tools:clean lib dist arredemo node_modules package-lock.json",
-    "server-tools:reset": "npm run server-tools:purge && cd packages/server-tools && npm i",
+    "commons:clean": "cd packages/commons && rm -fr $@",
+    "commons:purge": "npm run commons:clean lib dist",
+    "commons:lint": "npx xeira lint --filter=commons --folder=src",
+    "commons:lib": "npm run commons:clean lib && npx xeira transpile --filter=commons --minifier=none",
+    "commons:prepare": "npm run commons:lint && npm run commons:lib",
+
+    "server-tools:clean": "cd packages/server-tools && rm -fr $@",
+    "server-tools:purge": "npm run server-tools:clean lib dist",
     "server-tools:lint": "npx xeira lint --filter=server-tools --folder=src",
     "server-tools:lib": "npm run server-tools:clean lib && npx xeira transpile --filter=server-tools --minifier=none",
     "server-tools:dist": "npm run server-tools:clean dist && npx xeira bundle --filter=server-tools",
@@ -32,9 +42,8 @@
     "server-tools:prepare": "npm run server-tools:lint && npm run server-tools:lib && npm run server-tools:dist && npm run server-tools:site",
     "server-tools:publish": "cd packages/server-tools && npm publish",
 
-    "cli-tools:clean": "cd packages/cli-tools && rm -fr $1",
-    "cli-tools:purge": "npm run cli-tools:clean lib dist arredemo node_modules package-lock.json",
-    "cli-tools:reset": "npm run cli-tools:purge && cd packages/cli-tools && npm i",
+    "cli-tools:clean": "cd packages/cli-tools && rm -fr $@",
+    "cli-tools:purge": "npm run cli-tools:clean lib dist",
     "cli-tools:lint": "npx xeira lint --filter=cli-tools --folder=src",
     "cli-tools:lib": "npm run cli-tools:clean lib && npx xeira transpile --filter=cli-tools --minifier=none",
     "cli-tools:dist": "npm run cli-tools:clean dist && npx xeira bundle --filter=cli-tools",
@@ -44,7 +53,6 @@
 
     "demo:clean":   "echo \"demo not ready yet\"",
     "demo:purge":   "echo \"demo not ready yet\"",
-    "demo:reset":   "echo \"demo not ready yet\"",
     "demo:lint":    "echo \"demo not ready yet\"",
     "demo:demo":    "echo \"demo not ready yet\"",
     "demo:lib":     "echo \"demo not ready yet\"",
@@ -54,18 +62,17 @@
     "demo:publish": "echo \"demo not ready yet\"",
       
     
-    "pkg:purge": "npm run miolo:purge && npm run server-tools:purge && npm run cli-tools:purge && npm run demo:purge",
-    "pkg:reset": "npm run miolo:reset && npm run server-tools:reset && npm run cli-tools:reset && npm run demo:reset",
-    "pkg:lint": "npm run miolo:lint && npm run server-tools:lint && npm run cli-tools:lint && npm run demo:lint",
-    "pkg:lib": "npm run miolo:lib && npm run server-tools:lib && npm run cli-tools:lib && npm run demo:lib",
+    "pkg:purge": "npm run miolo:purge && npm run commons:purge && npm run server-tools:purge && npm run cli-tools:purge && npm run demo:purge",
+    "pkg:lint": "npm run miolo:lint && npm run commons:lint && npm run server-tools:lint && npm run cli-tools:lint && npm run demo:lint",
+    "pkg:lib": "npm run miolo:lib && npm run commons:lib && npm run server-tools:lib && npm run cli-tools:lib && npm run demo:lib",
     "pkg:dist": "npm run miolo:dist && npm run server-tools:dist && npm run cli-tools:dist && npm run demo:dist",
     "pkg:site": "npm run miolo:site && npm run server-tools:site && npm run cli-tools:site && npm run demo:site",
-    "pkg:prepare": "npm run miolo:prepare && npm run server-tools:prepare && npm run cli-tools:prepare && npm run demo:prepare",
-    "pkg:version": "npx xeira version --filter=* --number $1",
+    "pkg:prepare": "npm run miolo:prepare && npm run commons:prepare && npm run server-tools:prepare && npm run cli-tools:prepare && npm run demo:prepare",
+    "pkg:version": "npx xeira version --filter=* --number $@",
     "pkg:publish": "npm run miolo:publish && npm run server-tools:publish && npm run cli-tools:publish && npm run demo:publish",
 
     "purge": "npm run pkg:purge && npm run main:purge",
-    "reset": "npm run pkg:purge && npm run main:reset && npm run pkg:reset",
+    "reset": "npm run pkg:purge && npm run main:reset",
     "all:prepare": "npm run pkg:prepare",
     "all:publish": "npm run pkg:publish"
   },

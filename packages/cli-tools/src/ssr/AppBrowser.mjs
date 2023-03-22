@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import AppContext from '../../../commons/src/context/AppContext.mjs'
+import {AppContext} from 'miolo-commons'
 
 const AppBrowser = ({children}) => {
   return (

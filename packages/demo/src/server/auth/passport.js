@@ -1,6 +1,6 @@
 
 import {find_user_by_id as q_find_user_by_id, 
-        auth_user as q_auth_user} from 'server/db/io/users'
+        auth_user as q_auth_user} from '../db/io/users'
 
 // eslint-disable-next-line no-unused-vars
 const get_user_id = (user, done, miolo) => { 

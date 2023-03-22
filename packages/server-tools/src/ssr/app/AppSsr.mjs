@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { StaticRouter } from 'react-router-dom/server'
-import AppContext from '../../../../commons/src/context/AppContext.mjs'
+import {AppContext} from 'miolo-commons'
 
 const AppSsr = ({url, context, children}) => {
   

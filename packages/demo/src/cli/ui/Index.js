@@ -1,11 +1,11 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import {withContext} from 'miolo-hooks'
+import {withContext} from 'miolo-cli-tools'
 
-import Page from 'cli/ui/layout/Page'
-import Todos from 'cli/ui/pages/Todos'
-import Login from 'cli/ui/pages/Login'
-import Logout from 'cli/ui/pages/Logout'
+import Page from './layout/Page'
+import Todos from './pages/Todos'
+import Login from './pages/Login'
+import Logout from './pages/Logout'
 
 const Index = ({context}) => {
 

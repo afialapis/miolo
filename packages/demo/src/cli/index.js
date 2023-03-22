@@ -1,9 +1,9 @@
 import React from 'react'
 import { hydrate } from 'react-dom'
-import App from 'cli/App'
+import App from './App'
 
 // Import styles for this application
-import 'cli/static/scss/style.scss'
+import './static/scss/style.scss'
 
 // Catch window errors
 import {miolo_catcher_init} from 'miolo-tools'

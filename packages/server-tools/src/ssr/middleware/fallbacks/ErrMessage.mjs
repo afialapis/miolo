@@ -3,7 +3,7 @@ import React from 'react'
 const ErrMessage = ({ctx, error}) => {
   return (
     <div>
-      {`[MIOLO-HOOKS] Missing SSR renderer: ${error.toString()}`}
+      {`[MIOLO-SERVER_TOOLS] Missing SSR renderer: ${error.toString()}`}
     </div>
   )
 }
