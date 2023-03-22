@@ -1,19 +1,44 @@
 {
   "name": "miolo",
   "version": "0.0.51",
-  "description": "miolo",
-  "type": "module",
-  "main": "lib/index.cjs",
-  "scripts": {
-    "x_lib-clean": "rm -rf lib && mkdir lib",
-    "x_lib-cp-server-statics": "cp -R ./src/server/static ./lib/server/static && cp ./src/server/routes/fallback_index.html ./lib/server/routes",
-    "x_lib-build": "babel src -d lib && npm run lib-cp-server-statics",
-    "x_lib": "npm run lib-clean && npm run lib-build",
-    "x_clean": "npm run lib-clean",
-    "x_prepare": "npm run lint && npm run lib"
-  },
-  "author": "Afialapis <info@afialapis.com>",
+  "description": "all-in-one koa-based server",
+  
+  "keywords": [
+    "js",
+    "server",
+    "all-in-one"
+  ],
+  "author": "Donato Lorenzo <donato@afialapis.com>",
+  "contributors": [
+    "Donato Lorenzo <donato@afialapis.com>"
+  ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afialapis/miolo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/afialapis/miolo/issues"
+  },
+  "homepage": "https://miolo.afialapis.com/",
+  "files": [
+    "lib",
+    "dist"
+  ],
+    
+  
+  "type": "module",
+  "main": "./lib/index.cjs",
+  "module": "./dist/miolo.mjs",
+  "cjs": "./dist/miolo.cjs",
+
+  "exports": {
+    "import": "./dist/miolo.mjs",
+    "default": "./lib/index.cjs",
+    "require": "./dist/miolo.cjs"
+  },
+
+
   "dependencies": {
     "@koa/router": "^10.1.1",
     "assign-deep": "^1.0.1",
@@ -40,5 +65,10 @@
     "socket.io": "^4.4.1",
     "tinguir": "^0.0.3",
     "winston": "^3.6.0"
-  }
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/xeira/configs/eslint.cjs"
+    ]
+  }  
 }

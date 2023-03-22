@@ -1,0 +1,50 @@
+{
+  "name": "miolo-demo",
+  "version": "0.0.51",
+  "description": "miolo demo",
+  "main": "run.js",
+  "scripts": {
+    "lint": "eslint src",
+    "demo": "nodemon --ignore ./src/cli/statics run.js",
+    "debug": "node --inspect run.js",
+    "demo_prod": "rm -f build/* && node run.prod.js & echo $! > /tmp/miolo-demo.pid"
+  },
+  "author": "Afialapis <info@afialapis.com>",
+  "license": "MIT",
+  "dependencies": {
+    "farrapa": "2.0.1",
+    "miolo-hooks": "file:../miolo-hooks",
+    "miolo-tools": "file:../miolo-tools",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.2",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-env": "7.16.8",
+    "@babel/preset-react": "7.16.7",
+    "@babel/register": "7.16.9",
+    "assign-deep": "^1.0.1",
+    "babel-loader": "^8.2.3",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "css-loader": "6.5.1",
+    "eslint": "^8.9.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "file-loader": "6.2.0",
+    "fs-extra-promise": "^1.0.1",
+    "html-webpack-plugin": "^5.5.0",
+    "intre": "^1.1.6",
+    "mini-css-extract-plugin": "^2.5.3",
+    "miolo": "file:../miolo",
+    "node-sass": "^7.0.1",
+    "nodemon": "^2.0.15",
+    "sass-loader": "12.4.0",
+    "url-loader": "4.1.1",
+    "webpack": "^5.68.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-dev-server": "^4.7.4"
+  }
+}

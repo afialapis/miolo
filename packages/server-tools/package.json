@@ -1,0 +1,48 @@
+{
+  "name": "miolo-server-tools",
+  "version": "0.0.51",
+  "description": "react hooks for miolo",
+
+  "keywords": [
+    "js",
+    "server",
+    "all-in-one"
+  ],
+  "author": "Donato Lorenzo <donato@afialapis.com>",
+  "contributors": [
+    "Donato Lorenzo <donato@afialapis.com>"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afialapis/miolo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/afialapis/miolo/issues"
+  },
+  "homepage": "https://miolo.afialapis.com/",
+  "files": [
+    "lib",
+    "dist"
+  ],
+
+  "type": "module",
+  "main": "./lib/index.cjs",
+  "cjs": "./dist/miolo-server-tools.cjs",
+  "module": "./dist/miolo-server-tools.mjs",
+  "exports": {
+    "import": "./dist/miolo-server-tools.mjs",
+    "require": "./dist/miolo-server-tools.cjs",
+    "default": "./lib/index.cjs"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/xeira/configs/eslint.react.cjs"
+    ]
+  }
+}
