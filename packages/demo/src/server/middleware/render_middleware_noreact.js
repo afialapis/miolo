@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { resolve } from 'path'
-import main from '../../config/main'
+import main from '../config/main'
 import { ssr_data_for_location } from '../ssr/loader'
 //import { ssr_render_for_location } from '../ssr/renderer'
 
@@ -14,9 +14,9 @@ async function render_middleware(ctx) {
       Loading...
     </div>
   `
-  const bundleURL = `<script src="//localhost:${main.dev_port}/build/bundle.js" async></script>` 
+  const bundleURL = `<script src="//localhost:${main.port}/build/bundle.js" async></script>` 
   
-  const cssURL = `<link href="//localhost:${main.dev_port}/build/bundle.css" rel="stylesheet" media="all"></link>`
+  const cssURL = `<link href="//localhost:${main.port}/build/bundle.css" rel="stylesheet" media="all"></link>`
 
   let isAuthed = false
   try {
