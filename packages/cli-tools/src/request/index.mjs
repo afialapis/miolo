@@ -64,6 +64,7 @@ function make_request(method, url, params, isMultiForm, auth) {
       'content-type': 'application/json',
     }
   }
+  
   if (auth) {
     request.headers['Authorization'] = 'Basic ' + Buffer.from(auth.username + ":" + auth.password).toString('base64')
   }

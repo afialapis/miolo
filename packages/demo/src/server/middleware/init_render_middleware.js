@@ -10,7 +10,12 @@ const indexHTMLPath=  resolve(__dirname, '../../cli/index.html')
 const indexHTML = fs.readFileSync(indexHTMLPath, 'utf8')
 
 function init_it() {
-  const mid= init_render_middleware(indexHTML, main.port, loader, renderer)
+  const options= {
+    html: indexHTML,
+    port: main.port,
+    css: false
+  }
+  const mid= init_render_middleware(loader, renderer, options)
   return mid
 
 }

@@ -14,13 +14,12 @@
     "cli-build-link": "cd build && ln -s ./js/miolo-demo.iife.bundle.js bundle.js",
     "cli-build": "rm -fr build/* && npm run cli-build-bundle && npm run cli-build-trim && npm run cli-build-link",
 
-    "server": "node ./src/server/index.js"
+    "server": "NODE_ENV=development node ./src/server/index.js"
   },
   "author": "Afialapis <info@afialapis.com>",
   "license": "MIT",
   "type": "commonjs",
   "dependencies": {
-    "farrapa": "2.0.1",
     "miolo-cli-tools": "*",
     "miolo-server-tools": "*",
     "react": "^17.0.2",

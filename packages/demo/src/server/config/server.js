@@ -20,13 +20,21 @@ module.exports = {
         '/build': root('build'),
         '/static': root('src/cli/static')
       }
-    }
+    },
+
+    cors: 'simple',
+    proxy: false
   },
   session: {
     salt: 'SUPER_SALTY_YES?',
     secret: 'SUPER_SECRET_KEY_KERE',
     options: {
-      maxAge: 86400000
+      maxAge: 86400000,
+      /** (boolean) secure cookie*/
+      secure: false, // true, 
+      /** (string) session cookie sameSite options (default null, don't set it) */
+      sameSite: 'strict',
+
     }
   },  
   db: {

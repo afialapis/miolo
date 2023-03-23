@@ -11,7 +11,3 @@ miolo_catcher_init('sys/jserror')
 
 hydrate(<App/>, 
         document.getElementById('root'))
-
-if (module.hot) {
-  module.hot.accept()
-}

@@ -4,16 +4,36 @@ import AppSsr from '../app/AppSsr.mjs'
 import ErrMessage from './fallbacks/ErrMessage.mjs'
 import {html as f_html} from './fallbacks/index.html.mjs'
 
-function init_render_middleware(html, port, loader, renderer) {
+function init_render_middleware(loader, renderer, options) {
 
-  const the_html = html || f_html
+  // parse options
+  let html = f_html, port= 8000, use_css= true
+  try {
+    if (options?.html != undefined) {
+      html= options.html
+    }
+  } catch(_) {}
+
+  try {
+    if (options?.port != undefined) {
+      if (! isNaN(parseInt(options.port))) {
+        port= parseInt(options.port)
+      }
+    }
+  } catch(_) {}
+  
+  try {
+    use_css= options?.css !== false
+  } catch(_) {}
 
   const bundleURL = process.env.NODE_ENV === 'development' 
     ? `<script src="//localhost:${port}/build/bundle.js" async></script>` 
     : ''
 
-  const cssURL= process.env.NODE_ENV === 'development' 
-    ? `<link href="//localhost:${port}/build/bundle.css" rel="stylesheet" media="all"></link>`
+  const cssURL= use_css
+    ? process.env.NODE_ENV === 'development' 
+      ? `<link href="//localhost:${port}/build/bundle.css" rel="stylesheet" media="all"></link>`
+      : ''
     : ''
   
   const def_renderer = (ctx) => {
@@ -80,14 +100,14 @@ function init_render_middleware(html, port, loader, renderer) {
       </AppSsr>
     )
 
-    const html = the_html
+    const parsed_html = html
       .replace('{context}', JSON.stringify(context, null, 2))  
       .replace(/{bundleURL}/g, bundleURL)
       .replace('{children}', ssr_html)
       .replace('{styles}', cssURL)
       .replace('{bundle}', bundleURL)
 
-    ctx.body= html
+    ctx.body= parsed_html
   }
 
   return render_middleware

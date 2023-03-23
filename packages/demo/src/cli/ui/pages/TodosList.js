@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import { collSort } from 'farrapa/collections'
 
 const TodosList = ({authenticated, todoList, addTodo, toggleTodo, removeTodo, checkLastHour, insertFakeTodo}) => {
   const [inputText, setInputText] = useState('')
@@ -28,8 +27,7 @@ const TodosList = ({authenticated, todoList, addTodo, toggleTodo, removeTodo, ch
         {todoList.length==-100
         ? <div>...</div>
         : <ol className="todos-list"> 
-            {collSort(todoList, 'name')
-              .map((todo) => 
+            {todoList.map((todo) => 
               <li key={`todo_${todo.id}`} className={"todo"}>
                 <div className="todo-text">
                   {todo.name}

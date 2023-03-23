@@ -14,7 +14,22 @@ export default {
     static: {
       favicon: favicon,
       folders: {}
-    }
+    },
+    
+    // cors can be:
+    //   - false
+    //   - simple    (just assign Access-Control-Allow-Origin='*' and Access-Control-Expose-Headers='SourceMap,X-SourceMap'
+    //   - true      enable @koa/cors
+    //   - {options} enable @koa/cors and use the custom options
+    //
+    cors: false,
+
+    // proxy can be:
+    //   - false
+    //   - true      enable koa-proxies and use default options
+    //   - {options} enable koa-proxies and use the custom options
+    proxy: false
+    
   },
   session: {
     salt: 'SUPER_SALTY_YES?',
@@ -44,10 +59,10 @@ export default {
       //renew: false, 
 
       /** (boolean) secure cookie*/
-      secure: false, 
+      secure: true, 
       
       /** (string) session cookie sameSite options (default null, don't set it) */
-      sameSite: 'strict', 
+      sameSite: null, // 'strict', 
     }
   },
   db: {

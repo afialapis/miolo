@@ -3007,12 +3007,13 @@
 	  var requestURL = _url_make(url) + (method === 'GET' && params ? json_to_query_string(params) : '');
 	  var request = {
 	    method: method,
-	    mode: 'cors',
+	    ///mode: 'cors',
 	    credentials: 'include',
 	    headers: {
 	      'content-type': 'application/json'
 	    }
 	  };
+	  console.log('nocororororororor MJS o');
 	  if (auth) {
 	    request.headers['Authorization'] = 'Basic ' + Buffer.from(auth.username + ":" + auth.password).toString('base64');
 	  }
@@ -3554,56 +3555,6 @@
 	  }, "MIT"), " license")));
 	};
 
-	function _deepGet(obj, path) {
-	  return path.split('.').reduce(function (prev, curr) {
-	    return prev ? prev[curr] : undefined
-	  }, obj || self)
-	}
-
-
-	function collSort(coll, by, order) {
-	  if (by==undefined) {
-	    return coll
-	  }
-	  const ft = order=='desc' ? -1 : 1;
-	  return coll.slice().sort(function (a, b) {
-	    /*
-	    const fa = a[by].toLowerCase(), fb = b[by].toLowerCase()
-	    if (fa < fb) //sort string ascending
-	      return -1 * ft
-	    if (fa > fb)
-	      return 1 * ft
-	    return 0 //default return value (no sorting)
-	    */
-	   //return (a[by]-b[by])*ft
-	   let av,bv;
-
-	   if (typeof by == 'object') {
-	    
-	    av = _deepGet(a, by.field);
-	    bv = _deepGet(b, by.field);
-	    av= by.map[av] || '';
-	    bv= by.map[bv] || '';
-	   } else if (typeof by == 'function') {
-	    av = by(a) || '';
-	    bv = by(b) || '';
-	   } else {
-	    av = _deepGet(a, by);
-	    bv = _deepGet(b, by);
-	   }
-	   if (typeof av == 'string' && typeof bv == 'string') {
-	     av= av.toLowerCase();
-	     bv= bv.toLowerCase();
-	   }
-
-	    if (av < bv) //sort string ascending
-	      return -1 * ft
-	    if (av > bv)
-	      return 1 * ft
-	    return 0
-	  })  
-	}
-
 	var TodosList = function TodosList(_ref) {
 	  var authenticated = _ref.authenticated,
 	    todoList = _ref.todoList,
@@ -3642,7 +3593,7 @@
 	    className: "todos-body"
 	  }, todoList.length == -100 ? /*#__PURE__*/React.createElement("div", null, "...") : /*#__PURE__*/React.createElement("ol", {
 	    className: "todos-list"
-	  }, collSort(todoList, 'name').map(function (todo) {
+	  }, todoList.map(function (todo) {
 	    return /*#__PURE__*/React.createElement("li", {
 	      key: "todo_" + todo.id,
 	      className: "todo"
@@ -4041,9 +3992,6 @@
 
 	miolo_catcher_init('sys/jserror');
 	reactDomExports.hydrate( /*#__PURE__*/React.createElement(App, null), document.getElementById('root'));
-	if (module.hot) {
-	  module.hot.accept();
-	}
 
 })();
 //# sourceMappingURL=miolo-demo.iife.bundle.js.map

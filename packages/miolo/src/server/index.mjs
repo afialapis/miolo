@@ -7,6 +7,7 @@ import { init_cron } from './engines/cron'
 
 import { useCalustraDbContext, useCalustraRouter } from 'calustra-router'
 
+import { init_headers_middleware } from './middleware/headers'
 import { init_body_middleware } from './middleware/body'
 import { init_catcher_middleware } from './middleware/catcher'
 import { init_static_middleware } from './middleware/static'
@@ -31,7 +32,6 @@ async function miolo(sconfig, render, callback) {
   
   const app = new Koa()
 
-
   // attach to app calustra's db methods
   useCalustraDbContext(app, config.db)
 
@@ -42,6 +42,9 @@ async function miolo(sconfig, render, callback) {
     logger,
     db: app.context.db
   } 
+
+  // CORS and other headers
+  init_headers_middleware(app, config.http, logger)
 
   // Compress and body parser
   init_body_middleware(app)
