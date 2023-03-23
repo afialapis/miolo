@@ -2,6 +2,13 @@
 import {json_to_query_string} from './queryString.mjs'
 import {trim_left} from './utils.mjs'
 
+//function _is_browser() {
+//  try {
+//    return process.env.BROWSER==true
+//  } catch(_) {
+//    return false
+//  }
+//}
 
 /**
  * Prepend host of API server
@@ -9,8 +16,8 @@ import {trim_left} from './utils.mjs'
  function _url_make(path) {
   if (path.indexOf('http')==0) {
     return path
-  } else if (process.env.BROWSER) {
-    return '/' + trim_left(path, '/')
+  //} else if (_is_browser()) {
+  //  return '/' + trim_left(path, '/')
   } else {
     return `https://${location.host}/` + trim_left(path, '/')
   }

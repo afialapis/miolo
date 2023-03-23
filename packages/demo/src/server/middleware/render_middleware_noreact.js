@@ -4,9 +4,7 @@ import main from '../../config/main'
 import { ssr_data_for_location } from '../ssr/loader'
 //import { ssr_render_for_location } from '../ssr/renderer'
 
-const indexHTMLPath=  process.env.NODE_ENV === 'production'
-  ? resolve(__dirname, '../../../build/index.html')  // the one created by HtmlWebpackPlugin
-  : resolve(__dirname, '../../cli/index.html')
+const indexHTMLPath=  resolve(__dirname, '../../cli/index.html')
 
 const indexHTML = fs.readFileSync(indexHTMLPath, 'utf8')
 
@@ -16,13 +14,9 @@ async function render_middleware(ctx) {
       Loading...
     </div>
   `
-  const bundleURL = process.env.NODE_ENV === 'development' 
-    ? `<script src="//localhost:${main.dev_port}/build/bundle.js" async></script>` 
-    : ''
+  const bundleURL = `<script src="//localhost:${main.dev_port}/build/bundle.js" async></script>` 
   
-    const cssURL= process.env.NODE_ENV === 'development' 
-    ? `<link href="//localhost:${main.dev_port}/build/bundle.css" rel="stylesheet" media="all"></link>`
-    : ''
+  const cssURL = `<link href="//localhost:${main.dev_port}/build/bundle.css" rel="stylesheet" media="all"></link>`
 
   let isAuthed = false
   try {

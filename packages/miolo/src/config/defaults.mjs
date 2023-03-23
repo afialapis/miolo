@@ -44,10 +44,10 @@ export default {
       //renew: false, 
 
       /** (boolean) secure cookie*/
-      secure: process.env.NODE_ENV != 'development', 
+      secure: false, 
       
       /** (string) session cookie sameSite options (default null, don't set it) */
-      sameSite: process.env.NODE_ENV != 'development' ? null : 'strict', 
+      sameSite: 'strict', 
     }
   },
   db: {
@@ -135,7 +135,7 @@ export default {
       filename: '/var/log/afialapis/miolo.log'
     },
     mail: {
-      enabled: process.env.NODE_ENV === 'production',
+      enabled: false,
       level: 'warn',
       name: 'miolo',
       from: 'miolo@afialapis.com',
@@ -143,7 +143,7 @@ export default {
     }
   },
   mail: {
-    silent: process.env.NODE_ENV !== 'production',
+    silent: true,
     options: {
       //
       // General options
