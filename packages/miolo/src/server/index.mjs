@@ -44,7 +44,7 @@ async function miolo(sconfig, render, callback) {
   } 
 
   // CORS and other headers
-  init_headers_middleware(app, config.http, logger)
+  init_headers_middleware(app, config.http, logger)    
 
   // Compress and body parser
   init_body_middleware(app)

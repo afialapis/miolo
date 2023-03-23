@@ -3007,13 +3007,12 @@
 	  var requestURL = _url_make(url) + (method === 'GET' && params ? json_to_query_string(params) : '');
 	  var request = {
 	    method: method,
-	    ///mode: 'cors',
+	    mode: 'cors',
 	    credentials: 'include',
 	    headers: {
 	      'content-type': 'application/json'
 	    }
 	  };
-	  console.log('nocororororororor MJS o');
 	  if (auth) {
 	    request.headers['Authorization'] = 'Basic ' + Buffer.from(auth.username + ":" + auth.password).toString('base64');
 	  }
