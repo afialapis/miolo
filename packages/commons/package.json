@@ -1,6 +1,7 @@
 {
   "name": "miolo-commons",
-  "private": true,
+  "version": "0.0.51",
+  "description": "some core minimal stuff for miolo-server-tools and miolo-cli-tools",
   "type": "module",
   "main": "./lib/index.cjs",
   "exports": {
@@ -8,7 +9,7 @@
     "require": "./lib/index.cjs",
     "default": "./lib/index.cjs"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "^17.0.2"
   },
   "eslintConfig": {
