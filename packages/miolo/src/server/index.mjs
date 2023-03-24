@@ -43,8 +43,6 @@ async function miolo(sconfig, render, callback) {
     db: app.context.db
   } 
 
-  // CORS and other headers
-  init_headers_middleware(app, config.http, logger)    
 
   // Compress and body parser
   init_body_middleware(app)
@@ -100,6 +98,10 @@ async function miolo(sconfig, render, callback) {
   if (extra_middlewares) {
     init_extra_middlewares(app, extra_middlewares)
   }
+
+  // CORS and other headers
+  init_headers_middleware(app, config.http, logger)    
+
 
   // Middleware for html render
   if (render==undefined || render.html!=undefined) {

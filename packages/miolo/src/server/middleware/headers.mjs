@@ -52,7 +52,7 @@ const init_headers_middleware = ( app, http, logger) => {
       })
     } else {
       const coptions= _cors_options(options)
-      logger.debug(`Setting CORS headers for ${coptions}`)
+      logger.debug(`Setting CORS headers for ${JSON.stringify(coptions)}`)
       app.use(koa_cors(coptions))
     }
 
