@@ -1,8 +1,7 @@
 {
   "name": "miolo-cli-tools",
-  "version": "0.0.51",
+  "version": "0.1.0",
   "description": "cli tools for miolo",
-  
   "keywords": [
     "js",
     "server",
@@ -25,7 +24,6 @@
     "lib",
     "dist"
   ],
-
   "type": "module",
   "main": "./lib/index.cjs",
   "cjs": "./dist/miolo-cli-tools.cjs",
@@ -36,7 +34,6 @@
     "require": "./lib/index.cjs",
     "default": "./lib/index.cjs"
   },
-
   "XXX__dependencies": {
     "isomorphic-fetch": "^3.0.0"
   },
@@ -47,7 +44,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.1"
-  },  
+  },
   "eslintConfig": {
     "extends": [
       "./node_modules/xeira/configs/eslint.react.cjs"

@@ -1,8 +1,7 @@
 {
   "name": "miolo-server-tools",
-  "version": "0.0.51",
+  "version": "0.1.0",
   "description": "react hooks for miolo",
-
   "keywords": [
     "js",
     "server",
@@ -25,7 +24,6 @@
     "lib",
     "dist"
   ],
-
   "type": "module",
   "main": "./lib/index.cjs",
   "cjs": "./dist/miolo-server-tools.cjs",

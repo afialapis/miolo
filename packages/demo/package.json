@@ -34,5 +34,6 @@
     "extends": [
       "./node_modules/xeira/configs/eslint.react.cjs"
     ]
-  }
+  },
+  "version": "0.1.0"
 }
