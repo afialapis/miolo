@@ -17,8 +17,6 @@ function init_route_catch_js_error(app, route) {
 
     logger.error(msg)
 
-    console.log(msg)
-
     ctx.body = {result: 1}
   }
 
