@@ -1,0 +1,20 @@
+{
+  "name": "miolo-commons",
+  "private": true,
+  "description": "some core minimal stuff for miolo-server-tools and miolo-cli-tools",
+  "type": "module",
+  "main": "./lib/index.cjs",
+  "exports": {
+    "import": "./src/index.mjs",
+    "require": "./lib/index.cjs",
+    "default": "./lib/index.cjs"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/xeira/configs/eslint.react.cjs"
+    ]
+  }
+}

@@ -1,33 +1,47 @@
 {
   "name": "miolo",
   "version": "0.0.51",
-  "description": "miolo",
-  "main": "lib/index.js",
-  "scripts": {
-    "lint": "eslint src",
-    "lib-clean": "rm -rf lib && mkdir lib",
-    "lib-cp-server-statics": "cp -R ./src/server/static ./lib/server/static && cp ./src/server/routes/fallback_index.html ./lib/server/routes",
-    "lib-build": "babel src -d lib && npm run lib-cp-server-statics",
-    "lib": "npm run lib-clean && npm run lib-build",
-    "clean": "npm run lib-clean",
-    "prepare": "npm run lint && npm run lib"
-  },
-  "author": "Afialapis <info@afialapis.com>",
+  "description": "all-in-one koa-based server",
+  "keywords": [
+    "js",
+    "server",
+    "all-in-one"
+  ],
+  "author": "Donato Lorenzo <donato@afialapis.com>",
+  "contributors": [
+    "Donato Lorenzo <donato@afialapis.com>"
+  ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afialapis/miolo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/afialapis/miolo/issues"
+  },
+  "homepage": "https://miolo.afialapis.com/",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "type": "module",
+  "main": "./lib/index.cjs",
+  "module": "./dist/miolo.mjs",
+  "cjs": "./dist/miolo.cjs",
+  "exports": {
+    "import": "./dist/miolo.mjs",
+    "default": "./lib/index.cjs",
+    "require": "./dist/miolo.cjs"
+  },
   "dependencies": {
-    "@babel/core": "^7.17.2",
-    "@babel/eslint-parser": "^7.17.0",
-    "@babel/preset-env": "7.16.8",
-    "@babel/register": "7.16.9",
+    "@koa/cors": "^4.0.0",
     "@koa/router": "^10.1.1",
     "assign-deep": "^1.0.1",
-    "babel-plugin-module-resolver": "^4.1.0",
     "basic-auth": "^2.0.1",
-    "calustra-router": "0.2.3",
+    "calustra-router": "^0.2.8",
     "cron": "^1.8.2",
     "diskspace": "^2.0.0",
-    "eslint": "^8.9.0",
-    "farrapa-colors": "^1.0.7",
+    "jwt-simple": "^0.5.6",
     "koa": "^2.13.4",
     "koa-better-body": "^3.3.9",
     "koa-bodyparser": "^4.3.0",
@@ -36,6 +50,7 @@
     "koa-favicon": "^2.1.0",
     "koa-mount": "^4.0.0",
     "koa-passport": "^4.1.4",
+    "koa-proxies": "^0.12.3",
     "koa-redis": "^4.0.1",
     "koa-session": "^6.2.0",
     "koa-socket-2": "2.0.0",
@@ -44,6 +59,12 @@
     "passport-local": "^1.0.0",
     "redis": "^4.0.3",
     "socket.io": "^4.4.1",
+    "tinguir": "^0.0.3",
     "winston": "^3.6.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/xeira/configs/eslint.cjs"
+    ]
   }
 }

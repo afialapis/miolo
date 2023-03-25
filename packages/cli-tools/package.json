@@ -1,0 +1,56 @@
+{
+  "name": "miolo-cli-tools",
+  "version": "0.0.51",
+  "description": "cli tools for miolo",
+  
+  "keywords": [
+    "js",
+    "server",
+    "all-in-one"
+  ],
+  "author": "Donato Lorenzo <donato@afialapis.com>",
+  "contributors": [
+    "Donato Lorenzo <donato@afialapis.com>"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afialapis/miolo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/afialapis/miolo/issues"
+  },
+  "homepage": "https://miolo.afialapis.com/",
+  "files": [
+    "lib",
+    "dist"
+  ],
+
+  "type": "module",
+  "main": "./lib/index.cjs",
+  "cjs": "./dist/miolo-cli-tools.cjs",
+  "module": "./dist/miolo-cli-tools.mjs",
+  "browser": "./dist/miolo-cli-tools.umd.js",
+  "exports": {
+    "import": "./dist/miolo-cli-tools.mjs",
+    "require": "./lib/index.cjs",
+    "default": "./lib/index.cjs"
+  },
+
+  "XXX__dependencies": {
+    "isomorphic-fetch": "^3.0.0"
+  },
+  "dependencies": {
+    "miolo-commons": "file:../commons"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.1"
+  },  
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/xeira/configs/eslint.react.cjs"
+    ]
+  }
+}
