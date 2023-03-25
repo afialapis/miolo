@@ -130,6 +130,6 @@ module.exports = {
     //  realm: 'demo.demo',
     //  paths: ['/api']
     //},
-    //passport
+    passport
   }
 }

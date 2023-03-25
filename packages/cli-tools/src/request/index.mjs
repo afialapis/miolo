@@ -18,8 +18,11 @@ import {trim_left} from './utils.mjs'
     return path
   //} else if (_is_browser()) {
   //  return '/' + trim_left(path, '/')
+  //} else {
+  //  return `https://${location.host}/` + trim_left(path, '/')
+  //}
   } else {
-    return `https://${location.host}/` + trim_left(path, '/')
+    return '/' + trim_left(path, '/')
   }
 }
 

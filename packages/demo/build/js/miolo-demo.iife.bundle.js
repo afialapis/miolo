@@ -2971,8 +2971,11 @@
 	    return path;
 	    //} else if (_is_browser()) {
 	    //  return '/' + trim_left(path, '/')
+	    //} else {
+	    //  return `https://${location.host}/` + trim_left(path, '/')
+	    //}
 	  } else {
-	    return "https://".concat(location.host, "/") + trim_left(path, '/');
+	    return '/' + trim_left(path, '/');
 	  }
 	}
 
