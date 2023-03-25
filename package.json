@@ -69,7 +69,7 @@
 
     "purge": "npm run pkg:purge && npm run main:purge",
     "reset": "npm run pkg:purge && npm run main:reset",
-    "all:prepare": "npm run pkg:prepare",
+    "prepare": "npm run pkg:prepare",
     "all:publish": "npm run pkg:publish"
   },
   "devDependencies": {

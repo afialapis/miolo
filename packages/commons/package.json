@@ -1,6 +1,6 @@
 {
   "name": "miolo-commons",
-  "version": "0.0.51",
+  "private": true,
   "description": "some core minimal stuff for miolo-server-tools and miolo-cli-tools",
   "type": "module",
   "main": "./lib/index.cjs",

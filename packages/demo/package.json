@@ -4,17 +4,11 @@
   "description": "miolo demo",
   "main": "run.js",
   "scripts": {
-    "x_lint": "eslint src",
-    "x_demo": "nodemon --ignore ./src/cli/statics run.js",
-    "x_debug": "node --inspect run.js",
-    "x_demo_prod": "rm -f build/* && node run.prod.js & echo $! > /tmp/miolo-demo.pid",
-    
     "cli-build-bundle": "npx xeira bundle --target=browser --source_index=./src/cli/index.js --bundle_folder=./build/js --bundler=rollup",
     "cli-build-trim": "rm -fr build/js/*umd* build/js/*.mjs* build/js/*.min* build/js/*.iife.js*",
     "cli-build-link": "cd build && ln -s ./js/miolo-demo.iife.bundle.js bundle.js",
     "cli-build": "rm -fr build/* && npm run cli-build-bundle && npm run cli-build-trim && npm run cli-build-link",
-
-    "server": "NODE_ENV=development node ./src/server/index.js"
+    "server": "NODE_ENV=development nodemon ./src/server/index.js"
   },
   "author": "Afialapis <info@afialapis.com>",
   "license": "MIT",
@@ -28,12 +22,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.2",
-    "@babel/register": "7.16.9",
     "@babel/preset-env": "7.16.8",
-    "@babel/preset-react": "7.16.7",    
+    "@babel/preset-react": "7.16.7",
+    "@babel/register": "7.16.9",
     "assign-deep": "^1.0.1",
     "intre": "^1.1.5",
-    "miolo": "*"
+    "miolo": "*",
+    "nodemon": "^2.0.22"
   },
   "eslintConfig": {
     "extends": [

@@ -41,7 +41,7 @@
     "isomorphic-fetch": "^3.0.0"
   },
   "dependencies": {
-    "miolo-commons": "*"
+    "miolo-commons": "file:../commons"
   },
   "peerDependencies": {
     "react": "^17.0.2",

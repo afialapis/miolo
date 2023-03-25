@@ -36,7 +36,7 @@
     "default": "./lib/index.cjs"
   },
   "dependencies": {
-    "miolo-commons": "*"
+    "miolo-commons": "file:../commons"
   },
   "peerDependencies": {
     "react": "^17.0.2",
