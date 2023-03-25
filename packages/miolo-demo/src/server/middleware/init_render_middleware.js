@@ -12,7 +12,7 @@ const indexHTMLPath=  process.env.NODE_ENV === 'production'
 const indexHTML = fs.readFileSync(indexHTMLPath, 'utf8')
 
 function init_it() {
-  const mid= init_render_middleware(indexHTML, main.dev_port, loader, renderer)
+  const mid= init_render_middleware(indexHTML, main.port, loader, renderer)
   return mid
 
 }

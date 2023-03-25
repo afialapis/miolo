@@ -15,11 +15,11 @@ const indexHTML = fs.readFileSync(indexHTMLPath, 'utf8')
 
 async function render_middleware(ctx) {
   const bundleURL = process.env.NODE_ENV === 'development' 
-    ? `<script src="//localhost:${main.dev_port}/build/bundle.js" async></script>` 
+    ? `<script src="//localhost:${main.port}/build/bundle.js" async></script>` 
     : ''
   
     const cssURL= process.env.NODE_ENV === 'development' 
-    ? `<link href="//localhost:${main.dev_port}/build/bundle.css" rel="stylesheet" media="all"></link>`
+    ? `<link href="//localhost:${main.port}/build/bundle.css" rel="stylesheet" media="all"></link>`
     : ''
   
   let isAuthed = false

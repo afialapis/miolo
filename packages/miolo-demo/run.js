@@ -1,8 +1,13 @@
-console.log('[miolo-demo] building client...')
-
 process.env.NODE_ENV = 'development'
-require('./src/config/webpack.dev.js')
 
-console.log('[miolo-demo] running server...')
-require('./src/server')
+const compileDev= require('./src/config/webpack.dev.js')
+
+console.log('[miolo-demo] Server compiling...')
+
+compileDev(() => {
+  console.log('[miolo-demo] Server running...')
+  require('./src/server')
+})
+
+
 
