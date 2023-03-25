@@ -22,7 +22,7 @@ module.exports = {
       }
     },
 
-    cors: true,
+    cors: false,
     proxy: false
   },
   session: {
