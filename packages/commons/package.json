@@ -1,7 +1,28 @@
 {
   "name": "miolo-commons",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "some core minimal stuff for miolo-server-tools and miolo-cli-tools",
+  "keywords": [
+    "js",
+    "server",
+    "all-in-one"
+  ],
+  "author": "Donato Lorenzo <donato@afialapis.com>",
+  "contributors": [
+    "Donato Lorenzo <donato@afialapis.com>"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afialapis/miolo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/afialapis/miolo/issues"
+  },
+  "homepage": "https://miolo.afialapis.com/",
+  "files": [
+    "lib"
+  ],
   "type": "module",
   "main": "./lib/index.cjs",
   "exports": {
