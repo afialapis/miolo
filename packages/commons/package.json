@@ -1,7 +1,7 @@
 {
   "name": "miolo-commons",
-  "version": "0.2.2",
-  "description": "some core minimal stuff for miolo-server-tools and miolo-cli-tools",
+  "version": "0.2.3",
+  "description": "some core minimal stuff for miolo-server-tools and miolo-commons",
   "keywords": [
     "js",
     "server",
@@ -26,8 +26,11 @@
   ],
   "type": "module",
   "main": "./lib/index.cjs",
+  "cjs": "./dist/miolo-commons.cjs",
+  "module": "./dist/miolo-commons.mjs",
+  "browser": "./dist/miolo-commons.umd.js",
   "exports": {
-    "import": "./src/index.mjs",
+    "import": "./dist/miolo-commons.mjs",
     "require": "./lib/index.cjs",
     "default": "./lib/index.cjs"
   },
