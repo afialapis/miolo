@@ -1,6 +1,6 @@
 {
   "name": "miolo-server-tools",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "react hooks for miolo",
   "keywords": [
     "js",
@@ -34,7 +34,7 @@
     "default": "./lib/index.cjs"
   },
   "dependencies": {
-    "miolo-commons": "file:../commons"
+    "miolo-commons": "*"
   },
   "peerDependencies": {
     "react": "^17.0.2",
