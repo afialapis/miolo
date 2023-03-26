@@ -1,5 +1,5 @@
 /**
- * miolo-demo v0.2.1
+ * miolo-demo v0.2.2
  *
  * Copyright (c) Afialapis <info@afialapis.com>
  *

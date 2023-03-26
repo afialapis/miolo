@@ -1,6 +1,6 @@
 {
   "name": "miolo-cli-tools",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "cli tools for miolo",
   "keywords": [
     "js",
@@ -33,9 +33,6 @@
     "import": "./dist/miolo-cli-tools.mjs",
     "require": "./lib/index.cjs",
     "default": "./lib/index.cjs"
-  },
-  "XXX__dependencies": {
-    "isomorphic-fetch": "^3.0.0"
   },
   "dependencies": {
     "miolo-commons": "*"

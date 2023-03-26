@@ -1,6 +1,6 @@
 {
   "name": "miolo-commons",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "some core minimal stuff for miolo-server-tools and miolo-cli-tools",
   "keywords": [
     "js",
@@ -21,7 +21,8 @@
   },
   "homepage": "https://miolo.afialapis.com/",
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "type": "module",
   "main": "./lib/index.cjs",
