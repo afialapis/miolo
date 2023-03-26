@@ -33,6 +33,7 @@
     "commons:lint": "npx xeira lint --filter=commons --folder=src",
     "commons:lib": "npm run commons:clean lib && npx xeira transpile --filter=commons --minifier=none",
     "commons:prepare": "npm run commons:lint && npm run commons:lib",
+    "commons:publish": "cd packages/commons && npm publish",
 
     "server-tools:clean": "cd packages/server-tools && rm -fr $@",
     "server-tools:purge": "npm run server-tools:clean lib dist node_modules package-lock.json",
@@ -65,7 +66,7 @@
     "pkg:site": "npm run miolo:site && npm run server-tools:site && npm run cli-tools:site",
     "pkg:prepare": "npm run miolo:prepare && npm run commons:prepare && npm run server-tools:prepare && npm run cli-tools:prepare && npm run demo:prepare",
     "pkg:version": "npx xeira version --filter=* --number $@",
-    "pkg:publish": "npm run miolo:publish && npm run server-tools:publish && npm run cli-tools:publish",
+    "pkg:publish": "npm run miolo:publish && npm run commons:publish && npm run server-tools:publish && npm run cli-tools:publish",
 
     "purge": "npm run pkg:purge && npm run main:purge",
     "reset": "npm run pkg:purge && npm run main:reset",
