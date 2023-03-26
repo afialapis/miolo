@@ -22,7 +22,7 @@
   "homepage": "https://miolo.afialapis.com/",
   "files": [
     "lib",
-    "src"
+    "dist"
   ],
   "type": "module",
   "main": "./lib/index.cjs",

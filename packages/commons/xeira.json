@@ -5,11 +5,13 @@
   "linter": "eslint",
   "transpile_folder": "./lib",
   "transpiler": "babel",
-  "minifier": null,
-  "bundle_folder": null,
-  "bundler": null,
+  "minifier": "uglify",
+  "bundle_folder": "./dist",
+  "bundle_inline_dynamic_imports": true,
+  "bundler": "rollup",
   "test_folder": null,
   "demo_mode": null,
   "demo_demoer": null,
   "verbose": false
 }
+
