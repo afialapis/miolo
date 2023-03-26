@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "0.1.0",
+  "version": "0.1.9",
   "description": "all-in-one koa-based server",
   "keywords": [
     "js",
