@@ -5,6 +5,7 @@ import App from './App'
 // Import styles for this application
 import './static/scss/style.scss'
 
+
 // Catch window errors
 import {miolo_catcher_init} from 'miolo-cli-tools'
 miolo_catcher_init('sys/jserror')
