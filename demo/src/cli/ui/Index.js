@@ -10,8 +10,8 @@ import Logout from './pages/Logout'
 
 const Index = ({context}) => {
 
-  // console.log('miolo-demo UI Index ')
-  // console.log(context)
+  console.log('miolo-demo UI Index ')
+  console.log(context)
   
   return (
 
@@ -21,7 +21,7 @@ const Index = ({context}) => {
         <Route index          element={<Todos/>}/>
         <Route path={'todos'} element={<Todos/>}/>
 
-        { context.authenticated
+        { context?.authenticated
           ? <Route path={'logout'} element={<Logout/>}/>
           : <Route path={'login'} element={<Login/>}/>
         }

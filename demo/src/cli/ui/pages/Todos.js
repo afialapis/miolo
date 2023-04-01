@@ -84,7 +84,7 @@ const Todos = ({context}) => {
 
   return (
     <TodosList
-      authenticated  = {context.authenticated}
+      authenticated  = {context?.authenticated}
       todoList       = {todoList}
       addTodo        = {addTodo}
       toggleTodo     = {toggleTodo}

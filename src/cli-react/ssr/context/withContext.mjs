@@ -5,6 +5,11 @@ import Context from './Context.mjs'
 const withContext = BaseComponent => (props) => {
   const {context, setContext} = useContext(Context)
 
+  console.log('WITH CONTEXT')
+  console.log('WITH CONTEXT')
+  console.log('WITH CONTEXT')
+  console.log(context)
+
   return (
     <BaseComponent {...props}
                    context = {context}
