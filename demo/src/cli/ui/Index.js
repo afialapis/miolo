@@ -10,8 +10,8 @@ import Logout from './pages/Logout'
 
 const Index = ({context}) => {
 
-  console.log('miolo-demo UI Index ')
-  console.log(context)
+  // console.log('miolo-demo UI Index ')
+  // console.log(context)
   
   return (
 

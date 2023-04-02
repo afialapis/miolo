@@ -16,10 +16,7 @@ function init_it() {
     css: false
   }
 
-  console.log('\n\n\niniting node inspector')
-
   const mid= init_render_middleware(loader, renderer, options)
-
 
   return mid
 

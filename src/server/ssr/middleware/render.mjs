@@ -61,7 +61,7 @@ function init_render_middleware(loader, renderer, options) {
       
     */
     const ssr_data = await def_loader(ctx)
-    const ssr_comp = def_renderer(ctx)
+    //const ssr_comp = def_renderer(ctx)
 
     let isAuthed = false
     try {
@@ -96,7 +96,7 @@ function init_render_middleware(loader, renderer, options) {
     const ssr_html= renderToString(
       <AppSsr url    = {ctx.url}
               context= {context}>
-        {ssr_comp}
+        {() => def_renderer(ctx)}
       </AppSsr>
     )
 

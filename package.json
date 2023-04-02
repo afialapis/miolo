@@ -76,18 +76,14 @@
     "server-copy-static": "cp ./src/server/middleware/static/miolo.ico ./src/server/routes/robots/robots.txt ./src/server/routes/fallback_index.html ./dist/server/",
     "server-dist-build": "rm -fr ./dist/server/* && npx xeira bundle --target=node --source_index=./src/server/index.mjs --bundle_folder=./dist/server --bundle_name=miolo.server",
     "server-dist": "npm run server-dist-build && npm run server-copy-static",
+    "dist": "npm run cli-dist && npm run cli-react-dist && npm run server-dist",
 
-    "demo-cli-build-bundle": "npx xeira bundle --target=browser --source_index=./demo/src/cli/index.mjs --bundle_folder=./demo/build/js --bundler=rollup",
-    "demo-cli-build-trim": "rm -fr ./demo/build/js/*umd* ./demo/build/js/*.mjs* ./demo/build/js/*.min* ./demo/build/js/*.iife.js*",
-    "demo-cli-build-link": "cd ./demo/build && ln -s ./js/miolo-demo.iife.bundle.js bundle.js",
-    "demo-cli-build": "rm -fr ./demo/build/* && npm run cli-build-bundle && npm run cli-build-trim && npm run cli-build-link",
-    "demo-server-build": "cd demo && rm -fr ./lib/* && npx xeira transpile --source_index=./src/server/index.mjs --transpile_folder=./lib --minifier=none",
-    "demo-server": "NODE_ENV=development npx nodemon ./demo/lib/server/index.cjs",
-    "demo-server2": "NODE_ENV=development npx nodemon ./demo/src/server/index.js",
+    "demo": "cd demo && npm run cli-build && npm run server",
 
-    
+    "site": "npx xeira arredemo",
+
     "reset": "npm run main:purge && npm i",
-    "prepare": "echo \"I dont know\""
+    "prepare": "npm run dist && npm run site"
   },
   "dependencies": {
     "@koa/cors": "^4.0.0",
