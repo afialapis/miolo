@@ -66,7 +66,7 @@ module.exports = {
     ]
   },
   routes: routes,
-  catcher: 'sys/jserror',
+  catcher: '/sys/jserror',
   redis: {
     host: '127.0.0.1',
     port: 6379
