@@ -14,6 +14,7 @@ const AppBrowser = ({children}) => {
       </AppContext>
     </BrowserRouter>
   )
+  
 }
 
 export default AppBrowser
