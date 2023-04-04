@@ -127,12 +127,12 @@ export default {
     queries: undefined
   },
   catcher: '/sys/jserror',
-  cacher: {
-    redis: {
-      host: '127.0.0.1',
-      port: 6379
-    },
-  },
+  //cacher: {
+  //  redis: {
+  //    host: '127.0.0.1',
+  //    port: 6379
+  //  },
+  //},
   log: {
     level: 'debug',
     format: {
