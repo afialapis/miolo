@@ -38,32 +38,32 @@ module.exports = {
     }
   },  
   db: {
-    connection: {
-      database: {
-        dialect:  'postgres',
-        host:     'localhost',
-        port:     5432,
-        database: 'miolo',
-        user:     'postgres',
-        password: 'postgres',
-        max:      5,          // Maximum number of connection in pool
-        min:      0,          // Minimum number of connection in pool
-        idleTimeoutMillis: 10000,  // The maximum time, in milliseconds, that a connection can be idle before being released. Use with combination of evict for proper working, for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
-      },
+    config: {
+      dialect:  'postgres',
+      host:     'localhost',
+      port:     5432,
+      database: 'miolo',
+      user:     'postgres',
+      password: 'postgres',
+      max:      5,          // Maximum number of connection in pool
+      min:      0,          // Minimum number of connection in pool
+      idleTimeoutMillis: 10000,  // The maximum time, in milliseconds, that a connection can be idle before being released. Use with combination of evict for proper working, for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
     },
-    tables: [
-      {
-        name: 'todos',
-        options: {
-          useDates: false,
-          //checkBeforeDelete: ["edition.agent_id"],
-          //customHooks: {
-          //  beforeInsert: beforeInsertTest,
-          //  beforeUpdate: beforeUpdateTest
-          //}
+    options: {
+      tables: [
+        {
+          name: 'todos',
+          options: {
+            useDates: false,
+            //checkBeforeDelete: ["edition.agent_id"],
+            //customHooks: {
+            //  beforeInsert: beforeInsertTest,
+            //  beforeUpdate: beforeUpdateTest
+            //}
+          } 
         } 
-      } 
-    ]
+      ]
+    }
   },
   routes: routes,
   catcher: '/sys/jserror',
