@@ -1,26 +1,20 @@
 import Koa from 'koa'
-//import { getConnection } from 'calustra'
-import { initCalustraRouter } from 'calustra/router'
-
 import { init_config } from './config/index.mjs'
-//import { init_emailer } from './engines/emailer/index.mjs'
-//import { init_logger } from './engines/logger/index.mjs'
-import { init_cron } from './engines/cron/index.mjs'
-// import {init_socket} from './engines/socket/index.mjs'
 
 import { init_context_middleware } from './middleware/context.mjs'
-import { init_headers_middleware } from './middleware/headers.mjs'
 import { init_body_middleware } from './middleware/body.mjs'
 import { init_catcher_middleware } from './middleware/catcher.mjs'
 import { init_static_middleware } from './middleware/static/index.mjs'
-import { init_extra_middlewares } from './middleware/extra.mjs'
-
 import { init_request_middleware } from './middleware/request.mjs'
 import { init_session_middleware } from './middleware/session/index.mjs'
 import { init_route_robots } from './routes/robots/index.mjs'
 import { init_route_catch_js_error} from './routes/catch_js_error.mjs'
+import { initCalustraRouter } from 'calustra/router'
+// import {init_socket} from './engines/socket/index.mjs'
+import { init_extra_middlewares } from './middleware/extra.mjs'
+import { init_headers_middleware } from './middleware/headers.mjs'
+import { init_cron } from './engines/cron/index.mjs'
 
-import { init_route_html_render} from './routes/html_render.mjs'
 
 async function miolo(sconfig, render, callback) {
 
@@ -28,23 +22,7 @@ async function miolo(sconfig, render, callback) {
 
   // Init some pieces
   const config = init_config(sconfig)
-  //const emailer = init_emailer(config.mail.options, config.mail.defaults)
-  //const logger = init_logger(config.log, emailer)
-  //config.db.connection.options.log= logger
   
-  
-
-//  // attach to app calustra's db methods
-//  initCalustraDbContext(app, config.db)
-//
-//  // attach to app some custom miolo methods
-//  app.context.miolo = {
-//    config: {...config},
-//    emailer,
-//    logger,
-//    db: app.context.db
-//  } 
-//
   // attach to app some custom miolo methods
   init_context_middleware(app, config)
 
@@ -110,6 +88,7 @@ async function miolo(sconfig, render, callback) {
 
   // Middleware for html render
   if (render==undefined || render.html!=undefined) {
+    const { init_route_html_render} = await import('./routes/html_render.mjs')
     init_route_html_render(app, render?.html)
   } else if (render.middleware != undefined) {
     app.use(render.middleware)

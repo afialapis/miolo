@@ -11,9 +11,7 @@ const indexHTML = fs.readFileSync(indexHTMLPath, 'utf8')
 
 function init_it() {
   const options= {
-    html: indexHTML,
-    port: main.port,
-    css: false
+    html: indexHTML
   }
 
   const mid= init_render_middleware(loader, renderer, options)

@@ -15,8 +15,6 @@ const html = `
 			<!-- Firefox, Chrome, Safari, IE 11+ and Opera. 196x196 pixels in size. -->
 			<link rel="icon" href="/favicon.ico"/>
 
-			{styles}
-
 			<script>
 				window.__CONTEXT = {context}
 			</script>		
@@ -24,7 +22,6 @@ const html = `
 
 		<body>
 			<div id="root">{children}</div>
-			{bundle}
 		</body>
 		</html>
   `

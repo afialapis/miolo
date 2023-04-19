@@ -1,6 +1,5 @@
 import fs from 'fs'
 import { resolve } from 'path'
-import main from '../config/main'
 import { ssr_data_for_location } from '../ssr/loader'
 //import { ssr_render_for_location } from '../ssr/renderer'
 
@@ -14,19 +13,6 @@ async function render_middleware(ctx) {
       Loading...
     </div>
   `
-<<<<<<< HEAD:packages/miolo-demo/src/server/middleware/render_middleware_noreact.js
-  const bundleURL = process.env.NODE_ENV === 'development' 
-    ? `<script src="//localhost:${main.port}/build/bundle.js" async></script>` 
-    : ''
-  
-    const cssURL= process.env.NODE_ENV === 'development' 
-    ? `<link href="//localhost:${main.port}/build/bundle.css" rel="stylesheet" media="all"></link>`
-    : ''
-=======
-  const bundleURL = `<script src="//localhost:${main.port}/build/bundle.js" async></script>` 
-  
-  const cssURL = `<link href="//localhost:${main.port}/build/bundle.css" rel="stylesheet" media="all"></link>`
->>>>>>> xeira:packages/demo/src/server/middleware/render_middleware_noreact.js
 
   let isAuthed = false
   try {
@@ -60,14 +46,9 @@ async function render_middleware(ctx) {
     extra: ctx?.extra
   }
 
-
-
   const html = indexHTML
     .replace('{context}', JSON.stringify(context, null, 2))  
-    .replace(/{bundleURL}/g, bundleURL)
     .replace('{children}', loading)
-    .replace('{styles}', cssURL)
-    .replace('{bundle}', bundleURL)
 
   ctx.body= html
 }

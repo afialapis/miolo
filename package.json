@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "0.3.3",
+  "version": "0.3.5",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -52,10 +52,9 @@
 
     "dist": "npm run cli-dist && npm run cli-react-dist && npm run server-dist",
 
-    "demo-cli-build-bundle": "npx xeira bundle --target=browser --source_index=./demo/src/cli/index.js --bundle_folder=./demo/build/js --bundle_name=miolo-demo --bundler=rollup",
-    "demo-cli-build-trim": "rm -fr ./demo/build/js/*umd* ./demo/build/js/*.mjs* ./demo/build/js/*.min* ./demo/build/js/*.iife.js*",
-    "demo-cli-build-link": "cd ./demo/build && ln -s ./js/miolo-demo.iife.bundle.js bundle.js",
-    "demo-cli-build": "rm -fr ./demo/build/* && npm run demo-cli-build-bundle && npm run demo-cli-build-trim && npm run demo-cli-build-link",
+    "demo-cli-build-bundle": "npx xeira bundle --target=browser --source_index=./demo/src/cli/index.js --bundle_folder=./demo/build --bundle_name=miolo-demo --bundler=rollup",
+    "demo-cli-build-trim": "rm -fr ./demo/build/*umd* ./demo/build/*.mjs* ./demo/build/*.min* ./demo/build/*.iife.js*",
+    "demo-cli-build": "rm -fr ./demo/build/* && npm run demo-cli-build-bundle && npm run demo-cli-build-trim",
     "demo-server": "NODE_ENV=development npx nodemon --inspect ./demo/src/server/index.js",
     "demo": "npm run demo-cli-build && npm run demo-server",
 

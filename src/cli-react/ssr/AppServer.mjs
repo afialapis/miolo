@@ -1,18 +1,20 @@
 
 import React from 'react'
 import { StaticRouter } from 'react-router-dom/server'
-import AppContext from '../../../cli-react/ssr/context/AppContext.mjs'
+import AppContext from './context/AppContext.mjs'
 
-const AppSsr = ({url, context, children}) => {
+
+const AppServer = ({url, context, children}) => {
   
   return (
     <StaticRouter location={url}>
-      <AppContext context={context}>
+      <AppContext 
+          context={context || {}}>
         {children}
       </AppContext>
     </StaticRouter>
   )
 }
 
-export default AppSsr
+export default AppServer
 
