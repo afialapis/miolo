@@ -13,53 +13,48 @@
   "bugs": {
     "url": "https://github.com/afialapis/miolo/issues"
   },
-  "homepage": "https://github.com/afialapis/miolo#readme",  
+  "homepage": "https://github.com/afialapis/miolo#readme",
   "license": "MIT",
   "exports": {
-    "./server":{
+    "./server": {
       "import": "./dist/server/miolo.server.mjs",
       "default": "./dist/server/miolo.server.cjs"
     },
-    "./cli":{
+    "./cli": {
       "import": "./dist/cli/miolo.cli.mjs",
       "default": "./dist/cli/miolo.cli.umd.js"
     },
-    "./cli-react":{
+    "./cli-react": {
       "import": "./dist/cli-react/miolo.cli-react.mjs",
       "default": "./dist/cli-react/miolo.cli-react.umd.js"
-    }    
+    }
   },
   "files": [
     "logo",
     "dist"
   ],
-
   "scripts": {
     "main:purge": "rm -fr node_modules package-lock.json npm-lock.yaml",
-
     "cli-clean": "rm -fr ./dist/cli/* ",
     "cli-bundle": "npx xeira bundle --target=browser --source_index=./src/cli/index.mjs --bundle_folder=./dist/cli --bundle_name=miolo.cli",
     "cli-dist": "npm run cli-clean && npm run cli-bundle",
-
     "cli-react-clean": "rm -fr ./dist/cli-react/*",
     "cli-react-bundle": "npx xeira bundle --target=browser --source_index=./src/cli-react/index.mjs --bundle_folder=./dist/cli-react --bundle_name=miolo.cli-react",
     "cli-react-dist": "npm run cli-react-clean && npm run cli-react-bundle",
-    
     "server-clean": "rm -fr ./dist/server/*",
-    "server-copy-static": "cp ./src/server/middleware/static/miolo.ico ./src/server/routes/robots/robots.txt ./src/server/routes/fallback_index.html ./dist/server/",
+    "server-copy-static": "cp ./src/server/middleware/static/miolo.ico ./src/server/middleware/routes/robots/robots.txt ./src/server/middleware/render/html/fallback_index.html ./dist/server/",
     "server-bundle": "npx xeira bundle --target=node --source_index=./src/server/index.mjs --bundle_folder=./dist/server --bundle_name=miolo.server",
     "server-dist": "npm run server-clean && npm run server-bundle && npm run server-copy-static",
-
     "dist": "npm run cli-dist && npm run cli-react-dist && npm run server-dist",
-
-    "demo-cli-build-bundle": "npx xeira bundle --target=browser --source_index=./demo/src/cli/index.js --bundle_folder=./demo/build --bundle_name=miolo-demo --bundler=rollup",
-    "demo-cli-build-trim": "rm -fr ./demo/build/*umd* ./demo/build/*.mjs* ./demo/build/*.min* ./demo/build/*.iife.js*",
-    "demo-cli-build": "rm -fr ./demo/build/* && npm run demo-cli-build-bundle && npm run demo-cli-build-trim",
-    "demo-server": "NODE_ENV=development npx nodemon --inspect ./demo/src/server/index.js",
-    "demo": "npm run demo-cli-build && npm run demo-server",
-
+    "demo-web-cli-build-bundle": "npx xeira bundle --target=browser --source_index=./demo/web/src/cli/index.mjs --bundle_folder=./demo/web/build --bundle_name=miolo-demo-web --bundler=rollup",
+    "demo-web-cli-build-trim": "rm -fr ./demo/web/build/*umd* ./demo/web/build/*.mjs* ./demo/web/build/*.min* ./demo/web/build/*.iife.js*",
+    "demo-web-cli-build": "rm -fr ./demo/web/build/* && npm run demo-web-cli-build-bundle && npm run demo-web-cli-build-trim",
+    "demo-web-server": "NODE_ENV=development npx nodemon --inspect ./demo/web/src/server/index.cjs",
+    "demo-web": "npm run demo-web-cli-build && npm run demo-web-server",
+    "demo-app-guest": "NODE_ENV=development node ./demo/app/src/index.cjs --guest",
+    "demo-app-basic": "NODE_ENV=development node ./demo/app/src/index.cjs --basic",
+    "demo-app-passport": "NODE_ENV=development node ./demo/app/src/index.cjs --passport",
     "site": "npx xeira site",
-
     "reset": "npm run main:purge && npm i",
     "prepare": "npm run dist && npm run site"
   },
@@ -68,9 +63,10 @@
     "@koa/router": "^10.1.1",
     "assign-deep": "^1.0.1",
     "basic-auth": "^2.0.1",
-    "calustra": "^0.9.0",
+    "calustra": "^0.10.0-beta.1",
     "cron": "^1.8.2",
     "diskspace": "^2.0.0",
+    "http-graceful-shutdown": "^3.1.13",
     "intre": "^1.1.5",
     "jwt-simple": "^0.5.6",
     "koa": "^2.13.4",
@@ -83,6 +79,7 @@
     "koa-passport": "^4.1.4",
     "koa-proxies": "^0.12.3",
     "koa-redis": "^4.0.1",
+    "koa-router": "^12.0.0",
     "koa-session": "^6.2.0",
     "koa-socket-2": "2.0.0",
     "koa-static": "^5.0.0",
@@ -103,6 +100,8 @@
     "@babel/preset-env": "7.16.8",
     "@babel/preset-react": "7.16.7",
     "@babel/register": "7.16.9",
+    "babel-plugin-transform-import-meta": "^2.2.0",
+    "node-fetch": "^2.6.11",
     "nodemon": "^2.0.22",
     "xeira": "^0.3.3"
   },

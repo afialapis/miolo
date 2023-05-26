@@ -1,19 +1,21 @@
 import Koa from 'koa'
-import { init_config } from './config/index.mjs'
+import gracefulShutdown             from 'http-graceful-shutdown'
+import { init_config }              from './config/index.mjs'
 
-import { init_context_middleware } from './middleware/context.mjs'
-import { init_body_middleware } from './middleware/body.mjs'
-import { init_catcher_middleware } from './middleware/catcher.mjs'
-import { init_static_middleware } from './middleware/static/index.mjs'
-import { init_request_middleware } from './middleware/request.mjs'
-import { init_session_middleware } from './middleware/session/index.mjs'
-import { init_route_robots } from './routes/robots/index.mjs'
-import { init_route_catch_js_error} from './routes/catch_js_error.mjs'
-import { initCalustraRouter } from 'calustra/router'
-// import {init_socket} from './engines/socket/index.mjs'
-import { init_extra_middlewares } from './middleware/extra.mjs'
-import { init_headers_middleware } from './middleware/headers.mjs'
-import { init_cron } from './engines/cron/index.mjs'
+import { init_context_middleware }  from './middleware/context/context.mjs'
+import { init_body_middleware }     from './middleware/context/body.mjs'
+import { init_catcher_middleware }  from './middleware/context/catcher.mjs'
+import { init_static_middleware }   from './middleware/static/index.mjs'
+import { init_request_middleware }  from './middleware/context/request.mjs'
+import { init_session_middleware }  from './middleware/session/index.mjs'
+import { init_route_robots }        from './middleware/routes/robots/index.mjs'
+import { init_route_catch_js_error} from './middleware/routes/catch_js_error.mjs'
+import { init_router }              from './middleware/routes/router/index.mjs'
+import { init_extra_middlewares }   from './middleware/extra.mjs'
+import { init_headers_middleware }  from './middleware/context/headers.mjs'
+
+// import {init_socket}             from './engines/socket/index.mjs'
+import { init_cron }                from './engines/cron/index.mjs'
 
 
 async function miolo(sconfig, render, callback) {
@@ -66,12 +68,6 @@ async function miolo(sconfig, render, callback) {
     init_passport_auth_middleware(app, config.auth.passport)
   }
 
-  // Routes to /crud
-  if (config?.routes) {
-    const conn= app.context.miolo.db.getConnection()
-    initCalustraRouter(app, conn, config.routes)
-
-  }
   // Socket.io
   // const io= init_socket(logger)
   // io.attach(app)
@@ -85,23 +81,42 @@ async function miolo(sconfig, render, callback) {
   // CORS and other headers
   init_headers_middleware(app, config.http)    
 
-
-  // Middleware for html render
-  if (render==undefined || render.html!=undefined) {
-    const { init_route_html_render} = await import('./routes/html_render.mjs')
-    init_route_html_render(app, render?.html)
-  } else if (render.middleware != undefined) {
-    app.use(render.middleware)
+  // Routes to /crud
+  if (config?.routes) {
+    const conn= app.context.miolo.db.getConnection()
+    init_router(app, conn, config.routes)
   }
 
-  app.listen(config.http.port, config.http.hostname, function () {
+  // Middleware for final render
+  if (render?.html!=undefined) {
+    const { init_route_html_render} = await import('./middleware/render/html/render.mjs')
+    init_route_html_render(app, render.html)
+  } else if (render?.middleware != undefined) {
+    app.use(render.middleware)
+  } else {
+    // const { init_404_render_middleware} = await import('./middleware/render/404/render.mjs')
+    // init_404_render_middleware(app, render)
+
+    const { init_json_render_middleware} = await import('./middleware/render/json/render.mjs')
+    init_json_render_middleware(app, render)    
+  }
+
+
+  const server= app.listen(config.http.port, config.http.hostname, function () {
     app.context.miolo.logger.info(`miolo is listening on ${config.http.hostname}:${config.http.port}`)
     init_cron(app.context.miolo.logger)
 
     if (callback!=undefined) {
-      callback()
+      callback(app)
     }
   })
+  
+  app.server = server
+  
+  app.stop_server = () => {
+    gracefulShutdown(server)
+    delete app.server
+  }
 
 
   return app

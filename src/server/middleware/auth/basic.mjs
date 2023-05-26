@@ -8,7 +8,6 @@ const init_basic_auth_middleware = ( app, options ) => {
   }
 
   async function basic_auth_middleware(ctx, next) {
-
     ctx.user = null
     const au_user = auth(ctx)
 
@@ -27,8 +26,8 @@ const init_basic_auth_middleware = ( app, options ) => {
     if (! au_user) {
       return unauth_err()
     }
-
-    const user = await auth_user(au_user.name, au_user.pass)
+    
+    const user = await auth_user(au_user.name, au_user.pass, app.context.miolo)
 
     if (user === false || user == undefined) {
       return unauth_err()

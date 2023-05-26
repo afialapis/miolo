@@ -1,5 +1,5 @@
 import {mioloCatcher} from './catcher/index.mjs'
-import {Fetcher} from 'calustra/fetcher'
+import {Fetcher} from './fetcher/index.mjs'
 
 // similar but no react?
 // import { useSsrData } from './ssr/hooks/useSsrData.mjs'

@@ -1,3 +1,16 @@
+# `xeira.run`
+
+When available, apply here.
+
+If possible, export also server commands for running it.
+
+# Demo
+
+Made two server targets:
+
+- Web server (done)
+- App server - API/CRUD endpoint
+
 
 # SSR
 
