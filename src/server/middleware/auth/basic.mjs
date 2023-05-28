@@ -12,15 +12,20 @@ const init_basic_auth_middleware = ( app, options ) => {
     const au_user = auth(ctx)
 
     const unauth_err = () => {
-      return ctx.throw(
-        401,
-        null,
-        {
-          headers: {
-            'WWW-Authenticate': 'Basic realm="' + realm.replace(/"/g, '\\"') + '"'
-          }
-        }
-      )
+      // This will show error logs on the catcher middleware
+      //return ctx.throw(
+      //  401,
+      //  null,
+      //  {
+      //    headers: {
+      //      'WWW-Authenticate': 'Basic realm="' + realm.replace(/"/g, '\\"') + '"'
+      //    }
+      //  }
+      //)
+      ctx.body= {}
+      ctx.response.status= 401
+      ctx.response.body = 'Unauthorized'
+      ctx.response.headers['WWW-Authenticate']= 'Basic realm="' + realm.replace(/"/g, '\\"') + '"'
     }
 
     if (! au_user) {

@@ -75,7 +75,13 @@ const init_passport_auth_middleware = ( app, options ) => {
           info: info,
           error: err
         }
-        ctx.throw(401)
+
+        // This will show error logs on the catcher middleware
+        // ctx.throw(401)
+        
+        ctx.response.status= 401
+        ctx.response.body = 'Unauthorized'
+
       } else {
         ctx.body = { 
           success: true ,
@@ -104,7 +110,11 @@ const init_passport_auth_middleware = ( app, options ) => {
       ctx.body = { 
         success: false 
       }
-      ctx.throw(401)
+      // This will show error logs on the catcher middleware
+      // ctx.throw(401)
+      
+      ctx.response.status= 401
+      ctx.response.body = 'Unauthorized'
     }
   }
   

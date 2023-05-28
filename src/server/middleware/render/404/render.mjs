@@ -7,11 +7,15 @@ function init_404_render_middleware(app, options) {
     ctx.miolo.logger.debug(`render_404_middleware() Not FOUND ${ctx.url} `)
     
     ctx.body= {}
+    
+    // This will show error logs on the catcher middleware
+    //return ctx.throw(
+    //  404,
+    //  'Resource Not Found',
+    //)
 
-    return ctx.throw(
-      404,
-      'Resource Not Found',
-    )
+    ctx.response.status= 404
+    ctx.response.body = 'Resource Not Found'
   }
 
   const json_render_router = new Router()
