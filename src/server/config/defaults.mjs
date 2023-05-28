@@ -120,10 +120,10 @@ export default {
     //   error_code: 401
     // }, 
     
-    crud: {
+    crud: [{
       prefix: '',
       routes: [], // miolo will not support '*' by now
-    },
+    }],
     queries: undefined
   },
   catcher: '/sys/jserror',

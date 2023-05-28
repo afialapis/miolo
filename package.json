@@ -55,6 +55,8 @@
     "demo-app-basic": "NODE_ENV=development node ./demo/app/src/index.cjs --basic",
     "demo-app-passport": "NODE_ENV=development node ./demo/app/src/index.cjs --passport",
     "site": "npx xeira site",
+    "test": "npx xeira test --files=./test/routes/index.mjs",
+    "test2": "./node_modules/mocha/bin/mocha.js --exit --bail --require /home/lapis/repos/gh/miolo/node_modules/xeira/src/scripts/test/mocha/babel.mjs  --require ignore-styles /home/lapis/repos/gh/miolo/node_modules/xeira/src/scripts/test/mocha/helpers/chai.mjs  /home/lapis/repos/gh/miolo/test/routes/index.mjs",
     "reset": "npm run main:purge && npm i",
     "prepare": "npm run dist && npm run site"
   },
@@ -66,7 +68,7 @@
     "calustra": "^0.10.0-beta.1",
     "cron": "^1.8.2",
     "diskspace": "^2.0.0",
-    "http-graceful-shutdown": "^3.1.13",
+    "http-terminator": "^3.2.0",
     "intre": "^1.1.5",
     "jwt-simple": "^0.5.6",
     "koa": "^2.13.4",
@@ -103,7 +105,7 @@
     "babel-plugin-transform-import-meta": "^2.2.0",
     "node-fetch": "^2.6.11",
     "nodemon": "^2.0.22",
-    "xeira": "^0.3.3"
+    "xeira": "^0.3.9"
   },
   "eslintConfig": {
     "extends": [

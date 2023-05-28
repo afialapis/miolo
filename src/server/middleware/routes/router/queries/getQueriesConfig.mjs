@@ -25,58 +25,75 @@ import {
 
 const getQueriesConfig = (config) => {
 
-  const routes= config?.queries?.routes
 
-  if (! routes) {
-    return undefined
+  const instances= config?.queries || []
+
+  if (! instances) {
+    return []
   }
 
-  if (! Array.isArray(routes)) {
-    return undefined
+
+  if (! Array.isArray(instances)) {
+    return []
   }
 
-  const comm_bodyField = config?.crud?.bodyField || config?.bodyField
-
-  const comm_authUser= {
-    ...DEFAULT_AUTH_USER,
-    ...config?.queries?.authUser || {},
-    ...config?.authUser || {}
-  }
-  const comm_getUserId= config?.crud?.getUserId || config?.getUserId
+  let output= []
   
-  let parsed_routes= []
+  instances.map((instance) => {  
 
-  for (const route of routes) {
+    const routes= instance?.routes
 
-    if (! route.url) {
-      continue
+    if (! routes) {
+      return
     }
 
-    if (! route.callback) {
-      continue
+    if (! Array.isArray(routes)) {
+      return
     }
 
-    const parsed_route= {
-      url: route.url,
-      method: route?.method || 'GET', 
-      callback: route.callback,
+    const comm_bodyField = config?.crud?.bodyField || config?.bodyField
 
-      bodyField: route?.bodyField || comm_bodyField,
-      authUser: {
-        ...comm_authUser,
-        ...route?.authUser  || {}
-      },
-      getUserId: route?.getUserId  || comm_getUserId
+    const comm_authUser= {
+      ...DEFAULT_AUTH_USER,
+      ...instance?.authUser || {},
+      ...config?.authUser || {}
+    }
+    const comm_getUserId= config?.crud?.getUserId || config?.getUserId
+    
+    let parsed_routes= []
+
+    for (const route of routes) {
+      if (! route.url) {
+        continue
+      }
+
+      if (! route.callback) {
+        continue
+      }
+
+      const parsed_route= {
+        url: route.url,
+        method: route?.method || 'GET', 
+        callback: route.callback,
+
+        bodyField: route?.bodyField || comm_bodyField,
+        authUser: {
+          ...comm_authUser,
+          ...route?.authUser  || {}
+        },
+        getUserId: route?.getUserId  || comm_getUserId
+      }
+
+      parsed_routes.push(parsed_route)
     }
 
-    parsed_routes.push(parsed_route)
-  }
+    output.push({
+      prefix: instance?.prefix || '',
+      routes: parsed_routes
+    })
+  })
 
-  return {
-    prefix: config?.queries?.prefix || '',
-    routes: parsed_routes
-  }
-
+  return output
 }
 
 export default getQueriesConfig

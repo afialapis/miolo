@@ -4,7 +4,7 @@ import {
 } from "../defaults.mjs"
 
 /**
-  {
+  [{
     prefix: '/crud,
     
     getUserId,
@@ -34,67 +34,88 @@ import {
           getUserId,
           authUser
         }      
-  } 
+  }]
 */
 
 const getCrudConfig = (config) => {
 
-  const routes= config?.crud?.routes
+  const cruds= config?.crud || []
 
-  if (! routes) {
-    return undefined
+  if (! cruds) {
+    return []
   }
 
-  if (! Array.isArray(routes)) {
-    return undefined
+
+  if (! Array.isArray(cruds)) {
+    return []
   }
+
+  let output= []
   
-  const comm_bodyField = config?.crud?.bodyField || config?.bodyField
+  cruds.map((crud) => {      
+    const routes= crud?.routes
 
-  const comm_authUser= {
-    ...DEFAULT_AUTH_USER,
-    ...config?.crud?.authUser || {},
-    ...config?.authUser || {}
-  }
-  const comm_getUserId= config?.crud?.getUserId || config?.getUserId
-  
-  let parsed_routes= []
-
-  for (const troute of routes) {
-
-    const route = (typeof troute === 'string')
-      ? {name: troute}
-      : troute
-
-    if (! route.name) {
-      continue
+    if (! routes) {
+      return
     }
 
-    const parsed_route= {
-      name: route.name,
-      url: route?.url || route.name,
-      mode: route?.mode || 'rw',
+    if (! Array.isArray(routes)) {
+      return
+    }
+    
+    const comm_bodyField = crud?.bodyField || config?.bodyField
 
-      bodyField: route?.bodyField || comm_bodyField,
-      useUserFields: {
-        ...DEFAULT_USE_USER_FIELDS,
-        ...route?.useUserFields || {}
-      },
-      authUser: {
-        ...comm_authUser,
-        ...route?.authUser  || {}
-      },
-      getUserId: route?.getUserId  || comm_getUserId
+    const comm_authUser= {
+      ...DEFAULT_AUTH_USER,
+      ...crud?.authUser || {},
+      ...config?.authUser || {}
+    }
+    const comm_getUserId= crud?.getUserId || config?.getUserId
+    
+    let parsed_routes= []
+
+    for (const troute of routes) {
+
+      const route = (typeof troute === 'string')
+        ? {name: troute}
+        : troute
+
+      if (! route.name) {
+        continue
+      }
+
+      const parsed_route= {
+        name: route.name,
+        url: route?.url || route.name,
+        mode: route?.mode || 'rw',
+
+        bodyField: route?.bodyField || comm_bodyField,
+        useUserFields: {
+          ...DEFAULT_USE_USER_FIELDS,
+          ...route?.useUserFields || {}
+        },
+        authUser: {
+          ...comm_authUser,
+          ...route?.authUser  || {}
+        },
+        getUserId: route?.getUserId  || comm_getUserId
+      }
+
+      parsed_routes.push(parsed_route)
+    }
+    
+    if (parsed_routes.length>0) {
+      output.push( {
+        prefix: crud?.prefix || '',
+        routes: parsed_routes
+      } )
     }
 
-    parsed_routes.push(parsed_route)
-  }
+  })
 
-  return {
-    prefix: config?.crud?.prefix || '',
-    routes: parsed_routes
-  }
+  return output
 
 }
+
 
 export default getCrudConfig

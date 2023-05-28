@@ -1,10 +1,40 @@
 import path from 'path'
-import merge from 'assign-deep'
-import routes from './db/routes/index.mjs'
+import { fileURLToPath } from 'url'
+import def_routes from './db/routes/index.mjs'
 import passport from './auth/passport.mjs'
 import basic_auth from './auth/basic.mjs'
 
-const demo_server_make_config = (buildFolder, authType= 'guest', extraConfig= undefined) => {
+const __my_filename = fileURLToPath(import.meta.url)
+const __my_dirname = path.dirname(__my_filename)
+
+const postgres = {
+  dialect:  'postgres',
+  host:     'localhost',
+  port:     5432,
+  database: 'miolo',
+  user:     'postgres',
+  password: 'postgres'
+}
+
+const sqlite = {
+  dialect:  'sqlite',
+  filename: ':memory:', // '/tmp/miolo.sqlite'
+  verbose: true,
+  cached: true
+}
+
+
+const demo_server_make_config = (buildFolder, authType= 'guest', dbType = 'postgres', extraConfig= undefined) => {
+
+  let hstatic= {
+    favicon: path.resolve(__my_dirname, 'static/img/favicon.ico'),
+    folders: {
+      '/static': path.resolve(__my_dirname, 'static')
+    }
+  }
+  if (buildFolder) {
+    hstatic.folders['/build']= buildFolder
+  }
 
 
   const auth = 
@@ -20,13 +50,7 @@ const demo_server_make_config = (buildFolder, authType= 'guest', extraConfig= un
       //
       // Folders to be mounted by koa for static content
       //
-      static: {
-        favicon: path.resolve(__dirname, 'static/img/favicon.ico'),
-        folders: {
-          '/build': buildFolder,
-          '/static': path.resolve(__dirname, 'static')
-        }
-      },
+      static: hstatic,
 
       cors: false,
       proxy: false
@@ -45,19 +69,9 @@ const demo_server_make_config = (buildFolder, authType= 'guest', extraConfig= un
       }
     },  
     db: {
-      config: {
-        dialect:  'postgres',
-        host:     'localhost',
-        port:     5432,
-        database: 'miolo',
-        user:     'postgres',
-        password: 'postgres',
-        max:      5,          // Maximum number of connection in pool
-        min:      0,          // Minimum number of connection in pool
-        idleTimeoutMillis: 10000,  // The maximum time, in milliseconds, that a connection can be idle before being released. Use with combination of evict for proper working, for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
-      },
-      options: {
-        tables: [
+      config: dbType=='postgres' ? postgres : sqlite,
+      options:  {
+        tables: extraConfig?.db?.options?.tables || [
           {
             name: 'todos',
             options: {
@@ -68,22 +82,23 @@ const demo_server_make_config = (buildFolder, authType= 'guest', extraConfig= un
               //  beforeUpdate: beforeUpdateTest
               //}
             } 
-          } 
-        ]
+          }
+        ],
+        log: extraConfig?.db?.options?.log || 'warn'
       }
     },
-    routes: routes,
+    routes: extraConfig?.routes || def_routes,
     catcher: undefined, //'/sys/jserror',
     redis: {
       host: '127.0.0.1',
       port: 6379
     },    
     log: {
-      level: 'silly',
+      level: extraConfig?.log?.level || 'silly',
       format: {
         locale: 'es'
       },
-      console: {
+      console: extraConfig?.log?.console || {
         enabled: true,
         level: 'silly',
       },
@@ -114,11 +129,7 @@ const demo_server_make_config = (buildFolder, authType= 'guest', extraConfig= un
       }
     }
   }
-
-  if (extraConfig) {
-    config= merge(config, extraConfig)
-  }
-
+  
   return config
 }
 

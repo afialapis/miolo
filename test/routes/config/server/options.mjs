@@ -19,7 +19,7 @@ const tables= [
 ]
 
 const options= {
-  log: 'warn',
+  log: 'error',
   tables
 }
 

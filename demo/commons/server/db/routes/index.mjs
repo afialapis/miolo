@@ -1,8 +1,8 @@
-const crud = require('./crud.mjs')
-const queries = require('./queries.mjs')
+import crud from './crud.mjs'
+import queries from './queries.mjs'
 
-module.exports= {
+export default {
   bodyField: undefined,
-  crud,
-  queries
+  crud: crud,
+  queries: queries
 }

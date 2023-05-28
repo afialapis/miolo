@@ -43,7 +43,7 @@ const local_auth_user = (username, password, done, miolo) => {
   })
 }
 
-module.exports= {
+export default {
   get_user_id, 
   find_user_by_id, 
   local_auth_user,

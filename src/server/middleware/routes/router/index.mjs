@@ -12,25 +12,25 @@ function init_router(app, connection, routes) {
   
   try {
     // Parse routes
-    const crudConfig= getCrudConfig(routes)
-    const queriesConfig= getQueriesConfig(routes)
+    const crudConfigs= getCrudConfig(routes)
+    const queriesConfigs= getQueriesConfig(routes)
     
     // check routes
-    const crudRoutesOk= ((crudConfig?.routes!=undefined) && (crudConfig.routes.length>0))
-    const queriesRoutesOk= ((queriesConfig?.routes!=undefined) && (queriesConfig.routes.length>0))
+    const crudConfigsOk= crudConfigs.length > 0
+    const queriesConfigsOk= queriesConfigs.length > 0
 
-    if ( (!crudRoutesOk) && (!queriesRoutesOk)) {
+    if ( (!crudConfigsOk) && (!queriesConfigsOk)) {
       throw "[miolo-router] Could not get any route from the passed <routes> param"
     }  
 
     // attach CRUD routes
-    if (crudRoutesOk) {
-      attachCrudRoutes(connection, router, crudConfig, connection.log)
+    if (crudConfigsOk) {
+      attachCrudRoutes(connection, router, crudConfigs, connection.log)
     }
 
     // create routes for queries
-    if (queriesRoutesOk) {
-      attachQueriesRoutes(router, queriesConfig, connection.log)
+    if (queriesConfigsOk) {
+      attachQueriesRoutes(router, queriesConfigs, connection.log)
     }
   } catch(e) {
     console.error(e)

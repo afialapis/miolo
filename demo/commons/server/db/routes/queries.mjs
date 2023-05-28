@@ -18,7 +18,7 @@ async function q_todos_insert_fake(ctx) {
 }
 
 
-module.exports = {
+export default [{
   prefix: '/crud',
   routes: [
     {
@@ -37,6 +37,6 @@ module.exports = {
       },         
     }
   ]
-}
+}]
 
 

@@ -1,7 +1,11 @@
 import path from 'path'
+import { fileURLToPath } from 'url'
 import demo_server from '../../../commons/server/server.mjs'
 
-const BUILD_DIR = path.resolve(__dirname, '../../build')
+const __my_filename = fileURLToPath(import.meta.url)
+const __my_dirname = path.dirname(__my_filename)
+
+const BUILD_DIR = path.resolve(__my_dirname, '../../build')
 
 // import { render_html } from './middleware/render_html.mjs'
 // const html= render_html()
@@ -12,8 +16,11 @@ const BUILD_DIR = path.resolve(__dirname, '../../build')
 
 import init_ssr_render_middleware from './middleware/init_ssr_render_middleware.mjs'
 
-const app= demo_server(BUILD_DIR, 'passport', 
-  {middleware: init_ssr_render_middleware()}, async (app) => {
+const app= demo_server(BUILD_DIR, 'passport', 'postgres',
+  undefined,
+  {middleware: init_ssr_render_middleware()}, 
+
+  async (app) => {
   }
 )
 

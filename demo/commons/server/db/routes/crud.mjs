@@ -1,4 +1,4 @@
-module.exports= {
+export default [{
   prefix: '/crud',
   authUser: {
     require: 'read-only',
@@ -10,4 +10,4 @@ module.exports= {
       name: 'todos'
     } 
   ]
-}
+}]
