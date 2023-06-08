@@ -71,6 +71,12 @@ async function miolo(sconfig, render, callback) {
     init_passport_auth_middleware(app, config.auth.passport)
   }
 
+  if (config?.auth?.custom) {
+    const {init_custom_auth_middleware} = await import('./middleware/auth/custom.mjs')
+    init_custom_auth_middleware(app, config.auth.custom)
+  }
+
+
   // Socket.io
   // const io= init_socket(logger)
   // io.attach(app)

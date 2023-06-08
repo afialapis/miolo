@@ -75,7 +75,7 @@ const demo_server_make_config = (buildFolder, authType= 'guest', dbType = 'postg
           {
             name: 'todos',
             options: {
-              useDates: false,
+              useDateFields: false,
               //checkBeforeDelete: ["edition.agent_id"],
               //customHooks: {
               //  beforeInsert: beforeInsertTest,
