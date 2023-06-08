@@ -16,7 +16,7 @@ const _do_request = async (method, url, {params, auth, cookie}) => {
   }
 
   if (auth!=undefined) {
-    request['headers']['Authorization']= 'Basic ' + Buffer.from(auth.username + ":" + auth.password).toString('base64')
+    request.headers['Authorization']= 'Basic ' + Buffer.from(auth.username + ":" + auth.password).toString('base64')
   }
 
   if (method === 'POST') {

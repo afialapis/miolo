@@ -275,7 +275,17 @@ export default {
     //}
     //guest: {
     //  make_guest_token: undefined // (session) => ''
-    //}
+    //},
+    //custom: callback,
+    //  here callback receives (app)
+    //  and returns:
+    //    - a middleware function
+    //    or
+    //    - an array like [{
+    //        method: 'GET' // POST,...
+    //        url:    '/aa/bb',
+    //        callback: a middleware function
+    //      }, ...]
   },
   middlewares: [
     // async (ctx) => {}
