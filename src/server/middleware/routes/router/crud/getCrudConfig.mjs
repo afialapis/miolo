@@ -6,8 +6,7 @@ import {
 /**
   [{
     prefix: '/crud,
-    
-    getUserId,
+
     authUser,
     bodyField,
     
@@ -31,7 +30,6 @@ import {
             },
           },
 
-          getUserId,
           authUser
         }      
   }]
@@ -70,7 +68,6 @@ const getCrudConfig = (config) => {
       ...crud?.authUser || {},
       ...config?.authUser || {}
     }
-    const comm_getUserId= crud?.getUserId || config?.getUserId
     
     let parsed_routes= []
 
@@ -97,8 +94,7 @@ const getCrudConfig = (config) => {
         authUser: {
           ...comm_authUser,
           ...route?.authUser  || {}
-        },
-        getUserId: route?.getUserId  || comm_getUserId
+        }
       }
 
       parsed_routes.push(parsed_route)

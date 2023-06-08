@@ -2,7 +2,7 @@
 import passport from 'koa-passport'
 import LocalStrategy from 'passport-local'
 import Router from '@koa/router'
-
+import { init_session_middleware } from './session/index.mjs'
 
 // passport: {
 //   get_user_id:     (user, done) => done(null, user.id), // default
@@ -25,7 +25,7 @@ const def_local_auth_user = (username, password, done, miolo) => {
 }
 
 
-const init_passport_auth_middleware = ( app, options ) => {
+const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
   const {get_user_id, find_user_by_id, local_auth_user, 
          url_login, url_logout, url_login_redirect, url_logout_redirect} = options
 
@@ -55,6 +55,8 @@ const init_passport_auth_middleware = ( app, options ) => {
     (username, password, done) => {
       local_auth_user_f(username, password, done, app.context.miolo)
   })
+
+  init_session_middleware(app, sessionConfig)
   
   passport.serializeUser(serialize_user)
   passport.deserializeUser(deserialize_user)
@@ -66,8 +68,11 @@ const init_passport_auth_middleware = ( app, options ) => {
 
   // handle auth routes
   const handleLogIn = (ctx, next) => {
-    return passport.authenticate('local', function(err, user, info, _status) {
+    return passport.authenticate('local', async function(err, user, info, _status) {
       if (user === false) {
+        ctx.session.user = undefined
+        ctx.session.authenticated = false
+
         ctx.body = { 
           success: false,
           user: undefined,
@@ -83,6 +88,10 @@ const init_passport_auth_middleware = ( app, options ) => {
         ctx.response.body = 'Unauthorized'
 
       } else {
+
+        ctx.session.user = user
+        ctx.session.authenticated = true
+
         ctx.body = { 
           success: true ,
           user : user,
@@ -92,13 +101,18 @@ const init_passport_auth_middleware = ( app, options ) => {
           ctx.redirect(url_login_redirect)
         }
 
-        return ctx.login(user)
+        const res= await ctx.login(user)
+
+        return res
       }
     })(ctx)
   }
 
   const handleLogOut = async (ctx, next) => {
-    if (ctx.isAuthenticated()) {
+    if (ctx.session.authenticated) {
+      ctx.session.user = undefined
+      ctx.session.authenticated = false
+
       ctx.logout()
       ctx.body = { 
         success: true 
@@ -107,6 +121,7 @@ const init_passport_auth_middleware = ( app, options ) => {
         ctx.redirect(url_logout_redirect)
       }
     } else {
+
       ctx.body = { 
         success: false 
       }

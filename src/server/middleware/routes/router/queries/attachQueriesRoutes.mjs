@@ -16,17 +16,14 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
       logger.info(`Routing ${route.callback?.name || 'callback'} to ${url}`)
 
       const _route_callback = async (ctx) => {
-        let uid= undefined
-        if (route.getUserId) {
-          uid= route.getUserId(ctx)
-        }
+        const authenticated= ctx?.session?.authenticated === true
     
         const authUser = route.authUser
         const checkAuth= (authUser.require===true) || (authUser.require==='read-only' && route.method==='POST')
     
         if (checkAuth) {
     
-          if (uid===undefined) {
+          if (!authenticated) {
     
             if (authUser.action=='error') {
               logger.error(`Unauthorized access. Throwing error ${authUser.error_code}`)
@@ -35,10 +32,15 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
                 null,
                 {}
               )
-            } else {
-              logger.error(`Unauthorized access. Redirecting to ${authUser.redirect_url}`)
+            } else if (authUser.action=='redirect') {
+              logger.warn(`Unauthorized access. Redirecting to ${authUser.redirect_url}`)
               return ctx.redirect(authUser.redirect_url)
+            } else {
+              logger.error(`Route path ${route.url} specified auth but no action`)
+              ctx.body= {}
+              return
             }
+
           }
         }
     

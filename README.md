@@ -28,7 +28,11 @@ render:
   ctx.isUnauthenticated()
   await ctx.login()
   ctx.logout()
-  ctx.state.user or ctx.user
+  ctx.state.user
 
-
+  From auth:
+    ctx.session.user
+    ctx.session.authenticated
+    ctx.session.token (if guest auth)
+                 
 

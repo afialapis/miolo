@@ -1,4 +1,4 @@
-import merge from 'assign-deep'
+import merge from 'deepmerge'
 import base_config from './defaults.mjs'
 
 

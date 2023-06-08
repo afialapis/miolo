@@ -56,8 +56,12 @@ const init_guest_auth_middleware = ( app, options, session ) => {
 
     const options= _get_cookie_properties(session)
     ctx.cookies.set('token', token, options)
-    ctx.user = {
-      name: 'guest',
+
+    ctx.session= {
+      user: {
+        name: 'guest'
+      },
+      authenticated: true,
       token
     }    
     

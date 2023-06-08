@@ -28,29 +28,9 @@ function init_ssr_render_middleware(loader, renderer, options) {
     */
     const ssr_data = await def_loader(ctx)
 
-    let isAuthed = false
-    try {
-      isAuthed = ctx?.isAuthenticated() === true
-    } catch(e) {}
-    try {
-      if (! isAuthed) {
-        isAuthed = (ctx.user.name==='guest') && (ctx.user.token != undefined)
-      }
-    } catch(e) {}    
-
-    let user = undefined
-    try {
-      if (ctx.state.user != undefined) {
-        user= ctx.state.user
-      }
-    } catch(_) {}
-
-    try {
-      if (ctx.user != undefined) {
-        user= ctx.user
-      }
-    } catch(_) {}     
-
+    const isAuthed = ctx?.session?.authenticated === true
+    const user = ctx?.session?.user
+    
     const context= {
       user : user,
       authenticated: isAuthed,

@@ -87,34 +87,6 @@ export default {
   routes: {
     bodyField: undefined,
   
-    getUserId: (ctx) => {
-      try {
-        const from_pport= ctx.state.user.id
-        if (from_pport!=undefined) {
-          return from_pport
-        }
-      } catch(e) {}
-      try {
-        const from_basic_auth= ctx.user.id
-        if (from_basic_auth!=undefined) {
-          return from_basic_auth
-        }
-      } catch(e) {}
-      try {
-        if (ctx.user.name == 'guest') {
-          const from_guest_auth= ctx.user.token
-          if (from_guest_auth!=undefined) {
-            return from_guest_auth
-          }
-        }
-      } catch(e) {}          
-      let uid= ctx.headers['user-id']
-      if (uid!=undefined) {
-        return uid
-      }
-      return undefined
-    },
-  
     // authUser: {
     //   require: false,     // true / false / 'read-only'
     //   action: 'redirect', // 'error'

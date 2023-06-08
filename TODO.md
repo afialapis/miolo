@@ -10,14 +10,6 @@
     action: 'redirect', // 'error'
     redirect_url: '/',
     error_code: 401
-    getUserId = (ctx) => {
-      let uid= ctx.headers['user-id']
-      if (uid!=undefined) {
-        return uid
-      }
-      return undefined
-    },
-   },
 
    crud: {
     '/prefix/one': {

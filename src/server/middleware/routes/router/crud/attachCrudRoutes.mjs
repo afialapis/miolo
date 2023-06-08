@@ -27,10 +27,9 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
       
 
       const _checkUserInfo = async (ctx, op, callback) => {
-        let uid= undefined
-        if (route.getUserId) {
-          uid= route.getUserId(ctx)
-        }
+        
+        const uid= ctx?.session?.user?.id
+        const authenticated= ctx?.session?.authenticated === true
 
         let allowed= true
 
@@ -40,7 +39,7 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
 
         if (checkAuth) {
 
-          if (uid===undefined) {
+          if (! authenticated) {
 
             if (authUser.action=='error') {
               
@@ -50,9 +49,11 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
                 null,
                 {}
               )
-            } else {
-              logger.error(`[miolo-router] Unauthorized access. Redirecting to ${authUser.redirect_url}`)
+            } else if (authUser.action=='redirect') {
+              logger.warn(`[miolo-router] Unauthorized access. Redirecting to ${authUser.redirect_url}`)
               ctx.redirect(authUser.redirect_url)
+            } else {
+              logger.error(`Crud path ${route.url} specified auth but no action`)
             }
 
             allowed= false

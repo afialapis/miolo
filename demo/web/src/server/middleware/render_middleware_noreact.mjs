@@ -14,28 +14,8 @@ async function render_middleware(ctx) {
     </div>
   `
 
-  let isAuthed = false
-  try {
-    isAuthed = ctx?.isAuthenticated() === true
-  } catch(e) {}
-  try {
-    if (! isAuthed) {
-      isAuthed = (ctx.user.name==='guest') && (ctx.user.token != undefined)
-    }
-  } catch(e) {}     
-
-  let user = undefined
-  try {
-    if (ctx.state.user != undefined) {
-      user= ctx.state.user
-    }
-  } catch(_) {}
-
-  try {
-    if (ctx.user != undefined) {
-      user= ctx.user
-    }
-  } catch(_) {} 
+  const isAuthed = ctx?.session?.authenticated === true
+  const user = ctx?.session?.user
 
   const ssr_data = await ssr_data_for_location(ctx.url, user, isAuthed)
   

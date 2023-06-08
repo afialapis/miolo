@@ -1,7 +1,9 @@
 import { performance } from 'perf_hooks'
-import { cyan, green, yellow, red } from 'tinguir'
+import { cyan, green, yellow, red, magenta, cyan_light } from 'tinguir'
 
-let REQUEST_COUNTER= 1
+let REQUEST_COUNTER= {
+  total: 0
+}
 
 /**
  * Middleware for feed and log the request
@@ -10,38 +12,32 @@ let REQUEST_COUNTER= 1
 function init_request_middleware(app) {
   
   async function request_middleware(ctx, next) {
-
     const logger = ctx.miolo.logger
-
-    REQUEST_COUNTER+= 1
-    ctx.requestId= REQUEST_COUNTER    
+    const ip = ctx.headers["x-real-ip"] || '127.0.0.1'
+    const started = performance.now()
 
     // Patch for koa-better-body
     ctx.request.body = {...ctx.request.fields, ...ctx.request.files}
 
-    const started = performance.now()
-    const ip = ctx.headers["x-real-ip"] || '127.0.0.1'
-
-    ctx.request.ip = ip
+    // Keep request counters
+    REQUEST_COUNTER.total+= 1
+    REQUEST_COUNTER[ip] = (REQUEST_COUNTER[ip] || 0) + 1
     
-    logger.info(`req begin ${ctx.requestId} - ip ${ip} - ${cyan(ctx.request.method)} ${cyan(ctx.request.url)} ${ctx.request.body!=undefined ? JSON.stringify(ctx.request.body) : ''}`)
+    // Attach some info to request
+    ctx.requestId= REQUEST_COUNTER.total
+    ctx.request.ip = ip
+
+    // Log something
+    const sreq = `${magenta(ip)} ${cyan(ctx.request.method)} ${cyan(ctx.request.url)} [${cyan_light(REQUEST_COUNTER[ip])}/${cyan_light(ctx.requestId)}]`
+    const sbody= ctx.request.body!=undefined ? JSON.stringify(ctx.request.body) : ''
+    
+    logger.info(`${sreq} - START`)
+    logger.debug(`${sreq} - Body: ${sbody}`)
 
     await next()
     
 
-    let user = undefined
-    try {
-      if (ctx.state.user != undefined) {
-        user= ctx.state.user
-      }
-    } catch(_) {}
-
-    try {
-      if (ctx.user != undefined) {
-        user= ctx.user
-      }
-    } catch(_) {} 
-
+    const user = ctx?.session?.user
     let uid_desc= ''
     if (user != undefined) {
       if (user?.id) {
@@ -57,9 +53,12 @@ function init_request_middleware(app) {
                   ? green
                   : elapsed < 2.0
                     ? yellow
-                    : red
+                    : red 
+    
+    const ssession= ctx.session!=undefined ? JSON.stringify(ctx.session) : ''
+    logger.debug(`${sreq} - Session: ${ssession}`)
 
-    logger.info(`req end ${ctx.requestId}${uid_desc} => ${tcolor(`DONE in ${elapsed} seconds`)}`)
+    logger.info(`${sreq}${uid_desc} => ${tcolor(`DONE in ${elapsed} seconds`)}`)
   }
 
   app.use(request_middleware)

@@ -8,7 +8,6 @@ const init_basic_auth_middleware = ( app, options ) => {
   }
 
   async function basic_auth_middleware(ctx, next) {
-    ctx.user = null
     const au_user = auth(ctx)
 
     const unauth_err = () => {
@@ -22,6 +21,12 @@ const init_basic_auth_middleware = ( app, options ) => {
       //    }
       //  }
       //)
+
+      ctx.session= {
+        user: undefined,
+        authenticated: false
+      }
+
       ctx.body= {}
       ctx.response.status= 401
       ctx.response.body = 'Unauthorized'
@@ -38,7 +43,11 @@ const init_basic_auth_middleware = ( app, options ) => {
       return unauth_err()
     }
 
-    ctx.user= user
+    ctx.session= {
+      user,
+      authenticated: true
+    }
+
     await next()
   }
 

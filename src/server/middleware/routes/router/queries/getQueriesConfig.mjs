@@ -6,7 +6,6 @@ import {
   {
     prefix: '/queries',
 
-    getUserId,
     authUser,
     bodyField,
 
@@ -16,8 +15,7 @@ import {
         url: '/crud/todos/fake',
         method: 'GET', // 'POST'
         callback: (ctx) => {},
-        authUser,
-        getUserId  
+        authUser
       }
     ]
   }   
@@ -51,14 +49,13 @@ const getQueriesConfig = (config) => {
       return
     }
 
-    const comm_bodyField = config?.crud?.bodyField || config?.bodyField
+    const comm_bodyField = instance?.bodyField || config?.bodyField
 
     const comm_authUser= {
       ...DEFAULT_AUTH_USER,
       ...instance?.authUser || {},
       ...config?.authUser || {}
     }
-    const comm_getUserId= config?.crud?.getUserId || config?.getUserId
     
     let parsed_routes= []
 
@@ -80,8 +77,7 @@ const getQueriesConfig = (config) => {
         authUser: {
           ...comm_authUser,
           ...route?.authUser  || {}
-        },
-        getUserId: route?.getUserId  || comm_getUserId
+        }
       }
 
       parsed_routes.push(parsed_route)
