@@ -47,6 +47,8 @@ const demo_server_make_config = (buildFolder, authType= 'guest', dbType = 'postg
       port: 8001,
       hostname: 'localhost',
       
+      catcher_url: undefined, //'/sys/jserror',
+      
       //
       // Folders to be mounted by koa for static content
       //
@@ -88,19 +90,18 @@ const demo_server_make_config = (buildFolder, authType= 'guest', dbType = 'postg
       }
     },
     routes: extraConfig?.routes || def_routes,
-    catcher: undefined, //'/sys/jserror',
     redis: {
       host: '127.0.0.1',
       port: 6379
     },    
     log: {
-      level: extraConfig?.log?.level || 'silly',
+      level: extraConfig?.log?.level || 'info',
       format: {
         locale: 'es'
       },
       console: extraConfig?.log?.console || {
         enabled: true,
-        level: 'silly',
+        level: 'info',
       },
       file: {
         enabled: false,

@@ -1,70 +1,37 @@
-# router
+# render
 
-## simplificar options auth-related
+## html
+ 
+- si no string, que sea un {} con los campos a sustituir en los <meta/> del HTML por defecto
+- aun con esto, para casos como Bonages, nos faltaria la linea <rel/> del CSS y <script> (dev mode al menos)
 
- {
-   schema,
-   bodyField,
-   auth: {
-    require: false,     // true / false / 'read-only'
-    action: 'redirect', // 'error'
-    redirect_url: '/',
-    error_code: 401
+# SSR
 
-   crud: {
-    '/prefix/one': {
-      auth: {...},
-      routes: '*',
-      routes: [{
-        name,
-        schema,
-        url,
-        options: {
-          mode: r/rw/ru,
-          useUserFields: [],
-          auth: {...},
-        }
-      }]      
-    }
-  },
+- quizá los useSsrData..() como atributo de context?
 
-   queries: {
-    '/prefix/one': {
-      auth: {...},
-      routes: [{
-        url,
-        method, // GET - POST
-        callback: (ctx) => {},
-        options: {
-          auth: {...},
-        }
-      }]      
-    }
-  },
 
- }
+# Auth
+
+## Basic auth
+
+Como hacer la primera load con "/".
+omitir directamente en auth.basic.paths??
+no parece muy bueno tener que pasar toooodas las rutas ahi
+
+
+# Router
 
 ## auth.action
 
 Current: 'redirect', 'error'
 Add these? 'empty' / 'none'
 
-# SSR
 
-# render failback
+# Tests
 
-config.render {
-	html,
-	ssr: {loader, renderer}
-	json: empty/404/redirect
-}
+## demo.app
 
-que el init_ssr() se haga siempre, pasar loader/renderer directamente
-
-
-· render middleware: dejar claro que template strings ha de tener el index.html: {context} y {children}
-· quizá los useSsrData..() como atributo de context?
-
+They belong to test actually
 
 # demo
 
@@ -75,9 +42,6 @@ que el init_ssr() se haga siempre, pasar loader/renderer directamente
 When available, apply here.
 
 If possible, export also server commands for running it.
-
-
-
 
 
 # miolo + client bundle?

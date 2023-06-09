@@ -1,5 +1,5 @@
-import {mioloCatcher} from './catcher/index.mjs'
-import {Fetcher} from './fetcher/index.mjs'
+import {init_catcher} from './catcher/index.mjs'
+import {init_fetcher} from './fetcher/index.mjs'
 
 // similar but no react?
 // import { useSsrData } from './ssr/hooks/useSsrData.mjs'
@@ -7,20 +7,15 @@ import {Fetcher} from './fetcher/index.mjs'
 
 function miolo(config) {
 
-  if (window?.miolo == undefined) {
-    window.miolo= {
-      Fetcher,
-      catcher: false
-    }
-  } else {
-    if (window.miolo.Fetcher!=undefined) {
-      window.miolo.Fetcher = Fetcher
-    }
-    if (window.miolo.catcher!==true) {
-      mioloCatcher(config?.catcher?.url)    
-      window.miolo.catcher= true
-    }
+  const fetcher = init_fetcher(config)
+  if (config?.catcher_url) {
+    init_catcher(config?.catcher_url, fetcher)  
   }
+  const miolo_obj= {
+    fetcher
+  }
+
+  return miolo_obj
 }
 
 export {miolo}

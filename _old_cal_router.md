@@ -136,18 +136,18 @@ Is an object like this:
 }
 ```
 
-Custom options `schema`, `bodyField`, `getUserId` and `authUser` can be specified at any scope. For example:
+Custom options `schema`, `bodyField`, `auth` can be specified at any scope. For example:
 
 ```js
 {
-  getUserId: (ctx) => { return -1 }
+  auth: {...}
   crud: {
     prefix: '/api',
-    getUserId: (ctx) => { return 0 }
+    auth: {...}
     routes: [
       {
         name: 'screw_stock',
-        getUserId: (ctx) => { return 1 }
+        auth: {...}
       }
     ]
   }
@@ -185,16 +185,7 @@ Custom options `schema`, `bodyField`, `getUserId` and `authUser` can be specifie
                 last_update_by: 'last_update_by'
               },
             },
-
-            getUserId: (ctx) => {
-              let uid= ctx.headers['user-id']
-              if (uid!=undefined) {
-                return uid
-              }
-              return undefined
-            },
-
-            authUser: {
+            auth: {
               require: false,     // true / false / 'read-only'
               action: 'redirect', // 'error'
               redirect_url: '/',
@@ -217,7 +208,7 @@ Custom options `schema`, `bodyField`, `getUserId` and `authUser` can be specifie
         url: '/screw_stock/fake',
         method: 'POST',
         callback: (ctx) => {},
-        authUser: {
+        auth: {
           require: true,
           action: 'redirect',
           redirect_url: '/'
@@ -261,11 +252,11 @@ A callback receiving one param `ctx` and returning the logged in user id -if any
   }
 ```
 
-### `options.authUser`
+### `options.auth`
 
 ```js
   {
-    authUser: {
+    auth: {
       require: false,     // true / false / 'read-only'
       action: 'redirect', // 'error'
       redirect_url: '/',

@@ -1,0 +1,47 @@
+/* css variables*/
+:root {
+  --font-size: 12pt;
+  --font-size-sm: 9pt;
+
+  --primary-color: #432E30;
+  --primary-color-light: #8E7474;
+  --accent-color: #DD356E;
+  --accent-color-light: #f0b9cb;
+  /*--accent-color-light: #FFE4E4;
+  --accent-color-dark: #B94B4C;*/
+  --white-color: #FAFBFC;
+  /*--light-gray-color: #C6CBD1;
+  --medium-gray-color: #959DA5;
+  --dark-gray-color: #444D56; */
+  --header-bg-color: #F8F8FA;
+  --header-bg-color-secondary: #e4e4f7;
+  --code-bg-color: #f9f9f9;
+
+  --logo-gray: #6f6f6f;
+
+  --header-logo-width: 125px;
+  --header-logo-width-resp: 100px;
+
+  --header-grid-height: 4em;
+  --header-grid-height-resp: 3em;
+  --header-sub-height: 0;
+  --header-sub-height-resp: 2.5em;
+
+  --menu-width-web: 20em;
+
+  --border: 1px solid var(--header-bg-color);
+
+
+  --gradient-color-main: var(--header-bg-color); /* #a2ed56;*/
+  --gradient-color-secondary: var(--header-bg-color-secondary); /*#fddc32;*/
+
+
+}
+
+
+/*** EXTEND ***/
+/* box-shadow */
+%boxshadow {
+  box-shadow: 0.25rem 0.25rem 0.6rem rgba(0,0,0,0.05), 0 0.5rem 1.125rem rgba(75,0,0,0.05);
+}
+

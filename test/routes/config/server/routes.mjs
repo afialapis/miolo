@@ -35,7 +35,7 @@ export default {
           url: '/query',
           method: 'GET',
           callback: (_ctx) => {},
-          authUser: {
+          auth: {
             require: true,
             action: 'redirect',
             redirect_url: '/'

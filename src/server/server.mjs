@@ -2,7 +2,6 @@ import http                         from 'http'
 //import util                       from 'util'
 import Koa                          from 'koa'
 import { createHttpTerminator }     from 'http-terminator'
-
 import { init_config }              from './config/index.mjs'
 
 import { init_context_middleware }  from './middleware/context/context.mjs'
@@ -22,7 +21,8 @@ import { init_extra_middlewares }   from './middleware/extra.mjs'
 import { init_headers_middleware }  from './middleware/context/headers.mjs'
 import { init_router }              from './middleware/routes/router/index.mjs'
 
-import { init_route_html_render}      from './middleware/render/html/render.mjs'
+import { init_html_render_middleware} from './middleware/render/html/render.mjs'
+import { init_ssr_render_middleware}  from './middleware/render/ssr/render.mjs'
 import { init_404_render_middleware}  from './middleware/render/404/render.mjs'
 //import { init_json_render_middleware} from './middleware/render/json/render.mjs'
 
@@ -56,25 +56,24 @@ async function miolo(sconfig, render, callback) {
   init_route_robots(app)
 
   // Middleware for catching and logging JS errors
-  const catcher_url= config?.catcher
-  if (catcher_url) {
-    init_route_catch_js_error(app, catcher_url)
+  if (config.use_catcher) {
+    init_route_catch_js_error(app, config.http.catcher_url)
   }
 
   // auth middleware
-  if (config?.auth?.guest) {
+  if (config.auth_type == 'guest') {
     init_guest_auth_middleware(app, config.auth.guest, config?.session)
   }  
 
-  if (config?.auth?.basic) {
+  if (config.auth_type == 'basic') {
     init_basic_auth_middleware(app, config.auth.basic)
   }
 
-  if (config?.auth?.passport) {
+  if (config.auth_type == 'passport') {
     init_passport_auth_middleware(app, config.auth.passport, config?.session)
   }
 
-  if (config?.auth?.custom) {
+  if (config.auth_type == 'custom') {
     init_custom_auth_middleware(app, config.auth.custom)
   }
 
@@ -98,15 +97,18 @@ async function miolo(sconfig, render, callback) {
   }
 
   // Middleware for final render
-  if (render?.html!=undefined) {
-    init_route_html_render(app, render.html)
-  } else if (render?.middleware != undefined) {
+  if (render?.middleware != undefined) {
     app.use(render.middleware)
+  } else if (render?.ssr != undefined) {
+    init_ssr_render_middleware(app, render, config.http, config.auth_type)
+  } else  if (render?.html) {
+    init_html_render_middleware(app, render)
   } else {
     init_404_render_middleware(app, render)
-    // init_json_render_middleware(app, render)    
+    // init_json_render_middleware(app, render)  
   }
-  
+
+
   // promisify the server.listen()
 
   // opt1

@@ -17,5 +17,5 @@ const local_auth_user = async (username, password, miolo) => {
 export default {
   auth_user: local_auth_user,
   realm: undefined, //'demo.app',
-  paths: undefined // ['/api']
+  paths: ['/crud'] // ['/api']
 }

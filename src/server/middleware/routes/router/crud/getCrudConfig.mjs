@@ -7,7 +7,7 @@ import {
   [{
     prefix: '/crud,
 
-    authUser,
+    auth,
     bodyField,
     
     routes: Can be:
@@ -30,7 +30,7 @@ import {
             },
           },
 
-          authUser
+          auth
         }      
   }]
 */
@@ -63,10 +63,10 @@ const getCrudConfig = (config) => {
     
     const comm_bodyField = crud?.bodyField || config?.bodyField
 
-    const comm_authUser= {
+    const comm_auth= {
       ...DEFAULT_AUTH_USER,
-      ...crud?.authUser || {},
-      ...config?.authUser || {}
+      ...crud?.auth || {},
+      ...config?.auth || {}
     }
     
     let parsed_routes= []
@@ -91,9 +91,9 @@ const getCrudConfig = (config) => {
           ...DEFAULT_USE_USER_FIELDS,
           ...route?.useUserFields || {}
         },
-        authUser: {
-          ...comm_authUser,
-          ...route?.authUser  || {}
+        auth: {
+          ...comm_auth,
+          ...route?.auth  || {}
         }
       }
 

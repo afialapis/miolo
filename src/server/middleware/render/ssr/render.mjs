@@ -1,33 +1,38 @@
 import { renderToString } from 'react-dom/server'
-import {html as f_html} from './fallbacks/index.html.mjs'
+import {readFileSync} from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+const __my_filename = fileURLToPath(import.meta.url)
+const __my_dirname = path.dirname(__my_filename)
 
-function init_ssr_render_middleware(loader, renderer, options) {
+const indexHTMLPath= path.resolve(__my_dirname, 'fallback_index.html')
+const indexHTML = readFileSync(indexHTMLPath, 'utf8')
 
-  // parse options
-  let html = f_html
-  try {
-    if (options?.html != undefined) {
-      html= options.html
-    }
-  } catch(_) {}
-  
+export function init_ssr_render_middleware(app, render, http, auth_type) {
+  // check HTML
+  let html = render?.html || indexHTML
+
+  if (html.indexOf('{context}') < 0) {
+    app.context.miolo.logger.error('Provided HTML for rendering has no {context} template variable')
+  }
+  if (html.indexOf('{children}') < 0) {
+    app.context.miolo.logger.error('Provided HTML for rendering has no {children} template variable')
+  }
+
+  // wrap loader function
   const def_loader = async (ctx) => {
     let res= {}
     try {
-      res= await loader(ctx)
+      res= await render.ssr.loader(ctx)
     } catch(e) {
-      ctx.miolo.logger.error('Error produced by loader in the render middleware')
+      ctx.miolo.logger.error('Error produced by loader in render.ssr middleware')
       ctx.miolo.logger.error(e)
     }
     return res  
   }
 
-  async function render_ssr_middleware(ctx) {
-    /*
-      
-    */
-    const ssr_data = await def_loader(ctx)
-
+  // context builder
+  const build_context = (ctx, ssr_data) => {
     const isAuthed = ctx?.session?.authenticated === true
     const user = ctx?.session?.user
     
@@ -38,14 +43,26 @@ function init_ssr_render_middleware(loader, renderer, options) {
       extra: ctx?.extra
     }
 
+    return context
+  }
+  
+  // wrap renderer function
+  const render_html = (ctx, context) => {
     let ssr_html=''
+
+    const config= {
+      hostname: http?.hostname,
+      port: http?.port,
+      catcher_url: http?.catcher_url,
+      auth_type
+    }
 
     try {
       ssr_html= renderToString(
-        renderer(ctx, context)
+        render.ssr.renderer(ctx, context, config)
       )
     } catch(error) {
-      ctx.miolo.logger.error('Missing renderer in the render middleware')
+      ctx.miolo.logger.error('Missing renderer in render.ssr middleware')
       ctx.miolo.logger.error(error)
 
       ssr_html= `
@@ -59,13 +76,18 @@ function init_ssr_render_middleware(loader, renderer, options) {
       .replace('{context}', JSON.stringify(context, null, 2))  
       .replace('{children}', ssr_html)
 
-    
-    ctx.miolo.logger.debug(`render_middleware() rendered HTML (${Buffer.byteLength(ssr_html, 'utf8')} bytes of SSR content, ${Buffer.byteLength(parsed_html, 'utf8')} bytes total) `)
-
-    ctx.body= parsed_html
+    return parsed_html
   }
 
-  return render_ssr_middleware
-}
+  async function render_ssr_middleware(ctx) {
+    const ssr_data = await def_loader(ctx)
+    const context = build_context(ctx, ssr_data)
+    const rendered_html = render_html(ctx, context)
+    
+    ctx.miolo.logger.debug(`render_ssr_middleware() rendered HTML (${Buffer.byteLength(rendered_html, 'utf8')} bytes total) `)
 
-export {init_ssr_render_middleware}
+    ctx.body= rendered_html
+  }
+
+  app.use(render_ssr_middleware)
+}

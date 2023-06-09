@@ -4,12 +4,13 @@ import { StaticRouter } from 'react-router-dom/server.js'
 import AppContext from './context/AppContext.mjs'
 
 
-const AppServer = ({url, context, children}) => {
+const AppServer = ({url, context, config, children}) => {
   
   return (
     <StaticRouter location={url}>
       <AppContext 
-          context={context || {}}>
+          context= {context || {}}
+          config = {config}>
         {children}
       </AppContext>
     </StaticRouter>

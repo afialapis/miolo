@@ -12,6 +12,8 @@ export default {
   http: {
     port: 8001,
     hostname: 'localhost',
+
+    catcher_url: '/sys/jserror',
     
     static: {
       favicon: favicon,
@@ -87,7 +89,7 @@ export default {
   routes: {
     bodyField: undefined,
   
-    // authUser: {
+    // auth: {
     //   require: false,     // true / false / 'read-only'
     //   action: 'redirect', // 'error'
     //   redirect_url: '/',
@@ -100,7 +102,6 @@ export default {
     }],
     queries: undefined
   },
-  catcher: '/sys/jserror',
   //cacher: {
   //  redis: {
   //    host: '127.0.0.1',
@@ -258,6 +259,12 @@ export default {
     //        url:    '/aa/bb',
     //        callback: a middleware function
     //      }, ...]
+  },
+  render: {
+    // html: '',
+    // ssr: {loader, renderer},
+    // middleware: () => {}
+    //
   },
   middlewares: [
     // async (ctx) => {}

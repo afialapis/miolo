@@ -27,7 +27,7 @@ export default [{
       url: '/todos/fake',
       method: 'POST',
       callback: q_todos_insert_fake,
-      authUser: {
+      auth: {
         require: true,
         action: 'redirect',
         redirect_url: '/'

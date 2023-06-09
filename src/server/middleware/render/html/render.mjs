@@ -1,5 +1,5 @@
 
-import { cyan } from 'tinguir'
+import { red } from 'tinguir'
 import Router    from '@koa/router'
 import {readFileSync} from 'fs'
 import path from 'path'
@@ -10,29 +10,56 @@ const __my_dirname = path.dirname(__my_filename)
 const indexHTMLPath= path.resolve(__my_dirname, 'fallback_index.html')
 const indexHTML = readFileSync(indexHTMLPath, 'utf8')
 
-function init_route_html_render(app, html) {
+export function init_html_render_middleware(app, render) {
 
-  // Server-side render
-  async function html_render(ctx) {
-    const logger= ctx.miolo.logger
+  // check HTML
+  let html = render?.html || indexHTML
 
-    const reqid= ctx.requestId
-    const ip= ctx.headers["x-real-ip"] || '127.0.0.1'
-    const method= ctx.request.method
-    const url= ctx.request.url
-    const what = html!=undefined 
-                 ? 'provided html'
-                 : 'fallback page'
-    logger.info(`${reqid} - ${ip} : ${cyan(method)} ${cyan(url)} => Rendering ${what}`)
+  if (html.indexOf('{context}') < 0) {
+    app.context.miolo.logger.error(red('Provided HTML for rendering has no {context} template variable'))
+  }
+  if (html.indexOf('{children}') < 0) {
+    app.context.miolo.logger.error(red('Provided HTML for rendering has no {children} template variable'))
+  }
 
-    ctx.body = html || indexHTML
+  // context builder
+  const build_context = (ctx) => {
+    const isAuthed = ctx?.session?.authenticated === true
+    const user = ctx?.session?.user
+    
+    const context= {
+      user : user,
+      authenticated: isAuthed,
+      ssr_data: undefined,
+      extra: ctx?.extra
+    }
+
+    return context
+  }
+  
+  
+  // wrap renderer function
+  const render_html = (context) => {
+   
+    const parsed_html = html
+      .replace('{context}', JSON.stringify(context, null, 2)) 
+
+    return parsed_html
+  }
+
+
+  async function render_html_middleware(ctx) {
+
+    const context = build_context(ctx)
+    const rendered_html = render_html(context)
+
+    ctx.miolo.logger.debug(`render_html_middleware() rendered HTML (${Buffer.byteLength(rendered_html, 'utf8')} bytes total) `)
+
+    ctx.body= rendered_html
   }
 
   const html_render_router = new Router()
-  html_render_router.get('/', html_render)
+  html_render_router.get('/', render_html_middleware)
   
   app.use(html_render_router.routes())
 }
-
-
-export {init_route_html_render}

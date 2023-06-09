@@ -2,16 +2,19 @@ import assert from 'assert'
 import fetch from 'node-fetch'
 import data from '../config/data.mjs'
 import test_server from '../config/server/index.mjs'
-import {Fetcher} from '../../../src/cli/fetcher/index.mjs'
+import {miolo} from '../../../src/cli/index.mjs'
 
 
 function test_01 (dbType) {  
 
   let app
   let conn
-  const fetcher = new Fetcher()
+  const {fetcher} = miolo({
+    hostname: 'localhost',
+    port: 8001,
+    auth_type: 'passport'
+  })
   global.fetch = fetch
-  const baseUrl= 'http://localhost:8001'
 
 
   describe(`[miolo-test][${dbType}]`, function() {
@@ -43,23 +46,23 @@ function test_01 (dbType) {
     })
 
     it(`[miolo-test][${dbType}] should fetch test_01 from crud (read, unfiltered)`, async function() {
-      const response= await fetcher.read(`${baseUrl}/api/test_01`)
+      const response= await fetcher.read(`api/test_01`)
       assert.strictEqual(response.length, data.length)
     })
 
     it(`[miolo-test][${dbType}] should fetch test_01 from crud (read, filtered by name)`, async function() {
-      const response= await fetcher.read(`${baseUrl}/api/test_01`, {name: 'Peter'})
+      const response= await fetcher.read(`api/test_01`, {name: 'Peter'})
       assert.strictEqual(response.length, data.filter(r => r.name=='Peter').length)
     })
 
     it(`[miolo-test][${dbType}] should fetch test_01 from crud (read, unfiltered) using bodyField`, async function() {
-      const response= await fetcher.read(`${baseUrl}/rebody/test_01`)
+      const response= await fetcher.read(`rebody/test_01`)
       const res = response['rebody']
       assert.strictEqual(res.length, data.length)
     })
     
     it(`[miolo-test][${dbType}] should fetch test_01 from crud (read, filtered by name) using bodyField`, async function() {
-      const response= await fetcher.read(`${baseUrl}/rebody/test_01`, {name: 'Peter'})
+      const response= await fetcher.read(`rebody/test_01`, {name: 'Peter'})
       const res = response['rebody']
 
       assert.strictEqual(res.length, data.filter(r => r.name=='Peter').length)
@@ -67,13 +70,13 @@ function test_01 (dbType) {
 
 
     it(`[miolo-test][${dbType}] should fetch test_01 from query noauth (read, unfiltered)`, async function() {
-      const response= await fetcher.get(`${baseUrl}/noauth/query`)
+      const response= await fetcher.get(`noauth/query`)
       const data= response.data
       assert.strictEqual(data.name, 'Peter')
     })
 
     it(`[miolo-test][${dbType}] should fetch test_01 from query auth (returns error)`, async function() {
-      const response= await fetcher.get(`${baseUrl}/auth/query`)
+      const response= await fetcher.get(`auth/query`)
       assert.strictEqual(response.status, 404)
     })
 

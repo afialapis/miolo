@@ -1,6 +1,6 @@
 export default [{
   prefix: '/crud',
-  authUser: {
+  auth: {
     require: 'read-only',
     action: 'redirect',
     redirect_url: '/'

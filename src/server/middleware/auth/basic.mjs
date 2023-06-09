@@ -1,5 +1,26 @@
 import koa_mount from 'koa-mount'
-import auth from 'basic-auth'
+
+const _get_credentials = (req) => {
+  let sauth= req?.headers?.authorization
+
+  if (! sauth) {
+    return undefined
+  }
+  
+  try {
+    sauth= sauth.replace('Basic ', '')
+    try  {
+      sauth= Buffer.from(sauth, 'base64').toString()
+    } catch(_) {
+      sauth= atob(sauth)
+    }
+    const [username, password]= sauth.split(':')
+    return {username, password}
+
+  } catch(_) {
+    return undefined
+  }
+}
 
 const init_basic_auth_middleware = ( app, options ) => {
   let {auth_user, realm, paths} = options
@@ -8,7 +29,10 @@ const init_basic_auth_middleware = ( app, options ) => {
   }
 
   async function basic_auth_middleware(ctx, next) {
-    const au_user = auth(ctx)
+    let au_user
+    try {
+      au_user= _get_credentials(ctx.request)
+    } catch(_) {}
 
     const unauth_err = () => {
       // This will show error logs on the catcher middleware
@@ -37,7 +61,7 @@ const init_basic_auth_middleware = ( app, options ) => {
       return unauth_err()
     }
     
-    const user = await auth_user(au_user.name, au_user.pass, app.context.miolo)
+    const user = await auth_user(au_user.username, au_user.password, app.context.miolo)
 
     if (user === false || user == undefined) {
       return unauth_err()

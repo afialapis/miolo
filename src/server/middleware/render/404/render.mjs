@@ -1,7 +1,7 @@
 
 import Router from '@koa/router'
 
-function init_404_render_middleware(app, options) {
+function init_404_render_middleware(app, render) {
 
   async function render_404_middleware(ctx) {
     ctx.miolo.logger.debug(`render_404_middleware() Not FOUND ${ctx.url} `)

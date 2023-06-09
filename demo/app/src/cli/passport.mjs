@@ -1,8 +1,5 @@
-import {login, logout} from '../../../commons/cli/auth.mjs'
-import {insert_todos, 
-  insert_fake_todo, 
-  count_last_hour_todos, 
-  remove_todos} from '../../../commons/cli/todos.mjs'
+import {demo_app_api} from './api/todos.mjs'
+
 
 const AUTH= {
   username: 'todoer',
@@ -10,20 +7,26 @@ const AUTH= {
 }
 
 const miolo_demo_app_client_passport = async () => {
-  const cookie= await login(AUTH)
 
-  const tids= await insert_todos({cookie})
+  const {login, logout, insert_todos, 
+    insert_fake_todo, 
+    count_last_hour_todos, 
+    remove_todos} = demo_app_api('passport')
 
-  const count= await count_last_hour_todos(/*{cookie}*/) // auth not needed here
+  await login(AUTH)
+
+  const tids= await insert_todos()
+
+  const count= await count_last_hour_todos() 
   console.log('·································································')
   console.log(`Inserted ${count} todos!`)
   console.log('·································································')
 
-  await remove_todos(tids, {cookie})
-  const tid = await insert_fake_todo({cookie})
-  await remove_todos([tid], {cookie})
+  await remove_todos(tids)
+  const tid = await insert_fake_todo()
+  await remove_todos([tid])
 
-  await logout({cookie})
+  await logout()
 
   
 }

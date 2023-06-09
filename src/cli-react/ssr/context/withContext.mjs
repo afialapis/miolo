@@ -3,12 +3,11 @@ import Context from './Context.mjs'
 
 /* eslint react/display-name:0 */
 const withContext = (BaseComponent) => (props) => {
-  const {context, setContext} = useContext(Context)
+  const context = useContext(Context)
 
   return (
     <BaseComponent {...props}
-                   context = {context}
-                   setContext= {setContext}/>
+                   {...context}/>
   );
 }
 

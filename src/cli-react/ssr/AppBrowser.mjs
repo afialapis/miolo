@@ -1,20 +1,16 @@
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import AppContext from './context/AppContext.mjs'
-import { mioloCatcher } from '../../cli/catcher/index.mjs'
 
-const AppBrowser = ({children}) => {
-
-  mioloCatcher()
-  
+const AppBrowser = ({children, config}) => {
   return (
     <BrowserRouter>
-      <AppContext context={window.__CONTEXT || {}}>
+      <AppContext context={window.__CONTEXT || {}}
+                  config = {config}>
         {children}
       </AppContext>
     </BrowserRouter>
   )
-  
 }
 
 export default AppBrowser
