@@ -74,7 +74,6 @@ const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
         ctx.session.authenticated = false
 
         ctx.body = { 
-          success: false,
           user: undefined,
           authenticated: false,
           info: info,
@@ -85,15 +84,12 @@ const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
         // ctx.throw(401)
         
         ctx.response.status= 401
-        ctx.response.body = 'Unauthorized'
-
       } else {
 
         ctx.session.user = user
         ctx.session.authenticated = true
 
         ctx.body = { 
-          success: true ,
           user : user,
           authenticated: true
         }
@@ -115,7 +111,8 @@ const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
 
       ctx.logout()
       ctx.body = { 
-        success: true 
+        user: undefined,
+        authenticated: true 
       }      
       if (url_logout_redirect!=undefined) {
         ctx.redirect(url_logout_redirect)
@@ -123,13 +120,13 @@ const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
     } else {
 
       ctx.body = { 
-        success: false 
+        user: undefined,
+        authenticated: false 
       }
       // This will show error logs on the catcher middleware
       // ctx.throw(401)
       
       ctx.response.status= 401
-      ctx.response.body = 'Unauthorized'
     }
   }
   
