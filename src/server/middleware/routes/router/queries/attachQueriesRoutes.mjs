@@ -13,9 +13,9 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
         url= url.replace(/\/\//g, "/")
       }
 
-      logger.info(`Routing ${route.callback?.name || 'callback'} to ${url}`)
+      logger.info(`Routing ${route.callback?.name || 'callback'} to ${route.method} ${url}`)
 
-      const _route_callback = async (ctx) => {
+      const _route_auth_callback = async (ctx) => {
         const authenticated= ctx?.session?.authenticated === true
     
         const auth = route.auth
@@ -24,35 +24,57 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
         if (checkAuth) {
     
           if (!authenticated) {
-    
             if (auth.action=='error') {
               logger.error(`Unauthorized access. Throwing error ${auth.error_code}`)
-              return ctx.throw(
+              ctx.throw(
                 auth.error_code,
                 null,
                 {}
               )
             } else if (auth.action=='redirect') {
               logger.warn(`Unauthorized access. Redirecting to ${auth.redirect_url}`)
-              return ctx.redirect(auth.redirect_url)
+              ctx.redirect(auth.redirect_url)
             } else {
               logger.error(`Route path ${route.url} specified auth but no action`)
               ctx.body= {}
-              return
             }
-
           }
+
+          return authenticated
         }
     
-        const result= await route.callback(ctx)
+        return true
+      }
+
+      const _route_callback = async (ctx) => {
+
+        const authenticated = await _route_auth_callback(ctx)
+        if (! authenticated) {
+          return
+        }
+        
+        let goon= true
+        if (route?.before) {
+          goon= await route.before(ctx)
+        }
+
+        if (! goon) {
+          return
+        }
+    
+        let result= await route.callback(ctx)
+        
+        if (route?.after) {
+          result= await route.after(ctx, result)
+        }
+
         return result
       }
 
-      if (route.method == 'POST') {
-        router.post(url, (ctx) => _route_callback(ctx, route))
-      } else {
-        router.get(url, (ctx) => _route_callback(ctx, route))
-      }
+      const router_method = route.method.toLowerCase()
+
+      router[router_method](url, (ctx) => _route_callback(ctx, route))
+
     })
 
   })

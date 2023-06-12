@@ -34,8 +34,6 @@ export const demo_app_api = (auth_type) => {
     auth_type
   })
 
-  console.log(fetcher)
-
   const set_auth = (auth) => {
     fetcher.set_auth(auth)
   }

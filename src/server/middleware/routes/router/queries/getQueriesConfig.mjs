@@ -1,5 +1,9 @@
+import merge from 'deepmerge'
+
 import {
-  DEFAULT_AUTH_USER
+  DEFAULT_AUTH_USER,
+  DEFAULT_BEFORE_CALLBACK,
+  DEFAULT_AFTER_CALLBACK
 } from "../defaults.mjs"
 
 /**
@@ -7,7 +11,9 @@ import {
     prefix: '/queries',
 
     auth,
-    bodyField,
+    before: (ctx) => {return goon/!goon},
+    after : (ctx, result) => {return result},
+    
 
     routes: [
       List of objects like
@@ -15,7 +21,10 @@ import {
         url: '/crud/todos/fake',
         method: 'GET', // 'POST'
         callback: (ctx) => {},
-        auth
+
+        auth,
+        before: (ctx) => {return goon/!goon},
+        after : (ctx, result) => {return result},
       }
     ]
   }   
@@ -48,14 +57,15 @@ const getQueriesConfig = (config) => {
     if (! Array.isArray(routes)) {
       return
     }
+    
+    const comm_before = instance?.before || config?.before || DEFAULT_BEFORE_CALLBACK
+    const comm_after = instance?.after || config?.after || DEFAULT_AFTER_CALLBACK
 
-    const comm_bodyField = instance?.bodyField || config?.bodyField
-
-    const comm_auth= {
-      ...DEFAULT_AUTH_USER,
-      ...instance?.auth || {},
-      ...config?.auth || {}
-    }
+    const comm_auth= merge(
+      DEFAULT_AUTH_USER,
+      instance?.auth || {},
+      config?.auth || {}
+    )
     
     let parsed_routes= []
 
@@ -73,11 +83,13 @@ const getQueriesConfig = (config) => {
         method: route?.method || 'GET', 
         callback: route.callback,
 
-        bodyField: route?.bodyField || comm_bodyField,
-        auth: {
-          ...comm_auth,
-          ...route?.auth  || {}
-        }
+        auth: merge(
+          comm_auth,
+          route?.auth  || {}
+        ),
+
+        before: route?.before || comm_before,
+        after: route?.after || comm_after
       }
 
       parsed_routes.push(parsed_route)

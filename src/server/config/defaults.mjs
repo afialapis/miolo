@@ -95,6 +95,8 @@ export default {
     //   redirect_url: '/',
     //   error_code: 401
     // }, 
+    // before: (ctx) => {return goon/!goon},
+    // after : (ctx, result) => {return result},
     
     crud: [{
       prefix: '',

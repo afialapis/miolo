@@ -1,6 +1,10 @@
+import merge from 'deepmerge'
+
 import {
   DEFAULT_AUTH_USER,
-  DEFAULT_USE_USER_FIELDS
+  DEFAULT_USE_USER_FIELDS,
+  DEFAULT_BEFORE_CALLBACK,
+  DEFAULT_AFTER_CALLBACK
 } from "../defaults.mjs"
 
 /**
@@ -9,11 +13,10 @@ import {
 
     auth,
     bodyField,
+    before: (ctx) => {return goon/!goon},
+    after : (ctx, result) => {return result},
     
-    routes: Can be:
-      '*' => autodetect and create routes for every table on the daabase
-      or
-      an array of tables config, where each config can be:
+    routes: an array of tables config, where each config can be:
       - a simple string with the table name
       - an object like this:
         {
@@ -30,7 +33,11 @@ import {
             },
           },
 
-          auth
+          auth,
+          bodyField,
+          before: (ctx) => {return goon/!goon},
+          after : (ctx, result) => {return result},
+    
         }      
   }]
 */
@@ -62,12 +69,15 @@ const getCrudConfig = (config) => {
     }
     
     const comm_bodyField = crud?.bodyField || config?.bodyField
+    const comm_before = crud?.before || config?.before || DEFAULT_BEFORE_CALLBACK
+    const comm_after = crud?.after || config?.after || DEFAULT_AFTER_CALLBACK
 
-    const comm_auth= {
-      ...DEFAULT_AUTH_USER,
-      ...crud?.auth || {},
-      ...config?.auth || {}
-    }
+
+    const comm_auth= merge(
+      DEFAULT_AUTH_USER,
+      config?.auth || {},
+      crud?.auth || {}
+    )
     
     let parsed_routes= []
 
@@ -87,14 +97,17 @@ const getCrudConfig = (config) => {
         mode: route?.mode || 'rw',
 
         bodyField: route?.bodyField || comm_bodyField,
-        useUserFields: {
-          ...DEFAULT_USE_USER_FIELDS,
-          ...route?.useUserFields || {}
-        },
-        auth: {
-          ...comm_auth,
-          ...route?.auth  || {}
-        }
+        useUserFields: merge(
+          DEFAULT_USE_USER_FIELDS,
+          route?.useUserFields || {}
+        ),
+        auth: merge(
+          comm_auth,
+          route?.auth  || {}
+        ),
+
+        before: route?.before || comm_before,
+        after: route?.after || comm_after
       }
 
       parsed_routes.push(parsed_route)
