@@ -54,10 +54,19 @@ const remove_todos = async (fetcher, ids) => {
   return reses
 }
 
+const clean_todos = async (fetcher) => {
+  const res= await fetcher.get('/crud/todos/clean', {})
+  const count= parseInt(res.data)
+  return count
+}
+
+
+
+
 export {
   set_auth, login, logout, 
   insert_todos, insert_todo, 
   insert_fake_todo, count_last_hour_todos,
-  remove_todos
+  remove_todos, clean_todos
 }
 
