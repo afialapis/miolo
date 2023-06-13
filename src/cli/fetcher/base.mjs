@@ -30,7 +30,7 @@ class Fetcher {
       credentials: 'include',
       headers: {
         'content-type': 'application/json',
-        ...this.get_headers()
+        ...this.get_headers() || {}
       }
     }
 

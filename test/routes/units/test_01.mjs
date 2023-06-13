@@ -1,7 +1,7 @@
 import assert from 'assert'
 import fetch from 'node-fetch'
-import data from '../config/data.mjs'
-import test_server from '../config/server/index.mjs'
+import data from '../data.mjs'
+import test_server from '../server/index.mjs'
 import {miolo} from '../../../src/cli/index.mjs'
 
 
@@ -17,16 +17,16 @@ function test_01 (dbType) {
   global.fetch = fetch
 
 
-  describe(`[miolo-test][${dbType}]`, function() {
+  describe(`[miolo-test-routes][${dbType}]`, function() {
 
-    it(`[miolo-test][${dbType}] should start app`, async function() {
+    it(`[miolo-test-routes][${dbType}] should start app`, async function() {
       app = await test_server(dbType)
       conn = app.context.miolo.db.getConnection(dbType)
 
       assert.strictEqual(conn.config.dialect, dbType)
     })
 
-    it(`[miolo-test][${dbType}] should prepare database`, async function() {
+    it(`[miolo-test-routes][${dbType}] should prepare database`, async function() {
       
       let query = `DROP TABLE IF EXISTS test_01`
       await conn.execute(query)
@@ -45,23 +45,23 @@ function test_01 (dbType) {
       }
     })
 
-    it(`[miolo-test][${dbType}] should fetch test_01 from crud (read, unfiltered)`, async function() {
+    it(`[miolo-test-routes][${dbType}] should fetch test_01 from crud (read, unfiltered)`, async function() {
       const response= await fetcher.read(`api/test_01`)
       assert.strictEqual(response.length, data.length)
     })
 
-    it(`[miolo-test][${dbType}] should fetch test_01 from crud (read, filtered by name)`, async function() {
+    it(`[miolo-test-routes][${dbType}] should fetch test_01 from crud (read, filtered by name)`, async function() {
       const response= await fetcher.read(`api/test_01`, {name: 'Peter'})
       assert.strictEqual(response.length, data.filter(r => r.name=='Peter').length)
     })
 
-    it(`[miolo-test][${dbType}] should fetch test_01 from crud (read, unfiltered) using bodyField`, async function() {
+    it(`[miolo-test-routes][${dbType}] should fetch test_01 from crud (read, unfiltered) using bodyField`, async function() {
       const response= await fetcher.read(`rebody/test_01`)
       const res = response['rebody']
       assert.strictEqual(res.length, data.length)
     })
     
-    it(`[miolo-test][${dbType}] should fetch test_01 from crud (read, filtered by name) using bodyField`, async function() {
+    it(`[miolo-test-routes][${dbType}] should fetch test_01 from crud (read, filtered by name) using bodyField`, async function() {
       const response= await fetcher.read(`rebody/test_01`, {name: 'Peter'})
       const res = response['rebody']
 
@@ -69,25 +69,25 @@ function test_01 (dbType) {
     })
 
 
-    it(`[miolo-test][${dbType}] should fetch test_01 from query noauth (read, unfiltered)`, async function() {
+    it(`[miolo-test-routes][${dbType}] should fetch test_01 from query noauth (read, unfiltered)`, async function() {
       const response= await fetcher.get(`noauth/query`)
       const data= response.data
       assert.strictEqual(data.name, 'Peter')
     })
 
-    it(`[miolo-test][${dbType}] should fetch test_01 from query auth (returns error)`, async function() {
+    it(`[miolo-test-routes][${dbType}] should fetch test_01 from query auth (returns error)`, async function() {
       const response= await fetcher.get(`auth/query`)
       assert.strictEqual(response.status, 404)
     })
 
-    it(`[miolo-test][${dbType}] should clean [and close] database`, async function() {
+    it(`[miolo-test-routes][${dbType}] should clean [and close] database`, async function() {
       const query = `DROP TABLE test_01`
       await conn.execute(query)
       conn.close()
     })
 
-    it(`[miolo-test][${dbType}] should stop server`, async function() {
-      app.context.miolo.logger.info(`[miolo-test] Let's stop the server...`)
+    it(`[miolo-test-routes][${dbType}] should stop server`, async function() {
+      app.context.miolo.logger.info(`[miolo-test-routes] Let's stop the server...`)
       await app.stop_server()
     })
   })

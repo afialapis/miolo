@@ -1,22 +1,34 @@
-# render
+
+# Auth
+
+## Basic auth
+
+### How to route?
+
+Como hacer la primera load con "/".
+omitir directamente en auth.basic.paths??
+no parece muy bueno tener que pasar toooodas las rutas ahi
+
+## Guest auth
+
+### koa-session?
+
+Wouldn't be enough to use koa-session? Token could be taken from cookie.
+And we would get rid of JWT.
+
+
+
+# Render
 
 ## html
  
 - si no string, que sea un {} con los campos a sustituir en los <meta/> del HTML por defecto
 - aun con esto, para casos como Bonages, nos faltaria la linea <rel/> del CSS y <script> (dev mode al menos)
 
-# SSR
+## SSR
 
 - quizá los useSsrData..() como atributo de context?
 
-
-# Auth
-
-## Basic auth
-
-Como hacer la primera load con "/".
-omitir directamente en auth.basic.paths??
-no parece muy bueno tener que pasar toooodas las rutas ahi
 
 
 # Router
@@ -27,24 +39,17 @@ Current: 'redirect', 'error'
 Add these? 'empty' / 'none'
 
 
-# Tests
 
-## demo.app
+# DEV time
 
-They belong to test actually
-
-# demo
-
-- usar Fetcher en demo-app?
-
-# `xeira.run`
+## `xeira.run`
 
 When available, apply here.
 
 If possible, export also server commands for running it.
 
 
-# miolo + client bundle?
+## miolo + client bundle?
 	
   Con `xeira` se puede facilitar el tema. Por ejemplo, pasando un tercer parámetro:
 

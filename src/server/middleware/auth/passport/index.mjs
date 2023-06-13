@@ -112,7 +112,7 @@ const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
       ctx.logout()
       ctx.body = { 
         user: undefined,
-        authenticated: true 
+        authenticated: false 
       }      
       if (url_logout_redirect!=undefined) {
         ctx.redirect(url_logout_redirect)

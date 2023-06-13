@@ -30,7 +30,7 @@ import { init_404_render_middleware}  from './middleware/render/404/render.mjs'
 import { init_cron }                from './engines/cron/index.mjs'
 
 
-async function miolo(sconfig, render, callback) {
+function miolo(sconfig, render) {
 
   const app = new Koa()
 
@@ -108,59 +108,66 @@ async function miolo(sconfig, render, callback) {
     // init_json_render_middleware(app, render)  
   }
 
+  const _run = async () => {
 
-  // promisify the server.listen()
 
-  // opt1
-  // let server = http.createServer(app.callback())
-  // const promise = util.promisify( server.listen.bind( server ) )
-  // await promise( config.http.port, config.http.hostname)
-  
-  // opt2
-  const listenAsync = (server, port, hostname) => {
-    return new Promise((resolve, reject) => {
-      server.listen(port, hostname, (error) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve();
-        }
+    // promisify the server.listen()
+
+    // opt1
+    // let server = http.createServer(app.callback())
+    // const promise = util.promisify( server.listen.bind( server ) )
+    // await promise( config.http.port, config.http.hostname)
+    
+    // opt2
+    const listenAsync = (server, port, hostname) => {
+      return new Promise((resolve, reject) => {
+        server.listen(port, hostname, (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
       });
-    });
-  };
-  const server = http.createServer(app.callback());
-  await listenAsync(server, config.http.port, config.http.hostname);
+    };
+    const server = http.createServer(app.callback());
+    await listenAsync(server, config.http.port, config.http.hostname);
 
-  app.context.miolo.logger.info(`miolo is listening on ${config.http.hostname}:${config.http.port}`)
+    app.context.miolo.logger.info(`miolo is listening on ${config.http.hostname}:${config.http.port}`)
 
-  // Make server accessible from app object
-  app.server = server
-  
-  const httpTerminator = createHttpTerminator({
-    server,
-  })
+    // Make server accessible from app object
+    app.server = server
+    
+    const httpTerminator = createHttpTerminator({
+      server,
+    })
 
-  app.stop_server = async () => {
-    await httpTerminator.terminate()
-    app.context.miolo.logger.info(`miolo has been shutdowned from ${config.http.hostname}:${config.http.port}`)
+    app.stop_server = async () => {
+      await httpTerminator.terminate()
+      app.context.miolo.logger.info(`miolo has been shutdowned from ${config.http.hostname}:${config.http.port}`)
+    }
+
+    // // Although async, lets support callbacks too
+    // if (callback!=undefined) {
+    //   callback(app)
+    // }
+    
+    //  const server= app.listen(config.http.port, config.http.hostname, function () {
+    //    app.context.miolo.logger.info(`miolo is listening on ${config.http.hostname}:${config.http.port}`)
+    //    init_cron(app.context.miolo.logger)
+    //
+    //    if (callback!=undefined) {
+    //      callback(app)
+    //    }
+    //  })
+    
+    // Init cron when everything is set up
+    init_cron(app.context.miolo.logger)
+
+    return app
   }
 
-  // Although async, lets support callbacks too
-  if (callback!=undefined) {
-    callback(app)
-  }
-  
-  //  const server= app.listen(config.http.port, config.http.hostname, function () {
-  //    app.context.miolo.logger.info(`miolo is listening on ${config.http.hostname}:${config.http.port}`)
-  //    init_cron(app.context.miolo.logger)
-  //
-  //    if (callback!=undefined) {
-  //      callback(app)
-  //    }
-  //  })
-  
-  // Init cron when everything is set up
-  init_cron(app.context.miolo.logger)
+  app.run= _run
 
   return app
 }

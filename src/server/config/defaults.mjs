@@ -63,6 +63,9 @@ export default {
       //renew: false, 
 
       /** (boolean) secure cookie*/
+      /** You may want to set it as true in your Production environement,
+       *  while false at DEV time.
+       */
       secure: true, 
       
       /** (string) session cookie sameSite options (default null, don't set it) */
@@ -122,14 +125,14 @@ export default {
     file: {
       enabled: true,
       level: 'silly',
-      filename: '/var/log/afialapis/miolo.log'
+      filename: '/var/log/miolo.log'
     },
     mail: {
       enabled: false,
       level: 'warn',
       name: 'miolo',
-      from: 'miolo@afialapis.com',
-      to: 'devel@afialapis.com'      
+      from: 'miolo@mail.com',
+      to: 'errors@mail.com'      
     }
   },
   mail: {
@@ -141,7 +144,7 @@ export default {
       // port – is the port to connect to (defaults to 587 is secure is false or 465 if true)
       port: 25,
       // host – is the hostname or IP address to connect to (defaults to ‘localhost’)
-      host: 'mail.afialapis.com',
+      host: 'mail.com',
       // auth – defines authentication data 
       //        If authentication data is not present, the connection is considered authenticated from the start. 
       //        Otherwise you would need to provide the authentication options object.
@@ -209,27 +212,11 @@ export default {
       //
       // proxy – all SMTP based transports allow to use proxies for making TCP connections to servers.
       //         Read about proxy support in Nodemailer from here: https://nodemailer.com/smtp/proxies/
-
-      /* TESTED */
-      /*
-      port: 465,
-      host: 'mail.afialapis.com',
-      auth: {
-        user: 'devel@afialapis.com',
-        pass: '***',
-        type: 'login',
-      },      
-      secure: true,
-      tls: {
-        rejectUnauthorized: false
-      } ,
-      */
-
     },
     defaults: {
       name: 'miolo',
-      from: 'miolo@afialapis.com',
-      to: 'devel@afialapis.com'
+      from: 'miolo@mail.com',
+      to: 'errors@mail.com'
     }
   },
   auth: {

@@ -24,6 +24,10 @@ class FetcherPassport extends Fetcher {
   }
   
   get_headers() {
+    if (!this.cookie) {
+      return {}
+    }
+    
     return {
       'Cookie': this.cookie
     }
