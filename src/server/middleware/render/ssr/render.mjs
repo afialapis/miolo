@@ -25,8 +25,14 @@ export function init_ssr_render_middleware(app, render, http, auth_type) {
     try {
       res= await render.ssr.loader(ctx)
     } catch(e) {
-      ctx.miolo.logger.error('Error produced by loader in render.ssr middleware')
-      ctx.miolo.logger.error(e)
+      const tit= 'Error produced by loader in render.ssr middleware'
+      const inf= `URL: ${ctx.request.url}\nFields: ${JSON.stringify(ctx.request?.fields || {})}`
+      const det= e?.stack
+        ? `${e.toString()}\n${e.stack}`
+        : e.toString()
+      const all= `${tit}\n${inf}\n${det}`
+    
+      ctx.miolo.logger.error(all)
     }
     return res  
   }
