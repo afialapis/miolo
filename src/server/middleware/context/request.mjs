@@ -28,7 +28,10 @@ function init_request_middleware(app) {
     ctx.request.ip = ip
 
     // Log something
-    const sreq = `${magenta(ip)} ${cyan(ctx.request.method)} ${cyan(ctx.request.url)} [${cyan_light(REQUEST_COUNTER[ip])}/${cyan_light(ctx.requestId)}]`
+    const clurl = ctx.request.url.indexOf('?')>=0
+      ? ctx.request.url.substr(0, ctx.request.url.indexOf('?'))
+      : ctx.request.url
+    const sreq = `${magenta(ip)} ${cyan(ctx.request.method)} ${cyan(clurl)} [${cyan_light(REQUEST_COUNTER[ip])}/${cyan_light(ctx.requestId)}]`
     const sbody= ctx.request.body!=undefined ? JSON.stringify(ctx.request.body) : ''
     
     logger.info(`${sreq} - START`)
@@ -73,6 +76,9 @@ function init_request_middleware(app) {
     const ssession= ctx.session!=undefined ? JSON.stringify(ctx.session) : ''
     logger.debug(`${sreq} - Session: ${ssession}`)
 
+    const rbody= ctx.body!=undefined ? JSON.stringify(ctx.body) : ''
+    logger.debug(`${sreq} - Response: ${rbody}`)
+    
     logger.info(`${sreq} - DONE ${stdesc}${uid_desc} (time ${tcolor(elapsed)})`)
   }
 

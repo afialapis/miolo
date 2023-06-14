@@ -7,7 +7,7 @@ import basic_auth from './auth/basic.mjs'
 const __my_filename = fileURLToPath(import.meta.url)
 const __my_dirname = path.dirname(__my_filename)
 
-export const makeConfig = (authType, logLevel= 'info') => {
+export const makeConfig = (authType, logLevel= 'debug') => {
   const auth = 
       authType=='guest' ? {guest: {}}
     : authType=='basic' ? {basic: basic_auth}
@@ -49,18 +49,20 @@ export const makeConfig = (authType, logLevel= 'info') => {
         user:     'postgres',
         password: 'postgres'
       },
-      tables: [{
-        name: 'todos',
-        options: {
-          useDateFields: false,
-          //checkBeforeDelete: ["edition.agent_id"],
-          //customHooks: {
-          //  beforeInsert: beforeInsertTest,
-          //  beforeUpdate: beforeUpdateTest
-          //}
-        } 
-      }],
-      log: logLevel,
+      options: {
+        tables: [{
+          name: 'todos',
+          options: {
+            useDateFields: false,
+            //checkBeforeDelete: ["edition.agent_id"],
+            //customHooks: {
+            //  beforeInsert: beforeInsertTest,
+            //  beforeUpdate: beforeUpdateTest
+            //}
+          } 
+        }],
+        log: logLevel
+      },
     },
     log: {
       level: logLevel,
