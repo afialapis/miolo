@@ -1,3 +1,5 @@
+import {query_string_to_json} from '../utils.mjs'
+
 function attachQueriesRoutes(router, queriesConfigs, logger) {
 
   queriesConfigs.map((queriesConfig) => {
@@ -47,6 +49,19 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
       }
 
       const _route_callback = async (ctx) => {
+
+        try {
+          if ((route.method == 'GET') && (!ctx.request?.fields)) {
+            if (ctx.request.url.indexOf('?')>0) {
+              const fields= query_string_to_json(ctx.request.url)
+              if (fields) {
+                ctx.request.fields= fields
+              }
+            }
+          }
+        } catch(e) {
+          logger.error(`Error while trying to qet query params for ${ctx.request.url}`)
+        }
 
         const authenticated = await _route_auth_callback(ctx)
         if (! authenticated) {

@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
