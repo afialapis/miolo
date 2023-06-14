@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -46,26 +46,22 @@
     "server-bundle": "npx xeira bundle --target=node --source_index=./src/server/index.mjs --bundle_folder=./dist/server --bundle_name=miolo.server",
     "server-dist": "npm run server-clean && npm run server-bundle && npm run server-copy-static",
     "dist": "npm run cli-dist && npm run cli-react-dist && npm run server-dist",
-      
     "demo-guest-cli-build-bundle": "npx xeira bundle --target=browser --source_index=./demo/cli/guest/index.mjs --bundle_folder=./demo/build --bundle_name=miolo-demo-guest --bundler=rollup",
     "demo-guest-cli-build-trim": "rm -fr ./demo/build/*umd* ./demo/build/*.mjs* ./demo/build/*.min* ./demo/build/*.iife.js*",
     "demo-guest-cli-build": "rm -fr ./demo/build/miolo-demo-guest* && npm run demo-guest-cli-build-bundle && npm run demo-guest-cli-build-trim",
     "demo-guest-server": "NODE_ENV=development npx nodemon --inspect ./demo/server/index.cjs --guest",
     "demo-guest": "npm run demo-guest-cli-build && npm run demo-guest-server",
-
     "demo-basic-cli-build-bundle": "npx xeira bundle --target=browser --source_index=./demo/cli/basic/index.mjs --bundle_folder=./demo/build --bundle_name=miolo-demo-basic --bundler=rollup",
     "demo-basic-cli-build-trim": "rm -fr ./demo/build/*umd* ./demo/build/*.mjs* ./demo/build/*.min* ./demo/build/*.iife.js*",
     "demo-basic-cli-build": "rm -fr ./demo/build/miolo-demo-basic* && npm run demo-basic-cli-build-bundle && npm run demo-basic-cli-build-trim",
     "demo-basic-server": "NODE_ENV=development npx nodemon --inspect ./demo/server/index.cjs --basic",
     "demo-basic": "npm run demo-basic-cli-build && npm run demo-basic-server",
-
     "demo-passport-cli-build-bundle": "npx xeira bundle --target=browser --source_index=./demo/cli/passport/index.mjs --bundle_folder=./demo/build --bundle_name=miolo-demo-passport --bundler=rollup",
     "demo-passport-cli-build-trim": "rm -fr ./demo/build/*umd* ./demo/build/*.mjs* ./demo/build/*.min* ./demo/build/*.iife.js*",
     "demo-passport-cli-build": "rm -fr ./demo/build/miolo-demo-passport* && npm run demo-passport-cli-build-bundle && npm run demo-passport-cli-build-trim",
     "demo-passport-server": "NODE_ENV=development npx nodemon --inspect ./demo/server/index.cjs --passport",
     "demo-passport": "npm run demo-passport-cli-build && npm run demo-passport-server",
     "demo": "npm run demo-passport",
-
     "site": "npx xeira site",
     "test": "npx xeira test --files=./test/index.mjs",
     "reset": "npm run main:purge && npm i",
@@ -97,6 +93,7 @@
     "koa-static": "^5.0.0",
     "nodemailer": "^6.7.2",
     "passport-local": "^1.0.0",
+    "qs": "^6.11.2",
     "redis": "^4.0.3",
     "socket.io": "^4.4.1",
     "tinguir": "^0.0.3",

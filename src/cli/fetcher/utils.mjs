@@ -1,14 +1,13 @@
+import qs from "qs"
+
 /**
  * Transform an JSON object to a query string
  */
 export function json_to_query_string(params) {
-  return '?' + Object.keys(params).map(k => {
-    const name = encodeURIComponent(k)
-    if (Array.isArray(params[k])) {
-      return params[k].map(val => `${name}[]=${encodeURIComponent(val)}`).join('&')
-    }
-    return `${name}=${encodeURIComponent(params[k])}`
-  }).join('&')
+  if (params && (Object.keys(params).length>0)) {
+    return `?${qs.stringify(params)}`
+  }
+  return ''
 }
 
 export function trim_left(str, what) {

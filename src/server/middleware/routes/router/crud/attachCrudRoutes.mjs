@@ -96,59 +96,6 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
         ctx.body= result
       }
 
-      /*
-      const _checkUserInfo = async (ctx, op, callback) => {
-        
-        const uid= ctx?.session?.user?.id
-        const authenticated= ctx?.session?.authenticated === true
-
-        let allowed= true
-
-        const auth = route.auth
-
-        const checkAuth= (auth.require===true) || (auth.require==='read-only' && op==='w')
-
-        if (checkAuth) {
-
-          if (! authenticated) {
-
-            if (auth.action=='error') {
-              
-              logger.error(`[miolo-router] Unauthorized access. Throwing error ${auth.error_code}`)
-              ctx.throw(
-                auth.error_code,
-                null,
-                {}
-              )
-            } else if (auth.action=='redirect') {
-              logger.warn(`[miolo-router] Unauthorized access. Redirecting to ${auth.redirect_url}`)
-              ctx.redirect(auth.redirect_url)
-            } else {
-              logger.error(`Crud path ${route.url} specified auth but no action`)
-            }
-
-            allowed= false
-          }
-        }
-
-        let fieldNames= {}
-        if (route.useUserFields.use===true) {
-          fieldNames= route.useUserFields.fieldNames
-        }
-
-        const uinfo= {
-          uid: uid,
-          fieldNames,
-        }
-        
-        let res= {}
-        if (allowed) {
-          res= await callback(uinfo)
-        }
-        ctx.body = res
-      }
-      */
-
       const route_read = async (ctx) => {
         await _crud_callback(ctx, 'r', async (_uinfo) => {
           const params = query_string_to_json(ctx.request.url)
