@@ -48,18 +48,20 @@ export const makeConfig = (authType, logLevel= 'error') => {
         user:     'postgres',
         password: 'postgres'
       },
-      tables: [{
-        name: 'todos',
-        options: {
-          useDateFields: false,
-          //checkBeforeDelete: ["edition.agent_id"],
-          //customHooks: {
-          //  beforeInsert: beforeInsertTest,
-          //  beforeUpdate: beforeUpdateTest
-          //}
-        } 
-      }],
-      log: logLevel,
+      options: {
+        tables: [{
+          name: 'todos',
+          options: {
+            useDateFields: false,
+            //checkBeforeDelete: ["edition.agent_id"],
+            //customHooks: {
+            //  beforeInsert: beforeInsertTest,
+            //  beforeUpdate: beforeUpdateTest
+            //}
+          } 
+        }],
+       // log: logLevel
+      }
     },
     log: {
       level: logLevel,

@@ -1,11 +1,11 @@
-import qs from "qs"
+import stringify from "qs/lib/stringify.js"
 
 /**
  * Transform an JSON object to a query string
  */
 export function json_to_query_string(params) {
   if (params && (Object.keys(params).length>0)) {
-    return `?${qs.stringify(params)}`
+    return `?${stringify(params)}`
   }
   return ''
 }

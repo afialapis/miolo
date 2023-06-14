@@ -6,14 +6,17 @@ const init_context_middleware = ( app, config ) => {
   const emailer = init_emailer(config.mail.options, config.mail.defaults)
   const logger = init_logger(config.log, emailer)
 
-  config.db.options.log= logger
+  const dbOptions= {
+    ...config.db.options,
+    log: logger
+  }
   
   const getConnectionWrap = () => {
-    return getConnection(config.db.config, config.db.options)
+    return getConnection(config.db.config, dbOptions)
   }
 
   const getModelWrap = (name) => {
-    const conn = getConnection(config.db.config, config.db.options)
+    const conn = getConnection(config.db.config, dbOptions)
     return conn.getModel(name)
   }  
 

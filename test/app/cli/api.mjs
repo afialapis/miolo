@@ -55,7 +55,7 @@ const remove_todos = async (fetcher, ids) => {
 }
 
 const clean_todos = async (fetcher) => {
-  const res= await fetcher.get('/crud/todos/clean', {})
+  const res= await fetcher.post('/crud/todos/clean', {})
   const count= parseInt(res.data)
   return count
 }

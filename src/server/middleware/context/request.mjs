@@ -46,6 +46,21 @@ function init_request_middleware(app) {
         uid_desc= ` - token ${user?.token}`
       }
     }
+    const status = ctx.response.status
+    let ststr= status
+    let stcolor
+    if (status==200) {
+      stcolor= green
+    } else if (status>200 && status<=299) {
+      stcolor= yellow
+      if (ctx.response.redirected && ctx.response.url) {
+        ststr+= ` -> ${ctx.response.url}`
+
+      }
+    } else {
+      stcolor= red
+    }
+    const stdesc = `[${stcolor(ststr)}]`
 
     const elapsed = parseFloat( (performance.now() - started) / 1000.0 ).toFixed(2)
 
@@ -58,7 +73,7 @@ function init_request_middleware(app) {
     const ssession= ctx.session!=undefined ? JSON.stringify(ctx.session) : ''
     logger.debug(`${sreq} - Session: ${ssession}`)
 
-    logger.info(`${sreq}${uid_desc} => ${tcolor(`DONE in ${elapsed} seconds`)}`)
+    logger.info(`${sreq} - DONE ${stdesc}${uid_desc} (time ${tcolor(elapsed)})`)
   }
 
   app.use(request_middleware)

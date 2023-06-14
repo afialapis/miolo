@@ -18,12 +18,21 @@ const init_logger = (config, emailer) => {
     error  : red
   }
 
+  const LEVEL_ABBRV= {
+    silly  : 'sly',
+    debug  : 'dbg',
+    verbose: 'vbs',
+    info   : 'inf',
+    warn   : 'wrn',
+    error  : 'err',
+  }
+
   const myFormat = printf(info => {
     const lc = LEVEL_COLORS[info.level]
     const tm = new Date(info.timestamp)
     const ts= tm.toLocaleString(config?.format?.locale || 'en')
     //const ts= tm.toString().substr(4, 20)
-    const log= `[miolo] ${lc(ts)} ${lc(info.level)} ${info.message}`
+    const log= `[miolo] ${lc(ts)} ${lc(LEVEL_ABBRV[info.level])} ${info.message}`
     return info.stack
       ? `${log}\n${info.stack}`
       : log;    
