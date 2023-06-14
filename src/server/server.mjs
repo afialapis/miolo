@@ -162,7 +162,7 @@ function miolo(sconfig, render) {
     //  })
     
     // Init cron when everything is set up
-    init_cron(app.context.miolo.logger)
+    init_cron(app, config?.cron)
 
     return app
   }

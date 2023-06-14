@@ -7,7 +7,7 @@ import basic_auth from './auth/basic.mjs'
 const __my_filename = fileURLToPath(import.meta.url)
 const __my_dirname = path.dirname(__my_filename)
 
-export const makeConfig = (authType, logLevel= 'debug') => {
+export const makeConfig = (authType, logLevel= 'silly') => {
   const auth = 
       authType=='guest' ? {guest: {}}
     : authType=='basic' ? {basic: basic_auth}
@@ -69,6 +69,21 @@ export const makeConfig = (authType, logLevel= 'debug') => {
       console: { enabled: true, level: logLevel },
     },
     routes: def_routes,
-    auth
+    auth,
+    cron: [
+      {
+        name: 'KRON',
+        cronTime: '*/3 * * * *', 
+        onTick: (miolo, onComplete) => {
+          
+          miolo.logger.warn('KRON Task - ticking')
+
+        },
+        onComplete: (miolo) => {
+          miolo.logger.warn('KRON Task - completed')
+        },
+        start: true
+      }
+    ]
   }
 }

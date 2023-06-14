@@ -257,6 +257,20 @@ export default {
   },
   middlewares: [
     // async (ctx) => {}
+  ],
+  cron: [
+    // {
+    //   name,
+    //   cronTime, 
+    //   onTick(miolo, onComplete),
+    //      Notice that if task runs too fast, you may see that
+    //       onTick is actually never run, but onComplete is.
+    //      Consider passing a higher interval on cronTime
+    //   onComplete(miolo),
+    //   start,
+    //   timezone, context, runOnInit, utcOffset, unrefTimeout
+    // }
+    // check https://github.com/kelektiv/node-cron#readme
   ]
 };
 
