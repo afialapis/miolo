@@ -1,4 +1,4 @@
-import {epoch_now} from 'intre'
+import {intre_now} from 'intre'
 
 async function todos_read(conn) {
   // TODO : handle transactions
@@ -15,7 +15,7 @@ async function todos_count_last_hour(conn) {
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const one_hour_ago = epoch_now() - 60*60
+  const one_hour_ago = intre_now() - 60*60
 
   const query = `
     SELECT COUNT(1) as cnt
