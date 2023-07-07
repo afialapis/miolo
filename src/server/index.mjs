@@ -1,13 +1,13 @@
 import {miolo} from './server.mjs'
-// import { init_emailer as getEmailer} from './engines/emailer/index.mjs'
-// import { init_cacher as getCacher} from './engines/cacher/index.mjs'
-// import { init_logger as getLogger } from './engines/logger/index.mjs'
-import { getConnection } from 'calustra'
+import { init_emailer as miolo_emailer} from './engines/emailer/index.mjs'
+import { init_cacher as miolo_cacher} from './engines/cacher/index.mjs'
+import { init_logger as miolo_logger } from './engines/logger/index.mjs'
+import { getConnection as miolo_db_connection} from 'calustra'
 
 export {
   miolo,
-  //getEmailer,
-  //getCacher,
-  //getLogger,
-  getConnection
+  miolo_emailer,
+  miolo_cacher,
+  miolo_logger,
+  miolo_db_connection
 }

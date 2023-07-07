@@ -1,11 +1,11 @@
 import nodemailer from 'nodemailer'
 
-function init_emailer(options, defaults, silent= false) {
+function init_emailer({options, defaults, silent}) {
 
   const nmailer = nodemailer.createTransport(options, defaults)
 
   async function send_email(mail) {
-    if (silent) {
+    if (silent === true) {
       console.info('*********************************')
       console.info('This mail will not be send (emailing is disabled):')
       console.info(mail)
