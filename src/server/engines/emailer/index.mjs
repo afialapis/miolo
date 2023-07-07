@@ -10,6 +10,13 @@ function init_emailer(options, defaults, silent= false) {
       console.info('This mail will not be send (emailing is disabled):')
       console.info(mail)
       console.info('*********************************')
+
+      return {
+        ok: true,
+        silent: true,
+        error: undefined,
+        messageId: undefined
+      }
     } else {
       try {
         let info = nmailer.sendMail(mail)
