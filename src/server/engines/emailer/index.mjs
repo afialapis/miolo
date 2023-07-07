@@ -4,28 +4,24 @@ function init_emailer(options, defaults, silent= false) {
 
   const nmailer = nodemailer.createTransport(options, defaults)
 
-  function send_email(mail, cb) {
+  async function send_email(mail) {
     if (silent) {
       console.info('*********************************')
       console.info('This mail will not be send (emailing is disabled):')
       console.info(mail)
       console.info('*********************************')
     } else {
-      
-      if (! cb) {
-        cb= function(err, info) {
-          if (err) {
-            console.error('NodeMailer error:')
-            console.error(err)
-          }
-          if (info) {
-            console.log('NodeMailer sent mail:')
-            console.log(info)
-          } 
-        } 
-      }      
+      try {
+        let info = nmailer.sendMail(mail)
+        info.ok = info?.messageId ? true : false
 
-      nmailer.sendMail(mail, cb)
+        return info
+      } catch(error) {
+        return {
+          error,
+          ok: false
+        }
+      }
     }
   }
 
