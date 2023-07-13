@@ -40,6 +40,9 @@ function miolo(sconfig, render) {
   // attach to app some custom miolo methods
   init_context_middleware(app, config)
 
+  // CORS and other headers
+  init_headers_middleware(app, config.http)    
+
   // Compress and body parser
   init_body_middleware(app)
 
@@ -86,9 +89,6 @@ function miolo(sconfig, render) {
   if (extra_middlewares) {
     init_extra_middlewares(app, extra_middlewares)
   }
-
-  // CORS and other headers
-  init_headers_middleware(app, config.http)    
 
   // Routes to /crud
   if (config?.routes) {
