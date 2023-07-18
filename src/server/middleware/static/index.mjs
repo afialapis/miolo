@@ -11,10 +11,17 @@ const fallback_favicon_path = path.resolve(__my_dirname, './miolo.ico')
 const init_static_middleware = ( app, config ) => {
 
   const {favicon, folders} = config
+
+  const faviconPath = favicon || fallback_favicon_path
  
-  app.use(koa_favicon(favicon || fallback_favicon_path))
+  app.context.miolo.logger.debug(`[static] Serving favicon from ${faviconPath}`)
+
+  app.use(koa_favicon(faviconPath))
   
   for(const [k, v] of Object.entries(folders)) {
+
+    app.context.miolo.logger.debug(`[static] Mounting static folder ${k} => ${v}`)
+
     app.use(koa_mount(k, koa_serve(v, {index: false})))
   }
 }

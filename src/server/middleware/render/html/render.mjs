@@ -12,14 +12,9 @@ const indexHTML = readFileSync(indexHTMLPath, 'utf8')
 export function init_html_render_middleware(app, render) {
 
   // check HTML
-  let html = render?.html || indexHTML
+  const html = render?.html || indexHTML
 
-  if (html.indexOf('{context}') < 0) {
-    app.context.miolo.logger.error(red('Provided HTML for rendering has no {context} template variable'))
-  }
-  if (html.indexOf('{children}') < 0) {
-    app.context.miolo.logger.error(red('Provided HTML for rendering has no {children} template variable'))
-  }
+  const wantsContext = html.indexOf('{context}') > 0
 
   // context builder
   const build_context = (ctx) => {
@@ -38,8 +33,9 @@ export function init_html_render_middleware(app, render) {
   
   
   // wrap renderer function
-  const render_html = (context) => {
-   
+  const render_html = (ctx) => {
+    const context = build_context(ctx)
+
     const parsed_html = html
       .replace('{context}', JSON.stringify(context, null, 2)) 
 
@@ -49,10 +45,10 @@ export function init_html_render_middleware(app, render) {
 
   async function render_html_middleware(ctx) {
 
-    const context = build_context(ctx)
-    const rendered_html = render_html(context)
+    
+    const rendered_html = wantsContext ? render_html(ctx) : html
 
-    ctx.miolo.logger.debug(`render_html_middleware() rendered HTML (${Buffer.byteLength(rendered_html, 'utf8')} bytes total) `)
+    ctx.miolo.logger.debug(`[render-html] Returned body is ${Buffer.byteLength(rendered_html, 'utf8')} bytes`)
 
     ctx.body= rendered_html
   }

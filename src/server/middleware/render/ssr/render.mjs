@@ -90,7 +90,7 @@ export function init_ssr_render_middleware(app, render, http, auth_type) {
     const context = build_context(ctx, ssr_data)
     const rendered_html = render_html(ctx, context)
     
-    ctx.miolo.logger.debug(`render_ssr_middleware() rendered HTML (${Buffer.byteLength(rendered_html, 'utf8')} bytes total) `)
+    ctx.miolo.logger.debug(`[render-ssr] Returned body is ${Buffer.byteLength(rendered_html, 'utf8')} bytes`)
 
     ctx.body= rendered_html
   }
