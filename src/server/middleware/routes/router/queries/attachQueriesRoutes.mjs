@@ -15,7 +15,7 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
         url= url.replace(/\/\//g, "/")
       }
 
-      logger.info(`Routing ${route.callback?.name || 'callback'} to ${route.method} ${url}`)
+      logger.info(`[miolo-router] Routing ${route.callback?.name || 'callback'} to ${route.method} ${url}`)
 
       const _route_auth_callback = async (ctx) => {
         const authenticated= ctx?.session?.authenticated === true
@@ -60,7 +60,7 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
             }
           }
         } catch(e) {
-          logger.error(`Error while trying to qet query params for ${ctx.request.url}`)
+          logger.error(`[miolo-router] Error while trying to qet query params for ${ctx.request.url}`)
         }
 
         const authenticated = await _route_auth_callback(ctx)

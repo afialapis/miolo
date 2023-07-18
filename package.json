@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -70,7 +70,7 @@
   "dependencies": {
     "@koa/cors": "^4.0.0",
     "@koa/router": "^12.0.0",
-    "calustra": "^0.10.1",
+    "calustra": "^0.10.2",
     "cron": "^2.3.1",
     "deepmerge": "^4.3.1",
     "diskspace": "^2.0.0",

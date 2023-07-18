@@ -36,17 +36,17 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
     
           if (!authenticated) {
             if (auth.action=='error') {
-              logger.error(`Unauthorized access. Throwing error ${auth.error_code}`)
+              logger.error(`[miolo-router] Unauthorized access. Throwing error ${auth.error_code}`)
               ctx.throw(
                 auth.error_code,
                 null,
                 {}
               )
             } else if (auth.action=='redirect') {
-              logger.warn(`Unauthorized access. Redirecting to ${auth.redirect_url}`)
+              logger.warn(`[miolo-router] Unauthorized access. Redirecting to ${auth.redirect_url}`)
               ctx.redirect(auth.redirect_url)
             } else {
-              logger.error(`Crud path ${route.url} specified auth but no action`)
+              logger.error(`[miolo-router] Crud path ${route.url} specified auth but no action`)
               ctx.body= {}
             }
           }

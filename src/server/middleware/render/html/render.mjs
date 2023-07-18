@@ -1,5 +1,3 @@
-
-import { red } from 'tinguir'
 import {readFileSync} from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
