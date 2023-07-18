@@ -1,6 +1,5 @@
 
 import { red } from 'tinguir'
-import Router    from '@koa/router'
 import {readFileSync} from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -57,9 +56,6 @@ export function init_html_render_middleware(app, render) {
 
     ctx.body= rendered_html
   }
-
-  const html_render_router = new Router()
-  html_render_router.get('/', render_html_middleware)
   
-  app.use(html_render_router.routes())
+  app.use(render_html_middleware)
 }
