@@ -109,7 +109,7 @@ const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
       ctx.session.user = undefined
       ctx.session.authenticated = false
 
-      ctx.logout()
+      await ctx.logout()
       ctx.body = { 
         user: undefined,
         authenticated: false 

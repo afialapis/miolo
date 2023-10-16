@@ -18,8 +18,7 @@ export const makeConfig = (authType, logLevel= 'silly') => {
     http: {
       port: 8001,
       hostname: 'localhost',
-      
-      //catcher_url: '/sys/jserror',
+      catcher_url: '/sys/jserror',
       
       //
       // Folders to be mounted by koa for static content
