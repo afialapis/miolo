@@ -5,7 +5,7 @@ import {init_fetcher} from './fetcher/index.mjs'
 // import { useSsrData } from './ssr/hooks/useSsrData.mjs'
 // import { useSsrDataOrReload } from './ssr/hooks/useSsrDataOrReload.mjs'
 
-function miolo(config) {
+function miolo_client(config) {
 
   const fetcher = init_fetcher(config)
   if (config?.catcher_url) {
@@ -18,4 +18,4 @@ function miolo(config) {
   return miolo_obj
 }
 
-export {miolo}
+export {miolo_client}

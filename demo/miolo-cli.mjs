@@ -1,3 +1,3 @@
-import {miolo} from '../src/cli/index.mjs'
+import {miolo_client} from '../src/cli/index.mjs'
 
-export {miolo}
+export {miolo_client}

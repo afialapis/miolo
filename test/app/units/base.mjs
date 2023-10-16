@@ -1,16 +1,16 @@
 import assert from 'assert'
 import fetch from 'node-fetch'
 import test_server from '../server/index.mjs'
-import {miolo} from '../../../src/cli/index.mjs'
+import {miolo_client} from '../../../src/cli/index.mjs'
 
 function test_app_base (authType, callback) {  
 
   let app
   //let conn
-  const {fetcher} = miolo({
+  const {fetcher} = miolo_client({
     hostname: 'localhost',
     port: 8001,
-    auth_type: authType
+    //auth_type: authType
   })
   global.fetch = fetch
 
