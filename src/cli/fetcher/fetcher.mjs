@@ -139,8 +139,8 @@ class Fetcher {
   }
 
   async logout(url) {
-    const res= await this._fetch('POST', url || '/logout', {})
     this.cookie= undefined
+    const res= await this._fetch('POST', url || '/logout', {})
     return res  
   }
 

@@ -4,25 +4,25 @@ import IndexGuest from '../../cli/guest/ui/Index.mjs'
 import IndexBasic from '../../cli/basic/ui/Index.mjs'
 import IndexPassport from '../../cli/passport/ui/Index.mjs'
 
-const rendererGuest = (ctx, context, config) => {
+const rendererGuest = (ctx, context) => {
   return (
-    <AppServer url={ctx.url} context={context} config={config}>
+    <AppServer url={ctx.url} context={context}>
       <IndexGuest/>
     </AppServer>
   )
 }
 
-const rendererBasic = (ctx, context, config) => {
+const rendererBasic = (ctx, context) => {
   return (
-    <AppServer url={ctx.url} context={context} config={config}>
+    <AppServer url={ctx.url} context={context}>
       <IndexBasic/>
     </AppServer>
   )
 }
 
-const rendererPassport = (ctx, context, config) => {
+const rendererPassport = (ctx, context) => {
   return (
-    <AppServer url={ctx.url} context={context} config={config}>
+    <AppServer url={ctx.url} context={context}>
       <IndexPassport/>
     </AppServer>
   )

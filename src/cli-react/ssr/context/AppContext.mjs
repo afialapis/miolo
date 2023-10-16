@@ -3,9 +3,9 @@ import Context from './Context.mjs'
 import { miolo_client } from '../../../cli/index.mjs'
 
 
-const AppContext = ({context, config, children}) => {
+const AppContext = ({context, children}) => {
   const [innerContext, setInnerContext]= useState(context)
-  const [mioloObj, setMioloObj]= useState(miolo_client(config))
+  const [mioloObj, setMioloObj]= useState(miolo_client(context.config))
   
   useEffect(() => {
     setInnerContext(context)
@@ -13,8 +13,8 @@ const AppContext = ({context, config, children}) => {
 
   
   useEffect(() => {
-    setMioloObj(miolo_client(config))
-  }, [config])
+    setMioloObj(miolo_client(context.config))
+  }, [context.config])
 
   return (
     <Context.Provider 

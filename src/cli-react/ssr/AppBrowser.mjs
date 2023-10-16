@@ -2,11 +2,10 @@ import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import AppContext from './context/AppContext.mjs'
 
-const AppBrowser = ({children, config}) => {
+const AppBrowser = ({children}) => {
   return (
     <BrowserRouter>
-      <AppContext context={window.__CONTEXT || {}}
-                  config = {config}>
+      <AppContext context={window.__CONTEXT || {}}>
         {children}
       </AppContext>
     </BrowserRouter>
