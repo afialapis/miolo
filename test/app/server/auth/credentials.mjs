@@ -4,7 +4,7 @@ import {find_user_by_id as q_find_user_by_id,
 
 // eslint-disable-next-line no-unused-vars
 const get_user_id = (user, done, miolo) => { 
-  //console.log('[miolo-test-app][passport] get_user_id()', user)
+  //console.log('[miolo-test-app][credentials] get_user_id()', user)
   const uid= user?.id
   if (uid!=undefined) {
     done(null, uid)
@@ -14,7 +14,7 @@ const get_user_id = (user, done, miolo) => {
 }
 
 const find_user_by_id = (id, done, miolo) => {
-  //console.log('[miolo-test-app][passport] find_user_by_id()', id)
+  //console.log('[miolo-test-app][credentials] find_user_by_id()', id)
   const conn= miolo.db.getConnection()
 
   q_find_user_by_id(conn, id).then(user => {
@@ -31,11 +31,11 @@ const local_auth_user = (username, password, done, miolo) => {
   // noauth=> done(null, false, {message: ''}) 
   // err=> done(error, null)
 
-  //console.log('[miolo-test-app][passport] local_auth_user() - checking credentials for ', username)
+  //console.log('[miolo-test-app][credentials] local_auth_user() - checking credentials for ', username)
 
   const conn= miolo.db.getConnection()
   q_auth_user(conn, username, password).then(user => {
-    //console.log('[miolo-test-app][passport] local_auth_user() - User logged in', user)
+    //console.log('[miolo-test-app][credentials] local_auth_user() - User logged in', user)
 
     if (user==undefined) {
       done(null, false, 'Invalid credentials')
@@ -52,5 +52,5 @@ export default {
   url_login : '/login',
   url_logout: '/logout',
   url_login_redirect : undefined,
-  url_logout_redirect: '/'
+  url_logout_redirect: undefined
 }

@@ -225,7 +225,7 @@ export default {
     //  realm: '',
     //  paths: [],
     //},
-    //passport: {
+    //credentials: {
     //  get_user_id:  (user, done, miolo) => done(null, user.id), // default
     //  find_user_by_id: (id, done, miolo) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
     //  local_auth_user: (username, password, done, miolo) => done(null, {id: 1})

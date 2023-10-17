@@ -26,7 +26,7 @@ const Login = ({setContext, miolo}) => {
 //    o directamente sobre windows.CONTEXT
 //    
 //  3)
-//  Auth type 'passport': quiza llamar mejor 'credentials' o algo asi, ya que no hay necesidad de exponer nada de passport
+//  DONE: Auth type 'passport': quiza llamar mejor 'credentials' o algo asi, ya que no hay necesidad de exponer nada de passport
 //
 //  4)
 //  Volver a intentar con que el 'ssr.renderer' no necesite de AppServer. 

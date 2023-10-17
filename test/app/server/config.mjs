@@ -4,14 +4,14 @@
 // const __my_dirname = path.dirname(__my_filename)
 
 import def_routes from './routes/index.mjs'
-import passport from './auth/passport.mjs'
+import credentials from './auth/credentials.mjs'
 import basic_auth from './auth/basic.mjs'
 
 export const makeConfig = (authType, logLevel= 'error') => {
   const auth = 
       authType=='guest' ? {guest: {}}
     : authType=='basic' ? {basic: basic_auth}
-    : {passport}
+    : {credentials}
 
 
   return {

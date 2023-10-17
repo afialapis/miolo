@@ -6,8 +6,8 @@ function _get_auth_type(config) {
     return 'basic'
   }
 
-  if (config?.auth?.passport) {
-    return 'passport'
+  if (config?.auth?.credentials) {
+    return 'credentials'
   }
 
   if (config?.auth?.custom) {

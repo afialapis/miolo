@@ -25,7 +25,7 @@ const def_local_auth_user = (username, password, done, miolo) => {
 }
 
 
-const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
+const init_credentials_auth_middleware = ( app, options, sessionConfig ) => {
   const {get_user_id, find_user_by_id, local_auth_user, 
          url_login, url_logout, url_login_redirect, url_logout_redirect} = options
 
@@ -64,14 +64,16 @@ const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
 
   app.use(passport.initialize())
   app.use(passport.session())
-  app.use(async (ctx) => {
+
+  async function _ensure_ctx_user (ctx, next) {
     try{
       if (ctx.session.authenticated) {
         ctx.session.user = ctx.state.user
       }
     } catch(_) {}
-  })
-  
+    await next()
+  }
+  app.use(_ensure_ctx_user)
 
   // handle auth routes
   const handleLogIn = (ctx, next) => {
@@ -146,4 +148,4 @@ const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
   app.use(login_router.routes())
 }
 
-export {init_passport_auth_middleware}
+export {init_credentials_auth_middleware}

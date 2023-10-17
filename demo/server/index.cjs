@@ -47,11 +47,11 @@ require('@babel/register')({
 
 const {demo_server} = require('./server.mjs')
 
-let authType= 'passport'
+let authType= 'credentials'
 try {
   authType= process.argv[2].replace('--', '')
 } catch(_) {
-  console.log(`Running demo-passport...`)
+  console.log(`Running demo-credentials...`)
 }
 
 demo_server(authType)

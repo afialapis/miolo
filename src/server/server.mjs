@@ -14,7 +14,7 @@ import { init_route_catch_js_error} from './middleware/routes/catch_js_error.mjs
 
 import {init_guest_auth_middleware} from'./middleware/auth/guest.mjs'
 import {init_basic_auth_middleware} from'./middleware/auth/basic.mjs'
-import {init_passport_auth_middleware} from'./middleware/auth/passport/index.mjs'
+import {init_credentials_auth_middleware} from'./middleware/auth/credentials/index.mjs'
 import {init_custom_auth_middleware} from'./middleware/auth/custom.mjs'
 
 import { init_extra_middlewares }   from './middleware/extra.mjs'
@@ -71,8 +71,8 @@ function miolo(sconfig, render) {
     init_basic_auth_middleware(app, config.auth.basic)
   }
 
-  if (config.auth_type == 'passport') {
-    init_passport_auth_middleware(app, config.auth.passport, config?.session)
+  if (config.auth_type == 'credentials') {
+    init_credentials_auth_middleware(app, config.auth.credentials, config?.session)
   }
 
   if (config.auth_type == 'custom') {
