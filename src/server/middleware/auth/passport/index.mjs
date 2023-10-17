@@ -64,6 +64,13 @@ const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
 
   app.use(passport.initialize())
   app.use(passport.session())
+  app.use(async (ctx) => {
+    try{
+      if (ctx.session.authenticated) {
+        ctx.session.user = ctx.state.user
+      }
+    } catch(_) {}
+  })
   
 
   // handle auth routes
@@ -86,7 +93,7 @@ const init_passport_auth_middleware = ( app, options, sessionConfig ) => {
         ctx.response.status= 401
       } else {
 
-        ctx.session.user = user
+        ctx.session.user = ctx.state.user
         ctx.session.authenticated = true
 
         ctx.body = { 

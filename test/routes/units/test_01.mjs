@@ -12,7 +12,6 @@ function test_01 (dbType) {
   const {fetcher} = miolo_client({
     hostname: 'localhost',
     port: 8001,
-    //auth_type: 'passport'
   })
   global.fetch = fetch
 

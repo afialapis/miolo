@@ -5,7 +5,8 @@ import LogoutForm from './LogoutForm.mjs'
 const Logout = ({miolo}) => {
   
   const doTheLogout = useCallback(async () => {
-    const _= await miolo.fetcher.logout('/logout')
+    const _resp = await miolo.fetcher.logout('/logout')
+    // resp.redirected= true
   }, [miolo])
 
   return (
