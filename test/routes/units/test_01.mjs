@@ -10,8 +10,10 @@ function test_01 (dbType) {
   let app
   let conn
   const {fetcher} = miolo_client({
-    hostname: 'localhost',
-    port: 8001,
+    config: {
+      hostname: 'localhost',
+      port: 8001,
+    }
   })
   global.fetch = fetch
 
