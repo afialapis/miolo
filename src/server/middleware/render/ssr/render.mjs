@@ -64,14 +64,16 @@ export function init_ssr_render_middleware(app, render, http) {
         ssr_html= renderToString(
           render.ssr.renderer(ctx, context)
         )
+      } else {
+        ctx.miolo.logger.warn('Missing renderer in render.ssr middleware')
       }
     } catch(error) {
-      ctx.miolo.logger.error('Missing renderer in render.ssr middleware')
+      ctx.miolo.logger.error('Error in renderer (render.ssr middleware)')
       ctx.miolo.logger.error(error)
 
       ssr_html= `
       <div>
-        MIOLO: Missing SSR renderer: ${error.toString()}
+        MIOLO: Error SSR renderer: ${error.toString()}
       </div>      
       `
     }
