@@ -3,13 +3,6 @@ import {init_fetcher} from './fetcher/index.mjs'
 
 function miolo_client(context) {
 
-  // TODO Not needed at SSR time, right?
-  if (typeof window != 'object') {
-    return {
-      fetcher: {}
-    }
-  }
-
   const {config, ...rest_context} = context
 
   const fetcher = init_fetcher(config)

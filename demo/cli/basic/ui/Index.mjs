@@ -5,9 +5,9 @@ import Todos from './pages/Todos.mjs'
 import { withContext } from '../../../miolo-cli-react.mjs'
 
 
-const Index = ({miolo}) => {
+const Index = ({fetcher}) => {
   
-  miolo.fetcher.set_auth({
+  fetcher.set_auth({
     username: 'todoer',
     password: 'todoer'
   })

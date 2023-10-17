@@ -8,8 +8,7 @@ function show_title  (title) {
   }
 }
 
-const Todos = ({useSsrData, miolo}) => {
-  const fetcher = miolo.fetcher
+const Todos = ({useSsrData, fetcher}) => {
 
   async function todoListLoader() {
     show_title('loading todos...')
