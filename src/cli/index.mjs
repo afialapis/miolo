@@ -1,16 +1,23 @@
 import {init_catcher} from './catcher/index.mjs'
 import {init_fetcher} from './fetcher/index.mjs'
 
-// similar but no react?
-// import { useSsrData } from './ssr/hooks/useSsrData.mjs'
-// import { useSsrDataOrReload } from './ssr/hooks/useSsrDataOrReload.mjs'
+function miolo_client(context) {
 
-function miolo_client(config) {
+  // TODO Not needed at SSR time, right?
+  if (typeof window != 'object') {
+    return {
+      fetcher: {}
+    }
+  }
+
+  const {config, ...rest_context} = context
 
   const fetcher = init_fetcher(config)
+
   if (config?.catcher_url) {
     init_catcher(config?.catcher_url, fetcher)  
   }
+
   const miolo_obj= {
     fetcher
   }

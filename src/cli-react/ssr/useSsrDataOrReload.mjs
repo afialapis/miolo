@@ -8,11 +8,13 @@ const useSsrDataOrReload = (context, name, defval, loader) => {
   const [needToRefresh, setNeedToRefresh] = useState(ssrDataFromContext == undefined)
 
   const refreshSsrData = useCallback(() => {
+    if (loader == undefined) {
+      return
+    }
+
     async function fetchData() {
-      if (loader != undefined) {
-        let nSsrData = await loader()
-        setSsrData(nSsrData)
-      }
+      let nSsrData = await loader()
+      setSsrData(nSsrData)
     }
 
     fetchData()

@@ -1,22 +1,18 @@
 import React , {useState, useEffect} from 'react'
 import Context from './Context.mjs'
-import { miolo_client } from '../../../cli/index.mjs'
+import { miolo_client } from '../../cli/index.mjs'
+import { useSsrDataOrReload } from '../ssr/useSsrDataOrReload.mjs'
 
 
 const AppContext = ({context, children}) => {
   const [innerContext, setInnerContext]= useState(context)
-  const [mioloObj, setMioloObj]= useState(miolo_client(context.config))
+  const [mioloObj, setMioloObj]= useState(miolo_client(context))
     
   useEffect(() => {
     setInnerContext(context)
+    setMioloObj(miolo_client(context))
   }, [context])
   
-    
-  useEffect(() => {
-    setMioloObj(miolo_client(context.config))
-  }, [context.config])
-
-
   const login = async (credentials) => {
     const {data} = await mioloObj.fetcher.login('/login', credentials)
 
@@ -51,14 +47,25 @@ const AppContext = ({context, children}) => {
     }    
   }
 
+
+
+
+  const useSsrData = (name, defval, loader) => {
+    return useSsrDataOrReload(innerContext, name, defval, loader)
+  }  
+
   return (
     <Context.Provider 
       value={{
-        context: innerContext, 
+        //context: innerContext, 
         //setContext: setInnerContext,
-        miolo: mioloObj,
+        //miolo: mioloObj,
+        user: innerContext.user,
+        authenticated: innerContext.authenticated,
+        fetcher: mioloObj.fetcher,
         login,
         logout,
+        useSsrData
       }}>
       {children}
     </Context.Provider>
