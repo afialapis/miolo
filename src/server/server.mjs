@@ -22,7 +22,7 @@ import { init_headers_middleware }  from './middleware/context/headers.mjs'
 import { init_router }              from './middleware/routes/router/index.mjs'
 
 import { init_ssr_render_middleware}  from './middleware/render/ssr/render.mjs'
-import { init_404_render_middleware}  from './middleware/render/404/render.mjs'
+//import { init_404_render_middleware}  from './middleware/render/404/render.mjs'
 //import { init_json_render_middleware} from './middleware/render/json/render.mjs'
 
 // import {init_socket}             from './engines/socket/index.mjs'
@@ -98,12 +98,12 @@ function miolo(sconfig, render) {
   // Middleware for final render
   if (render?.middleware != undefined) {
     app.use(render.middleware)
-  } else if (render?.ssr != undefined) {
-    init_ssr_render_middleware(app, render, config.http, config?.auth)
   } else {
+    init_ssr_render_middleware(app, render, config.http, config?.auth)
+  }/* else {
     init_404_render_middleware(app, render)
     // init_json_render_middleware(app, render)  
-  }
+  }*/
 
   const _run = async () => {
 

@@ -31,7 +31,7 @@
 
 
 
-
+hostname cli vs server?
 añadir chpwsd endpoint
 
 # Auth
