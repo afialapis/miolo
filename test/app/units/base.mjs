@@ -10,7 +10,8 @@ function test_app_base (authType, callback) {
   const {fetcher} = miolo_client({
     config: {
       hostname: 'localhost',
-      port: 8001
+      port: 8001,
+      force_hostname: true
     }
   })
   global.fetch = fetch

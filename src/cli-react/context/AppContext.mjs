@@ -14,7 +14,8 @@ const AppContext = ({context, children}) => {
   }, [context])
   
   const login = async (credentials) => {
-    const {data} = await mioloObj.fetcher.login('/login', credentials)
+    const url = innerContext.config.login_url || '/login'
+    const {data} = await mioloObj.fetcher.login(url, credentials)
 
     const nContext = {
       ...innerContext,
@@ -30,7 +31,8 @@ const AppContext = ({context, children}) => {
 
   
   const logout = async () => {
-    const _resp = await mioloObj.fetcher.logout('/logout')
+    const url = innerContext.config.logout_url || '/logout'
+    const _resp = await mioloObj.fetcher.logout(url)
     // resp.redirected= true
 
     const nContext = {

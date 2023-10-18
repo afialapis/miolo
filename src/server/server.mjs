@@ -99,7 +99,7 @@ function miolo(sconfig, render) {
   if (render?.middleware != undefined) {
     app.use(render.middleware)
   } else if (render?.ssr != undefined) {
-    init_ssr_render_middleware(app, render, config.http)
+    init_ssr_render_middleware(app, render, config.http, config?.auth)
   } else {
     init_404_render_middleware(app, render)
     // init_json_render_middleware(app, render)  

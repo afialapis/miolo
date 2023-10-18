@@ -8,7 +8,7 @@ const __my_dirname = path.dirname(__my_filename)
 const indexHTMLPath= path.resolve(__my_dirname, 'fallback_index.html')
 const indexHTML = readFileSync(indexHTMLPath, 'utf8')
 
-export function init_ssr_render_middleware(app, render, http) {
+export function init_ssr_render_middleware(app, render, httpConfig, authConfig) {
   // check HTML
   let html = render?.html || indexHTML
 
@@ -87,9 +87,11 @@ export function init_ssr_render_middleware(app, render, http) {
 
   async function render_ssr_middleware(ctx) {
     const config= {
-      hostname: http?.hostname,
-      port: http?.port,
-      catcher_url: http?.catcher_url
+      hostname: httpConfig?.hostname,
+      port: httpConfig?.port,
+      catcher_url: httpConfig?.catcher_url,
+      login_url: authConfig?.credentials?.url_login,
+      logout_url: authConfig?.credentials?.url_logout
     }
 
     const ssr_data = await def_loader(ctx)

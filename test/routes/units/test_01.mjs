@@ -13,6 +13,7 @@ function test_01 (dbType) {
     config: {
       hostname: 'localhost',
       port: 8001,
+      force_hostname: true
     }
   })
   global.fetch = fetch

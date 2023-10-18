@@ -32,7 +32,7 @@
 
 
 
-
+añadir chpwsd endpoint
 
 # Auth
 

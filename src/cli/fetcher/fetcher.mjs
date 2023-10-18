@@ -44,11 +44,12 @@ class Fetcher {
 
   _prepare_url (url) {
     const endpoint = '/' + trim_left(url, '/')
-
-    const {hostname, port} = this.config || {}
-    if (hostname) {
+    
+    const {hostname, port, force_hostname} = this.config || {}
+    if (hostname && force_hostname) {
       return `http://${hostname}:${port}${endpoint}`
     }
+    
     return endpoint
   }
 
