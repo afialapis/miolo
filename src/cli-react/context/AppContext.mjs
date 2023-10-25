@@ -15,18 +15,22 @@ const AppContext = ({context, children}) => {
   
   const login = async (credentials) => {
     const url = innerContext.config.login_url || '/login'
-    const {data} = await mioloObj.fetcher.login(url, credentials)
+    const resp = await mioloObj.fetcher.login(url, credentials)
 
-    const nContext = {
-      ...innerContext,
-      ...data
-    }    
+    if (resp?.data) {
+      const nContext = {
+        ...innerContext,
+        ...resp?.data
+      }    
 
-    if (data.authenticated) {
-      setInnerContext(nContext)
+      if (resp?.data?.authenticated) {
+        setInnerContext(nContext)
+      }
+
+      return resp?.data
     }
 
-    return data
+    return {}
   } 
 
   

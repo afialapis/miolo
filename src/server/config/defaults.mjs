@@ -103,9 +103,33 @@ export default {
     
     crud: [{
       prefix: '',
-      routes: [], // miolo will not support '*' by now
+      routes: [/*
+        name: '',
+        url: '/../..', // default to 'name'
+        mode: 'r/w/rw',
+        bodyField: '',
+
+        useUserFields: ...,
+        auth: ...,
+        before: async (ctx) => {return bool} // If bool false, query callback not run
+        after : async (ctx, result) => {return modified_result}
+      */], 
     }],
-    queries: undefined
+    queries: []/*
+      [{
+        prefix: '',
+        routes: [
+          {
+            url: '/../..',
+            method: 'GET/POST',
+            callback: async (ctx) => {ctx.body = {}} ,
+            auth: ...,
+            before: async (ctx) => {return bool} // If bool false, query callback not run
+            after : async (ctx, result) => {return modified_result}
+          },          
+        ], 
+      }],
+    */
   },
   //cacher: {
   //  redis: {

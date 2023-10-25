@@ -1,23 +1,3 @@
-//  1) DONE
-//  ESTOS CALLBACKS LOGIN/LOGOUT PUEDEN ESTAR A NIVEL DE AppContext
-//  En el caso de Bonages no valdria porque hay un ssr_data.user_info,
-//    pero esa user_info parece duplicada, ya que deberia estar en el Context.user, no?
-//    Si es asi podemos eliminar duplicidad y proceder con estos callbacks
-//  
-//  2)
-//  Tb a nivel de AppContext se han de poder poner unos
-//    getSsrData()
-//
-//  Basta uno, con param loader opcional
-//
-//
-//  1) y 2) igual mejor en miolo_client que en AppContext,
-//    asi esta en miolo/cli y no en milo/cli-react solo
-//    Pero necesitamos cachear el context de alguna manera en vanilla JS,
-//    o directamente sobre windows.CONTEXT
-//    
-//  3)
-//  DONE: Auth type 'passport': quiza llamar mejor 'credentials' o algo asi, ya que no hay necesidad de exponer nada de passport
 //
 //  4)
 //  Volver a intentar con que el 'ssr.renderer' no necesite de AppServer. 
@@ -28,6 +8,8 @@
 //    la config de auth no va a nivel global del Server, sino
 //    en cada grupo de routes (o ambos, global y routes)
 //
+
+https://stackoverflow.com/a/60985636
 
 
 
@@ -50,19 +32,6 @@ no parece muy bueno tener que pasar toooodas las rutas ahi
 
 Wouldn't be enough to use koa-session? Token could be taken from cookie.
 And we would get rid of JWT.
-
-
-
-# Render
-
-## html
- 
-- si no string, que sea un {} con los campos a sustituir en los <meta/> del HTML por defecto
-- aun con esto, para casos como Bonages, nos faltaria la linea <rel/> del CSS y <script> (dev mode al menos)
-
-## SSR
-
-- quizá los useSsrData..() como atributo de context?
 
 
 
