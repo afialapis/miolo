@@ -8,7 +8,7 @@ function _showTitle  (title) {
   }
 }
 
-async function _todoListLoader(context, {fetcher}) {
+async function _todoListLoader(context, fetcher) {
   _showTitle('loading todos...')
   const nTodoList = await fetcher.read('crud/todos')     
   _showTitle('todos loaded!')

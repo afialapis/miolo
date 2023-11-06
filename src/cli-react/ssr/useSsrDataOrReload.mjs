@@ -11,8 +11,10 @@ const useSsrDataOrReload = (context, miolo, name, defval, loader) => {
       return
     }
 
+    const {fetcher} = miolo
+
     async function fetchData() {
-      let nSsrData = await loader(context, miolo)
+      let nSsrData = await loader(context, fetcher)
       setSsrData(nSsrData)
     }
 
