@@ -1,8 +1,7 @@
 import {useState, useCallback, useEffect} from 'react'
 import getSsrDataFromContext from './getSsrDataFromContext.mjs'
 
-const useSsrDataOrReload = (context, name, defval, loader) => {
-
+const useSsrDataOrReload = (context, miolo, name, defval, loader) => {
   const ssrDataFromContext = getSsrDataFromContext(context, name)
   const [ssrData, setSsrData] = useState(ssrDataFromContext != undefined ? ssrDataFromContext : defval)
   const [needToRefresh, setNeedToRefresh] = useState(ssrDataFromContext == undefined)
@@ -13,12 +12,12 @@ const useSsrDataOrReload = (context, name, defval, loader) => {
     }
 
     async function fetchData() {
-      let nSsrData = await loader()
+      let nSsrData = await loader(context, miolo)
       setSsrData(nSsrData)
     }
 
     fetchData()
-  }, [loader]) 
+  }, [context, miolo, loader]) 
   
   useEffect(() => {
     try {

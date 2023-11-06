@@ -2,22 +2,21 @@ import React, {useCallback} from 'react'
 import {withContext} from '../../../../miolo-cli-react.mjs'
 import TodosList from './TodosList.mjs'
 
-function show_title  (title) {
+function _showTitle  (title) {
   if (document!=undefined) {
       document.title= title
   }
 }
 
+async function _todoListLoader(context, {fetcher}) {
+  _showTitle('loading todos...')
+  const nTodoList = await fetcher.read('crud/todos')     
+  _showTitle('todos loaded!')
+  return nTodoList
+}
+
 const Todos = ({authenticated, fetcher, useSsrData}) => {
-
-  async function todoListLoader() {
-    show_title('loading todos...')
-    const nTodoList = await fetcher.read('crud/todos')     
-    show_title('todos loaded!')
-    return nTodoList
-  }
-
-  const [todoList, setTodoList, refreshTodoList] = useSsrData('todoList', [], todoListLoader)
+  const [todoList, setTodoList, refreshTodoList] = useSsrData('todoList', [], _todoListLoader)
 
   const addTodo = useCallback((text) => {
 

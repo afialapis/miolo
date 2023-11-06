@@ -1,4 +1,4 @@
-import Router    from 'koa-router'
+import Router    from '@koa/router'
 import getCrudConfig from './crud/getCrudConfig.mjs'
 import attachCrudRoutes from './crud/attachCrudRoutes.mjs'
 import getQueriesConfig from './queries/getQueriesConfig.mjs'
