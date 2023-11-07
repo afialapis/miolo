@@ -13,58 +13,51 @@ const AppContext = ({context, children}) => {
     setMioloObj(miolo_client(context))
   }, [context])
   
-  const login = useCallback(() => {
+  const login = useCallback(async (credentials) => {
     const {fetcher} = mioloObj
     const {config} = innerContext
       
-    const _login = async (credentials) => {
-      const url = config.login_url || '/login'
-      const resp = await fetcher.login(url, credentials)
 
-      if (resp?.data) {
-        const nContext = {
-          ...innerContext,
-          ...resp?.data
-        }    
+    const url = config.login_url || '/login'
+    const resp = await fetcher.login(url, credentials)
 
-        if (resp?.data?.authenticated) {
-          setInnerContext(nContext)
-        }
+    if (resp?.data) {
+      const nContext = {
+        ...innerContext,
+        ...resp?.data
+      }    
 
-        return resp?.data
+      if (resp?.data?.authenticated) {
+        setInnerContext(nContext)
       }
 
-      return {}
-    } 
+      return resp?.data
+    }
 
-    _login()
+    return {}
   }, [innerContext, mioloObj])
 
   
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
     const {fetcher} = mioloObj
     const {config} = innerContext
 
-    const _logout = async () => {
-      const url = config.logout_url || '/logout'
-      const _resp = await fetcher.logout(url)
-      // resp.redirected= true
+    const url = config.logout_url || '/logout'
+    const _resp = await fetcher.logout(url)
+    // resp.redirected= true
 
-      const nContext = {
-        ...innerContext,
-        user: undefined,
-        authenticated: false
-      }    
+    const nContext = {
+      ...innerContext,
+      user: undefined,
+      authenticated: false
+    }    
 
-      setInnerContext(nContext)
-      
-      return {
-        user: undefined,
-        authenticated: false
-      }    
+    setInnerContext(nContext)
+    
+    return {
+      user: undefined,
+      authenticated: false
     }
-
-    _logout()
   }, [innerContext, mioloObj])
 
 
