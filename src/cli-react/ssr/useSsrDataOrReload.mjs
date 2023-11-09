@@ -1,9 +1,16 @@
 import {useState, useCallback, useEffect} from 'react'
 import getSsrDataFromContext from './getSsrDataFromContext.mjs'
 
-const useSsrDataOrReload = (context, miolo, name, defval, loader) => {
+const useSsrDataOrReload = (context, miolo, name, defval, loader, modifier) => {
+  
+  const _maybeModify = useCallback((value) => {
+    return modifier==undefined ? value : modifier(value)
+  }, [modifier])
+
   const ssrDataFromContext = getSsrDataFromContext(context, name)
-  const [ssrData, setSsrData] = useState(ssrDataFromContext != undefined ? ssrDataFromContext : defval)
+  const [ssrData, setSsrData] = useState(_maybeModify(
+    ssrDataFromContext != undefined 
+    ? ssrDataFromContext : defval))
   const [needToRefresh, setNeedToRefresh] = useState(ssrDataFromContext == undefined)
 
   const refreshSsrData = useCallback(() => {
@@ -15,11 +22,11 @@ const useSsrDataOrReload = (context, miolo, name, defval, loader) => {
 
     async function fetchData() {
       let nSsrData = await loader(context, fetcher)
-      setSsrData(nSsrData)
+      setSsrData(_maybeModify(nSsrData))
     }
 
     fetchData()
-  }, [context, miolo, loader]) 
+  }, [context, miolo, loader, _maybeModify]) 
   
   useEffect(() => {
     try {
