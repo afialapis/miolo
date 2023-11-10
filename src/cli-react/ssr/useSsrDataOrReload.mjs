@@ -37,7 +37,7 @@ const useSsrDataOrReload = (context, miolo, name, defval, loader, modifier) => {
     } catch(e) {}
   }, [needToRefresh, refreshSsrData]) 
 
-  return [ssrData, setSsrData, refreshSsrData]
+  return [ssrData, (data) => setSsrData(_maybeModify(data)), refreshSsrData]
 }
 
 export {useSsrDataOrReload}

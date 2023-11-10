@@ -63,8 +63,8 @@ const AppContext = ({context, children}) => {
 
 
 
-  const useSsrData = (name, defval, loader) => {
-    return useSsrDataOrReload(innerContext, mioloObj, name, defval, loader)
+  const useSsrData = (name, defval, loader, modifier) => {
+    return useSsrDataOrReload(innerContext, mioloObj, name, defval, loader, modifier)
   }  
 
   return (
