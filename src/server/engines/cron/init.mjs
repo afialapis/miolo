@@ -18,7 +18,6 @@ export function init_cron_job(miolo, config) {
     
     // onTick(miolo, onComplete)
     (onComplete) => {
-      console.log(`${name}.onTick`)
       try {
         logger.silly(`[SERVER][Custom Job ${cyan(name)}] ${green_bold('ticks!')}`)
         config.onTick(miolo, onComplete)
@@ -30,8 +29,6 @@ export function init_cron_job(miolo, config) {
 
     // onComplete(miolo)
     () => {
-      console.log(`${name}.onComplete`)
-    
       logger.silly(`[SERVER][Custom Job ${cyan(name)}] ${green_bold('completed!')}`)
       if (config?.onComplete) {
         try {

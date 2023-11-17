@@ -58,37 +58,43 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
       }
 
       const _crud_callback = async (ctx, op, callback) => {
-        const authenticated = await _crud_auth_callback(ctx, op)
-        if (! authenticated) {
-          ctx.body= {}
-          return
-        }
-        
-        let goon= true
-        if (route?.before) {
-          goon= await route.before(ctx)
-        }
+        let result = {}
+        try {
+          const authenticated = await _crud_auth_callback(ctx, op)
+          if (! authenticated) {
+            ctx.body= {}
+            return
+          }
+          
+          let goon= true
+          if (route?.before) {
+            goon= await route.before(ctx)
+          }
 
-        if (! goon) {
-          ctx.body= {}
-          return
-        }
+          if (! goon) {
+            ctx.body= {}
+            return
+          }
 
-        const uid= ctx?.session?.user?.id
-        let fieldNames= {}
-        if (route.useUserFields.use===true) {
-          fieldNames= route.useUserFields.fieldNames
-        }
+          const uid= ctx?.session?.user?.id
+          let fieldNames= {}
+          if (route.useUserFields.use===true) {
+            fieldNames= route.useUserFields.fieldNames
+          }
 
-        const uinfo= {
-          uid: uid,
-          fieldNames,
-        }
-        
-        let result= await callback(uinfo)
-        
-        if (route?.after) {
-          result= await route.after(ctx, result)
+          const uinfo= {
+            uid: uid,
+            fieldNames,
+          }
+          
+          result= await callback(uinfo)
+          
+          if (route?.after) {
+            result= await route.after(ctx, result)
+          }
+        } catch(error) {
+          logger.error(`[miolo-router] Unexpected error on CRUD ${route.name}-${op}`)
+          logger.error(error)
         }
 
         result= _pack_body_field(result)

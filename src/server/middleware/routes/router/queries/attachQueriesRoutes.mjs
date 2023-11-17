@@ -49,38 +49,43 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
       }
 
       const _route_callback = async (ctx) => {
-
+        let result = {}
         try {
-          if ((route.method == 'GET') && (!ctx.request?.fields)) {
-            if (ctx.request.url.indexOf('?')>0) {
-              const fields= query_string_to_json(ctx.request.url)
-              if (fields) {
-                ctx.request.fields= fields
+          try {
+            if ((route.method == 'GET') && (!ctx.request?.fields)) {
+              if (ctx.request.url.indexOf('?')>0) {
+                const fields= query_string_to_json(ctx.request.url)
+                if (fields) {
+                  ctx.request.fields= fields
+                }
               }
             }
+          } catch(e) {
+            logger.error(`[miolo-router] Error while trying to qet query params for ${ctx.request.url}`)
           }
-        } catch(e) {
-          logger.error(`[miolo-router] Error while trying to qet query params for ${ctx.request.url}`)
-        }
 
-        const authenticated = await _route_auth_callback(ctx)
-        if (! authenticated) {
-          return
-        }
-        
-        let goon= true
-        if (route?.before) {
-          goon= await route.before(ctx)
-        }
+          const authenticated = await _route_auth_callback(ctx)
+          if (! authenticated) {
+            return
+          }
+          
+          let goon= true
+          if (route?.before) {
+            goon= await route.before(ctx)
+          }
 
-        if (! goon) {
-          return
-        }
-    
-        let result= await route.callback(ctx)
-        
-        if (route?.after) {
-          result= await route.after(ctx, result)
+          if (! goon) {
+            return
+          }
+      
+          result= await route.callback(ctx)
+          
+          if (route?.after) {
+            result= await route.after(ctx, result)
+          }
+        } catch(error) {
+          logger.error(`[miolo-router] Unexpected error on Query ${route.name}`)
+          logger.error(error)
         }
 
         return result
