@@ -52,7 +52,7 @@ function miolo(sconfig, render) {
   init_static_middleware(app, config.http?.static)
 
   // Feed and log request
-  init_request_middleware(app, config?.log?.request)
+  init_request_middleware(app, config?.http?.request)
 
   // attach the default robots.txt
   init_route_robots(app)

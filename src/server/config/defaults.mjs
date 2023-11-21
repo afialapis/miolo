@@ -32,7 +32,17 @@ export default {
     //   - false
     //   - true      enable koa-proxies and use default options
     //   - {options} enable koa-proxies and use the custom options
-    proxy: false
+    proxy: false,
+
+
+    request: {
+      lazy: 1, // seconds to consider lazy a request
+      slow: 2, // seconds to consider slow a request
+      onStart: undefined,
+      // (ctx, times) => { return begin_result}
+      onDone: undefined
+      // (ctx, begin_result, times) => {}
+    }
     
   },
   session: {
@@ -157,10 +167,6 @@ export default {
       name: 'miolo',
       from: 'miolo@mail.com',
       to: 'errors@mail.com'      
-    },
-    request: {
-      lazy: 1,
-      slow: 2,
     }
   },
   mail: {

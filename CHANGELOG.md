@@ -1,3 +1,6 @@
+# 0.9.21
+- better option: http.request
+
 # 0.9.20
 
 - extra middlewares receiving `(ctx, next)`

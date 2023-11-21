@@ -9,11 +9,15 @@ let REQUEST_COUNTER= {
  * Middleware for feed and log the request
  */
 
-function init_request_middleware(app, logRequest) {
+function init_request_middleware(app, config) {
+  const _def_on_begin = async (ctx, times) => { return {} }
+  const _def_on_done  = async (ctx, begin_result, times) => { }
 
-  let logTimes = {
-    lazy: logRequest?.lazy || 1,
-    slow: logRequest?.slow || 2
+  let reqConfig = {
+    lazy: config?.lazy || 1,
+    slow: config?.slow || 2,
+    onStart: config?.onStart || _def_on_begin,
+    onDone: config?.onDone || _def_on_done
   }
 
   
@@ -43,8 +47,9 @@ function init_request_middleware(app, logRequest) {
     logger.info(`${sreq} - START`)
     logger.debug(`${sreq} - Body: ${sbody}`)
 
-    await next()
-    
+    const begin_result = await reqConfig.onStart(ctx, {started, description: 'pending'})
+
+    await next()    
 
     const user = ctx?.session?.user
     let uid_desc= ''
@@ -73,29 +78,25 @@ function init_request_middleware(app, logRequest) {
 
     const elapsed = parseFloat( (performance.now() - started) / 1000.0 ).toFixed(2)
 
-    const tcolor= elapsed < logTimes.lazy
+    const tcolor= elapsed < reqConfig.lazy
                   ? green
-                  : elapsed < logTimes.slow
+                  : elapsed < reqConfig.slow
                     ? yellow
                     : red 
 
-    const tname= elapsed < logTimes.lazy
+    const tname= elapsed < reqConfig.lazy
                   ? 'Ok'
-                  : elapsed < logTimes.slow
+                  : elapsed < reqConfig.slow
                     ? 'lazy'
                     : 'slow' 
-    
-    // Attach some info to request
-    ctx.request.times = {
-      elapsed,
-      desciprion: tname
-    }
     
     const ssession= ctx.session!=undefined ? JSON.stringify(ctx.session) : ''
     logger.debug(`${sreq} - Session: ${ssession}`)
 
     const rbody= ctx.body!=undefined ? JSON.stringify(ctx.body) : ''
     logger.debug(`${sreq} - Response: ${rbody}`)
+
+    await reqConfig.onDone(ctx, begin_result, {started, elapsed, description: tname})
     
     logger.info(`${sreq} - DONE ${stdesc}${uid_desc} (${tcolor(tname)}: ${tcolor(elapsed)})`)
   }
