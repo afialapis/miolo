@@ -284,7 +284,8 @@ export default {
     //
   },
   middlewares: [
-    // async (ctx) => {}
+    // async (ctx, next) => {}
+    // Remember to call `await next()`
   ],
   cron: [
     // {

@@ -4,14 +4,8 @@ const init_extra_middlewares = ( app, middlewares  ) => {
     return
   }
 
-  middlewares.map(midw => {
-
-    async function extra_middleware(ctx, next) {
-      await midw(ctx) 
-      await next()
-    }
-  
-    app.use(extra_middleware)
+  middlewares.map(midw => { 
+    app.use(midw)
   })
 }
 
