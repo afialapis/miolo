@@ -1,3 +1,12 @@
+# 0.9.19
+
+- logger prefix using config.name
+- configurable request times coloring
+- save request.times: {
+    elapsed (float, seconds),
+    description ('ok', 'lazy' or 'slow')
+  }
+
 # 0.9.18
 
 - Cleaned some console.log on cron.

@@ -9,7 +9,13 @@ let REQUEST_COUNTER= {
  * Middleware for feed and log the request
  */
 
-function init_request_middleware(app) {
+function init_request_middleware(app, logRequest) {
+
+  let logTimes = {
+    lazy: logRequest?.lazy || 1,
+    slow: logRequest?.slow || 2
+  }
+
   
   async function request_middleware(ctx, next) {
     const logger = ctx.miolo.logger
@@ -67,11 +73,23 @@ function init_request_middleware(app) {
 
     const elapsed = parseFloat( (performance.now() - started) / 1000.0 ).toFixed(2)
 
-    const tcolor= elapsed < 1.0
+    const tcolor= elapsed < logTimes.lazy
                   ? green
-                  : elapsed < 2.0
+                  : elapsed < logTimes.slow
                     ? yellow
                     : red 
+
+    const tname= elapsed < logTimes.lazy
+                  ? 'Ok'
+                  : elapsed < logTimes.slow
+                    ? 'lazy'
+                    : 'slow' 
+    
+    // Attach some info to request
+    ctx.request.times = {
+      elapsed,
+      desciprion: tname
+    }
     
     const ssession= ctx.session!=undefined ? JSON.stringify(ctx.session) : ''
     logger.debug(`${sreq} - Session: ${ssession}`)
@@ -79,7 +97,7 @@ function init_request_middleware(app) {
     const rbody= ctx.body!=undefined ? JSON.stringify(ctx.body) : ''
     logger.debug(`${sreq} - Response: ${rbody}`)
     
-    logger.info(`${sreq} - DONE ${stdesc}${uid_desc} (time ${tcolor(elapsed)})`)
+    logger.info(`${sreq} - DONE ${stdesc}${uid_desc} (${tcolor(tname)}: ${tcolor(elapsed)})`)
   }
 
   app.use(request_middleware)

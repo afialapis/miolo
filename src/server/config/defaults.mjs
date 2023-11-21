@@ -157,6 +157,10 @@ export default {
       name: 'miolo',
       from: 'miolo@mail.com',
       to: 'errors@mail.com'      
+    },
+    request: {
+      lazy: 1,
+      slow: 2,
     }
   },
   mail: {

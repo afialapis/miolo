@@ -4,7 +4,7 @@ import { init_logger } from '../../engines/logger/index.mjs'
 
 const init_context_middleware = ( app, config ) => {
   const emailer = init_emailer(config.mail)
-  const logger = init_logger(config.log, emailer)
+  const logger = init_logger(config.log, emailer, config?.name)
 
   const dbOptions= {
     ...config.db.options,

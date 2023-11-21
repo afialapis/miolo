@@ -36,7 +36,7 @@ export function parse_login_cookie(response) {
       return cookiePart;
     }).join(';');
   } catch(e) {
-    console.log('[miolo] Could not get the set-cookie after login')
+    console.log('[miolo-cli] Could not get the set-cookie after login')
     return undefined
   }
 }

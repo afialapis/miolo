@@ -8,7 +8,7 @@ import { createLogger, format, transports } from 'winston'
 const { combine, timestamp, _label, printf, errors } = format
 
 
-const init_logger = (config, emailer) => {
+const init_logger = (config, emailer, prefix= 'miolo') => {
   const LEVEL_COLORS= {
     silly  : gray,
     debug  : magenta,
@@ -32,7 +32,7 @@ const init_logger = (config, emailer) => {
     const tm = new Date(info.timestamp)
     const ts= tm.toLocaleString(config?.format?.locale || 'en')
     //const ts= tm.toString().substr(4, 20)
-    const log= `[miolo] ${lc(ts)} ${lc(LEVEL_ABBRV[info.level])} ${info.message}`
+    const log= `[${prefix}] ${lc(ts)} ${lc(LEVEL_ABBRV[info.level])} ${info.message}`
     return info.stack
       ? `${log}\n${info.stack}`
       : log;    
