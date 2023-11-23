@@ -1,3 +1,6 @@
+# 0.9.22
+- added http.request.geoip
+
 # 0.9.21
 - better option: http.request
 

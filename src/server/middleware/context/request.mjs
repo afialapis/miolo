@@ -1,5 +1,6 @@
 import { performance } from 'perf_hooks'
 import { cyan, green, yellow, red, magenta, cyan_light } from 'tinguir'
+import { geoip_localize_ip } from '../../engines/geoip/index.mjs'
 
 let REQUEST_COUNTER= {
   total: 0
@@ -17,7 +18,10 @@ function init_request_middleware(app, config) {
     lazy: config?.lazy || 1,
     slow: config?.slow || 2,
     onStart: config?.onStart || _def_on_begin,
-    onDone: config?.onDone || _def_on_done
+    onDone: config?.onDone || _def_on_done,
+    geoip: config?.geoip || {
+      enabled: false
+    }
   }
 
   
@@ -37,11 +41,28 @@ function init_request_middleware(app, config) {
     ctx.requestId= REQUEST_COUNTER.total
     ctx.request.ip = ip
 
+    // If wanted, geo localize ip
+    const geo_enabled = reqConfig?.geoip?.enabled === true
+    let geo_info = {}
+    if (geo_enabled) {
+      geo_info = geoip_localize_ip(ip, reqConfig.geoip, logger)
+    }
+    ctx.request.geoip = geo_info
+
     // Log something
     const clurl = ctx.request.url.indexOf('?')>=0
       ? ctx.request.url.substr(0, ctx.request.url.indexOf('?'))
       : ctx.request.url
-    const sreq = `${magenta(ip)} ${cyan(ctx.request.method)} ${cyan(clurl)} [${cyan_light(REQUEST_COUNTER[ip])}/${cyan_light(ctx.requestId)}]`
+    const geo_string = geo_enabled 
+    ? geo_info?.local === true
+      ? ''
+      : geo_info?.country 
+        ? geo_info?.city
+          ? ` (${geo_info?.city}, ${geo_info.country})`
+          : ` (${geo_info.country})`
+        : ''
+      : ''
+    const sreq = `${magenta(ip)}${geo_string} ${cyan(ctx.request.method)} ${cyan(clurl)} [${cyan_light(REQUEST_COUNTER[ip])}/${cyan_light(ctx.requestId)}]`
     const sbody= ctx.request.body!=undefined ? JSON.stringify(ctx.request.body) : ''
     
     logger.info(`${sreq} - START`)

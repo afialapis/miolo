@@ -40,8 +40,15 @@ export default {
       slow: 2, // seconds to consider slow a request
       onStart: undefined,
       // (ctx, times) => { return begin_result}
-      onDone: undefined
-      // (ctx, begin_result, times) => {}
+      onDone: undefined,
+      // (ctx, begin_result, times) => {},
+      geoip: {
+        enabled: false,
+        db: '/var/lib/GeoIP/GeoLite2-City.mmdb',
+        local_ips: [
+          '127.0.0.1'
+        ]
+      }
     }
     
   },

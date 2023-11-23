@@ -32,7 +32,13 @@ export const makeConfig = (authType, logLevel= 'silly') => {
       },
 
       cors: false,
-      proxy: false
+      proxy: false,
+
+      request: {
+        geoip: {
+          enabled: true
+        }
+      }
     },    
     session: {
       options: {
