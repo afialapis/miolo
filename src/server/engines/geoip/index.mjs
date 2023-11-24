@@ -28,8 +28,6 @@ function _geoip_init(db = '/var/lib/GeoIP/GeoLite2-City.mmdb', local_ips = ['127
 }
 
 export const geoip_localize_ip= (ip, config, logger= console) => {
-  console.log(_geoip_local_ips)
-  console.log(ip)
   if (_geoip_local_ips.indexOf(ip) >= 0) {
     return {
       local: true,

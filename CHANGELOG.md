@@ -1,3 +1,6 @@
+# 0.9.23
+- clean logs
+
 # 0.9.22
 - added http.request.geoip
 
