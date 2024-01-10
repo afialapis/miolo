@@ -50,6 +50,9 @@ And we would get rid of JWT.
 Current: 'redirect', 'error'
 Add these? 'empty' / 'none'
 
+# Ratelimit
+
+Use Redis store
 
 
 # DEV time
