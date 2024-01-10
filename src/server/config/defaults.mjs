@@ -102,7 +102,9 @@ export default {
         idleTimeoutMillis: 10000,  // The maximum time, in milliseconds, that a connection can be idle before being released. Use with combination of evict for proper working, for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
     },
     options: {
-      log: 'silly', //  will be updated on the fly with miolo logger
+      // We will pass, on the fly, miolo logger to calustra
+      // But specifying a level here, we can customize the level only for db/calustra actions
+      // log: 'silly', 
       tables: []
     }
   },

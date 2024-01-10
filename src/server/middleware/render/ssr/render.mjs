@@ -68,8 +68,7 @@ export function init_ssr_render_middleware(app, render, httpConfig, authConfig) 
         ctx.miolo.logger.warn('Missing renderer in render.ssr middleware')
       }
     } catch(error) {
-      ctx.miolo.logger.error('Error in renderer (render.ssr middleware)')
-      ctx.miolo.logger.error(error)
+      ctx.miolo.logger.error(`Error in renderer (render.ssr middleware):\n${error.toString()}`)
 
       ssr_html= `
       <div>

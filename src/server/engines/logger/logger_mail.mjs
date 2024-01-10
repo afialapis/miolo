@@ -34,34 +34,49 @@ function init_logger_to_mail(config, emailer) {
 
 
   MailerLogger.prototype.log = function (info, callback) {
-      let self = this;
+    let self = this;
 
-      let tit= '';
+    let title = ''
+    let body = ''
+
+    try {
       try {
-        tit= info.message.split("\n")[0]
+        title= info.message.split("\n")[0]
       } catch(e) {
-        tit= info.message.toString();
+        title= info.message.toString();
       }
 
-      tit= uncolor(tit)
+      title= uncolor(title)
       
-      let subject = config.name + ': [' + info.level.toUpperCase() + '] ' + tit;
+    } catch(err) {
+      title = `Could not create a title for the error (${err.toString()})`
+    }
 
-      let mail= {
-        from    : this.from,
-        to      : this.to,
-        subject : subject, 
-        text    : uncolor(info.message)
-      }
+    try {
+      try {
+        body = uncolor(info.message)
+      } catch(err) {
+        body = info.message.toString()
+      }  
+    } catch(err) {
+      body = `Could not create a body for the error (${err.toString()})`
+    }
 
-      emailer.send(mail, function() {
-        self.emit("logged");
-        callback(null, true);    
-      });
+    let subject = `${config?.name} [${info.level.toUpperCase()}] ${title}`
+
+    let mail= {
+      from    : this.from,
+      to      : this.to,
+      subject : subject, 
+      text    : body
+    }
+
+    emailer.send(mail, function() {
+      self.emit("logged");
+      callback(null, true);    
+    });
       
   };
-
-
   
   return MailerLogger
 }

@@ -9,7 +9,7 @@ function init_route_catch_js_error(app, route) {
 
     if (warning) {
       const msg= 
-      `${yellow('[JS Warning]')} on ${blue(path)}: ${warning.msg}\n` +
+      `${yellow('[JS Warning]')} on ${blue(path)}: ${JSON.stringify(warning.msg)}\n` +
       `${yellow('[JS Warning]')} File  => ${warning.file}\n` +
       `${yellow('[JS Warning]')} Line  => ${warning.line}\n` + 
       `${yellow('[JS Warning]')} Col   => ${warning.col}\n` + 
@@ -19,7 +19,7 @@ function init_route_catch_js_error(app, route) {
 
     } else {
       const msg= 
-      `${red('[JS Error]')} on ${blue(path)}: ${error.msg}\n` +
+      `${red('[JS Error]')} on ${blue(path)}: ${JSON.stringify(error.msg)}\n` +
       `${red('[JS Error]')} File  => ${error.file}\n` +
       `${red('[JS Error]')} Line  => ${error.line}\n` + 
       `${red('[JS Error]')} Col   => ${error.col}\n` + 

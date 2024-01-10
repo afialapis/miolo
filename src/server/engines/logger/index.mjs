@@ -46,7 +46,7 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
   // 
 
-  if (config.console.enabled) {
+  if (config?.console?.enabled === true) {
     _log_transports.push(
         new transports.Console({
           humanReadableUnhandledException: true,
@@ -58,10 +58,10 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   //
   // File transport
   //
-  if (config.file.enabled) {
+  if (config?.file?.enabled === true) {
     _log_transports.push(
       new transports.File({ 
-        filename : config.file.filename, 
+        filename : config?.file?.filename || '/var/log/miolo.log', 
         level    : config?.file?.level || config?.level || 'info' ,
         humanReadableUnhandledException: true,
         handleExceptions: true})
@@ -71,7 +71,7 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   //
   // Mail transport
   //
-  if (config.mail.enabled) {    
+  if (config?.mail?.enabled === true) {    
     const MailerLogger= init_logger_to_mail(config.mail, emailer)
     transports.MailerLogger = MailerLogger;
 
