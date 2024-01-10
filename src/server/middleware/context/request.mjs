@@ -1,5 +1,6 @@
 import { performance } from 'perf_hooks'
 import { cyan, green, yellow, red, magenta, cyan_light } from 'tinguir'
+
 import { geoip_localize_ip } from '../../engines/geoip/index.mjs'
 
 let REQUEST_COUNTER= {
@@ -11,6 +12,8 @@ let REQUEST_COUNTER= {
  */
 
 function init_request_middleware(app, config) {
+
+  /* eslint-disable no-unused-vars */
   const _def_on_begin = async (ctx, times) => { return {} }
   const _def_on_done  = async (ctx, begin_result, times) => { }
 
@@ -24,7 +27,7 @@ function init_request_middleware(app, config) {
     }
   }
 
-  
+ 
   async function request_middleware(ctx, next) {
     const logger = ctx.miolo.logger
     const ip = ctx.headers["x-real-ip"] || '127.0.0.1'
@@ -121,7 +124,7 @@ function init_request_middleware(app, config) {
     
     logger.info(`${sreq} - DONE ${stdesc}${uid_desc} (${tcolor(tname)}: ${tcolor(elapsed)})`)
   }
-
+ 
   app.use(request_middleware)
 }
 

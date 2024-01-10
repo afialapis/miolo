@@ -34,6 +34,17 @@ export default {
     //   - {options} enable koa-proxies and use the custom options
     proxy: false,
 
+    ratelimit: {
+      /* eslint-disable no-unused-vars */
+      max: 1000,
+      duration: 60 * 1000, // miliseconds
+      errorMessage: 'Rate Limit reached',      
+      //whitelist: (ctx) => false,
+      //blacklist: (ctx) => false,
+      whitelist_ips: [],
+      blacklist_ips: [],
+      ipsum_folder: '/var/ipsum' // https://github.com/stamparm/ipsum
+    },
 
     request: {
       lazy: 1, // seconds to consider lazy a request
@@ -315,6 +326,8 @@ export default {
     //   timezone, context, runOnInit, utcOffset, unrefTimeout
     // }
     // check https://github.com/kelektiv/node-cron#readme
+    //
+    // https://crontab.guru/
   ]
 };
 

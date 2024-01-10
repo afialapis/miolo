@@ -4,6 +4,9 @@ import {
 import {
   sys_check_config
 } from './syscheck.mjs'
+import {
+  ipsum_config
+} from './ipsum.mjs'
 import { cyan, green_bold, yellow_bold } from 'tinguir'
 
 
@@ -13,7 +16,7 @@ function init_cron(app, custom) {
   
   const jobConfigs= [
     sys_check_config(),
-
+    ipsum_config(),
     ...custom || []
   ]
   
