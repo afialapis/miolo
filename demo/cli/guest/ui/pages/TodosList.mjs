@@ -3,7 +3,12 @@ import React, {useState} from 'react'
 const TodosList = ({todoList, addTodo, toggleTodo, removeTodo, checkLastHour, insertFakeTodo}) => {
   const [inputText, setInputText] = useState('')
   
-  const throwAnError = () => { throw Error('(Bad) Surprise!') }
+  //const throwAnError = () => { throw Error('(Bad) Surprise!') }
+  const throwAnError = () => { 
+    const obj= {}
+    const _foo = obj.foo.bar
+  }
+  
   return (
     <div className="todos">
       <div className="todos-header">
