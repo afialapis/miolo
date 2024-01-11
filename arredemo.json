@@ -2,8 +2,9 @@
   "theme": "default",
   "favicon": "./logo/favicon/miolo.png",
   "logo": "./logo/miolo-logo-name_200.png",
+  "url": "https://www.afialapis.com/os/miolo",
   "company": "Afialapis",
-  "url": "miolo.afialapis.com",
+  "company_url": "https://www.afialapis.com",
   "doc_versions": null,
   "md": {
     "strip_details_tag": true,
