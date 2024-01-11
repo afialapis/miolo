@@ -3,6 +3,7 @@ import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
 /* https://github.com/winstonjs/winston/issues/287 */
 import {init_logger_to_mail} from './logger_mail.mjs'
 import { createLogger, format, transports } from 'winston'
+import { reopenTransportOnHupSignal } from './reopenTransportOnHupSignal.mjs'
 
 
 const { combine, timestamp, _label, printf, errors } = format
@@ -35,7 +36,7 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
     const log= `[${prefix}] ${lc(ts)} ${lc(LEVEL_ABBRV[info.level])} ${info.message}`
     return info.stack
       ? `${log}\n${info.stack}`
-      : log;    
+      : log    
   })
 
 
@@ -58,14 +59,20 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   //
   // File transport
   //
+  // logrotate's copytruncate seems not enough
+  //  https://github.com/winstonjs/winston/issues/943
+  //  https://gist.github.com/suprememoocow/5133080
   if (config?.file?.enabled === true) {
-    _log_transports.push(
-      new transports.File({ 
-        filename : config?.file?.filename || '/var/log/miolo.log', 
-        level    : config?.file?.level || config?.level || 'info' ,
-        humanReadableUnhandledException: true,
-        handleExceptions: true})
-    )
+    const fileTransport = new transports.File({ 
+      filename : config?.file?.filename || '/var/log/miolo.log', 
+      level    : config?.file?.level || config?.level || 'info' ,
+      humanReadableUnhandledException: true,
+      handleExceptions: true
+    })
+
+    reopenTransportOnHupSignal(fileTransport)
+
+    _log_transports.push(fileTransport)
   }
 
   //
@@ -73,7 +80,7 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   //
   if (config?.mail?.enabled === true) {    
     const MailerLogger= init_logger_to_mail(config.mail, emailer)
-    transports.MailerLogger = MailerLogger;
+    transports.MailerLogger = MailerLogger
 
     _log_transports.push(
       new transports.MailerLogger({

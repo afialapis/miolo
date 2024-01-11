@@ -3,7 +3,7 @@
  * @param ctx
  */
 
-const _ONLY_WARN= [401]
+const _ONLY_WARN= [401, 403]
 
 function init_catcher_middleware(app) {
   const logger= app.context.miolo.logger

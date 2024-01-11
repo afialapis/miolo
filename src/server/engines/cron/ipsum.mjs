@@ -123,7 +123,7 @@ export function ipsum_config() {
     name: 'IPsum',
     cronTime: '0 0 * * *',
     onTick: (miolo, _onCompleted) => {
-      const folder = miolo.config.ratelimit.ipsum_folder || _IPSUM_DEF_FOLDER
+      const folder = miolo.config.http.ratelimit.ipsum_folder || _IPSUM_DEF_FOLDER
       ipsum_update(folder, (ips) => {
         miolo.logger.info(`[SERVER][${cyan('IPsum')}] File downloaded. ${green(ips.length)} ips will be ${yellow('blacklisted')}!`)
       }, miolo.logger)
@@ -134,6 +134,7 @@ export function ipsum_config() {
 
 export function ipsum_read_ips(folder = _IPSUM_DEF_FOLDER, callback, logger) {
   const ldbg = logger ? logger.debug : console.log
+  const lwarn = logger ? logger.warn : console.log
 
   const ips = _ipsum_ips_from_file(folder, logger)
   if (ips.length > 0) {
@@ -143,7 +144,7 @@ export function ipsum_read_ips(folder = _IPSUM_DEF_FOLDER, callback, logger) {
     ldbg(`[SERVER][${cyan('IPsum')}] File contains ${ips.length} ips`)
     return ips
   } else {
-    ldbg(`[SERVER][${cyan('IPsum')}] File is empty. Launching update...`)
+    lwarn(`[SERVER][${cyan('IPsum')}] File is empty. Launching update...`)
     ipsum_update(folder, callback, logger)
     return []
   }
