@@ -12,7 +12,6 @@
 https://stackoverflow.com/a/60985636
 
 
-
 hostname cli vs server?
 añadir chpwsd endpoint
 
