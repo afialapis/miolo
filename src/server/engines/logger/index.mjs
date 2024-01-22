@@ -77,8 +77,9 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   //  }
 
   if (config?.file?.enabled === true) {
+
     const fileTransport = new transports.DailyRotateFile({ 
-      filename : config?.file?.filename || '/var/log/afialapis/miolo.%DATE%.log', 
+      
       level    : config?.file?.level || config?.level || 'info' ,
 
       frequency: config?.file?.frequency,
@@ -86,10 +87,21 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
       zippedArchive: config?.file?.zippedArchive == true,
       maxSize: config?.file?.maxSize || '20m',
       maxFiles: config?.file?.maxFiles || '10d',
-      auditFile: config?.file?.auditFile || '/var/log/afialapis/miolo.audit.json',
-      createSymlink: config?.file?.createSymlink == true,
-      symlinkName: config?.file?.symlinkName || 'miolo.log',
+      
+      filename : config?.file?.filename 
+        ? config.file.filename.replace('%MIOLO%', prefix)
+        : '/var/log/afialapis/miolo.%DATE%.log', 
+      
+      auditFile: config?.file?.auditFile
+        ? config.file.auditFile.replace('%MIOLO%', prefix)
+        : '/var/log/afialapis/miolo.audit.json',
+      
+      symlinkName: config?.file?.symlinkName
+        ? config.file.symlinkName.replace('%MIOLO%', prefix)
+        : 'miolo.log',
 
+      createSymlink: config?.file?.createSymlink == true,
+      
       watchLog: true,
 
       humanReadableUnhandledException: true,
