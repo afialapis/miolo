@@ -3,8 +3,8 @@ import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
 /* https://github.com/winstonjs/winston/issues/287 */
 import {init_logger_to_mail} from './logger_mail.mjs'
 import { createLogger, format, transports } from 'winston'
-import { reopenTransportOnHupSignal } from './reopenTransportOnHupSignal.mjs'
-
+// import { reopenTransportOnHupSignal } from './reopenTransportOnHupSignal.mjs'
+import  'winston-daily-rotate-file'
 
 const { combine, timestamp, _label, printf, errors } = format
 
@@ -62,18 +62,49 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   // logrotate's copytruncate seems not enough
   //  https://github.com/winstonjs/winston/issues/943
   //  https://gist.github.com/suprememoocow/5133080
+  //
+  //  if (config?.file?.enabled === true) {
+  //    const fileTransport = new transports.File({ 
+  //      filename : config?.file?.filename || '/var/log/miolo.log', 
+  //      level    : config?.file?.level || config?.level || 'info' ,
+  //      humanReadableUnhandledException: true,
+  //      handleExceptions: true
+  //    })
+  //
+  //    reopenTransportOnHupSignal(fileTransport)
+  //
+  //    _log_transports.push(fileTransport)
+  //  }
+
   if (config?.file?.enabled === true) {
-    const fileTransport = new transports.File({ 
-      filename : config?.file?.filename || '/var/log/miolo.log', 
+    const fileTransport = new transports.DailyRotateFile({ 
+      filename : config?.file?.filename || '/var/log/afialapis/miolo.%DATE%.log', 
       level    : config?.file?.level || config?.level || 'info' ,
+
+      frequency: config?.file?.frequency,
+      datePattern: config?.file?.datePattern || 'YYYY-MM-DD',
+      zippedArchive: config?.file?.zippedArchive == true,
+      maxSize: config?.file?.maxSize || '20m',
+      maxFiles: config?.file?.maxFiles || '10d',
+      auditFile: config?.file?.auditFile || '/var/log/afialapis/miolo.audit.json',
+      createSymlink: config?.file?.createSymlink == true,
+      symlinkName: config?.file?.symlinkName || 'miolo.log',
+
+      watchLog: true,
+
       humanReadableUnhandledException: true,
       handleExceptions: true
     })
 
-    reopenTransportOnHupSignal(fileTransport)
+    fileTransport.on('rotate', function(oldFilename, newFilename) {
+      // do something fun
+      console.log(`[miolo][file-logger] Rotating log file: ${oldFilename} -- ${newFilename}`)
+    });
+   
 
     _log_transports.push(fileTransport)
   }
+
 
   //
   // Mail transport

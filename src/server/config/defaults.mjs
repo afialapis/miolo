@@ -179,7 +179,15 @@ export default {
     file: {
       enabled: true,
       level: 'silly',
-      filename: '/var/log/miolo.log'
+      filename: '/var/log/afialapis/miolo.%DATE%.log',
+      frequency: undefined,
+      datePattern: 'YYYY-MM-DD',
+      zippedArchive: true,
+      maxSize: '20m',
+      maxFiles: '10d',
+      auditFile: '/var/log/afialapis/miolo.audit.json',
+      createSymlink: true,
+      symlinkName: 'miolo.log'
     },
     mail: {
       enabled: false,
