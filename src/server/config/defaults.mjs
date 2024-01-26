@@ -179,17 +179,23 @@ export default {
     file: {
       enabled: true,
       level: 'silly',
-      
-      frequency: undefined,
-      datePattern: 'YYYY-MM-DD',
-      zippedArchive: true,
-      maxSize: '20m',
-      maxFiles: '10d',
 
-      filename: '/var/log/afialapis/%MIOLO%.%DATE%.log',
-      auditFile: '/var/log/afialapis/%MIOLO%.audit.json',
-      createSymlink: true,
-      symlinkName: '%MIOLO%.log'
+      filename: '/var/log/afialapis/%MIOLO%.log',
+      
+      //frequency: undefined,
+      //datePattern: 'YYYY-MM-DD',
+      zippedArchive: true,
+
+      maxsize: 1024 * 1024 * 20,
+      maxFiles: 20,
+
+      //maxSize: '20m',
+      ///maxFiles: '10d',
+
+      //filename: '/var/log/afialapis/%MIOLO%.%DATE%.log',
+      //auditFile: '/var/log/afialapis/%MIOLO%.audit.json',
+      //createSymlink: true,
+      //symlinkName: '%MIOLO%.log'
     },
     mail: {
       enabled: false,

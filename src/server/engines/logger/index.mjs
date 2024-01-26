@@ -1,13 +1,13 @@
-import fs from 'fs'
-import path from 'path'
+//import fs from 'fs'
+//import path from 'path'
 import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
 /* https://github.com/winstonjs/winston/issues/925 */
 /* https://github.com/winstonjs/winston/issues/287 */
 import {init_logger_to_mail} from './logger_mail.mjs'
 import { createLogger, format, transports } from 'winston'
 // import { reopenTransportOnHupSignal } from './reopenTransportOnHupSignal.mjs'
-import  'winston-daily-rotate-file'
-import { intre_to_str, intre_now } from 'intre'
+// import  'winston-daily-rotate-file'
+//import { intre_to_str, intre_now } from 'intre'
 
 const { combine, timestamp, _label, printf, errors } = format
 
@@ -78,84 +78,108 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   //    _log_transports.push(fileTransport)
   //  }
 
-  if (config?.file?.enabled === true) {
-    const datePattern = config?.file?.datePattern || 'YYYY-MM-DD'
+  //  if (config?.file?.enabled === true) {
+  //    const datePattern = config?.file?.datePattern || 'YYYY-MM-DD'
+  //
+  //    const fileTransport = new transports.DailyRotateFile({ 
+  //      level    : config?.file?.level || config?.level || 'info' ,
+  //
+  //      frequency: config?.file?.frequency,
+  //      datePattern,
+  //      zippedArchive: config?.file?.zippedArchive == true,
+  //      maxSize: config?.file?.maxSize || '20m',
+  //      maxFiles: config?.file?.maxFiles || '10d',
+  //      
+  //      filename : config?.file?.filename 
+  //        ? config.file.filename.replace('%MIOLO%', prefix)
+  //        : '/var/log/afialapis/miolo.%DATE%.log', 
+  //      
+  //      auditFile: config?.file?.auditFile
+  //        ? config.file.auditFile.replace('%MIOLO%', prefix)
+  //        : '/var/log/afialapis/miolo.audit.json',
+  //      
+  //      symlinkName: config?.file?.symlinkName
+  //        ? config.file.symlinkName.replace('%MIOLO%', prefix)
+  //        : 'miolo.log',
+  //
+  //      createSymlink: config?.file?.createSymlink == true,
+  //      
+  //      watchLog: true,
+  //
+  //      humanReadableUnhandledException: true,
+  //      handleExceptions: true
+  //    })
+  //
+  //    const _file_log = (s) => {
+  //      const currentDate = intre_to_str(intre_now(), datePattern)
+  //      const filename = path.join(fileTransport.dirname, fileTransport.filename.replace('%DATE%', currentDate))
+  //      
+  //      const msg = myFormat({
+  //        level: 'info',
+  //        message: `[logger][file-rotate] ${s}\n`,
+  //        timestamp: intre_now()
+  //      })
+  //      try {
+  //        fs.accessSync(filename, fs.constants.F_OK)
+  //        fs.appendFileSync(filename, msg)
+  //      } catch(_) {
+  //        fs.writeFileSync(filename, msg, { encoding: 'utf-8' })
+  //      }
+  //      if (config?.console?.enabled === true) {
+  //        if (fileTransport.levels[config?.console?.level || config?.level || 'error'] >= fileTransport.levels['info']) {
+  //          console.log(msg)
+  //        }
+  //      }
+  //    }
+  //
+  //    const _fname = (f) => magenta(f.replace(fileTransport.dirname+path.sep, ''))
+  //
+  //
+  //    fileTransport.on('new', function(newFilename) {
+  //      _file_log(`New log file: ${_fname(newFilename)}`)
+  //    });
+  //
+  //    fileTransport.on('rotate', function(oldFilename, newFilename) {
+  //      _file_log(`Rotating log file: ${_fname(oldFilename)} -- ${_fname(newFilename)}`)
+  //    })
+  //
+  //    fileTransport.on('archive', function(zipFilename) {
+  //      _file_log(`Archived log file: ${_fname(zipFilename)}`)
+  //    })
+  //
+  //    fileTransport.on('logRemoved', function(removedFilename) {
+  //      _file_log(`Removed log file: ${_fname(removedFilename)}`)
+  //    })
+  //
+  //    fileTransport.on('error', function(error) {
+  //      // do something fun
+  //      _file_log(red(`Error: ${error}`))
+  //    })
+  //
+  //    _log_transports.push(fileTransport)
+  //  }
 
-    const fileTransport = new transports.DailyRotateFile({ 
+
+  if (config?.file?.enabled === true) {
+    const fileTransport = new transports.File({ 
       level    : config?.file?.level || config?.level || 'info' ,
 
-      frequency: config?.file?.frequency,
-      datePattern,
       zippedArchive: config?.file?.zippedArchive == true,
-      maxSize: config?.file?.maxSize || '20m',
-      maxFiles: config?.file?.maxFiles || '10d',
-      
+      maxsize: config?.file?.maxsize || (1024 * 1024 * 20),
+      maxFiles: config?.file?.maxFiles || 20,
+        //      
       filename : config?.file?.filename 
         ? config.file.filename.replace('%MIOLO%', prefix)
-        : '/var/log/afialapis/miolo.%DATE%.log', 
-      
-      auditFile: config?.file?.auditFile
-        ? config.file.auditFile.replace('%MIOLO%', prefix)
-        : '/var/log/afialapis/miolo.audit.json',
-      
-      symlinkName: config?.file?.symlinkName
-        ? config.file.symlinkName.replace('%MIOLO%', prefix)
-        : 'miolo.log',
-
-      createSymlink: config?.file?.createSymlink == true,
-      
-      watchLog: true,
+        : '/var/log/afialapis/miolo.log', 
+        //      
 
       humanReadableUnhandledException: true,
-      handleExceptions: true
+      handleExceptions: true,
+      lazy: false,
+      tailable: true,
+
     })
-
-    const _file_log = (s) => {
-      const currentDate = intre_to_str(intre_now(), datePattern)
-      const filename = path.join(fileTransport.dirname, fileTransport.filename.replace('%DATE%', currentDate))
-      
-      const msg = myFormat({
-        level: 'info',
-        message: `[logger][file-rotate] ${s}\n`,
-        timestamp: intre_now()
-      })
-      try {
-        fs.accessSync(filename, fs.constants.F_OK)
-        fs.appendFileSync(filename, msg)
-      } catch(_) {
-        fs.writeFileSync(filename, msg, { encoding: 'utf-8' })
-      }
-      if (config?.console?.enabled === true) {
-        if (fileTransport.levels[config?.console?.level || config?.level || 'error'] >= fileTransport.levels['info']) {
-          console.log(msg)
-        }
-      }
-    }
-
-    const _fname = (f) => magenta(f.replace(fileTransport.dirname+path.sep, ''))
-
-
-    fileTransport.on('new', function(newFilename) {
-      _file_log(`New log file: ${_fname(newFilename)}`)
-    });
-
-    fileTransport.on('rotate', function(oldFilename, newFilename) {
-      _file_log(`Rotating log file: ${_fname(oldFilename)} -- ${_fname(newFilename)}`)
-    })
-
-    fileTransport.on('archive', function(zipFilename) {
-      _file_log(`Archived log file: ${_fname(zipFilename)}`)
-    })
-
-    fileTransport.on('logRemoved', function(removedFilename) {
-      _file_log(`Removed log file: ${_fname(removedFilename)}`)
-    })
-
-    fileTransport.on('error', function(error) {
-      // do something fun
-      _file_log(red(`Error: ${error}`))
-    })
-
+  
     _log_transports.push(fileTransport)
   }
 
