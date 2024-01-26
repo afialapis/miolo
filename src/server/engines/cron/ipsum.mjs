@@ -30,7 +30,7 @@ export function ipsum_download_file(callback, remote_file = _IPSUM_REMOTE_FILE, 
       callback(content)
     })
   }).on('error', (err) => {
-    lerr(`[SERVER][${cyan('IPsum')}] Error downloading remote file (${err.toString()})`)
+    lerr(`[cron][${cyan('IPsum')}] Error downloading remote file (${err.toString()})`)
     callback('')
   })
 
@@ -56,7 +56,7 @@ function _ipsum_ips_from_content(content, logger) {
       })
     return ips
   } catch(error) {
-    lerr(`[SERVER][${cyan('IPsum')}] Error getting IPs from content`)
+    lerr(`[cron][${cyan('IPsum')}] Error getting IPs from content`)
     return []
   }
 }
@@ -66,7 +66,7 @@ function _ipsum_ips_from_file(folder= _IPSUM_DEF_FOLDER, logger) {
 
   if (! fs.existsSync(folder)) {
     if (logger) {
-      lerr(`[SERVER][${cyan('IPsum')}] Folder ${folder} does not exist`)
+      lerr(`[cron][${cyan('IPsum')}] Folder ${folder} does not exist`)
     }
     return []
   }
@@ -75,7 +75,7 @@ function _ipsum_ips_from_file(folder= _IPSUM_DEF_FOLDER, logger) {
 
   if (! fs.existsSync(local_path)) {
     if (logger) {
-      lerr(`[SERVER][${cyan('IPsum')}] File ${local_path} does not exist`)
+      lerr(`[cron][${cyan('IPsum')}] File ${local_path} does not exist`)
     }
     return []
   }
@@ -90,12 +90,12 @@ function ipsum_update(folder= _IPSUM_DEF_FOLDER, callback, logger) {
   const ldbg = logger ? logger.debug : console.log
 
   if (! fs.existsSync(folder)) {
-    lerr(`[SERVER][${cyan('IPsum')}] Folder ${folder} does not exist`)
+    lerr(`[cron][${cyan('IPsum')}] Folder ${folder} does not exist`)
     return
   }
 
   try {
-    ldbg(`[SERVER][${cyan('IPsum')}] Updating file...`)
+    ldbg(`[cron][${cyan('IPsum')}] Updating file...`)
 
     ipsum_download_file((content) => {
       
@@ -105,7 +105,7 @@ function ipsum_update(folder= _IPSUM_DEF_FOLDER, callback, logger) {
       const ntot = content.split('\n').length
       const ips = _ipsum_ips_from_content(content, logger)
       const nfilt = ips.length
-      ldbg(`[SERVER][${cyan('IPsum')}] File downloaded. ${ntot} ips on the list (${nfilt} appearing in ${_IPSUM_NLISTS} or more lists)`)
+      ldbg(`[cron][${cyan('IPsum')}] File downloaded. ${ntot} ips on the list (${nfilt} appearing in ${_IPSUM_NLISTS} or more lists)`)
       
       if (callback) {
         callback(ips)
@@ -113,7 +113,7 @@ function ipsum_update(folder= _IPSUM_DEF_FOLDER, callback, logger) {
     })
   
   } catch(error) {
-    lerr(`[SERVER][${cyan('IPsum')}] Error ${error} updating the file`)
+    lerr(`[cron][${cyan('IPsum')}] Error ${error} updating the file`)
   }
 }
 
@@ -125,7 +125,7 @@ export function ipsum_config() {
     onTick: (miolo, _onCompleted) => {
       const folder = miolo.config.http.ratelimit.ipsum_folder || _IPSUM_DEF_FOLDER
       ipsum_update(folder, (ips) => {
-        miolo.logger.info(`[SERVER][${cyan('IPsum')}] File downloaded. ${green(ips.length)} ips will be ${yellow('blacklisted')}!`)
+        miolo.logger.info(`[cron][${cyan('IPsum')}] File downloaded. ${green(ips.length)} ips will be ${yellow('blacklisted')}!`)
       }, miolo.logger)
     },
     start: true   
@@ -141,10 +141,10 @@ export function ipsum_read_ips(folder = _IPSUM_DEF_FOLDER, callback, logger) {
     if (callback) {
       callback(ips)
     }
-    ldbg(`[SERVER][${cyan('IPsum')}] File contains ${ips.length} ips`)
+    ldbg(`[cron][${cyan('IPsum')}] File contains ${ips.length} ips`)
     return ips
   } else {
-    lwarn(`[SERVER][${cyan('IPsum')}] File is empty. Launching update...`)
+    lwarn(`[cron][${cyan('IPsum')}] File is empty. Launching update...`)
     ipsum_update(folder, callback, logger)
     return []
   }

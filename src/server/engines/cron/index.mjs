@@ -44,7 +44,7 @@ function init_cron(app, custom) {
     }
 
     if (!jobInfo) {
-      logger.error(`[SERVER] Cannot stop job ${cyan(idxOrName)}: Not Found`)
+      logger.error(`[cron] Cannot stop job ${cyan(idxOrName)}: Not Found`)
     }
 
     return jobInfo
@@ -54,9 +54,9 @@ function init_cron(app, custom) {
     try {
       jobInfo.job.stop()
       jobInfo.running= true
-      logger.debug(`[SERVER][Job ${cyan(jobInfo.name)}] ${green_bold('manually started!')}`)
+      logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${green_bold('manually started!')}`)
     } catch(e) {
-      logger.error(`[SERVER][Job ${cyan(jobInfo.name)}] Error manually starting it`)
+      logger.error(`[cron][Job ${cyan(jobInfo.name)}] Error manually starting it`)
       logger.error(e)
     }
   }  
@@ -65,9 +65,9 @@ function init_cron(app, custom) {
     try {
       jobInfo.job.stop()
       jobInfo.running= false
-      logger.debug(`[SERVER][Job ${cyan(jobInfo.name)}] ${yellow_bold('manually stopped!')}`) 
+      logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${yellow_bold('manually stopped!')}`) 
     } catch(e) {
-      logger.error(`[SERVER][Job ${cyan(jobInfo.name)}] Error manually stopping it`)
+      logger.error(`[cron][Job ${cyan(jobInfo.name)}] Error manually stopping it`)
       logger.error(e)
     }
   }

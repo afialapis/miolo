@@ -1,3 +1,5 @@
+import fs from 'fs'
+import path from 'path'
 import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
 /* https://github.com/winstonjs/winston/issues/925 */
 /* https://github.com/winstonjs/winston/issues/287 */
@@ -5,6 +7,7 @@ import {init_logger_to_mail} from './logger_mail.mjs'
 import { createLogger, format, transports } from 'winston'
 // import { reopenTransportOnHupSignal } from './reopenTransportOnHupSignal.mjs'
 import  'winston-daily-rotate-file'
+import { intre_to_str, intre_now } from 'intre'
 
 const { combine, timestamp, _label, printf, errors } = format
 
@@ -28,7 +31,7 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
     error  : 'err',
   }
 
-  const myFormat = printf(info => {
+  const myFormat = info => {
     const lc = LEVEL_COLORS[info.level]
     const tm = new Date(info.timestamp)
     const ts= tm.toLocaleString(config?.format?.locale || 'en')
@@ -37,8 +40,7 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
     return info.stack
       ? `${log}\n${info.stack}`
       : log    
-  })
-
+  }
 
   let _log_transports= []
   //
@@ -77,13 +79,13 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   //  }
 
   if (config?.file?.enabled === true) {
+    const datePattern = config?.file?.datePattern || 'YYYY-MM-DD'
 
     const fileTransport = new transports.DailyRotateFile({ 
-      
       level    : config?.file?.level || config?.level || 'info' ,
 
       frequency: config?.file?.frequency,
-      datePattern: config?.file?.datePattern || 'YYYY-MM-DD',
+      datePattern,
       zippedArchive: config?.file?.zippedArchive == true,
       maxSize: config?.file?.maxSize || '20m',
       maxFiles: config?.file?.maxFiles || '10d',
@@ -108,11 +110,51 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
       handleExceptions: true
     })
 
-    fileTransport.on('rotate', function(oldFilename, newFilename) {
-      // do something fun
-      console.log(`[miolo][file-logger] Rotating log file: ${oldFilename} -- ${newFilename}`)
+    const _file_log = (s) => {
+      const currentDate = intre_to_str(intre_now(), datePattern)
+      const filename = path.join(fileTransport.dirname, fileTransport.filename.replace('%DATE%', currentDate))
+      
+      const msg = myFormat({
+        level: 'info',
+        message: `[logger][file-rotate] ${s}\n`,
+        timestamp: intre_now()
+      })
+      try {
+        fs.accessSync(filename, fs.constants.F_OK)
+        fs.appendFileSync(filename, msg)
+      } catch(_) {
+        fs.writeFileSync(filename, msg, { encoding: 'utf-8' })
+      }
+      if (config?.console?.enabled === true) {
+        if (fileTransport.levels[config?.console?.level || config?.level || 'error'] >= fileTransport.levels['info']) {
+          console.log(msg)
+        }
+      }
+    }
+
+    const _fname = (f) => magenta(f.replace(fileTransport.dirname+path.sep, ''))
+
+
+    fileTransport.on('new', function(newFilename) {
+      _file_log(`New log file: ${_fname(newFilename)}`)
     });
-   
+
+    fileTransport.on('rotate', function(oldFilename, newFilename) {
+      _file_log(`Rotating log file: ${_fname(oldFilename)} -- ${_fname(newFilename)}`)
+    })
+
+    fileTransport.on('archive', function(zipFilename) {
+      _file_log(`Archived log file: ${_fname(zipFilename)}`)
+    })
+
+    fileTransport.on('logRemoved', function(removedFilename) {
+      _file_log(`Removed log file: ${_fname(removedFilename)}`)
+    })
+
+    fileTransport.on('error', function(error) {
+      // do something fun
+      _file_log(red(`Error: ${error}`))
+    })
 
     _log_transports.push(fileTransport)
   }
@@ -141,10 +183,15 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
     format: combine(
       errors({ stack: true }),
       timestamp(),
-      myFormat
+      printf(myFormat)
     ),
     transports: _log_transports
   })
+
+  //console.log(logger.transports[0])
+  try {
+    logger.info(`[logger] Inited for ${logger.transports.map(t => `${t.name} (${t.level})${t.silent ? red(' SILENT!') : ''}`).join(', ')}`)
+  } catch(_) {}
 
   return logger
 }

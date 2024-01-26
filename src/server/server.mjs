@@ -134,7 +134,7 @@ function miolo(sconfig, render) {
     const server = http.createServer(app.callback());
     await listenAsync(server, config.http.port, config.http.hostname);
 
-    app.context.miolo.logger.info(`miolo is listening on ${config.http.hostname}:${config.http.port}`)
+    app.context.miolo.logger.info(`[http] miolo is listening on ${config.http.hostname}:${config.http.port}`)
 
     // Make server accessible from app object
     app.server = server
@@ -145,7 +145,7 @@ function miolo(sconfig, render) {
 
     app.stop_server = async () => {
       await httpTerminator.terminate()
-      app.context.miolo.logger.info(`miolo has been shutdowned from ${config.http.hostname}:${config.http.port}`)
+      app.context.miolo.logger.info(`[http] miolo has been shutdowned from ${config.http.hostname}:${config.http.port}`)
     }
 
     // // Although async, lets support callbacks too
@@ -154,7 +154,7 @@ function miolo(sconfig, render) {
     // }
     
     //  const server= app.listen(config.http.port, config.http.hostname, function () {
-    //    app.context.miolo.logger.info(`miolo is listening on ${config.http.hostname}:${config.http.port}`)
+    //    app.context.miolo.logger.info(`[http] miolo is listening on ${config.http.hostname}:${config.http.port}`)
     //    init_cron(app.context.miolo.logger)
     //
     //    if (callback!=undefined) {

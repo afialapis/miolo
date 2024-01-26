@@ -19,22 +19,22 @@ export function init_cron_job(miolo, config) {
     // onTick(miolo, onComplete)
     (onComplete) => {
       try {
-        logger.silly(`[SERVER][Custom Job ${cyan(name)}] ${green_bold('ticks!')}`)
+        logger.silly(`[cron][Custom Job ${cyan(name)}] ${green_bold('ticks!')}`)
         config.onTick(miolo, onComplete)
       } catch(e) {
-        logger.error(`[SERVER][Custom Job ${cyan(name)}] Error at onTick()`)
+        logger.error(`[cron][Custom Job ${cyan(name)}] Error at onTick()`)
         logger.error(e)
       }
     },
 
     // onComplete(miolo)
     () => {
-      logger.silly(`[SERVER][Custom Job ${cyan(name)}] ${green_bold('completed!')}`)
+      logger.silly(`[cron][Custom Job ${cyan(name)}] ${green_bold('completed!')}`)
       if (config?.onComplete) {
         try {
           config.onComplete(miolo)
         } catch(e) {
-          logger.error(`[SERVER][Custom Job ${cyan(name)}] Error at onComplete()`)
+          logger.error(`[cron][Custom Job ${cyan(name)}] Error at onComplete()`)
           logger.error(e)
         }
       }
