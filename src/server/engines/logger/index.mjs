@@ -5,7 +5,7 @@ import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
 /* https://github.com/winstonjs/winston/issues/287 */
 import {init_logger_to_mail} from './logger_mail.mjs'
 import { createLogger, format, transports } from 'winston'
-// import { reopenTransportOnHupSignal } from './reopenTransportOnHupSignal.mjs'
+import { reopenTransportOnHupSignal } from './reopenTransportOnHupSignal.mjs'
 // import  'winston-daily-rotate-file'
 //import { intre_to_str, intre_now } from 'intre'
 
@@ -65,18 +65,20 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   //  https://github.com/winstonjs/winston/issues/943
   //  https://gist.github.com/suprememoocow/5133080
   //
-  //  if (config?.file?.enabled === true) {
-  //    const fileTransport = new transports.File({ 
-  //      filename : config?.file?.filename || '/var/log/miolo.log', 
-  //      level    : config?.file?.level || config?.level || 'info' ,
-  //      humanReadableUnhandledException: true,
-  //      handleExceptions: true
-  //    })
-  //
-  //    reopenTransportOnHupSignal(fileTransport)
-  //
-  //    _log_transports.push(fileTransport)
-  //  }
+  if (config?.file?.enabled === true) {
+    const fileTransport = new transports.File({ 
+      filename : config?.file?.filename 
+      ? config.file.filename.replace('%MIOLO%', prefix)
+      : '/var/log/afialapis/miolo.log', 
+      level    : config?.file?.level || config?.level || 'info' ,
+      humanReadableUnhandledException: true,
+      handleExceptions: true
+    })
+
+    reopenTransportOnHupSignal(fileTransport)
+
+    _log_transports.push(fileTransport)
+  }
 
   //  if (config?.file?.enabled === true) {
   //    const datePattern = config?.file?.datePattern || 'YYYY-MM-DD'
@@ -160,28 +162,28 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   //  }
 
 
-  if (config?.file?.enabled === true) {
-    const fileTransport = new transports.File({ 
-      level    : config?.file?.level || config?.level || 'info' ,
-
-      zippedArchive: config?.file?.zippedArchive == true,
-      maxsize: config?.file?.maxsize || (1024 * 1024 * 20),
-      maxFiles: config?.file?.maxFiles || 20,
-        //      
-      filename : config?.file?.filename 
-        ? config.file.filename.replace('%MIOLO%', prefix)
-        : '/var/log/afialapis/miolo.log', 
-        //      
-
-      humanReadableUnhandledException: true,
-      handleExceptions: true,
-      lazy: false,
-      tailable: true,
-
-    })
-  
-    _log_transports.push(fileTransport)
-  }
+  //  if (config?.file?.enabled === true) {
+  //    const fileTransport = new transports.File({ 
+  //      level    : config?.file?.level || config?.level || 'info' ,
+  //
+  //      zippedArchive: config?.file?.zippedArchive == true,
+  //      maxsize: config?.file?.maxsize || (1024 * 1024 * 20),
+  //      maxFiles: config?.file?.maxFiles || 20,
+  //        //      
+  //      filename : config?.file?.filename 
+  //        ? config.file.filename.replace('%MIOLO%', prefix)
+  //        : '/var/log/afialapis/miolo.log', 
+  //        //      
+  //
+  //      humanReadableUnhandledException: true,
+  //      handleExceptions: true,
+  //      lazy: false,
+  //      tailable: true,
+  //
+  //    })
+  //  
+  //    _log_transports.push(fileTransport)
+  //  }
 
 
   //
