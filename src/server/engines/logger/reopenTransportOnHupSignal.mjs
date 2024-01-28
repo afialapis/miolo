@@ -15,10 +15,10 @@ export function reopenTransportOnHupSignal(fileTransport) {
 
     const fullname = path.join(fileTransport.dirname, fileTransport._getFile(false))
 
-    console.log(`[miolo][file-logger] SIGHUP received. Check if we need to re-open log file ${fullname}...`)
+    //console.log(`[miolo][file-logger] SIGHUP received. Check if we need to re-open log file ${fullname}...`)
 
     function reopen() {
-      console.log(`[miolo][file-logger] Reopening ${fullname}...`)
+      console.log(`[miolo][file-logger] SIGHUP received. Reopening ${fullname}...`)
       try {
         if (fileTransport._stream) {
           fileTransport._stream.end()
@@ -44,11 +44,14 @@ export function reopenTransportOnHupSignal(fileTransport) {
       }
     }
 
+    /*
     fs.stat(fullname, function (err) {
       if (err && err.code == 'ENOENT') {
         return reopen()
       }
     })
+    */
+    return reopen()
 
   })
 }
