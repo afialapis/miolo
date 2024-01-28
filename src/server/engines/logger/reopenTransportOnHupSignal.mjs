@@ -22,7 +22,7 @@ export function reopenTransportOnHupSignal(fileTransport) {
       try {
         if (fileTransport._stream) {
           fileTransport._stream.end()
-          fileTransport._stream.destroySoon()
+          fileTransport._stream.destroy() // Soon()
         }
 
         let stream = fs.createWriteStream(fullname, fileTransport.options)
