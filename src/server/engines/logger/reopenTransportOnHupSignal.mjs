@@ -31,12 +31,12 @@ export function reopenTransportOnHupSignal(fileTransport) {
         fileTransport._size = 0
         fileTransport._stream = stream
 
-        fileTransport.once('flush', function () {
+        //fileTransport.once('flush', function () {
           fileTransport.opening = false
           fileTransport.emit('open', fullname)
-        })
+        //})
 
-        fileTransport.flush()
+        //fileTransport.flush()
 
         console.log(`[miolo][file-logger] Reopened ${fullname} successfully`)
       } catch(error) {
