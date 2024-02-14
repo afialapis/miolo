@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "0.9.34",
+  "version": "0.9.35",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -56,8 +56,9 @@
     "demo-basic": "npm run demo-basic-cli-build && npm run demo-basic-server",
     "demo-credentials-cli-build-bundle": "npx xeira bundle --target=browser --source_index=./demo/cli/credentials/index.mjs --bundle_folder=./demo/build --bundle_name=miolo-demo-credentials --bundler=rollup --bundle_extension=iife.bundle  --bundle_node_polyfill=true",
     "demo-credentials-cli-build": "rm -fr ./demo/build/miolo-demo-credentials* && npm run demo-credentials-cli-build-bundle",
-    "demo-credentials-server": "NODE_ENV=development npx nodemon --inspect ./demo/server/index.cjs --credentials",
+    "demo-credentials-server": "NODE_ENV=development npx nodemon --inspect ./demo/server/index.cjs --credentials  & echo $! > /tmp/miolo.pid",
     "demo-credentials": "npm run demo-credentials-cli-build && npm run demo-credentials-server",
+    "demo-credentials-debug": "npm run demo-credentials-cli-build && DEBUG=winston* npm run demo-credentials-server",
     "demo": "npm run demo-credentials",
     "site": "npx xeira site",
     "test": "npx xeira test --files=./test/index.mjs",

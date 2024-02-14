@@ -40,7 +40,7 @@ const insert_fake_todo = async (fetcher)  => {
 }
 
 const count_last_hour_todos = async (fetcher)  => {
-  const res= await fetcher.get('/crud/todos/last_hour', {})
+  const res= await fetcher.get('/crud/todos/last_hour', {h: 2})
   const count= parseInt(res.data)
   return count
 }

@@ -128,8 +128,8 @@ export default {
     //   redirect_url: '/',
     //   error_code: 401
     // }, 
-    // before: (ctx) => {return goon/!goon},
-    // after : (ctx, result) => {return result},
+    // before: async (ctx) => {return bool} // If bool false, query callback not run
+    // after : async (ctx, result) => {return modified_result}
     
     crud: [{
       prefix: '',
@@ -139,27 +139,39 @@ export default {
         mode: 'r/w/rw',
         bodyField: '',
 
-        useUserFields: ...,
+        useUserFields: {
+          use: false,
+          fieldNames: {
+            created_by: 'created_by', 
+            last_update_by: 'last_update_by'
+          }
+        }
         auth: ...,
-        before: async (ctx) => {return bool} // If bool false, query callback not run
-        after : async (ctx, result) => {return modified_result}
+        before: ...,
+        after : ...
       */], 
     }],
-    queries: []/*
-      [{
+    queries: [/*
+      {
         prefix: '',
+        auth: ...,
+        before: ...,
+        after : ...
+
         routes: [
           {
             url: '/../..',
             method: 'GET/POST',
-            callback: async (ctx) => {ctx.body = {}} ,
+            callback: async (ctx) => { ctx.body = result } ,  
+             // or
+            callback_fn: async (miolo, params) => { return result } ,  
             auth: ...,
-            before: async (ctx) => {return bool} // If bool false, query callback not run
-            after : async (ctx, result) => {return modified_result}
+            before: ...,
+            after : ...
           },          
         ], 
-      }],
-    */
+      },
+    */],
   },
   //cacher: {
   //  redis: {

@@ -1,10 +1,12 @@
 import { getConnection } from 'calustra'
 import { init_emailer } from '../../engines/emailer/index.mjs'
 import { init_logger } from '../../engines/logger/index.mjs'
+import { init_parser } from '../../engines/parser/index.mjs'
 
 const init_context_middleware = ( app, config ) => {
   const emailer = init_emailer(config.mail)
   const logger = init_logger(config.log, emailer, config?.name)
+  const parser = init_parser()
 
   const dbOptions= {
     ...config.db.options,
@@ -30,20 +32,18 @@ const init_context_middleware = ( app, config ) => {
     config: {...config},
     emailer,
     logger,
-    db: db
+    db: db,
+    parser
   } 
-
 
   async function context_middleware(ctx, next) {
     // Assign miolo stuff to ctx
     ctx.miolo= mioloContext 
     await next()
-
   }
 
   app.use(context_middleware)
   app.context.miolo= mioloContext
-  
 }
 
 export { init_context_middleware }
