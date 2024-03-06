@@ -1,6 +1,29 @@
 import {intre_now} from 'intre'
 
-async function todos_read(miolo, params) {
+export async function todos_make_table_from_conn(conn) {
+  let query = `
+    create table IF NOT EXISTS todos (
+      id serial,
+      name text,
+      done boolean,
+      created int DEFAULT EXTRACT (EPOCH FROM NOW())
+    )`
+  await conn.execute(query)
+
+  query= 'ALTER TABLE todos DROP CONSTRAINT IF EXISTS todos_id'
+  await conn.execute(query)
+  query= 'ALTER TABLE todos ADD CONSTRAINT todos_id UNIQUE (id)'
+  await conn.execute(query)
+
+  return true
+}
+
+export async function todos_make_table(miolo) {
+  const conn= miolo.db.getConnection()
+  return todos_make_table_from_conn(conn)
+}
+
+export async function todos_read(miolo, params) {
   const conn= miolo.db.getConnection()
   // TODO : handle transactions
   const options= {transaction: undefined}
@@ -12,7 +35,7 @@ async function todos_read(miolo, params) {
 }
 
 
-async function todos_count_last_hour(miolo, params) { 
+export async function todos_count_last_hour(miolo, params) { 
   const conn= miolo.db.getConnection()
   // TODO : handle transactions
   const options= {transaction: undefined}
@@ -32,7 +55,7 @@ async function todos_count_last_hour(miolo, params) {
   return res
 }
 
-async function todos_insert_fake(miolo, params) {
+export async function todos_insert_fake(miolo, params) {
   const conn= miolo.db.getConnection()
   // TODO : handle transactions
   const options= {transaction: undefined}
@@ -47,7 +70,3 @@ async function todos_insert_fake(miolo, params) {
 
   return tid
 }
-
-
-
-export {todos_read, todos_count_last_hour, todos_insert_fake}

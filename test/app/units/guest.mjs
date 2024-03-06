@@ -14,7 +14,6 @@ function test_app_guest() {
   let single_tid
   let last_tid
   test_app_base('guest', (fetcher) => {
-
     it(`[miolo-test-app][guest] should clean todos`, async function() {
       await clean_todos(fetcher)
     })

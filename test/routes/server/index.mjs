@@ -4,7 +4,8 @@ import { makeConfig } from './config.mjs'
 
 async function test_server (dbType) {  
 
-  const app = await miolo(makeConfig(dbType), undefined).run()
+  const app = miolo(makeConfig(dbType), undefined)
+  await app.start()
 
   return app
 }

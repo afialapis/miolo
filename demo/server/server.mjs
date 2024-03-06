@@ -32,7 +32,8 @@ async function demo_server (authType) {
     }
   }  
 
-  const app = await miolo(makeConfig(authType), render).run()
+  const app = miolo(makeConfig(authType), render)
+  await app.start()
 
   return app
 }

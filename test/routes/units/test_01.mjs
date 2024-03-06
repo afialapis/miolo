@@ -51,7 +51,7 @@ function test_01 (dbType) {
       const response= await fetcher.read(`api/test_01`)
       assert.strictEqual(response.length, data.length)
     })
-
+    
     it(`[miolo-test-routes][${dbType}] should fetch test_01 from crud (read, filtered by name)`, async function() {
       const response= await fetcher.read(`api/test_01`, {name: 'Peter'})
       assert.strictEqual(response.length, data.filter(r => r.name=='Peter').length)
@@ -90,7 +90,7 @@ function test_01 (dbType) {
 
     it(`[miolo-test-routes][${dbType}] should stop server`, async function() {
       app.context.miolo.logger.info(`[miolo-test-routes] Let's stop the server...`)
-      await app.stop_server()
+      await app.stop()
     })
   })
 }

@@ -40,7 +40,9 @@ export function init_cron_job(miolo, config) {
       }
     },
 
-    config?.start === true,
+    // Do not start yet
+    false,
+
     config?.timezone || 'Europe/Madrid',
     // config?.context || null,
     // config?.runOnInit || null,

@@ -1,34 +1,31 @@
-import http                         from 'http'
-//import util                       from 'util'
-import Koa                          from 'koa'
-import { createHttpTerminator }     from 'http-terminator'
-import { init_config }              from './config/index.mjs'
+import Koa                                from 'koa'
+import { init_config }                    from './config/index.mjs'
 
-import { init_context_middleware }    from './middleware/context/context.mjs'
-import { init_body_middleware }       from './middleware/context/body.mjs'
-import { init_catcher_middleware }    from './middleware/context/catcher.mjs'
-import { init_rate_limit_middleware } from './middleware/context/ratelimit.mjs'
-import { init_static_middleware }     from './middleware/static/index.mjs'
-import { init_request_middleware }    from './middleware/context/request.mjs'
-import { init_route_robots }          from './middleware/routes/robots/index.mjs'
-import { init_route_catch_js_error}   from './middleware/routes/catch_js_error.mjs'
+import { init_context_middleware }        from './middleware/context/context.mjs'
+import { init_body_middleware }           from './middleware/context/body.mjs'
+import { init_catcher_middleware }        from './middleware/context/catcher.mjs'
+import { init_rate_limit_middleware }     from './middleware/context/ratelimit.mjs'
+import { init_static_middleware }         from './middleware/static/index.mjs'
+import { init_request_middleware }        from './middleware/context/request.mjs'
+import { init_route_robots }              from './middleware/routes/robots/index.mjs'
+import { init_route_catch_js_error}       from './middleware/routes/catch_js_error.mjs'
 
 import {init_guest_auth_middleware}       from'./middleware/auth/guest.mjs'
 import {init_basic_auth_middleware}       from'./middleware/auth/basic.mjs'
 import {init_credentials_auth_middleware} from'./middleware/auth/credentials/index.mjs'
 import {init_custom_auth_middleware}      from'./middleware/auth/custom.mjs'
 
-import { init_extra_middlewares }   from './middleware/extra.mjs'
-import { init_headers_middleware }  from './middleware/context/headers.mjs'
-import { init_router }              from './middleware/routes/router/index.mjs'
+import { init_extra_middlewares }         from './middleware/extra.mjs'
+import { init_headers_middleware }        from './middleware/context/headers.mjs'
+import { init_router }                    from './middleware/routes/router/index.mjs'
 
-import { init_ssr_render_middleware}  from './middleware/render/ssr/render.mjs'
-//import { init_404_render_middleware}  from './middleware/render/404/render.mjs'
-//import { init_json_render_middleware} from './middleware/render/json/render.mjs'
+import { init_ssr_render_middleware}      from './middleware/render/ssr/render.mjs'
+//import { init_404_render_middleware}    from './middleware/render/404/render.mjs'
+//import { init_json_render_middleware}   from './middleware/render/json/render.mjs'
 
-// import {init_socket}             from './engines/socket/index.mjs'
-import { init_cron }                from './engines/cron/index.mjs'
-
+// import {init_socket}                   from './engines/socket/index.mjs'
+import { init_cron }                      from './engines/cron/index.mjs'
+import { init_http_server }               from './engines/http/index.mjs'
 
 function miolo(sconfig, render) {
 
@@ -109,66 +106,27 @@ function miolo(sconfig, render) {
     // init_json_render_middleware(app, render)  
   }*/
 
-  const _run = async () => {
-
-
-    // promisify the server.listen()
-
-    // opt1
-    // let server = http.createServer(app.callback())
-    // const promise = util.promisify( server.listen.bind( server ) )
-    // await promise( config.http.port, config.http.hostname)
+  // Init cron (will not start jobs yet)
+  init_cron(app, config?.cron)
     
-    // opt2
-    const listenAsync = (server, port, hostname) => {
-      return new Promise((resolve, reject) => {
-        server.listen(port, hostname, (error) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve();
-          }
-        });
-      });
-    };
-    const server = http.createServer(app.callback());
-    await listenAsync(server, config.http.port, config.http.hostname);
+  // Init http server
+  init_http_server(app, config?.http) 
 
-    app.context.miolo.logger.info(`[http] miolo is listening on ${config.http.hostname}:${config.http.port}`)
-
-    // Make server accessible from app object
-    app.server = server
-    
-    const httpTerminator = createHttpTerminator({
-      server,
-    })
-
-    app.stop_server = async () => {
-      await httpTerminator.terminate()
-      app.context.miolo.logger.info(`[http] miolo has been shutdowned from ${config.http.hostname}:${config.http.port}`)
-    }
-
-    // // Although async, lets support callbacks too
-    // if (callback!=undefined) {
-    //   callback(app)
-    // }
-    
-    //  const server= app.listen(config.http.port, config.http.hostname, function () {
-    //    app.context.miolo.logger.info(`[http] miolo is listening on ${config.http.hostname}:${config.http.port}`)
-    //    init_cron(app.context.miolo.logger)
-    //
-    //    if (callback!=undefined) {
-    //      callback(app)
-    //    }
-    //  })
-    
-    // Init cron when everything is set up
-    init_cron(app, config?.cron)
-
-    return app
+  // Util callbacks
+  app.start = async () => {
+    await app.http.start()
+    app.cron.start()
+  }
+  
+  app.stop = async () => {
+    await app.http.stop()
+    app.cron.stop()
   }
 
-  app.run= _run
+  app.restart = async () => {
+    await app.stop()
+    await app.start()
+  }  
 
   return app
 }

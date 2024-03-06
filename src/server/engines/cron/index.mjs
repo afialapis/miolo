@@ -10,7 +10,7 @@ import {
 import { cyan, green_bold, yellow_bold } from 'tinguir'
 
 
-function init_cron(app, custom) {
+export function init_cron(app, custom) {
   const miolo = app.context.miolo
   const logger= miolo.logger
   
@@ -31,7 +31,7 @@ function init_cron(app, custom) {
     jobInfos.push({
       name, 
       job,
-      running: config?.start === true
+      running: false
     })  
   })
   
@@ -44,7 +44,7 @@ function init_cron(app, custom) {
     }
 
     if (!jobInfo) {
-      logger.error(`[cron] Cannot stop job ${cyan(idxOrName)}: Not Found`)
+      logger.error(`[cron] Job ${cyan(idxOrName)} Not Found`)
     }
 
     return jobInfo
@@ -52,52 +52,100 @@ function init_cron(app, custom) {
 
   const _start_job = (jobInfo) => {
     try {
-      jobInfo.job.stop()
+      jobInfo.job.start()
       jobInfo.running= true
-      logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${green_bold('manually started!')}`)
+      logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${green_bold('started!')}`)
+      return 1
     } catch(e) {
-      logger.error(`[cron][Job ${cyan(jobInfo.name)}] Error manually starting it`)
+      logger.error(`[cron][Job ${cyan(jobInfo.name)}] Error starting it`)
       logger.error(e)
+      return 0
     }
   }  
+
+  const _start_job_by_idx_or_name = (idxOrName) => {
+    const jobInfo = _find_job_by_idx_or_name(idxOrName)
+    if (jobInfo) {
+      const done = _start_job(jobInfo)
+      return [done, jobInfo.name]
+    }
+    return [0, '']
+  }
+
+  const _start_all_jobs = () => {
+    try {
+      let started= [], errors= []
+      jobInfos.map(jobInfo => {
+        const done= _start_job(jobInfo)
+        if (done == 1) {
+          started.push(jobInfo.name)
+        } else {
+          errors.push(jobInfo.name)
+        }
+      })
+      if (started.length > 0) {
+        logger.info(`[cron] Started ${started.length} jobs: ${started}`)
+      }
+      if (errors.length > 0) {
+        logger.warn(`[cron] Could not start ${errors.length} jobs: ${errors}`)
+      }
+    } catch(error) {
+      logger.error(`[cron] start() error: ${error}`)
+    }
+  
+  }
 
   const _stop_job = (jobInfo) => {
     try {
       jobInfo.job.stop()
       jobInfo.running= false
-      logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${yellow_bold('manually stopped!')}`) 
+      logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${yellow_bold('stopped!')}`) 
+      return 1
     } catch(e) {
-      logger.error(`[cron][Job ${cyan(jobInfo.name)}] Error manually stopping it`)
+      logger.error(`[cron][Job ${cyan(jobInfo.name)}] Error stopping it`)
       logger.error(e)
-    }
-  }
-
-  const _start_job_by_idx_or_name = (idxOrName) => {
-    const jobInfo = _find_job_by_idx_or_name(idxOrName)
-    if (jobInfo) {
-      _start_job(jobInfo)
+      return 0
     }
   }
 
   const _stop_job_by_idx_or_name = (idxOrName) => {
     const jobInfo = _find_job_by_idx_or_name(idxOrName)
     if (jobInfo) {
-      _stop_job(jobInfo)
+      const done = _stop_job(jobInfo)
+      return [done, jobInfo.name]
     }
+    return [0, '']
   }
 
   const _stop_all_jobs = () => {
-    jobInfos.map(jobInfo => {
-      _stop_job(jobInfo)
-    })
+    try {
+      let stopped= [], errors= []
+      jobInfos.map(jobInfo => {
+        const done= _stop_job(jobInfo)
+        if (done == 1) {
+          stopped.push(jobInfo.name)
+        } else {
+          errors.push(jobInfo.name)
+        }
+      })
+      if (stopped.length > 0) {
+        logger.info(`[cron] Stopped ${stopped.length} jobs: ${stopped}`)
+      }
+      if (errors.length > 0) {
+        logger.warn(`[cron] Could not stop ${errors.length} jobs: ${errors}`)
+      }
+    } catch(error) {
+      logger.error(`[cron] stop() error: ${error}`)
+    }
   }
 
   app.cron= {
-    jobs: jobInfos,
-    start: _start_job_by_idx_or_name,
-    stop: _stop_job_by_idx_or_name,
-    stop_all: _stop_all_jobs
+    jobs:      jobInfos,
+    start_one: _start_job_by_idx_or_name,
+    start:     _start_all_jobs,
+    stop_one : _stop_job_by_idx_or_name,
+    stop:      _stop_all_jobs
   }
-}
 
-export {init_cron}
+  return app
+}

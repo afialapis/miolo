@@ -22,7 +22,6 @@ function test_app_credentials() {
   let single_tid
   let last_tid
   test_app_base('credentials', (fetcher) => {
-
     it(`[miolo-test-app][credentials] should login`, async function() {
       const {user, authenticated}= await login(fetcher, AUTH)
       assert.strictEqual(user.username, AUTH.username)

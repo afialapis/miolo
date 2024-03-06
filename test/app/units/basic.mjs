@@ -36,7 +36,7 @@ function test_app_basic() {
       assert.strictEqual(fake_tids.length, TODOS.length)
     })
 
-
+    
     it(`[miolo-test-app][basic] should remove fake todos`, async function() {
       const res= await remove_todos(fetcher, fake_tids)
 
