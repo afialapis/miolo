@@ -92,8 +92,7 @@ function miolo(sconfig, render) {
 
   // Routes to /crud
   if (config?.routes) {
-    const conn= app.context.miolo.db.getConnection()
-    init_router(app, conn, config.routes)
+    init_router(app, config.routes)
   }
 
   // Middleware for final render
@@ -114,11 +113,15 @@ function miolo(sconfig, render) {
 
   // Util callbacks
   app.start = async () => {
+    // Init and reset db connection
+    app.context.miolo.db.initConnection()
+    
     await app.http.start()
     app.cron.start()
   }
   
   app.stop = async () => {
+    app.context.miolo.db.dropConnections()
     await app.http.stop()
     app.cron.stop()
   }

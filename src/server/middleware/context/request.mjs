@@ -30,7 +30,7 @@ function init_request_middleware(app, config) {
  
   async function request_middleware(ctx, next) {
     const logger = ctx.miolo.logger
-    const ip = ctx.headers["x-real-ip"] || '127.0.0.1'
+    const ip = ctx.headers["x-real-ip"] || ctx.headers["x-orig-ip"] || ctx.ip || '127.0.0.1'
     const started = performance.now()
 
     // Patch for koa-better-body

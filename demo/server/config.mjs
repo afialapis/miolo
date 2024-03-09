@@ -7,7 +7,7 @@ import basic_auth from './auth/basic.mjs'
 const __my_filename = fileURLToPath(import.meta.url)
 const __my_dirname = path.dirname(__my_filename)
 
-export const makeConfig = (authType, logLevel= 'info') => {
+export const makeConfig = (authType, logLevel= 'silly') => {
   const auth = 
       authType=='guest' ? {guest: {}}
     : authType=='basic' ? {basic: basic_auth}

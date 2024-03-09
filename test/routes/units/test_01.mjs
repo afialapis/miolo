@@ -23,7 +23,10 @@ function test_01 (dbType) {
 
     it(`[miolo-test-routes][${dbType}] should start app`, async function() {
       app = await test_server(dbType)
-      conn = app.context.miolo.db.getConnection(dbType)
+      conn = app.context.miolo.db.getConnection(dbType, {
+        //nocache: true,
+        reset: true
+      })
 
       assert.strictEqual(conn.config.dialect, dbType)
     })

@@ -23,8 +23,6 @@ const _listenAsync = (server, port, hostname) => {
   })
 }
 
-
-
 export function init_http_server(app, config) {
   const miolo = app.context.miolo
   const logger= miolo.logger
@@ -33,7 +31,7 @@ export function init_http_server(app, config) {
     try {
       // If previous server already created, lets avoid
       if (app.http?.server != undefined) {
-        logger.warn(`[http] Server already running on ${app?.http?.hostname}:${app?.http?.port}`)
+        logger.warn(`[http][start] Server already running on ${app?.http?.hostname}:${app?.http?.port}`)
         return
       }
 
@@ -48,9 +46,10 @@ export function init_http_server(app, config) {
       const http_stop = async () => {
         try {
           await httpTerminator.terminate()
-          logger.info(`[http] miolo has been shutdowned from ${config.hostname}:${config.port}`)
+          delete app.http.server
+          logger.info(`[http][stop] miolo has been shutdowned from ${config.hostname}:${config.port}`)
         } catch(error) {
-          logger.error(`[http] stop() error: ${error}`)
+          logger.error(`[http][stop] error: ${error}`)
         }
       }
 
@@ -59,9 +58,9 @@ export function init_http_server(app, config) {
 
       // Finally start the server
       await _listenAsync(server, config.port, config.hostname)
-      logger.info(`[http] miolo is listening on ${config.hostname}:${config.port}`)
+      logger.info(`[http][start] miolo is listening on ${config.hostname}:${config.port}`)
     } catch(error) {
-      logger.error(`[http] start() error: ${error}`)
+      logger.error(`[http][start] error: ${error}`)
     }
   }  
 

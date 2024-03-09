@@ -1,7 +1,7 @@
 import {query_string_to_json} from '../utils.mjs'
 
 
-function attachCrudRoutes(connection, router, crudConfigs, logger) {
+function attachCrudRoutes(router, crudConfigs, logger) {
   
   crudConfigs.map((crudConfig) => {
 
@@ -9,13 +9,6 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
 
     crudConfig.routes.map(route => {
 
-      const model= connection.getModel(route.name)
-
-      if (! model) {
-        logger.error(`[miolo-router] Could not get model for ${route.name}`)
-        return
-      }
-          
       const _pack_body_field = (data) => {
         if (route.bodyField == undefined) {
           return data
@@ -36,17 +29,17 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
     
           if (!authenticated) {
             if (auth.action=='error') {
-              logger.error(`[miolo-router] Unauthorized access. Throwing error ${auth.error_code}`)
+              ctx.miolo.logger.error(`[miolo-router] Unauthorized access. Throwing error ${auth.error_code}`)
               ctx.throw(
                 auth.error_code,
                 null,
                 {}
               )
             } else if (auth.action=='redirect') {
-              logger.warn(`[miolo-router] Unauthorized access. Redirecting to ${auth.redirect_url}`)
+              ctx.miolo.logger.warn(`[miolo-router] Unauthorized access. Redirecting to ${auth.redirect_url}`)
               ctx.redirect(auth.redirect_url)
             } else {
-              logger.error(`[miolo-router] Crud path ${route.url} specified auth but no action`)
+              ctx.miolo.logger.error(`[miolo-router] Crud path ${route.url} specified auth but no action`)
               ctx.body= {}
             }
           }
@@ -58,6 +51,13 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
       }
 
       const _crud_callback = async (ctx, op, callback) => {
+        const model= ctx.miolo.db.getModel(route.name)
+
+        if (! model) {
+          ctx.miolo.logger.error(`[miolo-router] Could not get model for ${route.name}`)
+          throw new Error(`[miolo-router] Could not get model for ${route.name}`)
+        }
+
         let result = {}
         try {
           const authenticated = await _crud_auth_callback(ctx, op)
@@ -87,14 +87,14 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
             fieldNames,
           }
           
-          result= await callback(uinfo)
+          result= await callback(model, uinfo)
           
           if (route?.after) {
             result= await route.after(ctx, result)
           }
         } catch(error) {
-          logger.error(`[miolo-router] Unexpected error on CRUD ${route.name}-${op}`)
-          logger.error(error)
+          ctx.miolo.logger.error(`[miolo-router] Unexpected error on CRUD ${route.name}-${op}`)
+          ctx.miolo.logger.error(error)
         }
 
         result= _pack_body_field(result)
@@ -103,7 +103,7 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
       }
 
       const route_read = async (ctx) => {
-        await _crud_callback(ctx, 'r', async (_uinfo) => {
+        await _crud_callback(ctx, 'r', async (model, _uinfo) => {
           const params = query_string_to_json(ctx.request.url)
           // TODO : handle transactions
           const options= {transaction: undefined}
@@ -113,7 +113,7 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
       }
       
       const route_key_list = async (ctx) => {
-        await _crud_callback(ctx, 'r', async (_uinfo) => {
+        await _crud_callback(ctx, 'r', async (model, _uinfo) => {
           // TODO : handle transactions
           const params = query_string_to_json(ctx.request.url)
           const options= {transaction: undefined}
@@ -123,7 +123,7 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
       }
       
       const route_find = async (ctx) => {
-        await _crud_callback(ctx, 'r', async (_uinfo) => {
+        await _crud_callback(ctx, 'r', async (model, _uinfo) => {
           const params = query_string_to_json(ctx.request.url)
           // TODO : handle transactions
           const options= {transaction: undefined}    
@@ -133,7 +133,7 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
       }
 
       const route_distinct = async (ctx) => {
-        await _crud_callback(ctx, 'r', async (_uinfo) => {
+        await _crud_callback(ctx, 'r', async (model, _uinfo) => {
           const params = query_string_to_json(ctx.request.url)
           // TODO : handle transactions
           const options= {transaction: undefined}
@@ -143,7 +143,7 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
       }
       
       const route_save = async (ctx) => {
-        await _crud_callback(ctx, 'w', async (uinfo) => {
+        await _crud_callback(ctx, 'w', async (model, uinfo) => {
           const params = ctx.request.fields
           if (uinfo?.fieldNames?.created_by) {
             params[uinfo.fieldNames.created_by] = uinfo.uid
@@ -156,7 +156,7 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
       }
       
       const route_update = async (ctx) => {
-        await _crud_callback(ctx, 'w', async (uinfo) => {
+        await _crud_callback(ctx, 'w', async (model, uinfo) => {
           const params = ctx.request.fields
           if (uinfo?.fieldNames?.last_update_by) {
             params[uinfo.fieldNames.last_update_by] = uinfo.uid
@@ -169,7 +169,7 @@ function attachCrudRoutes(connection, router, crudConfigs, logger) {
       }
       
       const route_delete = async (ctx) => {
-        await _crud_callback(ctx, 'w', async (_uinfo) => {
+        await _crud_callback(ctx, 'w', async (model, _uinfo) => {
           const params = ctx.request.fields
           // TODO : handle transactions
           const options= {transaction: undefined}    

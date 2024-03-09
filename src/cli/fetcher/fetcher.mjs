@@ -2,7 +2,7 @@ import {omit_nil, trim_left, json_to_query_string, parse_login_cookie} from './u
 
 class Fetcher {
   /**
-   * @param {*} config {hostname, port}
+   * @param {*} config {hostname, port, force_hostname, silent_fail: false}
    */
   constructor(config) {
     this.config= config
@@ -101,6 +101,7 @@ class Fetcher {
       status: response.status,
       response
     }
+
   }
   
   async get(url, params, auth= undefined) {
@@ -109,12 +110,14 @@ class Fetcher {
       const resp = await this._fetch('GET', url, omit_nil(params), auth)
       return resp
     } catch(e) {
-      console.error(`Error on GET ${url}`)
-      console.error(e)
+      if (this.config?.silent_fail !== true) {
+        console.error(`Error on GET ${url}`)
+        console.error(e)
+      }
 
       return {
-        data: undefined,
-        status: -1
+        data: e,
+        status: -1,
       }
     }
   }
@@ -124,10 +127,13 @@ class Fetcher {
       const resp = await this._fetch('POST', url, data, auth)
       return resp
     } catch(e) {
-      console.error(`Error on POST ${url}`)
-      console.error(e)  
+      if (this.config?.silent_fail !== true) {
+        console.error(`Error on POST ${url}`)
+        console.error(e)
+      }
+
       return {
-        data: undefined,
+        data: e,
         status: -1
       }
     }

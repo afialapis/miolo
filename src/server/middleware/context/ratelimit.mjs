@@ -9,8 +9,7 @@ function init_rate_limit_middleware(app, config) {
   /* eslint-disable no-unused-vars */
   const miolo= app.context.miolo
 
-  //const _get_ip = (ctx) => ctx.ip
-  const _get_ip = (ctx) => ctx.headers["x-real-ip"] || ctx.ip || '127.0.0.1'
+  const _get_ip = (ctx) => ctx.headers["x-real-ip"] || ctx.headers["x-orig-ip"] || ctx.ip || '127.0.0.1'
 
   const ipsum_ips = ipsum_read_ips(config?.ipsum_folder, undefined, miolo.logger)
 

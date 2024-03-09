@@ -5,7 +5,7 @@ import getQueriesConfig from './queries/getQueriesConfig.mjs'
 import attachQueriesRoutes from './queries/attachQueriesRoutes.mjs'
 
 
-function init_router(app, connection, routes) {
+function init_router(app, routes) {
   const logger = app.context.miolo.logger
 
   // Init the Koa Router
@@ -26,7 +26,7 @@ function init_router(app, connection, routes) {
 
     // attach CRUD routes
     if (crudConfigsOk) {
-      attachCrudRoutes(connection, router, crudConfigs, logger)
+      attachCrudRoutes(router, crudConfigs, logger)
     }
 
     // create routes for queries
@@ -34,12 +34,10 @@ function init_router(app, connection, routes) {
       attachQueriesRoutes(router, queriesConfigs, logger)
     }
   } catch(e) {
-    logger.error(e)
-    logger.error('[miolo-router] Error initing the router. Probably config objects are not ok')
-    logger.error('[miolo-router] connOrConfig:')
-    logger.error(connection?.config)
+    logger.error('[miolo-router] Error initing the router.')
     logger.error('[miolo-router] routes:')
     logger.error(routes)
+    logger.error(e)
     
   }
 

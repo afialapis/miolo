@@ -26,17 +26,17 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
     
           if (!authenticated) {
             if (routeAuth.action=='error') {
-              logger.error(`Unauthorized access. Throwing error ${routeAuth.error_code}`)
+              ctx.miolo.logger.error(`Unauthorized access. Throwing error ${routeAuth.error_code}`)
               ctx.throw(
                 routeAuth.error_code,
                 null,
                 {}
               )
             } else if (routeAuth.action=='redirect') {
-              logger.warn(`Unauthorized access. Redirecting to ${routeAuth.redirect_url}`)
+              ctx.miolo.logger.warn(`Unauthorized access. Redirecting to ${routeAuth.redirect_url}`)
               ctx.redirect(routeAuth.redirect_url)
             } else {
-              logger.error(`Route path ${route.url} specified auth but no action`)
+              ctx.miolo.logger.error(`Route path ${route.url} specified auth but no action`)
               ctx.body= {}
             }
           }
@@ -60,7 +60,7 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
               }
             }
           } catch(e) {
-            logger.error(`[miolo-router] Error while trying to qet query params for ${ctx.request.url}`)
+            ctx.miolo.logger.error(`[miolo-router] Error while trying to qet query params for ${ctx.request.url}`)
           }
 
           const authenticated = await _route_auth_callback(ctx)
@@ -83,8 +83,8 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
             result= await route.after(ctx, result)
           }
         } catch(error) {
-          logger.error(`[miolo-router] Unexpected error on Query ${route.name}`)
-          logger.error(error)
+          ctx.miolo.logger.error(`[miolo-router] Unexpected error on Query ${route.name}`)
+          ctx.miolo.logger.error(error)
         }
 
         return result

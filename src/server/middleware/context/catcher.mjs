@@ -9,8 +9,9 @@ function init_catcher_middleware(app) {
   const logger= app.context.miolo.logger
   
   async function catcher_middleware(err) {
-
     if (!err) return
+
+    const ip = this.headers["x-real-ip"] || this.headers["x-orig-ip"] || this.ip || '127.0.0.1'
 
     // Get HTML status code
     let status = err.status || 400
@@ -25,7 +26,7 @@ function init_catcher_middleware(app) {
     // Log the error depending on the status
 
     if (_ONLY_WARN.indexOf(status)>=0) {
-      logger.warn(`${this.method} ${this.url} - ${status}: ${err.message}`)
+      logger.warn(`[${ip}] ${this.method} ${this.url} - ${status}: ${err.message}`)
     } else {
       logger.error(err)
     }

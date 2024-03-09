@@ -20,7 +20,7 @@ const sqlite = {
   cached: true
 }
 
-export const makeConfig = (dbType) => {
+export const makeConfig = (dbType, logLevel= 'warn') => {
   return {
     http: {
       port: 8001,
@@ -43,31 +43,13 @@ export const makeConfig = (dbType) => {
     },    
     db: {
       config: dbType==='postgres' ? postgres : sqlite,
-      tables: [
-        {
-          name: 'test_01',
-          schema: 'public',
-          useDateFields: {
-            use: true,
-            fieldNames: {
-              created_at: 'created_at', 
-              last_update_at: 'last_update_at'
-            },
-            now: () => 999
-          },
-          triggers: {
-            // eslint-disable-next-line
-            afterInsert: async (conn, id, params, options) => {
-              return 777
-            }
-          }
-        }
-      ],
-      log: 'error',
+      options: {
+        log: logLevel
+      }
     },
     log: {
-      level: 'none',
-      console: { enabled: true, level: 'none' },
+      level: logLevel,
+      console: { enabled: true, level: logLevel },
     },
     routes: {
       crud: [
