@@ -7,6 +7,22 @@ let REQUEST_COUNTER= {
   total: 0
 }
 
+function _validate_ip(ipaddress) {  
+  if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {  
+    return true
+  }
+  return false
+}
+
+const _get_ip = (ctx) => {
+  const chances = [ctx.headers["x-real-ip"], ctx.headers["x-orig-ip"], ctx.ip, '127.0.0.1']
+  for (const ch of chances) {
+    if (_validate_ip(ch)) {
+      return ch
+    }
+  }
+}
+
 /**
  * Middleware for feed and log the request
  */
@@ -30,7 +46,7 @@ function init_request_middleware(app, config) {
  
   async function request_middleware(ctx, next) {
     const logger = ctx.miolo.logger
-    const ip = ctx.headers["x-real-ip"] || ctx.headers["x-orig-ip"] || ctx.ip || '127.0.0.1'
+    const ip = _get_ip(ctx)
     const started = performance.now()
 
     // Patch for koa-better-body

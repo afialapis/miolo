@@ -9,20 +9,20 @@ function init_rate_limit_middleware(app, config) {
   /* eslint-disable no-unused-vars */
   const miolo= app.context.miolo
 
-  const _get_ip = (ctx) => ctx.headers["x-real-ip"] || ctx.headers["x-orig-ip"] || ctx.ip || '127.0.0.1'
+  //const _get_ip = (ctx) => ctx.headers["x-real-ip"] || ctx.headers["x-orig-ip"] || ctx.ip || '127.0.0.1'
 
   const ipsum_ips = ipsum_read_ips(config?.ipsum_folder, undefined, miolo.logger)
 
   const _def_whitelist = (ctx) => {
     const ips = config?.whitelist_ips || []
     if (ips) {
-      return ips.indexOf(_get_ip(ctx))>=0
+      return ips.indexOf(ctx.request.ip)>=0
     }
     return false
   }
 
   const _def_blacklist = (ctx) => {
-    const ip = _get_ip(ctx)
+    const ip = ctx.request.ip
     const ips = [
       ... ipsum_ips,
       ... CUSTOM_BLACKLIST_IPS,
@@ -44,7 +44,7 @@ function init_rate_limit_middleware(app, config) {
     driver: 'memory',
     db: rateLimitDB,
 
-    id: _get_ip,
+    id: (ctx) => ctx.request.ip,
     headers: {
       remaining: 'Rate-Limit-Remaining',
       reset: 'Rate-Limit-Reset',

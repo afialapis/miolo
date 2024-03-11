@@ -4,7 +4,8 @@ import {Reader} from '@maxmind/geoip2-node'
 let _geoip_reader = undefined
 
 let _geoip_local_ips= [
-  '127.0.0.1'
+  '127.0.0.1',
+  '::1:'
 ]
 
 function _geoip_init(db = '/var/lib/GeoIP/GeoLite2-City.mmdb', local_ips = ['127.0.0.1'], logger= console) {
