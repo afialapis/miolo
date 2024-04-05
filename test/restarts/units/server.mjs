@@ -14,7 +14,7 @@ export function test_restarts_server_start () {
     it(`[miolo-test-restarts][server] should start app`, async function() {
       app = test_server(dbType)
       await app.start()
-      conn = app.context.miolo.db.getConnection(dbType, {
+      conn = await app.context.miolo.db.getConnection(dbType, {
         reset: true
       })
 
@@ -35,7 +35,7 @@ export function test_restarts_server_start () {
         )`
       await conn.execute(query)
 
-      const Test01 = conn.getModel('test_01')
+      const Test01 = await conn.getModel('test_01')
       for (const rec of data) {
         await Test01.insert(rec)
       }

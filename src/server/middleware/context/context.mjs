@@ -8,7 +8,7 @@ const init_context_middleware = ( app, config ) => {
   const logger = init_logger(config.log, emailer, config?.name)
   const parser = init_parser()
   
-  const getConnectionWrap = (options) => {
+  const getConnectionWrap = async (options) => {
 
     const dbOptions= {
       ...config.db.options,
@@ -16,7 +16,7 @@ const init_context_middleware = ( app, config ) => {
       log: logger
     }
 
-    let conn = getConnection(config.db.config, dbOptions)
+    let conn = await getConnection(config.db.config, dbOptions)
 
     // Maybe we need to force some conn is retrieved?
     //
@@ -29,7 +29,7 @@ const init_context_middleware = ( app, config ) => {
     return conn
   }
 
-  const getModelWrap = (name, options) => {
+  const getModelWrap = async (name, options) => {
 
     const dbOptions= {
       ...config.db.options,
@@ -37,13 +37,19 @@ const init_context_middleware = ( app, config ) => {
       log: logger
     }
 
-    const conn = getConnection(config.db.config, dbOptions)
+    const conn = await getConnection(config.db.config, dbOptions)
     return conn.getModel(name)
   }  
 
   const db= {
-    initConnection: () => {return getConnectionWrap({reset: true})},
-    flyConnection: () => {return getConnectionWrap({nocache: true})},
+    initConnection: async () => {
+      const conn = await getConnectionWrap({reset: true})
+      return conn
+    },
+    flyConnection: async () => {
+      const conn = await getConnectionWrap({cache: false})
+      return conn
+    },
     getConnection: getConnectionWrap,
     getModel: getModelWrap,
     dropConnections

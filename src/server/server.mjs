@@ -114,7 +114,7 @@ function miolo(sconfig, render) {
   // Util callbacks
   app.start = async () => {
     // Init and reset db connection
-    app.context.miolo.db.initConnection()
+    await app.context.miolo.db.initConnection()
     
     await app.http.start()
     app.cron.start()

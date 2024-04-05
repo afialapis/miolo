@@ -24,13 +24,12 @@ function test_app_base (authType, callback) {
 
     it(`[miolo-test-app][${authType}] should start app`, async function() {
       app = await test_server(authType)
-      //conn = app.context.miolo.db.getConnection()
-
+      
       assert.strictEqual(app.context.miolo.config.auth_type, authType)
     })
 
     it(`[miolo-test-app][${authType}] should prepare database`, async function() {
-      const conn = app.context.miolo.db.getConnection()
+      const conn = await app.context.miolo.db.getConnection()
       await users_make_table_from_conn(conn)
       await todos_make_table_from_conn(conn)
     })

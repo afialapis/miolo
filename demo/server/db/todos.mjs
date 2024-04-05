@@ -1,11 +1,11 @@
 import {intre_now} from 'intre'
 
 async function todos_read(miolo, params) {
-  const conn= miolo.db.getConnection()
+  const conn= await miolo.db.getConnection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const Todos = conn.getModel('todos')
+  const Todos = await conn.getModel('todos')
   const todos = await Todos.read(options)
 
   return todos
@@ -13,7 +13,7 @@ async function todos_read(miolo, params) {
 
 
 async function todos_count_last_hour(miolo, params) { 
-  const conn= miolo.db.getConnection()
+  const conn= await miolo.db.getConnection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
@@ -31,11 +31,11 @@ async function todos_count_last_hour(miolo, params) {
 }
 
 async function todos_insert_fake(miolo, params) {
-  const conn= miolo.db.getConnection()
+  const conn= await miolo.db.getConnection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const Todos = conn.getModel('todos')
+  const Todos = await conn.getModel('todos')
 
   const d= {
     name: 'Fake todo',

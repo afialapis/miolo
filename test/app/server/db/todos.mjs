@@ -19,16 +19,16 @@ export async function todos_make_table_from_conn(conn) {
 }
 
 export async function todos_make_table(miolo) {
-  const conn= miolo.db.getConnection()
+  const conn = await miolo.db.getConnection()
   return todos_make_table_from_conn(conn)
 }
 
 export async function todos_read(miolo, params) {
-  const conn= miolo.db.getConnection()
+  const conn = await miolo.db.getConnection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const Todos = conn.getModel('todos')
+  const Todos = await conn.getModel('todos')
   const todos = await Todos.read(options)
 
   return todos
@@ -36,7 +36,7 @@ export async function todos_read(miolo, params) {
 
 
 export async function todos_count_last_hour(miolo, params) { 
-  const conn= miolo.db.getConnection()
+  const conn = await miolo.db.getConnection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
@@ -56,11 +56,11 @@ export async function todos_count_last_hour(miolo, params) {
 }
 
 export async function todos_insert_fake(miolo, params) {
-  const conn= miolo.db.getConnection()
+  const conn = await miolo.db.getConnection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const Todos = conn.getModel('todos')
+  const Todos = await conn.getModel('todos')
 
   const d= {
     name: 'Fake todo',

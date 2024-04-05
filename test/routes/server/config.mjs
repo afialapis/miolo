@@ -75,7 +75,7 @@ export const makeConfig = (dbType, logLevel= 'warn') => {
             url: '/query',
             method: 'GET',
             callback: async (ctx) => {
-              const conn= ctx.miolo.db.getConnection()
+              const conn = await ctx.miolo.db.getConnection()
               const res= await conn.selectOne('select * from test_01 where name = $1', ['Peter'], {})            
               ctx.body= res
             }

@@ -20,7 +20,7 @@ async function q_todos_insert_fake(ctx) {
   ctx.body = {id: tid}
 }
 async function q_todos_clean(ctx) {
-  const conn= ctx.miolo.db.getConnection()
+  const conn= await ctx.miolo.db.getConnection()
   const qry= 'DELETE FROM todos'
   const res= await conn.executeAndCount(qry)
 

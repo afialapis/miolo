@@ -23,7 +23,7 @@ function init_cacher(config) {
 
   const _getKey    = promisify(client.get).bind(client)
   const _existsKey = promisify(client.exists).bind(client)
-  const _setKey   = promisify(client.set).bind(client)
+  const _setKey    = promisify(client.set).bind(client)
   const _delKey    = promisify(client.del).bind(client)
 
   async function redisGet (key) {

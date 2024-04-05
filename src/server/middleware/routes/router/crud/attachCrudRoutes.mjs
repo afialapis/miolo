@@ -51,7 +51,7 @@ function attachCrudRoutes(router, crudConfigs, logger) {
       }
 
       const _crud_callback = async (ctx, op, callback) => {
-        const model= ctx.miolo.db.getModel(route.name)
+        const model = await ctx.miolo.db.getModel(route.name)
 
         if (! model) {
           ctx.miolo.logger.error(`[miolo-router] Could not get model for ${route.name}`)

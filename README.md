@@ -36,3 +36,11 @@ render:
     ctx.session.token (if guest auth)
                  
 
+
+
+# Changelog
+
+## 0.10.0
+
+- upgraded `calustra` to `0.11.0`. After newer cache handling, `getConnection()` and `getModel()` are `async`.
+- upgraded every other dependency

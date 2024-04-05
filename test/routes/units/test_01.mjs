@@ -23,8 +23,7 @@ function test_01 (dbType) {
 
     it(`[miolo-test-routes][${dbType}] should start app`, async function() {
       app = await test_server(dbType)
-      conn = app.context.miolo.db.getConnection(dbType, {
-        //nocache: true,
+      conn = await app.context.miolo.db.getConnection(dbType, {
         reset: true
       })
 
@@ -44,7 +43,7 @@ function test_01 (dbType) {
         )`
       await conn.execute(query)
 
-      const Test01 = conn.getModel('test_01')
+      const Test01 = await conn.getModel('test_01')
       for (const rec of data) {
         await Test01.insert(rec)
       }

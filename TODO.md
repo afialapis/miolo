@@ -15,14 +15,6 @@ https://stackoverflow.com/a/60985636
 hostname cli vs server?
 añadir chpwsd endpoint
 
-# Logger
-
-Si se especifica config.db.options.log, que ese level afecte solo a calustra.
-Hay que rear otra instancia del logger en middleware/context, al inicializar getConnection().
-Aunque no se si dos instancias romperan algo aqui.
-
-
-
 # Auth
 
 ## Basic auth
