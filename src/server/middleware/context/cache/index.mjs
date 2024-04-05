@@ -20,25 +20,25 @@ export function init_context_cache(config, logger) {
   }
 
 
-  const getCache = async (name) => {
+  const get_cache = async (name) => {
     const cache_stores = await _init_cache_stores()
     return cache_stores[name]
   }
-  const getCacheNames = async () => {
+  const get_cache_names = async () => {
     const cache_stores = await _init_cache_stores()
     return Object.keys(cache_stores)
   }
 
-  const dropCache = async (name, clean) => {
+  const drop_cache = async (name, clean) => {
     const cache_stores = await _init_cache_stores()
     if (clean) {
-      const cache = await getCache(name)
+      const cache = await get_cache(name)
       cache.unsetAll()
     }
     delete cache_stores[name]
   }
 
-  const dropCaches = async (clean) => {
+  const drop_caches = async (clean) => {
     if (clean) {
       const cache_stores = await _init_cache_stores()
       for(const [_name, cache] of Object.entries(cache_stores)) {
@@ -50,10 +50,10 @@ export function init_context_cache(config, logger) {
   }
 
   const cache_ctx = {
-    getCache,
-    getCacheNames,
-    dropCache,
-    dropCaches
+    get_cache,
+    get_cache_names,
+    drop_cache,
+    drop_caches
   }
 
   return cache_ctx

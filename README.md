@@ -42,5 +42,14 @@ render:
 
 ## 0.10.0
 
-- upgraded `calustra` to `0.11.0`. After newer cache handling, `getConnection()` and `getModel()` are `async`.
+
+
+- `context.miolo.db.initConnection` is now `context.miolo.db.init_connection`
+- `context.miolo.db.getConnection` is now `context.miolo.db.get_connection`
+- `context.miolo.db.getModel` is now `context.miolo.db.get_model`
+- `context.miolo.db.dropConnection` is now `context.miolo.db.drop_connection`
+- `connection.getModel` is now `connection.get_model`
+- added `context.miolo.cache: {get_cache, get_cache_names,drop_cache,drop_caches}}`
+
+- upgraded `calustra` to `0.11.0`. After newer cache handling, `get_connection()`, `get_model()`, etc. are `async`.
 - upgraded every other dependency. Major version changes: @koa/cors, @maxmind/geoip2-node cron, winston-daily-rotate-file and nodemon.

@@ -29,7 +29,7 @@ function test_app_base (authType, callback) {
     })
 
     it(`[miolo-test-app][${authType}] should prepare database`, async function() {
-      const conn = await app.context.miolo.db.getConnection()
+      const conn = await app.context.miolo.db.get_connection()
       await users_make_table_from_conn(conn)
       await todos_make_table_from_conn(conn)
     })

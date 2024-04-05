@@ -15,7 +15,7 @@ const get_user_id = (user, done, miolo) => {
 
 const find_user_by_id = (id, done, miolo) => {
   //console.log('[miolo-test-app][credentials] find_user_by_id()', id)
-  miolo.db.getConnection().then((conn) => {
+  miolo.db.get_connection().then((conn) => {
     q_find_user_by_id(conn, id).then(user => {
       if (user==undefined) {
         done('User not found', null)
@@ -35,7 +35,7 @@ const local_auth_user = (username, password, done, miolo) => {
 
   //console.log('[miolo-test-app][credentials] local_auth_user() - checking credentials for ', username)
 
-  miolo.db.getConnection().then((conn) => {
+  miolo.db.get_connection().then((conn) => {
     q_auth_user(conn, username, password).then(user => {
       //console.log('[miolo-test-app][credentials] local_auth_user() - User logged in', user)
   

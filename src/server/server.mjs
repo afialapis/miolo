@@ -114,14 +114,14 @@ function miolo(sconfig, render) {
   // Util callbacks
   app.start = async () => {
     // Init and reset db connection
-    await app.context.miolo.db.initConnection()
+    await app.context.miolo.db.init_connection()
     
     await app.http.start()
     app.cron.start()
   }
   
   app.stop = async () => {
-    app.context.miolo.db.dropConnections()
+    app.context.miolo.db.drop_connections()
     await app.http.stop()
     app.cron.stop()
   }

@@ -3,7 +3,7 @@ import {  miolo_cacher_options_for_calustra } from './cache/options.mjs'
 
 export function init_context_db (config, logger) {
 
-  const getConnectionWrap = async (options) => {
+  const get_connection_wrap = async (options) => {
 
     const dbOptions= {
       ...config.db.options,
@@ -15,6 +15,7 @@ export function init_context_db (config, logger) {
     
 
     let conn = await getConnection(config.db.config, dbOptions)
+    conn.get_model = conn.getModel
 
     // Maybe we need to force some conn is retrieved?
     //
@@ -27,7 +28,7 @@ export function init_context_db (config, logger) {
     return conn
   }
 
-  const getModelWrap = async (name, options) => {
+  const get_model_wrap = async (name, options) => {
 
     const dbOptions= {
       ...config.db.options,
@@ -36,21 +37,21 @@ export function init_context_db (config, logger) {
     }
 
     const conn = await getConnection(config.db.config, dbOptions)
-    return conn.getModel(name)
+    return conn.get_model(name)
   }  
 
   const db= {
-    initConnection: async () => {
-      const conn = await getConnectionWrap({reset: true})
+    init_connection: async () => {
+      const conn = await get_connection_wrap({reset: true})
       return conn
     },
-    flyConnection: async () => {
-      const conn = await getConnectionWrap({cache: false})
+    fly_connection: async () => {
+      const conn = await get_connection_wrap({cache: false})
       return conn
     },
-    getConnection: getConnectionWrap,
-    getModel: getModelWrap,
-    dropConnections
+    get_connection: get_connection_wrap,
+    get_model: get_model_wrap,
+    drop_connections: dropConnections
   }
 
   return db

@@ -50,8 +50,7 @@ const {demo_server} = require('./server.mjs')
 let authType= 'credentials'
 try {
   authType= process.argv[2].replace('--', '')
-} catch(_) {
-  console.log(`Running demo-credentials...`)
-}
+} catch(_) {}
 
+console.log(`[miolo-demo-${authType}][server] Starting...`)
 demo_server(authType)

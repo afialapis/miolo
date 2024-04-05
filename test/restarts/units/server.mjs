@@ -14,7 +14,7 @@ export function test_restarts_server_start () {
     it(`[miolo-test-restarts][server] should start app`, async function() {
       app = test_server(dbType)
       await app.start()
-      conn = await app.context.miolo.db.getConnection(dbType, {
+      conn = await app.context.miolo.db.get_connection(dbType, {
         reset: true
       })
 
@@ -35,7 +35,7 @@ export function test_restarts_server_start () {
         )`
       await conn.execute(query)
 
-      const Test01 = await conn.getModel('test_01')
+      const Test01 = await conn.get_model('test_01')
       for (const rec of data) {
         await Test01.insert(rec)
       }
@@ -67,7 +67,7 @@ export function test_restarts_server_cache_set() {
       // app.context.miolo.logger.info(`[miolo-test-restarts][server] Let's save some value on cache...`)
       random_value = Math.random().toString()
       
-      const cache = await app.context.miolo.cache.getCache('test')
+      const cache = await app.context.miolo.cache.get_cache('test')
       await cache.setItem('test-value', random_value)
     })
   })
@@ -78,7 +78,7 @@ export function test_restarts_server_cache_check() {
     it(`[miolo-test-restarts][server][cache-check] should check some value on cache`, async function() {
       // app.context.miolo.logger.info(`[miolo-test-restarts][server] Let's check some value on cache...`)
 
-      const cache = await app.context.miolo.cache.getCache('test')
+      const cache = await app.context.miolo.cache.get_cache('test')
       const value = await cache.getItem('test-value')
       assert.strictEqual(value, random_value)
     })

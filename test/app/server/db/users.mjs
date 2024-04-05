@@ -29,7 +29,7 @@ export async function users_make_table_from_conn(conn) {
 }
 
 export async function users_make_table(miolo) {
-  const conn = await miolo.db.getConnection()
+  const conn = await miolo.db.get_connection()
   return users_make_table_from_conn(conn)
 }
 

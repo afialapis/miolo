@@ -385,7 +385,7 @@ export default {
     },
     
     // custom cache instances
-    // will be inited by miolo, and available through ctx.miolo.cache.getCache('name')
+    // will be inited by miolo, and available through ctx.miolo.cache.get_cache('name')
     custom: {
      // <name>: {options}
     }
