@@ -14,9 +14,11 @@ const get_user_id = (user, done, miolo) => {
 }
 
 const find_user_by_id = (id, done, miolo) => {
-  //console.log('[miolo-test-app][credentials] find_user_by_id()', id)
+  // console.log('[miolo-test-app][credentials] find_user_by_id()', id)
   miolo.db.getConnection().then((conn) => {
     q_find_user_by_id(conn, id).then(user => {
+      // console.log('[miolo-test-app][credentials] find_user_by_id()', JSON.stringify(user))
+
       if (user==undefined) {
         done('User not found', null)
       } else {
@@ -31,11 +33,11 @@ const local_auth_user = (username, password, done, miolo) => {
   // noauth=> done(null, false, {message: ''}) 
   // err=> done(error, null)
 
-  //console.log('[miolo-test-app][credentials] local_auth_user() - checking credentials for ', username)
+  // console.log('[miolo-test-app][credentials] local_auth_user() - checking credentials for ', username)
 
-  miolo.db.getConnection((conn) => {
+  miolo.db.getConnection().then((conn) => {
     q_auth_user(conn, username, password).then(user => {
-      //console.log('[miolo-test-app][credentials] local_auth_user() - User logged in', user)
+      // console.log('[miolo-test-app][credentials] local_auth_user() - User logged in', JSON.stringify(user))
   
       if (user==undefined) {
         done(null, false, 'Invalid credentials')

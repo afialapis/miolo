@@ -7,10 +7,10 @@ import Login from './pages/Login.mjs'
 import Logout from './pages/Logout.mjs'
 
 
-const Index = ({context}) => {
+const Index = ({authenticated}) => {
 
   // console.log('miolo-demo UI Index ')
-  // console.log(context)
+  // console.log({user, authenticated})
   
   return (
 
@@ -20,7 +20,7 @@ const Index = ({context}) => {
         <Route index          element={<Todos/>}/>
         <Route path={'todos'} element={<Todos/>}/>
 
-        { context?.authenticated
+        { authenticated
           ? <Route path={'logout'} element={<Logout/>}/>
           : <Route path={'login'} element={<Login/>}/>
         }

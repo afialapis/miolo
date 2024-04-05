@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom'
 import AppContext from './context/AppContext.mjs'
 
 const AppBrowser = ({children}) => {
+  
   return (
     <BrowserRouter>
       <AppContext context={window.__CONTEXT || {}}>

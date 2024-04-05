@@ -61,12 +61,10 @@ const AppContext = ({context, children}) => {
   }, [innerContext, mioloObj])
 
 
-
-
   const useSsrData = (name, defval, loader, modifier) => {
     return useSsrDataOrReload(innerContext, mioloObj, name, defval, loader, modifier)
   }  
-
+  
   return (
     <Context.Provider 
       value={{
