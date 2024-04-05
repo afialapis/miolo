@@ -101,6 +101,13 @@ export const makeConfig = (dbType, logLevel= 'warn') => {
       guest: {
 
       }
+    },
+    cache: {
+      custom: {
+        test: {
+          ttl: 5 * 1000
+        }
+      }
     }
   }
 }

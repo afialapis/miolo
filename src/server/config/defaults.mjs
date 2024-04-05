@@ -7,6 +7,8 @@ const __my_dirname = path.dirname(__my_filename)
 
 const favicon = path.resolve(__my_dirname, '../static/img/miolo.ico')
 
+const SESSION_MAX_AGE = 86400 * 30 * 1000
+
 export default {
   name: 'miolo',
   http: {
@@ -70,7 +72,7 @@ export default {
       /** (number || 'session') maxAge in ms (default is 1 days) */
       /** 'session' will result in a cookie that expires when session/browser is closed */
       /** Warning: If a session cookie is stolen, this cookie will never expire */
-      maxAge: 86400000,
+      maxAge: SESSION_MAX_AGE,
       
       /** (boolean) automatically commit headers (default true) */
       //autoCommit: true, 
@@ -113,10 +115,16 @@ export default {
         idleTimeoutMillis: 10000,  // The maximum time, in milliseconds, that a connection can be idle before being released. Use with combination of evict for proper working, for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
     },
     options: {
+      tables: []
+
+      // cache:
+      // Refer to top level cache option
+      // cache: {...}
+      
+      // log:
       // We will pass, on the fly, miolo logger to calustra
       // But specifying a level here, we can customize the level only for db/calustra actions
       // log: 'silly', 
-      tables: []
     }
   },
   routes: {
@@ -173,12 +181,6 @@ export default {
       },
     */],
   },
-  //cacher: {
-  //  redis: {
-  //    host: '127.0.0.1',
-  //    port: 6379
-  //  },
-  //},
   log: {
     level: 'debug',
     format: {
@@ -355,6 +357,40 @@ export default {
     // check https://github.com/kelektiv/node-cron#readme
     //
     // https://crontab.guru/
-  ]
+  ],
+
+  cache: {
+    // Default options passed to cacheiro for
+    // every other cache
+    default: {
+      type: 'combined',
+      redis: {
+        host: '127.0.0.1',
+        port: 6379
+      },
+      version: 1,
+      clean: false,
+    },
+    
+    // specific cache options for calustra
+    calustra: {
+      namespace: 'miolo-calustra',
+      ttl: 86400*1000,
+    },
+
+    // specific cache options for koa-session
+    session: {
+      namespace: 'miolo-session',
+      ttl: SESSION_MAX_AGE,
+    },
+    
+    // custom cache instances
+    // will be inited by miolo, and available through ctx.miolo.cache.getCache('name')
+    custom: {
+     // <name>: {options}
+    }
+
+
+  },
 };
 

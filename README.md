@@ -43,4 +43,4 @@ render:
 ## 0.10.0
 
 - upgraded `calustra` to `0.11.0`. After newer cache handling, `getConnection()` and `getModel()` are `async`.
-- upgraded every other dependency
+- upgraded every other dependency. Major version changes: @koa/cors, @maxmind/geoip2-node cron, winston-daily-rotate-file and nodemon.

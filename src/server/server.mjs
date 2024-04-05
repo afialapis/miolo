@@ -1,12 +1,12 @@
 import Koa                                from 'koa'
 import { init_config }                    from './config/index.mjs'
 
-import { init_context_middleware }        from './middleware/context/context.mjs'
-import { init_body_middleware }           from './middleware/context/body.mjs'
-import { init_catcher_middleware }        from './middleware/context/catcher.mjs'
-import { init_rate_limit_middleware }     from './middleware/context/ratelimit.mjs'
+import { init_context_middleware }        from './middleware/context/index.mjs'
+import { init_body_middleware }           from './middleware/http/body.mjs'
+import { init_catcher_middleware }        from './middleware/http/catcher.mjs'
+import { init_rate_limit_middleware }     from './middleware/http/ratelimit.mjs'
 import { init_static_middleware }         from './middleware/static/index.mjs'
-import { init_request_middleware }        from './middleware/context/request.mjs'
+import { init_request_middleware }        from './middleware/http/request.mjs'
 import { init_route_robots }              from './middleware/routes/robots/index.mjs'
 import { init_route_catch_js_error}       from './middleware/routes/catch_js_error.mjs'
 
@@ -16,7 +16,7 @@ import {init_credentials_auth_middleware} from'./middleware/auth/credentials/ind
 import {init_custom_auth_middleware}      from'./middleware/auth/custom.mjs'
 
 import { init_extra_middlewares }         from './middleware/extra.mjs'
-import { init_headers_middleware }        from './middleware/context/headers.mjs'
+import { init_headers_middleware }        from './middleware/http/headers.mjs'
 import { init_router }                    from './middleware/routes/router/index.mjs'
 
 import { init_ssr_render_middleware}      from './middleware/render/ssr/render.mjs'

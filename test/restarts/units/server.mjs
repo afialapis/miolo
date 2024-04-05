@@ -5,7 +5,7 @@ import test_server from '../server/index.mjs'
 const dbType= 'postgres'
 let app
 let conn
-
+let random_value
 
 export function test_restarts_server_start () {  
 
@@ -57,6 +57,30 @@ export function test_restarts_server_stop() {
     it(`[miolo-test-restarts][server][stop] should stop server`, async function() {
       app.context.miolo.logger.info(`[miolo-test-restarts][server] Let's stop the server...`)
       await app.stop()
+    })
+  })
+}
+
+export function test_restarts_server_cache_set() {
+  describe(`[miolo-test-restarts][server][cache-set]`, function() {
+    it(`[miolo-test-restarts][server][cache-set] should set some value on cache`, async function() {
+      // app.context.miolo.logger.info(`[miolo-test-restarts][server] Let's save some value on cache...`)
+      random_value = Math.random().toString()
+      
+      const cache = await app.context.miolo.cache.getCache('test')
+      await cache.setItem('test-value', random_value)
+    })
+  })
+}
+
+export function test_restarts_server_cache_check() {
+  describe(`[miolo-test-restarts][server][cache-check]`, function() {
+    it(`[miolo-test-restarts][server][cache-check] should check some value on cache`, async function() {
+      // app.context.miolo.logger.info(`[miolo-test-restarts][server] Let's check some value on cache...`)
+
+      const cache = await app.context.miolo.cache.getCache('test')
+      const value = await cache.getItem('test-value')
+      assert.strictEqual(value, random_value)
     })
   })
 }
