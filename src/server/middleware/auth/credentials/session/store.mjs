@@ -38,7 +38,8 @@ class SessionStore {
       svalue = JSON.stringify(sess)
     } catch(_) {}
 
-    await cache.setItem(key, svalue, maxAge)
+    // Rely on miolo settings for ttl / maxAge
+    await cache.setItem(key, svalue /*, maxAge*/)
   }
   
   async destroy(key, {ctx}) {

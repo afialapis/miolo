@@ -64,6 +64,9 @@ render:
 
 # Changelog
 
+## 0.10.2
+- Rely on miolo settings for cached session's ttl
+
 ## 0.10.1
 - Upgraded `cacheiro`
 - Session is cached on `cacheiro` and using `miolo` config.
