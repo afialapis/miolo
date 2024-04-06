@@ -25,7 +25,7 @@ const def_local_auth_user = (username, password, done, miolo) => {
 }
 
 
-const init_credentials_auth_middleware = ( app, options, sessionConfig ) => {
+const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheConfig) => {
   const {get_user_id, find_user_by_id, local_auth_user, 
          url_login, url_logout, url_login_redirect, url_logout_redirect} = options
 
@@ -56,7 +56,7 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig ) => {
       local_auth_user_f(username, password, done, app.context.miolo)
   })
 
-  init_session_middleware(app, sessionConfig)
+  init_session_middleware(app, sessionConfig, cacheConfig)
   
   passport.serializeUser(serialize_user)
   passport.deserializeUser(deserialize_user)

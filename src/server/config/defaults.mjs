@@ -7,7 +7,7 @@ const __my_dirname = path.dirname(__my_filename)
 
 const favicon = path.resolve(__my_dirname, '../static/img/miolo.ico')
 
-const SESSION_MAX_AGE = 86400 * 30 * 1000
+const SESSION_MAX_AGE = 86400 * 10 * 1000
 
 export default {
   name: 'miolo',

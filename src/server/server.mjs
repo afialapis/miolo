@@ -73,7 +73,7 @@ function miolo(sconfig, render) {
   }
 
   if (config.auth_type == 'credentials') {
-    init_credentials_auth_middleware(app, config.auth.credentials, config?.session)
+    init_credentials_auth_middleware(app, config.auth.credentials, config?.session, config?.cache)
   }
 
   if (config.auth_type == 'custom') {

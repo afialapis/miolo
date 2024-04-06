@@ -1,6 +1,30 @@
-API
+![miolo logo](https://www.afialapis.com/os/miolo/logo.png)
+[![NPM Version](https://badge.fury.io/js/miolo.svg)](https://www.npmjs.com/package/miolo)
+[![NPM Downloads](https://img.shields.io/npm/dm/miolo.svg?style=flat)](https://www.npmjs.com/package/miolo)
 
-blablabla
+
+---
+
+> **miolo**. substantivo masculino plural:
+
+> **1.** popular **Encéfalo.**
+
+> _Disque aínda se vían os miolos esparexidos polo chan._
+
+
+> **2. Parte interior do pan.**
+
+> _Prefiro o miolo á codia._
+
+
+> **4.** figurado **Parte fundamental ou máis importante de algo.**
+
+> _O miolo da cuestión non é ese._
+
+
+---
+
+# Intro
 
 
 ## Server middleware
@@ -40,10 +64,11 @@ render:
 
 # Changelog
 
+## 0.10.1
+- Upgraded `cacheiro`
+- Session is cached on `cacheiro` and using `miolo` config.
+
 ## 0.10.0
-
-
-
 - `context.miolo.db.initConnection` is now `context.miolo.db.init_connection`
 - `context.miolo.db.getConnection` is now `context.miolo.db.get_connection`
 - `context.miolo.db.getModel` is now `context.miolo.db.get_model`
