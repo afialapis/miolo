@@ -29,17 +29,17 @@ function attachCrudRoutes(router, crudConfigs, logger) {
     
           if (!authenticated) {
             if (auth.action=='error') {
-              ctx.miolo.logger.error(`[miolo-router] Unauthorized access. Throwing error ${auth.error_code}`)
+              ctx.miolo.logger.error(`[router] Unauthorized access. Throwing error ${auth.error_code}`)
               ctx.throw(
                 auth.error_code,
                 null,
                 {}
               )
             } else if (auth.action=='redirect') {
-              ctx.miolo.logger.warn(`[miolo-router] Unauthorized access. Redirecting to ${auth.redirect_url}`)
+              ctx.miolo.logger.warn(`[router] Unauthorized access. Redirecting to ${auth.redirect_url}`)
               ctx.redirect(auth.redirect_url)
             } else {
-              ctx.miolo.logger.error(`[miolo-router] Crud path ${route.url} specified auth but no action`)
+              ctx.miolo.logger.error(`[router] Crud path ${route.url} specified auth but no action`)
               ctx.body= {}
             }
           }
@@ -54,8 +54,8 @@ function attachCrudRoutes(router, crudConfigs, logger) {
         const model = await ctx.miolo.db.get_model(route.name)
 
         if (! model) {
-          ctx.miolo.logger.error(`[miolo-router] Could not get model for ${route.name}`)
-          throw new Error(`[miolo-router] Could not get model for ${route.name}`)
+          ctx.miolo.logger.error(`[router] Could not get model for ${route.name}`)
+          throw new Error(`[router] Could not get model for ${route.name}`)
         }
 
         let result = {}
@@ -93,7 +93,7 @@ function attachCrudRoutes(router, crudConfigs, logger) {
             result= await route.after(ctx, result)
           }
         } catch(error) {
-          ctx.miolo.logger.error(`[miolo-router] Unexpected error on CRUD ${route.name}-${op}`)
+          ctx.miolo.logger.error(`[router] Unexpected error on CRUD ${route.name}-${op}`)
           ctx.miolo.logger.error(error)
         }
 
@@ -186,7 +186,7 @@ function attachCrudRoutes(router, crudConfigs, logger) {
         url= url.replace(/\/\//g, "/")
       }
 
-      logger.info(`[miolo-router] Routing table ${route.name} to ${url}`)
+      logger.info(`[router] Routing table ${route.name} to ${url}`)
 
       const allowRead = route.mode.indexOf('r')>=0
       const allowDelete = route.mode.indexOf('w')>=0

@@ -18,7 +18,7 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
       const routeAuth = route.auth
       const checkAuth= (routeAuth.require===true) || (routeAuth.require==='read-only' && route.method==='POST')
   
-      logger.info(`[miolo-router] Routing ${route.callback?.name || 'callback'} to ${route.method} ${url}${checkAuth ? ' (auth)' : ''}`)
+      logger.info(`[router] Routing ${route.callback?.name || 'callback'} to ${route.method} ${url}${checkAuth ? ' (auth)' : ''}`)
 
       const _route_auth_callback = async (ctx) => {
         const authenticated= ctx?.session?.authenticated === true
@@ -60,7 +60,7 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
               }
             }
           } catch(e) {
-            ctx.miolo.logger.error(`[miolo-router] Error while trying to qet query params for ${ctx.request.url}`)
+            ctx.miolo.logger.error(`[router] Error while trying to qet query params for ${ctx.request.url}`)
           }
 
           const authenticated = await _route_auth_callback(ctx)
@@ -83,7 +83,7 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
             result= await route.after(ctx, result)
           }
         } catch(error) {
-          ctx.miolo.logger.error(`[miolo-router] Unexpected error on Query ${route.name}`)
+          ctx.miolo.logger.error(`[router] Unexpected error on Query ${route.callback?.name} at ${url}`)
           ctx.miolo.logger.error(error)
         }
 

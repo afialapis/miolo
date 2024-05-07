@@ -3,21 +3,26 @@ import {Reader} from '@maxmind/geoip2-node'
 
 let _geoip_reader = undefined
 
-let _geoip_local_ips= [
+const _geoip_def_local_ips= [
   '127.0.0.1',
   '::1:'
 ]
 
-function _geoip_init(db = '/var/lib/GeoIP/GeoLite2-City.mmdb', local_ips = ['127.0.0.1'], logger= console) {
+function _geoip_is_local(ip, local_ips = []) {
+  const all_local_ips = [
+      ..._geoip_def_local_ips,
+      ...local_ips || []
+    ]
+  return all_local_ips.indexOf(ip) >= 0
+}
+
+
+
+function _geoip_init(db = '/var/lib/GeoIP/GeoLite2-City.mmdb', logger= console) {
   try {
     if (_geoip_reader != undefined) {
       return _geoip_reader
     }
-
-    _geoip_local_ips = [
-      ..._geoip_local_ips,
-      ...local_ips || []
-    ]
     const dbBuffer = fs.readFileSync(db)
     _geoip_reader = Reader.openBuffer(dbBuffer)
     return _geoip_reader
@@ -29,7 +34,7 @@ function _geoip_init(db = '/var/lib/GeoIP/GeoLite2-City.mmdb', local_ips = ['127
 }
 
 export const geoip_localize_ip= (ip, config, logger= console) => {
-  if (_geoip_local_ips.indexOf(ip) >= 0) {
+  if (_geoip_is_local(ip, config?.local_ips)) {
     return {
       local: true,
       country: '',
@@ -38,7 +43,7 @@ export const geoip_localize_ip= (ip, config, logger= console) => {
   }
 
   try {
-    const reader = _geoip_init(config?.db, config?.local_ipds, logger)
+    const reader = _geoip_init(config?.db, logger)
     const resp= reader.city(ip)
     return {
       country: resp.country.isoCode,

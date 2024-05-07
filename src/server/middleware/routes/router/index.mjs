@@ -21,7 +21,7 @@ function init_router(app, routes) {
     const queriesConfigsOk= queriesConfigs.length > 0
 
     if ( (!crudConfigsOk) && (!queriesConfigsOk)) {
-      throw "[miolo-router] Could not get any route from the passed <routes> param"
+      throw "[router] Could not get any route from the passed <routes> param"
     }  
 
     // attach CRUD routes
@@ -34,8 +34,8 @@ function init_router(app, routes) {
       attachQueriesRoutes(router, queriesConfigs, logger)
     }
   } catch(e) {
-    logger.error('[miolo-router] Error initing the router.')
-    logger.error('[miolo-router] routes:')
+    logger.error('[router] Error initing the router.')
+    logger.error('[router] routes:')
     logger.error(routes)
     logger.error(e)
     

@@ -3,6 +3,7 @@ export const CUSTOM_BLACKLIST_IPS= [
   '54.218.32.58',   // Amazon.com, Inc. AMAZO-ZPDX4
   '170.106.82.193', // Asia Pacific Network Information Centre (APNIC)
   '110.166.71.39',  // Asia Pacific Network Information Centre (APNIC)
+  '39.107.54.8',    // Asia Pacific Network Information Centre (APNIC)
   '205.210.31.240 ',// Palo Alto Networks, Inc (PAN-22)
   '134.122.52.203', // DigitalOcean, LLC (DO-13)
   '165.232.105.25', // DigitalOcean, LLC (DO-13)
