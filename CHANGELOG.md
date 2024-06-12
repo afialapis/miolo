@@ -1,4 +1,4 @@
-# 0.11.0
+# 0.11.1
 - upd deps like `calustra`, `intre`, etc
 
 # 0.10.3
