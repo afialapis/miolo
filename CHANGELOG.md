@@ -1,3 +1,6 @@
+# 0.11.0
+- upd deps like `calustra`, `intre`, etc
+
 # 0.10.3
 - fix config `geoip.local_ipds` typo
 - fix and make `geoip.local_ips` do something
