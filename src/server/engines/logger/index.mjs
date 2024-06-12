@@ -7,7 +7,7 @@ import {init_logger_to_mail} from './logger_mail.mjs'
 import { createLogger, format, transports } from 'winston'
 import { reopenTransportOnHupSignal } from './reopenTransportOnHupSignal.mjs'
 // import  'winston-daily-rotate-file'
-import { intre_to_str, intre_now } from 'intre'
+import { /*intre_to_str,*/ intre_now } from 'intre'
 
 const { combine, timestamp, _label, printf, errors } = format
 
