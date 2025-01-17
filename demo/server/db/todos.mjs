@@ -5,8 +5,12 @@ async function todos_read(miolo, params) {
   // TODO : handle transactions
   const options= {transaction: undefined}
 
+  miolo.logger.debug(`[todos_read] Reading todos...`, {indent: 2})
+
   const Todos = await conn.get_model('todos')
   const todos = await Todos.read(options)
+
+  miolo.logger.debug(`[todos_read] Read ${todos.length} todos!`, {indent: -2})
 
   return todos
 }

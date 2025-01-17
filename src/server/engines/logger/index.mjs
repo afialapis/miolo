@@ -30,13 +30,15 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
     warn   : 'wrn',
     error  : 'err',
   }
+  let _INDENT = 0
 
   const myFormat = info => {
     const lc = LEVEL_COLORS[info.level]
     const tm = new Date(info.timestamp)
     const ts= tm.toLocaleString(config?.format?.locale || 'en')
+    let sindent = ''.padStart(_INDENT, ' ')
     //const ts= tm.toString().substr(4, 20)
-    const log= `[${prefix}] ${lc(ts)} ${lc(LEVEL_ABBRV[info.level])} ${info.message}`
+    const log= `[${prefix}] ${lc(ts)} ${lc(LEVEL_ABBRV[info.level])} ${sindent}${info.message}`
     return info.stack
       ? `${log}\n${info.stack}`
       : log    
@@ -250,9 +252,36 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
     transports: _log_transports
   })
 
+  const _make_indented_log = (f, name) => {
+    const _indented_func = (text, opts) => {
+      if (! isNaN(opts?.indent)) {
+        const nIndent = Math.max(_INDENT + parseInt(opts?.indent), 0)
+        if (opts.indent > 0) {
+          f(text, opts)
+          _INDENT= nIndent
+        } else {
+          _INDENT= nIndent
+          f(text, opts)
+        }
+      } else {
+        f(text, opts)
+      }
+    }
+    Object.defineProperty(_indented_func, "name", { value: name });
+    return _indented_func
+  }
+
+  logger.error   = _make_indented_log(logger.error, 'error')
+  logger.warn    = _make_indented_log(logger.warn, 'warn')
+  logger.info    = _make_indented_log(logger.info, 'info')
+  logger.http    = _make_indented_log(logger.http, 'http')
+  logger.verbose = _make_indented_log(logger.verbose, 'verbose')
+  logger.debug   = _make_indented_log(logger.debug, 'debug')
+  logger.silly   = _make_indented_log(logger.silly, 'silly')
+
   //console.log(logger.transports[0])
   try {
-    logger.debug(`[logger] Inited for ${logger.transports.map(t => `${t.name} (${t.level})${t.silent ? red(' SILENT!') : ''}`).join(', ')}`)
+    logger.debug(`[logger] Inited for ${logger.transports.map(t => `${t.name} (${t.level})${t.silent ? red(' SILENT!') : ''}`).join(',')}`)
   } catch(_) {}
 
   return logger
