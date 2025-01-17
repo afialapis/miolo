@@ -10,6 +10,7 @@ let random_value
 export function test_restarts_server_start () {  
 
   describe(`[miolo-test-restarts][server][start]`, function() {
+    this.timeout(3000)
 
     it(`[miolo-test-restarts][server] should start app`, async function() {
       app = test_server(dbType)

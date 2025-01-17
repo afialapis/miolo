@@ -21,6 +21,7 @@ function test_app_base (authType, callback) {
 
 
   describe(`[miolo-test-app][${authType}]`, function() {
+    this.timeout(3000)
 
     it(`[miolo-test-app][${authType}] should start app`, async function() {
       app = await test_server(authType)

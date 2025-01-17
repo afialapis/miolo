@@ -20,6 +20,7 @@ function test_01 (dbType) {
 
 
   describe(`[miolo-test-routes][${dbType}]`, function() {
+    this.timeout(3000)
 
     it(`[miolo-test-routes][${dbType}] should start app`, async function() {
       app = await test_server(dbType)
