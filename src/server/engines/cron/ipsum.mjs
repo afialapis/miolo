@@ -125,7 +125,7 @@ export function ipsum_config() {
     onTick: (miolo, _onCompleted) => {
       const folder = miolo.config.http.ratelimit.ipsum_folder || _IPSUM_DEF_FOLDER
       ipsum_update(folder, (ips) => {
-        miolo.logger.info(`[cron][${cyan('IPsum')}] File downloaded. ${green(ips.length)} ips will be ${yellow('blacklisted')}!`)
+        miolo.logger.debug(`[cron][${cyan('IPsum')}] File downloaded. ${green(ips.length)} ips will be ${yellow('blacklisted')}!`)
       }, miolo.logger)
     },
     start: true   

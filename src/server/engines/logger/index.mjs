@@ -252,7 +252,7 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
 
   //console.log(logger.transports[0])
   try {
-    logger.info(`[logger] Inited for ${logger.transports.map(t => `${t.name} (${t.level})${t.silent ? red(' SILENT!') : ''}`).join(', ')}`)
+    logger.debug(`[logger] Inited for ${logger.transports.map(t => `${t.name} (${t.level})${t.silent ? red(' SILENT!') : ''}`).join(', ')}`)
   } catch(_) {}
 
   return logger

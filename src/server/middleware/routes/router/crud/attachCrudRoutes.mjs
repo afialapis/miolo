@@ -186,7 +186,7 @@ function attachCrudRoutes(router, crudConfigs, logger) {
         url= url.replace(/\/\//g, "/")
       }
 
-      logger.info(`[router] Routing table ${route.name} to ${url}`)
+      logger.debug(`[router] Routing table ${route.name} to ${url}`)
 
       const allowRead = route.mode.indexOf('r')>=0
       const allowDelete = route.mode.indexOf('w')>=0

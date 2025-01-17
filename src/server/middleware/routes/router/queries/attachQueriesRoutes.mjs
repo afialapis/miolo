@@ -18,7 +18,7 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
       const routeAuth = route.auth
       const checkAuth= (routeAuth.require===true) || (routeAuth.require==='read-only' && route.method==='POST')
   
-      logger.info(`[router] Routing ${route.callback?.name || 'callback'} to ${route.method} ${url}${checkAuth ? ' (auth)' : ''}`)
+      logger.debug(`[router] Routing ${route.callback?.name || 'callback'} to ${route.method} ${url}${checkAuth ? ' (auth)' : ''}`)
 
       const _route_auth_callback = async (ctx) => {
         const authenticated= ctx?.session?.authenticated === true

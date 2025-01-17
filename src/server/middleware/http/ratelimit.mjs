@@ -32,7 +32,7 @@ function init_rate_limit_middleware(app, config) {
     const doit = ips.indexOf(ip)>=0
 
     if (doit) {
-      ctx.miolo.logger.info(`Rejecting ${yellow('blacklisted')} ${magenta(ip)}`)
+      ctx.miolo.logger.debug(`Rejecting ${yellow('blacklisted')} ${magenta(ip)}`)
     }
 
     return doit

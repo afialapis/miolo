@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -61,7 +61,7 @@
     "@koa/router": "^12.0.1",
     "@maxmind/geoip2-node": "^5.0.0",
     "cacheiro": "^0.2.0",
-    "calustra": "^0.12.1",
+    "calustra": "^0.12.2",
     "cron": "^3.1.7",
     "deepmerge": "^4.3.1",
     "diskspace": "^2.0.0",

@@ -13,19 +13,21 @@ export function query_string_to_json(url) {
 
 export function make_endpoint_from_fn(fn, field) {
 
-  async function endpoint_from_fn(ctx) {
-    ctx.miolo.logger.info(`[router] ${fn.name}()`)
-    
+  async function endpoint_from_fn(ctx) {    
     const params = ctx.request.fields
     try {
       ctx.miolo.logger.debug(`[router] ${fn.name}() Calling with params ${JSON.stringify(params)}`)
-    } catch (_) {}
+    } catch (_) {
+      ctx.miolo.logger.debug(`[router] ${fn.name}()Calling with params (?)`)
+    }
 
     const result = await fn(ctx.miolo, params)
 
     try {
       ctx.miolo.logger.debug(`[router] ${fn.name}() Called with result ${JSON.stringify(result)}`)
-    } catch (_) {}
+    } catch (_) {
+      ctx.miolo.logger.debug(`[router] ${fn.name}() Called with result (?)`)
+    }
 
     ctx.body = result
   }
