@@ -25,7 +25,6 @@ function test_app_base (authType, callback) {
 
     it(`[miolo-test-app][${authType}] should start app`, async function() {
       app = await test_server(authType)
-      
       assert.strictEqual(app.context.miolo.config.auth_type, authType)
     })
 

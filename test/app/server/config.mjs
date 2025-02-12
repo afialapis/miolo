@@ -12,8 +12,7 @@ export const makeConfig = (authType, logLevel= 'error') => {
       authType=='guest' ? {guest: {}}
     : authType=='basic' ? {basic: basic_auth}
     : {credentials}
-
-
+  
   return {
     http: {
       port: 8001,

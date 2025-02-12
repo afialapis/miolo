@@ -79,10 +79,18 @@ class Fetcher {
     const response = await fetch(wurl, request)
     
     if (response.redirected) {
-      if (typeof window == 'object') {
-        window.location.replace(response.url)
-      }      
-      return Promise.resolve(response)
+      const isBrowser = typeof window == 'object'
+      if (isBrowser) {
+        // JSDOM does not support navigation,  so lets skip it for tests
+        const isTest = typeof navigator !== "undefined" &&
+                        navigator.userAgent.includes("Node.js");
+        if (!isTest) {
+          window.location.replace(response.url)
+          return Promise.resolve(response)
+        } else {
+          console.error(`Response for ${wurl} is a redirect to ${response.url}. But you are in a test environment, where redirects cannot be done. Unexpected results are coming...`)
+        }
+      }
     }
   
     if (response.headers.get('content-type').indexOf('json') >= 0) {

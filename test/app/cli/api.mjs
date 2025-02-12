@@ -19,13 +19,13 @@ export const logout = async (fetcher)  => {
 
 
 export const make_users_table = async (fetcher) => {
-  const res= await fetcher.post('/crud/users/make_table', {})
+  const res= await fetcher.post('/queries/users/make_table', {})
   return res.data
 }
 
 
 export const make_todos_table = async (fetcher) => {
-  const res= await fetcher.post('/crud/todos/make_table', {})
+  const res= await fetcher.post('/queries/todos/make_table', {})
   return res.data
 }
 
@@ -46,13 +46,13 @@ export const insert_todo = async (fetcher, s) => {
 }
 
 export const insert_fake_todo = async (fetcher)  => {
-  const res= await fetcher.post('/crud/todos/fake', {})
+  const res= await fetcher.post('/queries/todos/fake', {})
   const nid= res.data.id
   return nid
 }
 
 export const count_last_hour_todos = async (fetcher)  => {
-  const res= await fetcher.get('/crud/todos/last_hour', {h: 2})
+  const res= await fetcher.get('/queries/todos/last_hour', {h: 2})
   const count= parseInt(res.data)
   return count
 }
@@ -62,14 +62,14 @@ export const remove_todos = async (fetcher, ids) => {
   for (const tid of ids) {
     const res= await fetcher.post('/crud/todos/delete', {id: tid})
     reses.push({id: tid, result: res})
-  }  
+  }
   return reses
 }
 
 export const clean_todos = async (fetcher) => {
-  const res= await fetcher.post('/crud/todos/clean', {})
-  const count= parseInt(res.data)
-  return count
+  const res= await fetcher.post('/queries/todos/clean', {})
+  const ok= res?.response?.redirected !== true
+  return ok
 }
 
 

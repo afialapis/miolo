@@ -90,6 +90,13 @@ export const makeConfig = (authType, logLevel= 'silly') => {
         },
         start: true
       }
-    ]
+    ],
+    //socket: {
+    //  enabled: true,
+    //  
+    //  connection: (socket) => {console.warn('connected'); console.warn(socket)},
+    //  //new_namespace: (namespace) => {},
+    //  
+    //}    
   }
 }

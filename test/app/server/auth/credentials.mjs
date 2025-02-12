@@ -17,6 +17,7 @@ const find_user_by_id = (id, done, miolo) => {
   //console.log('[miolo-test-app][credentials] find_user_by_id()', id)
   miolo.db.get_connection().then((conn) => {
     q_find_user_by_id(conn, id).then(user => {
+      //console.log('[miolo-test-app][credentials] find_user_by_id()', JSON.stringify(user))
       if (user==undefined) {
         done('User not found', null)
       } else {

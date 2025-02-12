@@ -30,7 +30,7 @@ async function q_todos_clean(ctx) {
 
 
 export default [{
-  prefix: '/crud',
+  prefix: '/queries',
   routes: [
     {
       url: '/users/make_table',

@@ -73,11 +73,11 @@ const getCrudConfig = (config) => {
     const comm_after = crud?.after || config?.after || DEFAULT_AFTER_CALLBACK
 
 
-    const comm_auth= merge(
+    const comm_auth= merge.all([
       DEFAULT_AUTH_USER,
       config?.auth || {},
       crud?.auth || {}
-    )
+    ])
     
     let parsed_routes= []
 
@@ -97,19 +97,18 @@ const getCrudConfig = (config) => {
         mode: route?.mode || 'rw',
 
         bodyField: route?.bodyField || comm_bodyField,
-        useUserFields: merge(
+        useUserFields: merge.all([
           DEFAULT_USE_USER_FIELDS,
           route?.useUserFields || {}
-        ),
-        auth: merge(
+        ]),
+        auth: merge.all([
           comm_auth,
           route?.auth  || {}
-        ),
+        ]),
 
         before: route?.before || comm_before,
         after: route?.after || comm_after
       }
-
       parsed_routes.push(parsed_route)
     }
     

@@ -5,6 +5,10 @@ nav.page-header {
   width: 100%;
   z-index: 2;  
 
+  // Look and feel
+
+  background-color: var(--header-bg-color);
+
   @media screen and (min-width: 600px) {
     padding-left: 4em;
     padding-right: 4em;
@@ -59,10 +63,6 @@ nav.page-header {
       }      
     }
   }
-
-  // Look and feel
-
-  background-color: var(--header-bg-color);
 
   .grid {
 

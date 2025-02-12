@@ -8,7 +8,7 @@ const __my_dirname = path.dirname(__my_filename)
 const indexHTMLPath= path.resolve(__my_dirname, 'fallback_index.html')
 const indexHTML = readFileSync(indexHTMLPath, 'utf8')
 
-export function init_ssr_render_middleware(app, render, httpConfig, authConfig) {
+export function init_ssr_render_middleware(app, render, httpConfig, authConfig, socketConfig) {
   // check HTML
   let html = render?.html || indexHTML
 
@@ -90,7 +90,11 @@ export function init_ssr_render_middleware(app, render, httpConfig, authConfig) 
       port: httpConfig?.port,
       catcher_url: httpConfig?.catcher_url,
       login_url: authConfig?.credentials?.url_login,
-      logout_url: authConfig?.credentials?.url_logout
+      logout_url: authConfig?.credentials?.url_logout,
+      //socket: {
+      //  enabled: socketConfig?.enabled===true,
+      //  config: socketConfig?.config?.cli || {}
+      //}
     }
 
     const ssr_data = await def_loader(ctx)

@@ -23,9 +23,11 @@ class SessionStore {
     try {
       const value = JSON.parse(jvalue)
       this.logger.silly(`[session-store] Get session for ${key}: ${JSON.stringify(value)}`)
+      //console.log(`[session-store] Get session for ${key}: ${JSON.stringify(value)}`)
       return value
     } catch(_) {
       this.logger.silly(`[session-store] No session for ${key}`)
+      //console.log(`[session-store] No session for ${key}`)
       return undefined
     }
   }

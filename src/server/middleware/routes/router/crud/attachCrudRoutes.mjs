@@ -24,7 +24,7 @@ function attachCrudRoutes(router, crudConfigs, logger) {
     
         const auth = route.auth
         const checkAuth= (auth.require===true) || (auth.require==='read-only' && op==='w')
-    
+        
         if (checkAuth) {
     
           if (!authenticated) {
@@ -43,7 +43,6 @@ function attachCrudRoutes(router, crudConfigs, logger) {
               ctx.body= {}
             }
           }
-
           return authenticated
         }
     
@@ -61,6 +60,7 @@ function attachCrudRoutes(router, crudConfigs, logger) {
         let result = {}
         try {
           const authenticated = await _crud_auth_callback(ctx, op)
+
           if (! authenticated) {
             ctx.body= {}
             return

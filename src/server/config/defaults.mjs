@@ -99,7 +99,7 @@ export default {
       secure: true, 
       
       /** (string) session cookie sameSite options (default null, don't set it) */
-      sameSite: null, // 'strict', 
+      sameSite: 'lax', // 'strict', 
     }
   },
   db: {
@@ -392,5 +392,23 @@ export default {
 
 
   },
+
+  socket: {
+    enabled: false,
+    cli: {
+      /**
+       domain: '',
+       options: {}
+       */
+    }
+    /*
+    connection: (socket) => {},
+    new_namespace: (namespace) => {},
+    namespaces: [{  
+      name,
+      listener: (data) => {}
+    }]
+    */
+  }
 };
 

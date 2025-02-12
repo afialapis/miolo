@@ -16,7 +16,6 @@ const AppContext = ({context, children}) => {
   const login = useCallback(async (credentials) => {
     const {fetcher} = mioloObj
     const {config} = innerContext
-      
 
     const url = config.login_url || '/login'
     const resp = await fetcher.login(url, credentials)
@@ -74,6 +73,7 @@ const AppContext = ({context, children}) => {
         user: innerContext.user,
         authenticated: innerContext.authenticated,
         fetcher: mioloObj.fetcher,
+        //socket: mioloObj.socket,
         login,
         logout,
         useSsrData

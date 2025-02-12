@@ -21,9 +21,9 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
       logger.debug(`[router] Routing ${route.callback?.name || 'callback'} to ${route.method} ${url}${checkAuth ? ' (auth)' : ''}`)
 
       const _route_auth_callback = async (ctx) => {
-        const authenticated= ctx?.session?.authenticated === true
+        
         if (checkAuth) {
-    
+          const authenticated= ctx?.session?.authenticated === true
           if (!authenticated) {
             if (routeAuth.action=='error') {
               ctx.miolo.logger.error(`Unauthorized access. Throwing error ${routeAuth.error_code}`)

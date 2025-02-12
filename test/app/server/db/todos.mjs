@@ -67,6 +67,5 @@ export async function todos_insert_fake(miolo, params) {
     done: true
   }
   const tid= await Todos.insert(d, options)
-
   return tid
 }

@@ -7,10 +7,14 @@ import Login from './pages/Login.mjs'
 import Logout from './pages/Logout.mjs'
 
 
-const Index = ({authenticated}) => {
+const Index = ({authenticated/*, socket*/}) => {
 
   // console.log('miolo-demo UI Index ')
   // console.log({user, authenticated})
+
+  // if (socket) {
+  //   socket.emit('test', 'Test Message')
+  // }
   
   return (
 

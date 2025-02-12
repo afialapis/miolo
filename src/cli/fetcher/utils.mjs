@@ -25,7 +25,7 @@ export function omit_nil(obj) {
 
 
 export function parse_login_cookie(response) {
-  if (typeof window == 'object') {
+  if (typeof window !== 'object') {
     return undefined
   }
   try {

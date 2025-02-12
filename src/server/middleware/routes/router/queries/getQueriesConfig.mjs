@@ -64,11 +64,11 @@ const getQueriesConfig = (config) => {
     const comm_before = instance?.before || config?.before || DEFAULT_BEFORE_CALLBACK
     const comm_after = instance?.after || config?.after || DEFAULT_AFTER_CALLBACK
 
-    const comm_auth= merge(
+    const comm_auth= merge.all([
       DEFAULT_AUTH_USER,
       instance?.auth || {},
       config?.auth || {}
-    )
+    ])
     
     let parsed_routes= []
 
@@ -89,10 +89,10 @@ const getQueriesConfig = (config) => {
         method: route?.method || 'GET', 
         callback: cb,
 
-        auth: merge(
+        auth: merge.all([
           comm_auth,
           route?.auth  || {}
-        ),
+        ]),
 
         before: route?.before || comm_before,
         after: route?.after || comm_after

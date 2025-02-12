@@ -23,7 +23,7 @@ import { init_ssr_render_middleware}      from './middleware/render/ssr/render.m
 //import { init_404_render_middleware}    from './middleware/render/404/render.mjs'
 //import { init_json_render_middleware}   from './middleware/render/json/render.mjs'
 
-// import {init_socket}                   from './engines/socket/index.mjs'
+//import {init_socket}                      from './engines/socket/index.mjs'
 import { init_cron }                      from './engines/cron/index.mjs'
 import { init_http_server }               from './engines/http/index.mjs'
 
@@ -80,10 +80,6 @@ function miolo(sconfig, render) {
     init_custom_auth_middleware(app, config.auth.custom)
   }
 
-  // Socket.io
-  // const io= init_socket(logger)
-  // io.attach(app)
-
   // extra middlewares
   const extra_middlewares= config?.middlewares
   if (extra_middlewares) {
@@ -99,7 +95,7 @@ function miolo(sconfig, render) {
   if (render?.middleware != undefined) {
     app.use(render.middleware)
   } else {
-    init_ssr_render_middleware(app, render, config.http, config?.auth)
+    init_ssr_render_middleware(app, render, config.http, config?.auth, config?.socket)
   }/* else {
     init_404_render_middleware(app, render)
     // init_json_render_middleware(app, render)  
@@ -130,6 +126,9 @@ function miolo(sconfig, render) {
     await app.stop()
     await app.start()
   }  
+
+  // Socket.io
+  // init_socket(app, config?.socket)
 
   return app
 }
