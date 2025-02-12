@@ -5,7 +5,11 @@ import AppContext from './context/AppContext.mjs'
 const AppBrowser = ({children}) => {
   
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+      }}    
+    >
       <AppContext context={window.__CONTEXT || {}}>
         {children}
       </AppContext>
