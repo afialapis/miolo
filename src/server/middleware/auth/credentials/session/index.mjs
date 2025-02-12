@@ -1,4 +1,4 @@
-import koa_session from 'koa-session'
+import { createSession } from 'koa-session'
 // import store_koa_redis from './store_koa_redis.mjs'
 import {init_session_cache_store} from './store.mjs'
 
@@ -17,8 +17,8 @@ function init_session_middleware(app, sessionConfig, cacheConfig) {
     store,
     ...sessionConfig.options || {}
   }
-
-  app.use(koa_session(options, app))
+  
+  app.use(createSession(options, app))
 }
 
 export {init_session_middleware}
