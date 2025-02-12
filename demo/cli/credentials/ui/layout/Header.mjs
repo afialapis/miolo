@@ -21,10 +21,10 @@ const Header = ({authenticated}) => {
           <div>demo</div>
         </div>
         <div className="toolbar">
-          <ToolbarLink name='Todos' path='/todos'/>
+          <ToolbarLink name='Todos' path='todos'/>
           {authenticated
-           ? <ToolbarLink name='Logout' path='/logout'/>
-           : <ToolbarLink name='Login' path='/login'/>
+           ? <ToolbarLink name='Logout' path='logout'/>
+           : <ToolbarLink name='Login' path='login'/>
           }
           <a className="link github" 
             href     = {"https://github.com/afialapis"}

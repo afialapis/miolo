@@ -8,6 +8,7 @@ const AppBrowser = ({children}) => {
     <BrowserRouter
       future={{
         v7_startTransition: true,
+        v7_relativeSplatPath: true,
       }}    
     >
       <AppContext context={window.__CONTEXT || {}}>

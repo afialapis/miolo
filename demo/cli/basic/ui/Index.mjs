@@ -21,7 +21,7 @@ const Index = ({fetcher}) => {
         <Route path={'todos'} element={<Todos/>}/>
         <Route
             path="*"
-            element={<Navigate to="todos" />}
+            element={<Navigate to="../todos" />}
         />
       </Route>
     </Routes>

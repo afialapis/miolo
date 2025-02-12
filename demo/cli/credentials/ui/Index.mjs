@@ -31,7 +31,7 @@ const Index = ({authenticated/*, socket*/}) => {
 
         <Route
             path="*"
-            element={<Navigate to="todos" />}
+            element={<Navigate to="../todos" />}
         />
       </Route>
     </Routes>
