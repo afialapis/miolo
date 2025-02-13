@@ -1,7 +1,8 @@
-![miolo logo](https://www.afialapis.com/os/miolo/logo.png)
+# miolo
 [![NPM Version](https://badge.fury.io/js/miolo.svg)](https://www.npmjs.com/package/miolo)
 [![NPM Downloads](https://img.shields.io/npm/dm/miolo.svg?style=flat)](https://www.npmjs.com/package/miolo)
 
+![miolo logo](https://www.afialapis.com/os/miolo/logo.png)
 
 ---
 
@@ -26,6 +27,8 @@
 
 # Intro
 
+[`miolo`](https://www.afialapis.com/os/miolo) is an all-in-one koa-based server.
+
 
 ## Server middleware
 
@@ -39,7 +42,6 @@ render:
 	undefined         => renderiza un html fallback
 	html     (string) => renderiza ese HTML
 	middleware        => renderiza HTML con posibilidad de SSR
-
 
 ### Custom `ctx` properties
 
@@ -64,20 +66,4 @@ render:
 
 # Changelog
 
-## 0.10.2
-- Rely on miolo settings for cached session's ttl
-
-## 0.10.1
-- Upgraded `cacheiro`
-- Session is cached on `cacheiro` and using `miolo` config.
-
-## 0.10.0
-- `context.miolo.db.initConnection` is now `context.miolo.db.init_connection`
-- `context.miolo.db.getConnection` is now `context.miolo.db.get_connection`
-- `context.miolo.db.getModel` is now `context.miolo.db.get_model`
-- `context.miolo.db.dropConnection` is now `context.miolo.db.drop_connection`
-- `connection.getModel` is now `connection.get_model`
-- added `context.miolo.cache: {get_cache, get_cache_names,drop_cache,drop_caches}}`
-
-- upgraded `calustra` to `0.11.0`. After newer cache handling, `get_connection()`, `get_model()`, etc. are `async`.
-- upgraded every other dependency. Major version changes: @koa/cors, @maxmind/geoip2-node cron, winston-daily-rotate-file and nodemon.
+See [changelog here](https://github.com/afialapis/miolo/blob/main/CHANGELOG.md)
