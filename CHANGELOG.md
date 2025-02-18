@@ -1,3 +1,7 @@
+# 1.0.1
+
+ * no big logs of Response body
+
 # 1.0.0
 
  * peer depencies: `React` _^18.3.1_, `React Router DOM` _^6.29.0_.
