@@ -6,17 +6,17 @@
 
 ---
 
-> **miolo**. substantivo masculino plural:
+> **[miolo](https://academia.gal/dicionario/-/termo/miolo)**. substantivo masculino plural:
 
 > **1.** popular **Encéfalo.**
 
 > _Disque aínda se vían os miolos esparexidos polo chan._
 
+> substantivo masculino:
 
 > **2. Parte interior do pan.**
 
 > _Prefiro o miolo á codia._
-
 
 > **4.** figurado **Parte fundamental ou máis importante de algo.**
 

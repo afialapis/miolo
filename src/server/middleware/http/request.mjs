@@ -131,10 +131,12 @@ function init_request_middleware(app, config) {
                     : 'slow' 
     
     const ssession= ctx.session!=undefined ? JSON.stringify(ctx.session) : ''
-    logger.debug(`${sreq} - Session: ${ssession}`)
+    logger.debug(`${sreq} - Session: ${ssession.slice(0, 150)}...`)
+    logger.silly(`${sreq} - Session: ${ssession}`)
 
     const rbody= ctx.body!=undefined ? JSON.stringify(ctx.body) : ''
-    logger.debug(`${sreq} - Response: ${rbody}`)
+    logger.debug(`${sreq} - Response: ${rbody.slice(0, 150)}...`)
+    logger.silly(`${sreq} - Response: ${rbody}`)
 
     await reqConfig.onDone(ctx, begin_result, {started, elapsed, description: tname})
     
