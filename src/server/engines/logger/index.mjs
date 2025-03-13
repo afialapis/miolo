@@ -12,6 +12,7 @@ import { /*intre_to_str,*/ intre_now } from 'intre'
 const { combine, timestamp, _label, printf, errors } = format
 
 
+
 const init_logger = (config, emailer, prefix= 'miolo') => {
   const LEVEL_COLORS= {
     silly  : gray,
@@ -30,7 +31,11 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
     warn   : 'wrn',
     error  : 'err',
   }
+
+  const _INDENT_SIZE = 4
   let _INDENT = 0
+  let _SECTIONS = {}
+  let _TIMES = {}
 
   const myFormat = info => {
     const lc = LEVEL_COLORS[info.level]
@@ -254,6 +259,37 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
 
   const _make_indented_log = (f, name) => {
     const _indented_func = (text, opts) => {
+      if (opts?.section) {
+        if (! (opts.section in _SECTIONS)) {
+          // Section starts
+          _SECTIONS[opts.section]= {
+            indentIncr: parseInt(opts?.indent || _INDENT_SIZE),
+            timeStart: Date.now()
+          }
+          const nIndent = Math.max(_INDENT + _SECTIONS[opts.section].indentIncr, 0)
+          f(text, opts)
+          _INDENT= nIndent
+          
+        } else {
+          // Section ends
+          const elapsed = parseFloat( (Date.now() - _SECTIONS[opts.section].timeStart) / 1000.0 ).toFixed(2)
+          text = `${text} (time: ${elapsed})`
+          _INDENT-= _SECTIONS[opts.section].indentIncr
+          f(text, opts)
+          delete _SECTIONS[opts.section]      
+        }
+      }
+
+
+      /*
+      if (opts?.timeStart) {
+        _TIMES[opts.timeStart]= Date.now()
+      }
+      if (opts?.timeEnd) {    
+        const elapsed = parseFloat( (Date.now() - _TIMES[opts.timeEnd]) / 1000.0 ).toFixed(2)
+        text = `${text} (time: ${elapsed})`
+        delete _TIMES[opts.timeEnd]
+      }
       if (! isNaN(opts?.indent)) {
         const nIndent = Math.max(_INDENT + parseInt(opts?.indent), 0)
         if (opts.indent > 0) {
@@ -265,7 +301,7 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
         }
       } else {
         f(text, opts)
-      }
+      }*/
     }
     Object.defineProperty(_indented_func, "name", { value: name });
     return _indented_func
@@ -289,7 +325,3 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
 
 
 export {init_logger}
-
-
-
-

@@ -1,4 +1,8 @@
-# 1.0.1
+# 1.0.2
+
+ * `options.section` (and optional `options.indent`) on logger calls
+ 
+ # 1.0.1
 
  * no big logs of Response body
 

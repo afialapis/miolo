@@ -66,7 +66,7 @@ export const makeConfig = (authType, logLevel= 'silly') => {
             //}
           } 
         }],
-        log: logLevel
+        //log: logLevel
       },
     },
     log: {

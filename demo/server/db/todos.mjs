@@ -5,18 +5,20 @@ async function todos_read(miolo, params) {
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  miolo.logger.debug(`[todos_read] Reading todos...`, {indent: 2})
+  miolo.logger.debug(`[todos_read] Reading todos...`, {section: 'todos-read'})
 
   const Todos = await conn.get_model('todos')
   const todos = await Todos.read(options)
 
-  miolo.logger.debug(`[todos_read] Read ${todos.length} todos!`, {indent: -2})
+  miolo.logger.debug(`[todos_read] Read ${todos.length} todos!`, {section: 'todos-read'})
 
   return todos
 }
 
 
 async function todos_count_last_hour(miolo, params) { 
+  miolo.logger.info(`[todos] Counting last hour todos... `, {section: 'todos-hour'})
+
   const conn= await miolo.db.get_connection()
   // TODO : handle transactions
   const options= {transaction: undefined}
@@ -30,6 +32,8 @@ async function todos_count_last_hour(miolo, params) {
 
   const data= await conn.select(query, [one_hour_ago], options) 
   const res= data[0]['cnt']
+
+  miolo.logger.info(`[todos] Counted last hour todos: ${res} `, {section: 'todos-hour'})
 
   return res
 }
