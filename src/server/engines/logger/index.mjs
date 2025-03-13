@@ -278,30 +278,9 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
           f(text, opts)
           delete _SECTIONS[opts.section]      
         }
-      }
-
-
-      /*
-      if (opts?.timeStart) {
-        _TIMES[opts.timeStart]= Date.now()
-      }
-      if (opts?.timeEnd) {    
-        const elapsed = parseFloat( (Date.now() - _TIMES[opts.timeEnd]) / 1000.0 ).toFixed(2)
-        text = `${text} (time: ${elapsed})`
-        delete _TIMES[opts.timeEnd]
-      }
-      if (! isNaN(opts?.indent)) {
-        const nIndent = Math.max(_INDENT + parseInt(opts?.indent), 0)
-        if (opts.indent > 0) {
-          f(text, opts)
-          _INDENT= nIndent
-        } else {
-          _INDENT= nIndent
-          f(text, opts)
-        }
       } else {
         f(text, opts)
-      }*/
+      }
     }
     Object.defineProperty(_indented_func, "name", { value: name });
     return _indented_func
