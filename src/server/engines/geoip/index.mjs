@@ -9,6 +9,10 @@ const _geoip_def_local_ips= [
 ]
 
 function _geoip_is_local(ip, local_ips = []) {
+  // if (process.env.NODE_ENV == 'development') {
+  //   return true
+  // }
+  
   const all_local_ips = [
       ..._geoip_def_local_ips,
       ...local_ips || []

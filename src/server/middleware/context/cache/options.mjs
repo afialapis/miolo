@@ -1,18 +1,23 @@
 
 function _miolo_cacher_options_merge(def, opt, logger) {
 
-  const redis = {
-    redis: {
-      host: process.env?.REDIS_HOST || '127.0.0.1',
-      port: 6379,
-      ...def?.redis || {},
-      ...opt?.redis || {}
-    },    
+  const redis_host = opt?.redis?.host || def?.redis?.host || process.env?.REDIS_HOST || '127.0.0.1'
+  const redis_port = opt?.redis?.port || def?.redis?.port || process.env?.REDIS_PORT || 6379
+
+  const redis_username = opt?.redis?.username || def?.redis?.username || process.env?.REDIS_USERNAME || ''
+  const redis_password = opt?.redis?.password || def?.redis?.password || process.env?.REDIS_PASSWORD || ''
+  let redis_credentials = ''
+  if (redis_username) {
+    redis_credentials= `${redis_username}${redis_password ? `:${redis_password}`: ''}@`
   }
+
+  const redis_url = opt?.redis?.url || def?.redis?.url || `redis://${redis_credentials}${redis_host}:${redis_port}'`
 
   return {
     type: opt?.type || def?.type,
-    redis: redis,
+    redis: {
+      url: redis_url
+    },
     namespace: opt?.namespace || def?.namespace,
     version: opt?.version || def?.version,
     clean: opt?.clean===true || def?.clean===true,

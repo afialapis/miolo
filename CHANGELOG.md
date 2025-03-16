@@ -1,4 +1,8 @@
-# 1.0.5
+# 1.0.6
+
+ * Cache: switch `redis` options to URL
+ 
+ # 1.0.5
 
  * Cache: fix `redis` options merge
  
