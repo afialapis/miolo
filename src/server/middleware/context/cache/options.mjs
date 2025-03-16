@@ -11,7 +11,7 @@ function _miolo_cacher_options_merge(def, opt, logger) {
     redis_credentials= `${redis_username}${redis_password ? `:${redis_password}`: ''}@`
   }
 
-  const redis_url = opt?.redis?.url || def?.redis?.url || `redis://${redis_credentials}${redis_host}:${redis_port}'`
+  const redis_url = opt?.redis?.url || def?.redis?.url || `redis://${redis_credentials}${redis_host}:${redis_port}`
 
   return {
     type: opt?.type || def?.type,

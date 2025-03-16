@@ -1,4 +1,4 @@
-# 1.0.6
+# 1.0.6, 1.0.7
 
  * Cache: switch `redis` options to URL
  
