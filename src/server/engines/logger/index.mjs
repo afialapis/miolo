@@ -35,7 +35,6 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
   const _INDENT_SIZE = 4
   let _INDENT = 0
   let _SECTIONS = {}
-  let _TIMES = {}
 
   const myFormat = info => {
     const lc = LEVEL_COLORS[info.level]

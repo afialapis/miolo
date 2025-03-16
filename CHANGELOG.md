@@ -1,10 +1,18 @@
+# 1.0.5
+
+ * Cache: fix `redis` options merge
+ 
+# 1.0.4
+
+ * upgrade `cacheiro` and `calustra`
+ 
 # 1.0.3
 
- * `options.section` fix
+ * Logger's `options.section` fix
  
 # 1.0.2
 
- * `options.section` (and optional `options.indent`) on logger calls
+ * Logger's `options.section` (and optional `options.indent`)
  
 # 1.0.1
 
