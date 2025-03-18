@@ -188,11 +188,9 @@ export default {
     },
     console: {
       enabled: true,
-      level: 'silly',
     },
     file: {
       enabled: true,
-      level: 'silly',
 
       filename: '/var/log/afialapis/%MIOLO%.log',
       

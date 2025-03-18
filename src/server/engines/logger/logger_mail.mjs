@@ -61,21 +61,26 @@ function init_logger_to_mail(config, emailer) {
     } catch(err) {
       body = `Could not create a body for the error (${err.toString()})`
     }
+    
+    try {
+      let subject = `${config?.name} [${info.level.toUpperCase()}] ${title}`
 
-    let subject = `${config?.name} [${info.level.toUpperCase()}] ${title}`
+      let mail= {
+        from    : this.from,
+        to      : this.to,
+        subject : subject, 
+        text    : body
+      }
 
-    let mail= {
-      from    : this.from,
-      to      : this.to,
-      subject : subject, 
-      text    : body
-    }
-
-    emailer.send(mail, function() {
+      emailer.send(mail, function() {
+        self.emit("logged");
+        callback(null, true);    
+      });
+    } catch(error) {
+      // TODO - How to exxpose info from here
       self.emit("logged");
       callback(null, true);    
-    });
-      
+    }
   };
   
   return MailerLogger

@@ -1,3 +1,8 @@
+# 1.1.2
+
+try/catchs on email logger
+
+
 # 1.1.1
 
 `reopenTransportOnHupSignal` optional with `options.log.file.hup_patch`

@@ -1,5 +1,5 @@
-import fs from 'fs'
-import path from 'path'
+// import fs from 'fs'
+// import path from 'path'
 import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
 /* https://github.com/winstonjs/winston/issues/925 */
 /* https://github.com/winstonjs/winston/issues/287 */
@@ -7,7 +7,7 @@ import {init_logger_to_mail} from './logger_mail.mjs'
 import { createLogger, format, transports } from 'winston'
 import { reopenTransportOnHupSignal } from './reopenTransportOnHupSignal.mjs'
 // import  'winston-daily-rotate-file'
-import { /*intre_to_str,*/ intre_now } from 'intre'
+// import { /*intre_to_str,*/ intre_now } from 'intre'
 
 const { combine, timestamp, _label, printf, errors } = format
 
@@ -90,38 +90,38 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
     _log_transports.push(fileTransport)
 
 
-    const _file_log = (s) => {
-      const filename = path.join(fileTransport.dirname, fileTransport.filename)
-      
-      // console.log(fileTransport._stream )
-      const msg = myFormat({
-        level: 'info',
-        message: `[logger][file-rotate] ${s}\n`,
-        timestamp: intre_now()
-      })
-
-      try {
-        fs.accessSync(filename, fs.constants.F_OK)
-        fs.appendFileSync(filename, msg)
-      } catch(_) {
-        fs.writeFileSync(filename, msg, { encoding: 'utf-8' })
-      }
-      if (config?.console?.enabled === true) {
-        if (fileTransport.levels[config?.console?.level || config?.level || 'error'] >= fileTransport.levels['info']) {
-          console.log(msg)
-        }
-      }
-    }
-
-    fileTransport.on('finish', function(info) {
-      // do something fun
-      _file_log('Log done')
-    })    
-    fileTransport.on('error', function(error) {
-      // do something fun
-      _file_log(red(`Error: ${error}`))
-    })
-
+  //    const _file_log = (s) => {
+  //      const filename = path.join(fileTransport.dirname, fileTransport.filename)
+  //      
+  //      // console.log(fileTransport._stream )
+  //      const msg = myFormat({
+  //        level: 'info',
+  //        message: `[logger][file-rotate] ${s}\n`,
+  //        timestamp: intre_now()
+  //      })
+  //
+  //      try {
+  //        fs.accessSync(filename, fs.constants.F_OK)
+  //        fs.appendFileSync(filename, msg)
+  //      } catch(_) {
+  //        fs.writeFileSync(filename, msg, { encoding: 'utf-8' })
+  //      }
+  //      if (config?.console?.enabled === true) {
+  //        if (fileTransport.levels[config?.console?.level || config?.level || 'error'] >= fileTransport.levels['info']) {
+  //          console.log(msg)
+  //        }
+  //      }
+  //    }
+  //
+  //    fileTransport.on('finish', function(info) {
+  //      // do something fun
+  //      _file_log('Log done')
+  //    })    
+  //    fileTransport.on('error', function(error) {
+  //      // do something fun
+  //      _file_log(red(`Error: ${error}`))
+  //    })
+  //
   }
 
   //  if (config?.file?.enabled === true) {
@@ -260,27 +260,33 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
 
   const _make_indented_log = (f, name) => {
     const _indented_func = (text, opts) => {
-      if (opts?.section) {
-        if (! (opts.section in _SECTIONS)) {
-          // Section starts
-          _SECTIONS[opts.section]= {
-            indentIncr: parseInt(opts?.indent || _INDENT_SIZE),
-            timeStart: Date.now()
+      try {
+        if (opts?.section) {
+          if (! (opts.section in _SECTIONS)) {
+            // Section starts
+            _SECTIONS[opts.section]= {
+              indentIncr: parseInt(opts?.indent || _INDENT_SIZE),
+              timeStart: Date.now()
+            }
+            const nIndent = Math.max(_INDENT + _SECTIONS[opts.section].indentIncr, 0)
+            f(text, opts)
+            _INDENT= nIndent
+            
+          } else {
+            // Section ends
+            const elapsed = parseFloat( (Date.now() - _SECTIONS[opts.section].timeStart) / 1000.0 ).toFixed(2)
+            text = `${text} (time: ${elapsed})`
+            _INDENT-= _SECTIONS[opts.section].indentIncr
+            f(text, opts)
+            delete _SECTIONS[opts.section]      
           }
-          const nIndent = Math.max(_INDENT + _SECTIONS[opts.section].indentIncr, 0)
-          f(text, opts)
-          _INDENT= nIndent
-          
         } else {
-          // Section ends
-          const elapsed = parseFloat( (Date.now() - _SECTIONS[opts.section].timeStart) / 1000.0 ).toFixed(2)
-          text = `${text} (time: ${elapsed})`
-          _INDENT-= _SECTIONS[opts.section].indentIncr
           f(text, opts)
-          delete _SECTIONS[opts.section]      
         }
-      } else {
-        f(text, opts)
+      } catch(error) {
+        // TODO - How to exxpose info from here
+        console.error(error)
+
       }
     }
     Object.defineProperty(_indented_func, "name", { value: name });

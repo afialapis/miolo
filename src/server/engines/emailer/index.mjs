@@ -24,6 +24,8 @@ function init_emailer({options, defaults, silent}) {
 
         return info
       } catch(error) {
+        console.error(`Error sending email: ${mail?.from || ''} => ${mail?.to || ''} (${mail?.subject || ''})`)
+
         return {
           error,
           ok: false
