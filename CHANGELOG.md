@@ -1,3 +1,6 @@
+# 1.1.1
+
+`reopenTransportOnHupSignal` optional with `options.log.file.hup_patch`
 
 # 1.1.0
 

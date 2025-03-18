@@ -82,8 +82,10 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
       handleExceptions: true,
       maxRetries: 10
     })
-
-    reopenTransportOnHupSignal(fileTransport)
+    
+    if (config?.file?.hup_patch === true) {
+      reopenTransportOnHupSignal(fileTransport)
+    }
 
     _log_transports.push(fileTransport)
 

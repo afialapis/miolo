@@ -210,6 +210,8 @@ export default {
       //auditFile: '/var/log/afialapis/%MIOLO%.audit.json',
       //createSymlink: true,
       //symlinkName: '%MIOLO%.log'
+
+      hup_patch: false
     },
     mail: {
       enabled: false,
