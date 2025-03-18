@@ -1,8 +1,13 @@
+
+# 1.1.0
+
+Upgraded `xeira`, which means Node >= 21
+
 # 1.0.6, 1.0.7
 
  * Cache: switch `redis` options to URL
  
- # 1.0.5
+# 1.0.5
 
  * Cache: fix `redis` options merge
  

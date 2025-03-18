@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -59,16 +59,16 @@
   "dependencies": {
     "@koa/cors": "^5.0.0",
     "@koa/router": "^13.1.0",
-    "@maxmind/geoip2-node": "^5.0.0",
-    "cacheiro": "^0.3.1",
-    "calustra": "^0.13.1",
-    "cron": "^3.5.0",
+    "@maxmind/geoip2-node": "^6.0.0",
+    "cacheiro": "^0.4.0",
+    "calustra": "^0.14.0",
+    "cron": "^4.1.0",
     "deepmerge": "^4.3.1",
     "diskspace": "^2.0.0",
     "http-terminator": "^3.2.0",
-    "intre": "^2.4.0",
+    "intre": "^2.5.0",
     "jwt-simple": "^0.5.6",
-    "koa": "^2.15.4",
+    "koa": "^2.16.0",
     "koa-better-body": "^3.3.9",
     "koa-bodyparser": "^4.4.1",
     "koa-compress": "^5.1.1",
@@ -96,14 +96,14 @@
     "react-router-dom": "^6.29.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.8",
-    "@babel/preset-env": "7.26.8",
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "7.26.9",
     "@babel/preset-react": "7.26.3",
     "@babel/register": "7.25.9",
     "babel-plugin-transform-import-meta": "^2.3.2",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.9",
-    "xeira": "^1.0.1"
+    "xeira": "^1.1.0"
   },
   "eslintConfig": {
     "extends": [

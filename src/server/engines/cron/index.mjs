@@ -22,7 +22,7 @@ export function init_cron(app, custom) {
   
   // Keep trace of conr jobs to be accessible later
   const jobInfos= [
-    // {name: 'name', job: <job>, running: true/false} 
+    // {name: 'name', job: <job>, isActive: true/false} 
   ]
   
   jobConfigs.map(config => {
@@ -31,7 +31,7 @@ export function init_cron(app, custom) {
     jobInfos.push({
       name, 
       job,
-      running: false
+      isActive: false
     })  
   })
   
@@ -53,7 +53,7 @@ export function init_cron(app, custom) {
   const _start_job = (jobInfo) => {
     try {
       jobInfo.job.start()
-      jobInfo.running= true
+      jobInfo.isActive= true
       logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${green_bold('started!')}`)
       return 1
     } catch(e) {
@@ -98,7 +98,7 @@ export function init_cron(app, custom) {
   const _stop_job = (jobInfo) => {
     try {
       jobInfo.job.stop()
-      jobInfo.running= false
+      jobInfo.isActive= false
       logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${yellow_bold('stopped!')}`) 
       return 1
     } catch(e) {
