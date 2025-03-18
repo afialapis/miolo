@@ -7,7 +7,7 @@ import basic_auth from './auth/basic.mjs'
 const __my_filename = fileURLToPath(import.meta.url)
 const __my_dirname = path.dirname(__my_filename)
 
-export const makeConfig = (authType, logLevel= 'silly') => {
+export const makeConfig = (authType, logLevel= 'info') => {
   const auth = 
       authType=='guest' ? {guest: {}}
     : authType=='basic' ? {basic: basic_auth}
@@ -72,8 +72,10 @@ export const makeConfig = (authType, logLevel= 'silly') => {
     log: {
       level: logLevel,
       console: { enabled: true, level: logLevel },
-      file: {enabled: true, level: logLevel}
+      file: {enabled: true, level: logLevel},
+      mail: {enabled: true, level: 'warn'}
     },
+    mail: {silent: false},
     routes: def_routes,
     auth,
     cron: [

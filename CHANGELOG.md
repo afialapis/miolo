@@ -1,3 +1,7 @@
+# 1.1.4
+
+emails are not sent immediately: queued first and sent by cron
+
 # 1.1.3
 
 try/catchs on email logger

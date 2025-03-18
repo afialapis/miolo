@@ -1,11 +1,11 @@
-import { init_emailer } from '../../engines/emailer/index.mjs'
+import { init_emailer_transporter } from '../../engines/emailer/index.mjs'
 import { init_logger } from '../../engines/logger/index.mjs'
 import { init_parser } from '../../engines/parser/index.mjs'
 import {init_context_db} from './db.mjs'
 import {init_context_cache} from './cache/index.mjs'
 
 const init_context_middleware = ( app, config ) => {
-  const emailer = init_emailer(config.mail)
+  const emailer = init_emailer_transporter(config.mail)
   const logger = init_logger(config.log, emailer, config?.name)
   const parser = init_parser()
 

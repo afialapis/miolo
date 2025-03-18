@@ -8,6 +8,7 @@ import {
   ipsum_config
 } from './ipsum.mjs'
 import { cyan, green_bold, yellow_bold } from 'tinguir'
+import { sys_email_queue_config } from './emails.mjs'
 
 
 export function init_cron(app, custom) {
@@ -17,6 +18,7 @@ export function init_cron(app, custom) {
   const jobConfigs= [
     sys_check_config(),
     ipsum_config(),
+    sys_email_queue_config(),
     ...custom || []
   ]
   

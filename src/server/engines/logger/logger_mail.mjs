@@ -72,10 +72,10 @@ function init_logger_to_mail(config, emailer) {
         text    : body
       }
 
-      emailer.send(mail, function() {
-        self.emit("logged");
-        callback(null, true);    
-      });
+      emailer.queue_email(mail)
+      self.emit("logged")
+      callback(null, true)
+
     } catch(error) {
       // TODO - How to exxpose info from here
       self.emit("logged");
