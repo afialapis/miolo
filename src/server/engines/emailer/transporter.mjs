@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { email_queue_an_email, EMAIL_QUEUE } from './queue.mjs'
+import { email_queue_an_email, email_queue_pop_pendings, email_queue_remove_ids } from './queue.mjs'
 
 
 const _logi = (logger, msg) => logger?.info ? logger.info(msg) : console.info(msg)
@@ -92,7 +92,7 @@ export function _init_emailer_transporter({options, defaults, silent}) {
   }
 
   async function queue_send_emails(logger= undefined) {
-    const pending = Object.values(EMAIL_QUEUE).filter(e => !e.sent)
+    const pending = email_queue_pop_pendings(logger)
     if (pending.length <= 0) {
       return
     }
@@ -103,12 +103,17 @@ export function _init_emailer_transporter({options, defaults, silent}) {
     // const email = JSON.parse(emailString)
   
     for (const email of pending) {
-      email.sent= true
-      _logi(logger, `[emailer] Sending queued email ${email.id}...`)
+      if (email.count > 1) {
+        _logi(logger, `[emailer] Sending queued and stacked email [${email.subject}](x${email.count})...`)
+        email.subject = `${email.subject} (x${email.count})`
+      } else {
+        _logi(logger, `[emailer] Sending queued email [${email.subject}]...`)
+      }
+
       send_email(email).then((res) => {
-        _logi(logger, `[emailer] Queued email ${email.id} sent ${res.ok ? 'OK' : 'NOT OK'}`)
+        _logi(logger, `[emailer] Queued email [${email.subject}]sent ${res.ok ? 'OK' : 'NOT OK'}`)
         if (res.ok) {
-          delete EMAIL_QUEUE[email.id]
+          delete email_queue_remove_ids(res.ids, logger)
         }
       })
     }

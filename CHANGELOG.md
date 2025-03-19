@@ -1,3 +1,7 @@
+# 1.1.5
+
+Group mails by from+subject as a "ratelimit" basic
+
 # 1.1.4
 
 emails are not sent immediately: queued first and sent by cron
