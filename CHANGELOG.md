@@ -1,3 +1,7 @@
+# 1.1.6
+
+Fix en email queing
+
 # 1.1.5
 
 Group mails by from+subject as a "ratelimit" basic

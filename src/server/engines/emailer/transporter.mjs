@@ -113,7 +113,7 @@ export function _init_emailer_transporter({options, defaults, silent}) {
       send_email(email).then((res) => {
         _logi(logger, `[emailer] Queued email [${email.subject}]sent ${res.ok ? 'OK' : 'NOT OK'}`)
         if (res.ok) {
-          delete email_queue_remove_ids(res.ids, logger)
+          delete email_queue_remove_ids(email.ids, logger)
         }
       })
     }
