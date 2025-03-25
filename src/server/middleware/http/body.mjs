@@ -1,4 +1,4 @@
-import koa_body_parser from '@koa/bodyparser'
+import { bodyParser as koa_body_parser } from '@koa/bodyparser'
 import koa_compress from 'koa-compress'
 import {constants} from 'node:zlib'
 

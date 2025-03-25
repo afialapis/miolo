@@ -1,3 +1,7 @@
+# 1.1.9
+
+Fix `@koa/bodyparser`
+
 # 1.1.8
 
 Fix 'exports'
