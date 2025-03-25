@@ -1,3 +1,7 @@
+# 1.1.8
+
+Fix 'exports'
+
 # 1.1.7
 
 Upgrade `calustra`.
