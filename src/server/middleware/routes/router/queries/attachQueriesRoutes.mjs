@@ -51,11 +51,11 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
         let result = {}
         try {
           try {
-            if ((route.method == 'GET') && (!ctx.request?.fields)) {
+            if ((route.method == 'GET') && (!ctx.request?.body)) {
               if (ctx.request.url.indexOf('?')>0) {
                 const fields= query_string_to_json(ctx.request.url)
                 if (fields) {
-                  ctx.request.fields= fields
+                  ctx.request.body= fields
                 }
               }
             }

@@ -7,6 +7,11 @@ import def_routes from './routes/index.mjs'
 import credentials from './auth/credentials.mjs'
 import basic_auth from './auth/basic.mjs'
 
+import path from 'path'
+import { fileURLToPath } from 'url'
+const __my_filename = fileURLToPath(import.meta.url)
+const __my_dirname = path.dirname(__my_filename)
+
 export const makeConfig = (authType, logLevel= 'error') => {
   const auth = 
       authType=='guest' ? {guest: {}}
@@ -23,12 +28,12 @@ export const makeConfig = (authType, logLevel= 'error') => {
       //
       // Folders to be mounted by koa for static content
       //
-      // static: {
-      //   favicon: path.resolve(__my_dirname, 'static/img/favicon.ico'),
-      //   folders: {
-      //     '/static': path.resolve(__my_dirname, 'static')
-      //   }        
-      // },
+      static: {
+        favicon: path.resolve(__my_dirname, '../../../demo/server/static/img/favicon.ico'),
+        //folders: {
+        //  '/static': path.resolve(__my_dirname, 'static')
+        //}        
+      },
 
       cors: false,
       proxy: false

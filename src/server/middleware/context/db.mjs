@@ -1,4 +1,4 @@
-import { getConnection, dropConnections } from 'calustra'
+import { getConnection, dropConnections } from 'calustra/conn-postgres'
 import {  miolo_cacher_options_for_calustra } from './cache/options.mjs'
 
 export function init_context_db (config, logger) {

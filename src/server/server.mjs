@@ -7,7 +7,7 @@ import { init_catcher_middleware }        from './middleware/http/catcher.mjs'
 import { init_rate_limit_middleware }     from './middleware/http/ratelimit.mjs'
 import { init_static_middleware }         from './middleware/static/index.mjs'
 import { init_request_middleware }        from './middleware/http/request.mjs'
-import { init_route_robots }              from './middleware/routes/robots/index.mjs'
+import { init_route_robots }              from './middleware/routes/robots.mjs'
 import { init_route_catch_js_error}       from './middleware/routes/catch_js_error.mjs'
 
 import {init_guest_auth_middleware}       from'./middleware/auth/guest.mjs'

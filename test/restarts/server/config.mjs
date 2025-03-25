@@ -1,10 +1,9 @@
-// import path from 'path'
-// import { fileURLToPath } from 'url'
-// const __my_filename = fileURLToPath(import.meta.url)
-// const __my_dirname = path.dirname(__my_filename)
+import path from 'path'
+import { fileURLToPath } from 'url'
+const __my_filename = fileURLToPath(import.meta.url)
+const __my_dirname = path.dirname(__my_filename)
 
-
-const postgres = {
+const dbConfig = {
   dialect:  'postgres',
   host:     'localhost',
   port:     5432,
@@ -13,14 +12,7 @@ const postgres = {
   password: 'postgres'
 }
 
-const sqlite = {
-  dialect:  'sqlite',
-  filename: ':memory:', // '/tmp/miolo.sqlite'
-  verbose: true,
-  cached: true
-}
-
-export const makeConfig = (dbType, logLevel= 'warn') => {
+export const makeConfig = (logLevel= 'warn') => {
   return {
     http: {
       port: 8001,
@@ -31,18 +23,18 @@ export const makeConfig = (dbType, logLevel= 'warn') => {
       //
       // Folders to be mounted by koa for static content
       //
-      // static: {
-      //   favicon: path.resolve(__my_dirname, 'static/img/favicon.ico'),
-      //   folders: {
-      //     '/static': path.resolve(__my_dirname, 'static')
-      //   }        
-      // },
+      static: {
+        favicon: path.resolve(__my_dirname, '../../../demo/server/static/img/favicon.ico'),
+        //folders: {
+        //  '/static': path.resolve(__my_dirname, 'static')
+        //}        
+      },
 
       cors: false,
       proxy: false
     },    
     db: {
-      config: dbType==='postgres' ? postgres : sqlite,
+      config: dbConfig,
       options: {
         log: logLevel,
       }

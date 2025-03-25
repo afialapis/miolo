@@ -1,3 +1,4 @@
+export const fallbackIndexHTML = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,3 +26,4 @@
 	<div id="root">{children}</div>
 </body>
 </html>
+`

@@ -1,16 +1,9 @@
 import { renderToString } from 'react-dom/server'
-import {readFileSync} from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
-const __my_filename = fileURLToPath(import.meta.url)
-const __my_dirname = path.dirname(__my_filename)
-
-const indexHTMLPath= path.resolve(__my_dirname, 'fallback_index.html')
-const indexHTML = readFileSync(indexHTMLPath, 'utf8')
+import { fallbackIndexHTML } from './fallbackIndex.mjs'
 
 export function init_ssr_render_middleware(app, render, httpConfig, authConfig, socketConfig) {
   // check HTML
-  let html = render?.html || indexHTML
+  let html = render?.html || fallbackIndexHTML
 
   if (html.indexOf('{context}') < 0) {
     app.context.miolo.logger.error('Provided HTML for rendering has no {context} template variable')

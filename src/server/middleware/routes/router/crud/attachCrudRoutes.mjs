@@ -144,7 +144,7 @@ function attachCrudRoutes(router, crudConfigs, logger) {
       
       const route_save = async (ctx) => {
         await _crud_callback(ctx, 'w', async (model, uinfo) => {
-          const params = ctx.request.fields
+          const params = ctx.request.body
           if (uinfo?.fieldNames?.created_by) {
             params[uinfo.fieldNames.created_by] = uinfo.uid
           }
@@ -157,7 +157,7 @@ function attachCrudRoutes(router, crudConfigs, logger) {
       
       const route_update = async (ctx) => {
         await _crud_callback(ctx, 'w', async (model, uinfo) => {
-          const params = ctx.request.fields
+          const params = ctx.request.body
           if (uinfo?.fieldNames?.last_update_by) {
             params[uinfo.fieldNames.last_update_by] = uinfo.uid
           }
@@ -170,7 +170,7 @@ function attachCrudRoutes(router, crudConfigs, logger) {
       
       const route_delete = async (ctx) => {
         await _crud_callback(ctx, 'w', async (model, _uinfo) => {
-          const params = ctx.request.fields
+          const params = ctx.request.body
           // TODO : handle transactions
           const options= {transaction: undefined}    
           const data = await model.delete({id: params.id}, options)

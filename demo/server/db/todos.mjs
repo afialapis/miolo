@@ -16,14 +16,14 @@ async function todos_read(miolo, params) {
 }
 
 
-async function todos_count_last_hour(miolo, params) { 
-  miolo.logger.info(`[todos] Counting last hour todos... `, {section: 'todos-hour'})
+async function todos_count_last_hours(miolo, params) { 
+  miolo.logger.info(`[todos] Counting last ${params.hours} hours todos... `, {section: 'todos-hour'})
 
   const conn= await miolo.db.get_connection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const one_hour_ago = intre_now() - 60*60
+  const one_hour_ago = intre_now() - 60*60 * parseInt(params.hours)
 
   const query = `
     SELECT COUNT(1) as cnt
@@ -33,7 +33,7 @@ async function todos_count_last_hour(miolo, params) {
   const data= await conn.select(query, [one_hour_ago], options) 
   const res= data[0]['cnt']
 
-  miolo.logger.info(`[todos] Counted last hour todos: ${res} `, {section: 'todos-hour'})
+  miolo.logger.info(`[todos] Counted last ${params.hours} hours todos: ${res} `, {section: 'todos-hour'})
 
   return res
 }
@@ -56,4 +56,4 @@ async function todos_insert_fake(miolo, params) {
 
 
 
-export {todos_read, todos_count_last_hour, todos_insert_fake}
+export {todos_read, todos_count_last_hours, todos_insert_fake}

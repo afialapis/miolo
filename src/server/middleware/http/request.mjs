@@ -48,10 +48,7 @@ function init_request_middleware(app, config) {
     const logger = ctx.miolo.logger
     const ip = _get_ip(ctx)
     const started = performance.now()
-
-    // Patch for koa-better-body
-    ctx.request.body = {...ctx.request.fields, ...ctx.request.files}
-
+    
     // Keep request counters
     REQUEST_COUNTER.total+= 1
     REQUEST_COUNTER[ip] = (REQUEST_COUNTER[ip] || 0) + 1

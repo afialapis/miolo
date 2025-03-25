@@ -1,3 +1,11 @@
+# 1.1.7
+
+Upgrade `calustra`.
+No need to copy static files alongside `dist` files.
+Removed usages of `fileURLToPath` to get `__dirname` or `__filename`.
+Moved form `koa-better-body` to `@koa/bodyparser`. 
+  ==> No more `ctx.request.fields`, now it is just `ctx.request.body`.
+
 # 1.1.6
 
 Fix en email queing

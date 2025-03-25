@@ -14,7 +14,7 @@ export function query_string_to_json(url) {
 export function make_endpoint_from_fn(fn, field) {
 
   async function endpoint_from_fn(ctx) {    
-    const params = ctx.request.fields
+    const params = ctx.request.body
     try {
       ctx.miolo.logger.debug(`[router] ${fn.name}() Calling with params ${JSON.stringify(params)}`)
     } catch (_) {

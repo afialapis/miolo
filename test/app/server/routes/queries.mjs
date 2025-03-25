@@ -15,7 +15,7 @@ async function q_todos_make_table(ctx) {
 }
 
 async function q_todos_insert_fake(ctx) {
-  const tid= await todos_insert_fake(ctx.miolo, ctx.request.fields)
+  const tid= await todos_insert_fake(ctx.miolo, ctx.request.body)
 
   ctx.body = {id: tid}
 }

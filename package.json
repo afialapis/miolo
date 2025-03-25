@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -42,9 +42,8 @@
     "cli-react-bundle": "npx xeira bundle --target=browser --source_index=./src/cli-react/index.mjs --bundle_folder=./dist/cli-react --bundle_name=miolo.cli-react --bundle_node_polyfill=true",
     "cli-react-dist": "npm run cli-react-clean && npm run cli-react-bundle",
     "server-clean": "rm -fr ./dist/server/*",
-    "server-copy-static": "cp ./src/server/middleware/static/miolo.ico ./src/server/middleware/routes/robots/robots.txt ./src/server/middleware/render/ssr/fallback_index.html ./dist/server/",
     "server-bundle": "npx xeira bundle --target=node --source_index=./src/server/index.mjs --bundle_folder=./dist/server --bundle_name=miolo.server",
-    "server-dist": "npm run server-clean && npm run server-bundle && npm run server-copy-static",
+    "server-dist": "npm run server-clean && npm run server-bundle",
     "dist": "npm run cli-dist && npm run cli-react-dist && npm run server-dist",
     "demo-guest": "rm -fr ./demo/build/miolo-demo-guest* && node demo/run.cjs --guest",
     "demo-basic": "rm -fr ./demo/build/miolo-demo-basic* && node demo/run.cjs --basic",
@@ -57,11 +56,12 @@
     "prepare": "npm run test && npm run dist && npm run site"
   },
   "dependencies": {
+    "@koa/bodyparser": "^5.1.1",
     "@koa/cors": "^5.0.0",
     "@koa/router": "^13.1.0",
     "@maxmind/geoip2-node": "^6.0.0",
     "cacheiro": "^0.4.0",
-    "calustra": "^0.14.0",
+    "calustra": "^0.15.0",
     "cron": "^4.1.0",
     "deepmerge": "^4.3.1",
     "diskspace": "^2.0.0",
@@ -69,10 +69,7 @@
     "intre": "^2.5.0",
     "jwt-simple": "^0.5.6",
     "koa": "^2.16.0",
-    "koa-better-body": "^3.3.9",
-    "koa-bodyparser": "^4.4.1",
     "koa-compress": "^5.1.1",
-    "koa-convert": "^2.0.0",
     "koa-favicon": "^2.1.0",
     "koa-mount": "^4.0.0",
     "koa-passport": "^6.0.0",
@@ -103,7 +100,7 @@
     "babel-plugin-transform-import-meta": "^2.3.2",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.9",
-    "xeira": "^1.1.0"
+    "xeira": "^1.1.6"
   },
   "eslintConfig": {
     "extends": [

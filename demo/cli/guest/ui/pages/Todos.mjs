@@ -69,11 +69,11 @@ const Todos = ({useSsrData, fetcher}) => {
   }, [fetcher, todoList, setTodoList])
 
   
-  const checkLastHour = useCallback(async () => {
-    const res= await fetcher.get('crud/todos/last_hour')
-    alert(`You have added ${res.data} todos in the last hour`)
+  const checkLastHours = useCallback(async ({hours}) => {
+    const res= await fetcher.get('crud/todos/last_hours', {hours})
+    alert(`You have added ${res.data} todos in the last ${hours} hours`)
   }, [fetcher])
-
+  
   const insertFakeTodo = useCallback(async () => {
     const _tid= await fetcher.post('crud/todos/fake')
     refreshTodoList()
@@ -85,7 +85,7 @@ const Todos = ({useSsrData, fetcher}) => {
       addTodo        = {addTodo}
       toggleTodo     = {toggleTodo}
       removeTodo     = {removeTodo}
-      checkLastHour  = {checkLastHour}
+      checkLastHours  = {checkLastHours}
       insertFakeTodo = {insertFakeTodo}
     />
   )

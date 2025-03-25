@@ -4,8 +4,9 @@ import data from '../data.mjs'
 import test_server from '../server/index.mjs'
 import {miolo_client} from '../../../src/cli/index.mjs'
 
+const dbType = 'postgres'
 
-function test_01 (dbType) {  
+function test_01 () {  
 
   let app
   let conn

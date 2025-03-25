@@ -4,7 +4,7 @@ import { init_logger as miolo_logger } from './engines/logger/index.mjs'
 import { init_parser as miolo_parser } from './engines/parser/index.mjs'
 
 import { cacheiro as miolo_cacher} from 'cacheiro'
-import { getConnection as miolo_db_connection} from 'calustra'
+import { getConnection as miolo_db_connection} from 'calustra/conn-postgres'
 
 export {
   miolo,

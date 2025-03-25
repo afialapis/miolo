@@ -45,7 +45,7 @@ render:
 
 ### Custom `ctx` properties
 
-  ctx.request.body => instead of ctx.request.fields (default on koa-better-body)
+  ctx.request.body
   ctx.request.ip
 
   From koa-passport:

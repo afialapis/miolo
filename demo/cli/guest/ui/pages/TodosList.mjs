@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
 
-const TodosList = ({todoList, addTodo, toggleTodo, removeTodo, checkLastHour, insertFakeTodo}) => {
+const TodosList = ({todoList, addTodo, toggleTodo, removeTodo, checkLastHours, insertFakeTodo}) => {
   const [inputText, setInputText] = useState('')
+    const [hours, setHours] = useState(1)
   
   //const throwAnError = () => { throw Error('(Bad) Surprise!') }
   const throwAnError = () => { 
@@ -68,8 +69,14 @@ const TodosList = ({todoList, addTodo, toggleTodo, removeTodo, checkLastHour, in
         <h3>
           Shortcuts
         </h3>
-        <div className="question" onClick={() => checkLastHour()}>
-          Tell me how many todos I have added in the last hour
+        <div className="question" >
+          <div style={{display: 'inline'}} onClick={() => checkLastHours({hours})}>
+            {`Tell me how many todos I have added in the last ${hours} hours`}  
+          </div>
+          <div style={{display: 'inline'}}>
+            <a style={{margin: '0.5em'}} onClick={() => setHours((current) => Math.max(current-1, 1))}>-</a>
+            <a style={{margin: '0.5em'}} onClick={() => setHours((current) => current+1)}>+</a>
+          </div>          
         </div>
         <div className="question" onClick={() => throwAnError()}>
           Throw some JS error (server will receive it)

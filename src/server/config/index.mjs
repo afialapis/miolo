@@ -23,7 +23,7 @@ function init_config(config) {
   
   all_config.auth_type = _get_auth_type(config)
   all_config.use_catcher = all_config?.http?.catcher_url ? true : false
-
+  
   return all_config
 }
 
