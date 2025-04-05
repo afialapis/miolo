@@ -5,7 +5,8 @@ async function find_user_by_id(conn, uid) {
     SELECT id, username, name, created
       FROM users
      WHERE id = $1`;
-
+  return undefined
+  
   const data= await conn.select(query, [uid], options) 
   try {
     return data[0]

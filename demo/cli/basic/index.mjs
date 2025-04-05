@@ -1,5 +1,5 @@
 import React from 'react'
-import { hydrate } from 'react-dom'
+import { hydrateRoot } from 'react-dom'
 import App from './App.mjs'
 
 // Import styles for this application
@@ -10,5 +10,5 @@ import './assets/scss/style.scss'
 // import {miolo_catcher_init} from 'miolo-cli-tools'
 // miolo_catcher_init('sys/jserror')
 
-hydrate(<App/>, 
+hydrateRoot(<App/>, 
         document.getElementById('root'))

@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react'
 import {withContext} from '../../../../miolo-cli-react.mjs'
-import TodosList from './TodosList.mjs'
+import TodosList from './TodosList.jsx'
 
 function _showTitle  (title) {
   if (document!=undefined) {

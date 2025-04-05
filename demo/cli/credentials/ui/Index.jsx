@@ -1,10 +1,10 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { withContext } from '../../../miolo-cli-react.mjs'
-import Page from './layout/Page.mjs'
-import Todos from './pages/Todos.mjs'
-import Login from './pages/Login.mjs'
-import Logout from './pages/Logout.mjs'
+import Page from './layout/Page.jsx'
+import Todos from './pages/Todos.jsx'
+import Login from './pages/Login.jsx'
+import Logout from './pages/Logout.jsx'
 
 
 const Index = ({authenticated/*, socket*/}) => {

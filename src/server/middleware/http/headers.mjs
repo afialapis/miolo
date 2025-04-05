@@ -47,8 +47,8 @@ const init_headers_middleware = ( app, http) => {
     if (options=='simple') {
       logger.debug(`[http] Setting CORS the simple way`)
       app.use(async (ctx, next) => {
-        ctx.set('[http] Access-Control-Allow-Origin', '*')
-        ctx.set('[http] Access-Control-Expose-Headers', 'SourceMap,X-SourceMap')
+        ctx.set('Access-Control-Allow-Origin', '*')
+        ctx.set('Access-Control-Expose-Headers', 'SourceMap,X-SourceMap')
         await next()
       })
     } else {
@@ -68,7 +68,6 @@ const init_headers_middleware = ( app, http) => {
       koa_proxy(tpath, toptions)
     );
   })  
-
 }
 
 export { init_headers_middleware }

@@ -53,7 +53,7 @@
     "site": "npx xeira site",
     "test": "npx xeira test --files=./test/index.mjs",
     "reset": "npm run main:purge && npm i",
-    "prepare": "npm run test && npm run dist && npm run site"
+    "prepare-XXXX": "npm run test && npm run dist && npm run site"
   },
   "dependencies": {
     "@koa/bodyparser": "^5.1.1",
@@ -97,9 +97,11 @@
     "@babel/preset-env": "7.26.9",
     "@babel/preset-react": "7.26.3",
     "@babel/register": "7.25.9",
+    "@vitejs/plugin-react": "^4.3.4",
     "babel-plugin-transform-import-meta": "^2.3.2",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.9",
+    "vite": "^6.2.5",
     "xeira": "^1.1.6"
   },
   "eslintConfig": {

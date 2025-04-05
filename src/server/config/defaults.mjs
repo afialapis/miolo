@@ -19,7 +19,7 @@ export default {
     //   - true      enable @koa/cors
     //   - {options} enable @koa/cors and use the custom options
     //
-    cors: false,
+    cors: 'simple',
 
     // proxy can be:
     //   - false

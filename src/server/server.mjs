@@ -19,7 +19,7 @@ import { init_extra_middlewares }         from './middleware/extra.mjs'
 import { init_headers_middleware }        from './middleware/http/headers.mjs'
 import { init_router }                    from './middleware/routes/router/index.mjs'
 
-import { init_ssr_render_middleware}      from './middleware/render/ssr/render.mjs'
+import { init_ssr_render_middleware}      from './middleware/render/ssr/vite_render.mjs'
 //import { init_404_render_middleware}    from './middleware/render/404/render.mjs'
 //import { init_json_render_middleware}   from './middleware/render/json/render.mjs'
 
@@ -27,7 +27,7 @@ import { init_ssr_render_middleware}      from './middleware/render/ssr/render.m
 import { init_cron }                      from './engines/cron/index.mjs'
 import { init_http_server }               from './engines/http/index.mjs'
 
-function miolo(sconfig, render) {
+async function miolo(sconfig, render) {
 
   const app = new Koa()
 
@@ -36,6 +36,40 @@ function miolo(sconfig, render) {
   
   // attach to app some custom miolo methods
   init_context_middleware(app, config)
+
+
+  // Vite Dev Server
+  const isProduction = process.env.NODE_ENV === 'production'
+  let vite
+  if (!isProduction) {
+    const { createServer } = await import('vite')
+    const react = await import('@vitejs/plugin-react')
+
+
+    vite = await createServer({
+      server: { middlewareMode: true },
+      appType: 'custom',
+      base: render?.base || '/',
+      root: render?.root || '/',
+      plugins: [react.default()],
+      //port: 8001.
+      //esbuild: {
+      //  loader: 'jsx',
+      //  include: /src\/.*\.mjs$/, // Ajusta la ruta si es necesario
+      //  exclude: [],
+      //},        
+    })
+    // app.use(vite.middlewares)
+
+    app.use(async (ctx, next) => {
+      // Pasar el 'res' nativo al middleware de Vite
+      await vite.middlewares(ctx.req, ctx.res);
+      if (ctx.responded) {
+        return;
+      }
+      await next();
+    });
+  }    
 
   // CORS and other headers
   init_headers_middleware(app, config.http)    
@@ -91,11 +125,13 @@ function miolo(sconfig, render) {
     init_router(app, config.routes)
   }
 
+
   // Middleware for final render
   if (render?.middleware != undefined) {
     app.use(render.middleware)
   } else {
-    init_ssr_render_middleware(app, render, config.http, config?.auth, config?.socket)
+    // init_ssr_render_middleware(app, render, config.http, config?.auth, config?.socket)
+    init_ssr_render_middleware(app, vite, render, config.http, config?.auth, config?.socket)
   }/* else {
     init_404_render_middleware(app, render)
     // init_json_render_middleware(app, render)  

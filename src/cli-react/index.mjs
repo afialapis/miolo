@@ -1,5 +1,5 @@
-import withContext from './context/withContext.mjs'
-import AppBrowser from './AppBrowser.mjs'
-import AppServer from './AppServer.mjs'
+import withContext from './context/withContext.jsx'
+import AppBrowser from './AppBrowser.jsx'
+import AppServer from './AppServer.jsx'
 
 export {withContext, AppBrowser, AppServer}

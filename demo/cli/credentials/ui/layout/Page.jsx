@@ -1,6 +1,6 @@
 import React from 'react'
-import Header from './Header.mjs'
-import Badges from './Badges.mjs'
+import Header from './Header.jsx'
+import Badges from './Badges.jsx'
 import { Outlet } from 'react-router-dom'
 const Page = () => {
   return (

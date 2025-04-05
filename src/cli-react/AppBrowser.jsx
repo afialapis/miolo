@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import AppContext from './context/AppContext.mjs'
+import AppContext from './context/AppContext.jsx'
 
 const AppBrowser = ({children}) => {
   

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import Page from './layout/Page.mjs'
-import Todos from './pages/Todos.mjs'
+import Page from './layout/Page.jsx'
+import Todos from './pages/Todos.jsx'
 
 
 const Index = () => {
