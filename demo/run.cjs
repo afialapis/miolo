@@ -10,7 +10,7 @@ async function mioloDemo (authType) {
   //process.env.DEBUG = 'winston*'
   
   // Cli build folders relative to top main folder, otherwise xeira complains
-  const cli_index = `./demo/cli/${authType}/index.mjs`
+  const cli_index = `./demo/cli/${authType}/index.jsx`
   const cli_build = './demo/build'
 
   const server_index = path.join(__dirname, `./server/index.cjs`)

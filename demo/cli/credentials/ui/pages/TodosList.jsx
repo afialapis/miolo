@@ -17,7 +17,7 @@ const TodosList = ({authenticated, todoList, addTodo, toggleTodo, removeTodo, ch
         <div className="todos-add">
           <div className="input-container">
             <input type="text" 
-                  placeholder={authenticated ? "Things to be done..." : "Login in order to be able to add todos"}
+                  placeholder={authenticated ? "Things to be done..." : "LogIn in order to be able to add todos"}
                   disabled={!authenticated}
                   value={inputText}
                   onChange={(ev) => setInputText(ev.target.value)}

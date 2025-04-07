@@ -81,7 +81,7 @@ export function init_ssr_render_middleware(app, vite, renderOptions, httpConfig,
 
         render = (await import(renderOptions.server)).render
       }
-      ssr_html = render(ctx, context)
+      ssr_html = await render(ctx, context)
     } catch(error) {
       ctx.miolo.logger.error(`Error in renderer (render.server):\n${error.toString()}`)
 
@@ -122,7 +122,7 @@ export function init_ssr_render_middleware(app, vite, renderOptions, httpConfig,
 
       ctx.type = 'text/html'
       ctx.body= rendered_html
-      //ctx.status = 200
+      ctx.status = 200
     } catch(e) {
       vite?.ssrFixStacktrace(e)
       console.log(e.stack)

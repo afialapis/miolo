@@ -1,6 +1,8 @@
 import Koa                                from 'koa'
 import { init_config }                    from './config/index.mjs'
 
+import koaConnect from 'koa-connect'
+
 import { init_context_middleware }        from './middleware/context/index.mjs'
 import { init_body_middleware }           from './middleware/http/body.mjs'
 import { init_catcher_middleware }        from './middleware/http/catcher.mjs'
@@ -37,7 +39,6 @@ async function miolo(sconfig, render) {
   // attach to app some custom miolo methods
   init_context_middleware(app, config)
 
-
   // Vite Dev Server
   const isProduction = process.env.NODE_ENV === 'production'
   let vite
@@ -45,12 +46,18 @@ async function miolo(sconfig, render) {
     const { createServer } = await import('vite')
     const react = await import('@vitejs/plugin-react')
 
+    console.log('--------------')
+    console.log('CWD: ' + process.cwd())
+    console.log(`root: ${render?.root || '/'}`)
+    console.log(`base: ${render?.base || '/'}`)
+
 
     vite = await createServer({
       server: { middlewareMode: true },
       appType: 'custom',
       base: render?.base || '/',
-      root: render?.root || '/',
+      //root: `${process.cwd()}/demo`, // render?.root || '/',
+      root: 'demo',
       plugins: [react.default()],
       //port: 8001.
       //esbuild: {
@@ -58,22 +65,32 @@ async function miolo(sconfig, render) {
       //  include: /src\/.*\.mjs$/, // Ajusta la ruta si es necesario
       //  exclude: [],
       //},        
+
+      watch: {
+        // During tests we edit the files too fast and sometimes chokidar
+        // misses change events, so enforce polling for consistency
+        usePolling: true,
+        interval: 100,
+      },      
     })
     // app.use(vite.middlewares)
 
-    app.use(async (ctx, next) => {
-      // Pasar el 'res' nativo al middleware de Vite
-      await vite.middlewares(ctx.req, ctx.res);
-      if (ctx.responded) {
-        return;
-      }
-      await next();
-    });
-  }    
+    //app.use(async (ctx, next) => {
+    //  // Pasar el 'res' nativo al middleware de Vite
+    //  await vite.middlewares(ctx.req, ctx.res);
+    //  if (ctx.responded) {
+    //    return;
+    //  }
+    //  await next();
+    //});
+    app.use(koaConnect(vite.middlewares))
 
+  }    
+  
   // CORS and other headers
   init_headers_middleware(app, config.http)    
-
+  
+  
   // Compress and body parser
   init_body_middleware(app)
 
@@ -125,7 +142,6 @@ async function miolo(sconfig, render) {
     init_router(app, config.routes)
   }
 
-
   // Middleware for final render
   if (render?.middleware != undefined) {
     app.use(render.middleware)
@@ -136,6 +152,7 @@ async function miolo(sconfig, render) {
     init_404_render_middleware(app, render)
     // init_json_render_middleware(app, render)  
   }*/
+
 
   // Init cron (will not start jobs yet)
   init_cron(app, config?.cron)

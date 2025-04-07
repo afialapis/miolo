@@ -22,10 +22,10 @@ async function demo_server (authType) {
   const indexHTML = readFileSync(indexHTMLPath, 'utf8')
 
   const client = authType=='guest'
-    ? 'cli/guest/index.mjs'
+    ? 'cli/guest/index.jsx'
     : authType=='basic'
-    ? 'cli/basic/index.mjs'
-    : 'cli/credentials/index.mjs'
+    ? 'cli/basic/index.jsx'
+    : 'cli/credentials/index.jsx'
 
   const server = authType=='guest'
     ? 'server/ssr/entry-guest.jsx'
@@ -42,7 +42,7 @@ async function demo_server (authType) {
     loader,
     client,
     server,
-    base: '/demo',
+    base: '/',
     root: 'demo'
   }  
 
