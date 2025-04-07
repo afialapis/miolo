@@ -1,35 +1,32 @@
 import Koa                                from 'koa'
 import { init_config }                    from './config/index.mjs'
 
-import koaConnect from 'koa-connect'
+import { init_context_middleware }         from './middleware/context/index.mjs'
+import { init_vite_dev_server_middleware } from './middleware/vite/devserver.mjs'
+import { init_headers_middleware }         from './middleware/http/headers.mjs'
+import { init_body_middleware }            from './middleware/http/body.mjs'
+import { init_catcher_middleware }         from './middleware/http/catcher.mjs'
+import { init_rate_limit_middleware }      from './middleware/http/ratelimit.mjs'
+import { init_static_middleware }          from './middleware/static/index.mjs'
+import { init_request_middleware }         from './middleware/http/request.mjs'
+import { init_route_robots }               from './middleware/routes/robots.mjs'
+import { init_route_catch_js_error}        from './middleware/routes/catch_js_error.mjs'
 
-import { init_context_middleware }        from './middleware/context/index.mjs'
-import { init_body_middleware }           from './middleware/http/body.mjs'
-import { init_catcher_middleware }        from './middleware/http/catcher.mjs'
-import { init_rate_limit_middleware }     from './middleware/http/ratelimit.mjs'
-import { init_static_middleware }         from './middleware/static/index.mjs'
-import { init_request_middleware }        from './middleware/http/request.mjs'
-import { init_route_robots }              from './middleware/routes/robots.mjs'
-import { init_route_catch_js_error}       from './middleware/routes/catch_js_error.mjs'
+import {init_guest_auth_middleware}        from'./middleware/auth/guest.mjs'
+import {init_basic_auth_middleware}        from'./middleware/auth/basic.mjs'
+import {init_credentials_auth_middleware}  from'./middleware/auth/credentials/index.mjs'
+import {init_custom_auth_middleware}       from'./middleware/auth/custom.mjs'
 
-import {init_guest_auth_middleware}       from'./middleware/auth/guest.mjs'
-import {init_basic_auth_middleware}       from'./middleware/auth/basic.mjs'
-import {init_credentials_auth_middleware} from'./middleware/auth/credentials/index.mjs'
-import {init_custom_auth_middleware}      from'./middleware/auth/custom.mjs'
+import { init_extra_middlewares }          from './middleware/extra.mjs'
+import { init_router }                     from './middleware/routes/router/index.mjs'
 
-import { init_extra_middlewares }         from './middleware/extra.mjs'
-import { init_headers_middleware }        from './middleware/http/headers.mjs'
-import { init_router }                    from './middleware/routes/router/index.mjs'
-
-import { init_ssr_render_middleware}      from './middleware/render/ssr/vite_render.mjs'
-//import { init_404_render_middleware}    from './middleware/render/404/render.mjs'
-//import { init_json_render_middleware}   from './middleware/render/json/render.mjs'
+import { init_ssr_render_middleware }      from './middleware/ssr/ssr_render.mjs'
 
 //import {init_socket}                      from './engines/socket/index.mjs'
-import { init_cron }                      from './engines/cron/index.mjs'
-import { init_http_server }               from './engines/http/index.mjs'
+import { init_cron }                       from './engines/cron/index.mjs'
+import { init_http_server }                from './engines/http/index.mjs'
 
-async function miolo(sconfig, render) {
+async function miolo(sconfig) {
 
   const app = new Koa()
 
@@ -40,56 +37,10 @@ async function miolo(sconfig, render) {
   init_context_middleware(app, config)
 
   // Vite Dev Server
-  const isProduction = process.env.NODE_ENV === 'production'
-  let vite
-  if (!isProduction) {
-    const { createServer } = await import('vite')
-    const react = await import('@vitejs/plugin-react')
-
-    console.log('--------------')
-    console.log('CWD: ' + process.cwd())
-    console.log(`root: ${render?.root || '/'}`)
-    console.log(`base: ${render?.base || '/'}`)
-
-
-    vite = await createServer({
-      server: { middlewareMode: true },
-      appType: 'custom',
-      base: render?.base || '/',
-      //root: `${process.cwd()}/demo`, // render?.root || '/',
-      root: 'demo',
-      plugins: [react.default()],
-      //port: 8001.
-      //esbuild: {
-      //  loader: 'jsx',
-      //  include: /src\/.*\.mjs$/, // Ajusta la ruta si es necesario
-      //  exclude: [],
-      //},        
-
-      watch: {
-        // During tests we edit the files too fast and sometimes chokidar
-        // misses change events, so enforce polling for consistency
-        usePolling: true,
-        interval: 100,
-      },      
-    })
-    // app.use(vite.middlewares)
-
-    //app.use(async (ctx, next) => {
-    //  // Pasar el 'res' nativo al middleware de Vite
-    //  await vite.middlewares(ctx.req, ctx.res);
-    //  if (ctx.responded) {
-    //    return;
-    //  }
-    //  await next();
-    //});
-    app.use(koaConnect(vite.middlewares))
-
-  }    
-  
+  await init_vite_dev_server_middleware(app, config.vite)
+ 
   // CORS and other headers
   init_headers_middleware(app, config.http)    
-  
   
   // Compress and body parser
   init_body_middleware(app)
@@ -142,17 +93,8 @@ async function miolo(sconfig, render) {
     init_router(app, config.routes)
   }
 
-  // Middleware for final render
-  if (render?.middleware != undefined) {
-    app.use(render.middleware)
-  } else {
-    // init_ssr_render_middleware(app, render, config.http, config?.auth, config?.socket)
-    init_ssr_render_middleware(app, vite, render, config.http, config?.auth, config?.socket)
-  }/* else {
-    init_404_render_middleware(app, render)
-    // init_json_render_middleware(app, render)  
-  }*/
-
+  // Middleware for HTML and SSR rendering
+  init_ssr_render_middleware(app, config.ssr, config.http, config?.auth, config?.socket)
 
   // Init cron (will not start jobs yet)
   init_cron(app, config?.cron)

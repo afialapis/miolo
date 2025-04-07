@@ -324,12 +324,6 @@ export default {
     //        callback: a middleware function
     //      }, ...]
   },
-  render: {
-    // html: '',
-    // ssr: {loader, renderer},
-    // middleware: () => {}
-    //
-  },
   middlewares: [
     // async (ctx, next) => {}
     // Remember to call `await next()`
@@ -400,6 +394,25 @@ export default {
       listener: (data) => {}
     }]
     */
-  }
+  },
+
+  // vite: false, 
+  vite: {
+    base: '/',
+    root: '',
+    watch: {
+      // During tests we edit the files too fast and sometimes chokidar
+      // misses change events, so enforce polling for consistency
+      usePolling: true,
+      interval: 100,
+    }, 
+  },
+    
+  ssr: {
+    client: 'cli/index.jsx',
+    server: 'server/index.jsx',
+    // html: '',
+    // loader: async (ctx) => {}
+  },
 };
 

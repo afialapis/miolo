@@ -1,18 +1,36 @@
 import path from 'path'
+import {readFileSync} from 'fs'
 import { fileURLToPath } from 'url'
 import def_routes from './routes/index.mjs'
 import credentials from './auth/credentials.mjs'
 import basic_auth from './auth/basic.mjs'
+import { loader } from './ssr/loader.mjs'
 
 const __my_filename = fileURLToPath(import.meta.url)
 const __my_dirname = path.dirname(__my_filename)
 
-export const makeConfig = (authType, logLevel= 'info') => {
+
+
+export const makeConfig = (authType, logLevel= 'debug') => {
+  const indexHTMLPath=  path.resolve(__my_dirname, `../cli/${authType}/index.html`)
+  const indexHTML = readFileSync(indexHTMLPath, 'utf8')
+
   const auth = 
       authType=='guest' ? {guest: {}}
     : authType=='basic' ? {basic: basic_auth}
     : {credentials}
 
+  const client = authType=='guest'
+    ? 'cli/guest/index.jsx'
+    : authType=='basic'
+    ? 'cli/basic/index.jsx'
+    : 'cli/credentials/index.jsx'
+
+  const server = authType=='guest'
+    ? 'server/ssr/entry-guest.jsx'
+    : authType=='basic'
+    ? 'server/ssr/entry-basic.jsx'
+    : 'server/ssr/entry-credentials.jsx'    
 
   return {
     http: {
@@ -100,5 +118,16 @@ export const makeConfig = (authType, logLevel= 'info') => {
     //  //new_namespace: (namespace) => {},
     //  
     //}    
+
+
+    ssr: {
+      //html: indexHTML,
+      client,
+      server,
+    }, 
+    vite: {
+      base: '/',
+      root: 'demo'
+    }
   }
 }
