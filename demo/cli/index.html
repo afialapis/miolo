@@ -1,4 +1,3 @@
-export const fallbackIndexHTML = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,16 +13,16 @@ export const fallbackIndexHTML = `
 	<!--<link rel="apple-touch-icon-precomposed" href="/favicon.ico"/>-->
 	<!-- Firefox, Chrome, Safari, IE 11+ and Opera. 196x196 pixels in size. -->
 	<link rel="icon" href="/favicon.ico"/>
+	<link href="/build/cli/miolo-demo.iife.bundle.css" rel="stylesheet" media="all"></link>
 
-
-	<script>
-		window.__CONTEXT = {context}
-	</script>	
 </head>
 
 <body>
 	<div id="root">{children}</div>
-	<script type="module" src="{client}"></script>
+  <script>
+		window.AUTH_TYPE = '--AUTH_TYPE--'
+    window.__CONTEXT = {context}
+  </script>
+	<script src="{client}" async></script>
 </body>
 </html>
-`

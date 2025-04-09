@@ -1,4 +1,4 @@
-import {miolo} from './server.mjs'
+import { miolo } from './server.mjs'
 import { init_emailer_transporter as miolo_emailer} from './engines/emailer/index.mjs'
 import { init_logger as miolo_logger } from './engines/logger/index.mjs'
 import { init_parser as miolo_parser } from './engines/parser/index.mjs'

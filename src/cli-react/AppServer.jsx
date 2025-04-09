@@ -1,18 +1,15 @@
 
 import React from 'react'
-import { StaticRouter } from 'react-router-dom/server.js'
-import AppContext from './context/AppContext.jsx'
+import MioloContextProvider from './context/MioloContextProvider.jsx'
 
 
-const AppServer = ({url, context, children}) => {
-  
+const AppServer = ({context, children}) => {
+
   return (
-    <StaticRouter location={url}>
-      <AppContext 
-          context= {context || {}}>
-        {children}
-      </AppContext>
-    </StaticRouter>
+    <MioloContextProvider 
+        context= {context || {}}>
+      {children}
+    </MioloContextProvider>
   )
 }
 

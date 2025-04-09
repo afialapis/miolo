@@ -2,7 +2,7 @@ import Koa                                from 'koa'
 import { init_config }                    from './config/index.mjs'
 
 import { init_context_middleware }         from './middleware/context/index.mjs'
-import { init_vite_dev_server_middleware } from './middleware/vite/devserver.mjs'
+// import { init_vite_dev_server_middleware } from './middleware/vite/devserver.mjs'
 import { init_headers_middleware }         from './middleware/http/headers.mjs'
 import { init_body_middleware }            from './middleware/http/body.mjs'
 import { init_catcher_middleware }         from './middleware/http/catcher.mjs'
@@ -26,7 +26,7 @@ import { init_ssr_render_middleware }      from './middleware/ssr/ssr_render.mjs
 import { init_cron }                       from './engines/cron/index.mjs'
 import { init_http_server }                from './engines/http/index.mjs'
 
-async function miolo(sconfig) {
+async function miolo(sconfig, devInit= undefined, devRender= undefined) {
 
   const app = new Koa()
 
@@ -37,8 +37,12 @@ async function miolo(sconfig) {
   init_context_middleware(app, config)
 
   // Vite Dev Server
-  await init_vite_dev_server_middleware(app, config.vite)
- 
+  if (devInit) {
+    await devInit(app, config)
+    // await init_vite_dev_server_middleware(app, config.vite)
+  }
+  
+  
   // CORS and other headers
   init_headers_middleware(app, config.http)    
   
@@ -94,7 +98,7 @@ async function miolo(sconfig) {
   }
 
   // Middleware for HTML and SSR rendering
-  init_ssr_render_middleware(app, config.ssr, config.http, config?.auth, config?.socket)
+  await init_ssr_render_middleware(app, config, devRender)
 
   // Init cron (will not start jobs yet)
   init_cron(app, config?.cron)

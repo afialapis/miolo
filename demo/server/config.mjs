@@ -1,36 +1,30 @@
 import path from 'path'
 import {readFileSync} from 'fs'
-import { fileURLToPath } from 'url'
 import def_routes from './routes/index.mjs'
 import credentials from './auth/credentials.mjs'
 import basic_auth from './auth/basic.mjs'
 import { loader } from './ssr/loader.mjs'
 
-const __my_filename = fileURLToPath(import.meta.url)
-const __my_dirname = path.dirname(__my_filename)
-
-
+const proot = (p) => path.join(process.env.NODE_ROOT, p)
 
 export const makeConfig = (authType, logLevel= 'debug') => {
-  const indexHTMLPath=  path.resolve(__my_dirname, `../cli/${authType}/index.html`)
-  const indexHTML = readFileSync(indexHTMLPath, 'utf8')
+  const isProduction = process.env.NODE_ENV === 'production'
+
+  const indexHTMLPath=  proot(`cli/${isProduction ? 'index.html' : 'index.dev.html'}`)
+  const indexHTML = readFileSync(indexHTMLPath, 'utf8').replace(/--AUTH_TYPE--/g, process.env.AUTH_TYPE || 'credentials')
 
   const auth = 
       authType=='guest' ? {guest: {}}
     : authType=='basic' ? {basic: basic_auth}
     : {credentials}
 
-  const client = authType=='guest'
-    ? 'cli/guest/index.jsx'
-    : authType=='basic'
-    ? 'cli/basic/index.jsx'
-    : 'cli/credentials/index.jsx'
+  const client = isProduction
+    ? 'build/cli/miolo-demo.iife.bundle.js' // 'build/cli/miolo-demo.iife.bundle.min.js'
+    : 'cli/entry-cli.jsx'
 
-  const server = authType=='guest'
-    ? 'server/ssr/entry-guest.jsx'
-    : authType=='basic'
-    ? 'server/ssr/entry-basic.jsx'
-    : 'server/ssr/entry-credentials.jsx'    
+  const server = isProduction
+    ? proot('dist/server/entry-server.mjs')
+    : 'server/ssr/entry-server.jsx'
 
   return {
     http: {
@@ -42,10 +36,10 @@ export const makeConfig = (authType, logLevel= 'debug') => {
       // Folders to be mounted by koa for static content
       //
       static: {
-        favicon: path.resolve(__my_dirname, 'static/img/favicon.ico'),
+        favicon: proot('server/static/img/favicon.ico'),
         folders: {
-          '/static': path.resolve(__my_dirname, 'static'),
-          '/build': path.resolve(__my_dirname, '../build')
+          '/static': proot('server/static'),
+          '/build': proot('build')
         }        
       },
 
@@ -121,13 +115,14 @@ export const makeConfig = (authType, logLevel= 'debug') => {
 
 
     ssr: {
-      //html: indexHTML,
+      html: indexHTML,
       client,
       server,
+      loader
     }, 
     vite: {
       base: '/',
-      root: 'demo'
+      root: ''
     }
   }
 }

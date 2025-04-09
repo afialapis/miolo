@@ -5,7 +5,8 @@ let _geoip_reader = undefined
 
 const _geoip_def_local_ips= [
   '127.0.0.1',
-  '::1:'
+  '::1:',
+  '172.19.0.1' // Docker inner - probably healthcheck
 ]
 
 function _geoip_is_local(ip, local_ips = []) {
@@ -54,8 +55,8 @@ export const geoip_localize_ip= (ip, config, logger= console) => {
       city   : resp.city?.names?.en
     }
   } catch(error) {
-    logger.error(`[geoip] Error localizing IP ${ip}:`)
-    logger.error(error)
+    logger.error(`[geoip] Error localizing IP ${ip} (not in the database)`)
+    //logger.error(error)
   }
 
   return {

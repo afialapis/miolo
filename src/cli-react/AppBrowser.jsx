@@ -1,21 +1,14 @@
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
-import AppContext from './context/AppContext.jsx'
+import MioloContextProvider from './context/MioloContextProvider.jsx'
 
-const AppBrowser = ({children}) => {
-  
+const AppBrowser = ({ children }) => {
+  const context = typeof window !== 'undefined' && window.__CONTEXT ? window.__CONTEXT : {};
+
   return (
-    <BrowserRouter
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}    
-    >
-      <AppContext context={window.__CONTEXT || {}}>
-        {children}
-      </AppContext>
-    </BrowserRouter>
-  )
+    <MioloContextProvider context={context}>
+      {children}
+    </MioloContextProvider>
+  )  
 }
 
 export default AppBrowser

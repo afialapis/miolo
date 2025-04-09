@@ -1,0 +1,37 @@
+{
+  "name": "miolo-demo",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "reset": "rm -fr node_modules package-lock.json npm-lock.yaml && npm i",
+
+    "x-demo-vite": "AUTH_TYPE=credentials node server/run.mjs",
+    "x-demo-vite-prod": "NODE_ENV=production AUTH_TYPE=credentials node server/run.mjs",
+    "x-demo-vite-build-client": "vite build --outDir dist/client",
+    "x-demo-vite-build-server": "vite build --outDir dist/server --ssr server/ssr/entry-server.jsx",
+
+    "dev": "node ./bin/run.dev.mjs",
+    "build-clean": "node ./bin/build.prod.mjs clean 1>> /var/log/afialapis/miolo_demo.log 2>&1",
+    "build": "node ./bin/build.prod.mjs build 1>> /var/log/afialapis/miolo_demo.log 2>&1",
+    "start": "node ./bin/run.prod.mjs start 1>> /var/log/afialapis/miolo_demo.log 2>&1",
+    "stop": "node ./bin/run.prod.mjs stop 1>> /var/log/afialapis/miolo_demo.log 2>&1",
+    "restart": "node ./bin/run.prod.mjs restart 1>> /var/log/afialapis/miolo_demo.log 2>&1"
+  },
+  "dependencies": {
+    "miolo": "file:../",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.29.0"
+  },
+  "devDependencies": {
+    "xeira": "^1.1.9"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/xeira/configs/eslint.react.cjs"
+    ]
+  },
+  "babel": {
+    "extends": "./node_modules/xeira/configs/babel.react.cjs"
+  }
+}

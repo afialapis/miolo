@@ -1,11 +1,20 @@
-import stringify from "qs/lib/stringify.js"
-
 /**
  * Transform an JSON object to a query string
  */
-export function json_to_query_string(params) {
-  if (params && (Object.keys(params).length>0)) {
-    return `?${stringify(params)}`
+export function json_to_query_string(obj) {
+  if (obj && (Object.keys(obj).length>0)) {
+    const uparams = new URLSearchParams()
+    for (const key in obj) {
+      if (Object.hasOwn(obj, key)) {
+        const value = obj[key];
+        if (Array.isArray(value)) {
+          value.forEach(item => uparams.append(key, item))
+        } else if (value !== undefined && value !== null) {
+          uparams.append(key, value)
+        }
+      }
+    }
+    return uparams.toString()
   }
   return ''
 }

@@ -1,5 +1,7 @@
-import withContext from './context/withContext.jsx'
+import withMioloContext from './context/withMioloContext.jsx'
+import useMioloContext from './context/useMioloContext.jsx'
+
 import AppBrowser from './AppBrowser.jsx'
 import AppServer from './AppServer.jsx'
 
-export {withContext, AppBrowser, AppServer}
+export {withMioloContext, useMioloContext, AppBrowser, AppServer}
