@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "2.0.0-beta.10",
+  "version": "2.0.0-beta.11",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -17,7 +17,7 @@
   "license": "MIT",
   "bin": {
     "miolo": "./bin/index.mjs"
-  },  
+  },
   "exports": {
     "./server": {
       "default": "./dist/server/miolo.server.node.mjs"
@@ -69,6 +69,7 @@
     "xxx_demo-vite-build-server": "vite build --outDir demo/dist/server --ssr demo/server/ssr/entry-server.jsx"
   },
   "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.25.9",
     "@koa/bodyparser": "^5.1.1",
     "@koa/cors": "^5.0.0",
     "@koa/router": "^13.1.0",
@@ -101,8 +102,8 @@
     "vite": "^6.2.5",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
-    "yargs-parser": "^21.1.1",
-    "xeira": "^1.1.10"
+    "xeira": "^1.1.10",
+    "yargs-parser": "^21.1.1"
   },
   "peerDependencies": {
     "react": "^18.3.1",

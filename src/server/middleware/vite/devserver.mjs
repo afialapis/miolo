@@ -13,7 +13,15 @@ export async function init_vite_dev_server_middleware(app, config) {
     vite = await createServer({
       server: { middlewareMode: true },
       appType: 'custom',
-      plugins: [react.default()],
+      plugins: [react.default(
+        {
+          babel: {
+            plugins: [
+              ["@babel/plugin-proposal-decorators", { "legacy": true }]
+            ]
+          }
+        }
+      )],
       // 
       base: config?.base || '/',
       root: config?.root || '',
