@@ -4,34 +4,44 @@
   "private": true,
   "scripts": {
     "reset": "rm -fr node_modules package-lock.json npm-lock.yaml && npm i",
-
     "x-demo-vite": "AUTH_TYPE=credentials node server/run.mjs",
     "x-demo-vite-prod": "NODE_ENV=production AUTH_TYPE=credentials node server/run.mjs",
     "x-demo-vite-build-client": "vite build --outDir dist/client",
-    "x-demo-vite-build-server": "vite build --outDir dist/server --ssr server/ssr/entry-server.jsx",
 
-    "dev": "node ./bin/run.dev.mjs",
-    "build-clean": "node ./bin/build.prod.mjs clean 1>> /var/log/afialapis/miolo_demo.log 2>&1",
-    "build": "node ./bin/build.prod.mjs build 1>> /var/log/afialapis/miolo_demo.log 2>&1",
-    "start": "node ./bin/run.prod.mjs start 1>> /var/log/afialapis/miolo_demo.log 2>&1",
-    "stop": "node ./bin/run.prod.mjs stop 1>> /var/log/afialapis/miolo_demo.log 2>&1",
-    "restart": "node ./bin/run.prod.mjs restart 1>> /var/log/afialapis/miolo_demo.log 2>&1"
+    
+    "x_dev": "node ./bin/run.dev.mjs",
+    "x_demo-vite-build-server": "vite build --outDir dist/server --ssr server/ssr/entry-server.jsx",
+    "x_build-clean": "node ./bin/build.prod.mjs clean 1>> /var/log/afialapis/miolo_demo.log 2>&1",
+    "x_build": "node ./bin/build.prod.mjs build 1>> /var/log/afialapis/miolo_demo.log 2>&1",
+    "x_start": "node ./bin/run.prod.mjs start 1>> /var/log/afialapis/miolo_demo.log 2>&1",
+    "x_stop": "node ./bin/run.prod.mjs stop 1>> /var/log/afialapis/miolo_demo.log 2>&1",
+    "x_restart": "node ./bin/run.prod.mjs restart 1>> /var/log/afialapis/miolo_demo.log 2>&1",
+
+    "dev": "npx miolo dev --entry=./server/server-dev.mjs --server-name=miolo_demo_server",
+    "cp-html": "cp ./cli/index.html ./build/cli/index.html",
+    "build-client": "npx miolo build-client --entry=./cli/entry-cli.jsx --dest=./build/cli && npm run cp-html",
+    "build-server": "npx miolo build-server --ssr-entry=server/ssr/entry-server.jsx --ssr-dest=./dist/server --entry=./server/server-prod.mjs --dest=./build/server",
+    "start": "npx miolo start --server-name=miolo_demo_server  --dest=./build/server",
+    "stop": "npx miolo stop",
+    "restart": "npx miolo restart --server-name=miolo_demo_server  --dest=./build/server"
   },
   "dependencies": {
-    "miolo": "file:../",
+    "intre": "^2.5.0",
+    "miolo": "2.0.0-beta.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.29.0"
   },
   "devDependencies": {
+    "vite": "^6.2.5",
     "xeira": "^1.1.9"
   },
   "eslintConfig": {
     "extends": [
-      "./node_modules/xeira/configs/eslint.react.cjs"
+      "./node_modules/xeira/configs/eslint.react.mjs"
     ]
   },
   "babel": {
-    "extends": "./node_modules/xeira/configs/babel.react.cjs"
+    "extends": "./node_modules/xeira/configs/babel.react.mjs"
   }
 }

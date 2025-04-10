@@ -5,7 +5,8 @@ import credentials from './auth/credentials.mjs'
 import basic_auth from './auth/basic.mjs'
 import { loader } from './ssr/loader.mjs'
 
-const proot = (p) => path.join(process.env.NODE_ROOT, p)
+//const proot = (p) => path.join(process.env.NODE_ROOT, p)
+const proot = (p) => path.join(process.cwd(), p)
 
 export const makeConfig = (authType, logLevel= 'debug') => {
   const isProduction = process.env.NODE_ENV === 'production'
@@ -19,7 +20,7 @@ export const makeConfig = (authType, logLevel= 'debug') => {
     : {credentials}
 
   const client = isProduction
-    ? 'build/cli/miolo-demo.iife.bundle.js' // 'build/cli/miolo-demo.iife.bundle.min.js'
+    ? 'build/cli/miolo-demo.iife.bundle.min.js' // 'build/cli/miolo-demo.iife.bundle.min.js'
     : 'cli/entry-cli.jsx'
 
   const server = isProduction

@@ -1,3 +1,16 @@
+1 - cli y clireact en otro pkg
+2 - ver si asi persisten problemas de doble react en demo con dependencia local
+
+
+En /bin, los wrappers miolo-prod.mjs y miolo-dev.mjs
+podrian ser innecesarios. Que el entry sea el fichero de options y ya.
+
+
+
+
+
+
+
 # ipsum
 
 Añadir un directorio custom que se pueda actualizar sin upgradear miolo
