@@ -20,7 +20,7 @@ export const makeConfig = (authType, logLevel= 'debug') => {
     : {credentials}
 
   const client = isProduction
-    ? 'build/cli/miolo-demo.iife.bundle.min.js' // 'build/cli/miolo-demo.iife.bundle.min.js'
+    ? 'dist/cli/miolo-demo.iife.bundle.min.js'
     : 'cli/entry-cli.jsx'
 
   const server = isProduction
@@ -40,7 +40,7 @@ export const makeConfig = (authType, logLevel= 'debug') => {
         favicon: proot('server/static/img/favicon.ico'),
         folders: {
           '/static': proot('server/static'),
-          '/build': proot('build')
+          '/dist': proot('dist')
         }        
       },
 

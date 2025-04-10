@@ -20,6 +20,7 @@ export async function _fixProdBuild(appName, filePath) {
 }
 
 export default async function({ appName, ssrEntry, ssrDest, entry, dest }) {
+  cleanFolder(dest)
 
   console.log(`[${appName}][prod] Building first the SSR entry ${ssrEntry}`)
   await build({
@@ -36,8 +37,6 @@ export default async function({ appName, ssrEntry, ssrDest, entry, dest }) {
   })
   
   console.log(`[${appName}][prod] Building server from entry ${entry}`)
-  cleanFolder(dest)
-  
   const serverExt = 'node.bundle.mjs'
   await xeiraBundle({
     source_index: entry,
