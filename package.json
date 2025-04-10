@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "2.0.0-beta.9",
+  "version": "2.0.0-beta.10",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -102,7 +102,7 @@
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
     "yargs-parser": "^21.1.1",
-    "xeira": "^1.1.9"
+    "xeira": "^1.1.10"
   },
   "peerDependencies": {
     "react": "^18.3.1",
