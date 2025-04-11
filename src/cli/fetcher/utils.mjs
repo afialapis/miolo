@@ -14,7 +14,7 @@ export function json_to_query_string(obj) {
         }
       }
     }
-    return uparams.toString()
+    return `?${uparams.toString()}`
   }
   return ''
 }
