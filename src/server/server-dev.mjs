@@ -1,5 +1,6 @@
 import { miolo } from "./server.mjs"
 import { init_vite_dev_server_middleware } from './middleware/vite/devserver.mjs'
+import { init_watcher_dev_server_middleware } from './middleware/vite/watcher.mjs'
 
 /**
  * We use two separated servers 
@@ -18,6 +19,7 @@ export async function miolo_dev(sconfig) {
   // Vite DEV server init
   const devInit= async (app, config) => {
     await init_vite_dev_server_middleware(app, config.vite)
+    await init_watcher_dev_server_middleware(app, config.dev.watcher, config.ssr)
   }
 
   // Vite SSR side

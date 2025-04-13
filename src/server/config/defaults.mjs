@@ -414,5 +414,12 @@ export default {
     // html: '',
     // loader: async (ctx) => {}
   },
+
+  dev: {
+    watcher: {
+      enabled: true,
+      // dirs: []    By default, server's entry dir
+    },
+  }
 };
 
