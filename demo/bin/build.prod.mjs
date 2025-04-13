@@ -16,7 +16,6 @@ import { fix_prod_build } from './utils.mjs';
 
 process.env.NODE_ENV = 'production'
 
-
 function _app_prod_clean_folder(folder) {
   fs.readdirSync(folder).forEach(file => {
     fs.rmSync(`${folder}/${file}`, { recursive: true, force: true });

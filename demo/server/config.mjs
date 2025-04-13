@@ -26,13 +26,13 @@ export const makeConfig = (authType, logLevel= 'debug') => {
   const server = isProduction
     ? proot('dist/server/entry-server.mjs')
     : 'server/ssr/entry-server.jsx'
-
+  
   return {
     http: {
       port: 8001,
       hostname: 'localhost',
       catcher_url: '/sys/jserror',
-      
+
       //
       // Folders to be mounted by koa for static content
       //
@@ -114,7 +114,6 @@ export const makeConfig = (authType, logLevel= 'debug') => {
     //  
     //}    
 
-
     ssr: {
       html: indexHTML,
       client,
@@ -124,6 +123,15 @@ export const makeConfig = (authType, logLevel= 'debug') => {
     vite: {
       base: '/',
       root: ''
+    },
+    dev: {
+      watch: {
+        dirs: [
+          //path.join(process.cwd(), 'cli'),
+          path.join(process.cwd(), 'server'),
+          //path.join(process.cwd(), 'bin'),
+        ]
+      }
     }
   }
 }

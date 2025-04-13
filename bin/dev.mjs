@@ -5,13 +5,24 @@ let serverProcess = null
 // let retryCount = 0
 // const maxRetries = 5
 
+function _isProcessRunning(pid) {
+  try {
+    process.kill(pid, 0) // Sending a signal 0 does nothing but checks if the process exists
+    return true
+  } catch (error) {
+    return false
+  }
+}
 
 async function startDevServerProcess({ appName, entry }) {
   const serverPath = path.join(process.cwd(), entry)
   serverProcess = fork(serverPath)
 
-  serverProcess.on('exit', (code) => {
-    console.log(`[${appName}][dev] Server process exited with code ${code}`)
+  console.log(`[${appName}][dev] Server process started with pid ${serverProcess.pid} from ${process.pid}`)
+
+  serverProcess.on('exit', (code, args) => {
+    console.log(`[${appName}][dev] Server process exited with code ${code} -  ${args}`)
+    serverProcess = null
     // Puedes implementar lógica de reintento aquí si es necesario
     //  if (code !== 0 && retryCount < maxRetries) {
     //    retryCount++
@@ -26,15 +37,23 @@ async function startDevServerProcess({ appName, entry }) {
   })
 
   serverProcess.on('message', (message) => {
-    if (message === 'restart') {
+    if (message === 'miolo_restart') {
       console.log(`[${appName}][dev] Received restart signal. Restarting server...`)
-      serverProcess.kill('SIGTERM') // Intenta un cierre limpio primero
-      // Después de un breve tiempo, si no se cierra, puedes forzarlo con 'SIGKILL'
-      setTimeout(() => {
-        if (serverProcess && !serverProcess.killed) {
-          serverProcess.kill('SIGKILL')
-        }
-      }, 2000)
+
+      const pidToKill = serverProcess ? serverProcess.pid : null
+      if (pidToKill) {
+        console.log(`[${appName}][dev] Killing process with PID: ${pidToKill}`)
+        // Clean kill
+        process.kill(pidToKill, 'SIGTERM')
+
+        // Harder if still alive
+        setTimeout(() => {
+          if (_isProcessRunning(pidToKill)) {
+            process.kill(pidToKill, 'SIGKILL')
+          }
+        }, 2000)
+      }
+
       startDevServerProcess({ appName, entry }) // Inicia un nuevo proceso
     }
   })
@@ -43,9 +62,6 @@ async function startDevServerProcess({ appName, entry }) {
 
 export default async function({ appName, entry, serverName }) {
   console.log(`[${appName}][dev] Running DEV server ${serverName} from entry ${entry}`)
-  // const srv_module = await import(path.join(process.cwd(), entry))
-  // const server = srv_module[serverName]
-  // await server()  
   await startDevServerProcess({ appName, entry })
 }
 

@@ -4,7 +4,9 @@ import { makeConfig } from './config.mjs'
 
 export async function miolo_demo_server (authType) {  
   const app = await miolo_dev(makeConfig(authType))
-  await app.start()
-
+  await app.start() 
   return app
 }
+
+
+miolo_demo_server('credentials')

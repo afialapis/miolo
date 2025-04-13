@@ -119,6 +119,9 @@ async function miolo(sconfig, devInit= undefined, devRender= undefined) {
     app.context.miolo.db.drop_connections()
     await app.http.stop()
     app.cron.stop()
+    if (app?.vite) {
+      app.vite.close()
+    }
   }
 
   app.restart = async () => {

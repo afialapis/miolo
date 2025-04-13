@@ -14,27 +14,28 @@ export async function init_watcher_dev_server_middleware(app, watcherConfig, ssr
     watcher = app.vite.watcher
 
     // Extra dirs to watch
-    const serverDirsToWatch = watcherConfig?.dirs || [
-      path.resolve(process.cwd(), path.basename(ssrConfig.server))
-    ]
+    const serverDirsToWatch = watcherConfig?.dirs || ['server', 'src/server']
 
     // Listen to changes in the extra dirs
     serverDirsToWatch.forEach((dir) => {
-      watcher.add(dir)
-      app.context.miolo.logger.info(`[watcher] Vite is now watching for changes in: ${dir}`)
+      watcher.add(path.resolve(process.cwd(), dir))
+      app.context.miolo.logger.info(`[watcher] Vite is now watching for changes also in: ${dir}`)
     })
    
     // Listen to changes in the extra dirs
-    watcher.on('change', (filePath) => {
+    watcher.on('change', async (filePath) => {
+      let isCustom = false
+      serverDirsToWatch.forEach((dir) => {
+        if (filePath.startsWith(path.resolve(process.cwd(), dir))) {
+          isCustom = true
+        }
+      })
+      if (!isCustom) return // Ignore changes outside the custom watched directories
       app.context.miolo.logger.info(`[watcher] File changed: ${filePath}. Reloading server...`)
-      // Aquí puedes implementar la lógica para reiniciar tu servidor Koa
-      // Por ejemplo, podrías cerrar el servidor actual y crear uno nuevo,
-      // o usar alguna forma de recarga en caliente específica de Koa (si existe).
-      // Un reinicio completo del proceso de Node.js suele ser la forma más segura.
-      //process.exit(0) // Forzar la salida del proceso para que un gestor de procesos lo reinicie
-      process.send('restart') // Envía un mensaje al proceso padre para reiniciar
-    })
 
+      await app.stop()
+      process.send('miolo_restart') // Envía un mensaje al proceso padre para reiniciar
+    })
   } 
 
   app.watcher= watcher
