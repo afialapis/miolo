@@ -6,6 +6,7 @@ export async function miolo_cron(sconfig) {
 
   const app = {
     use: () => {},
+    context: {}
   }
 
   // Init some pieces
