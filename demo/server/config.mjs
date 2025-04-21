@@ -95,12 +95,12 @@ export const makeConfig = (authType, logLevel= 'debug') => {
       {
         name: 'KRON',
         cronTime: '*/3 * * * *', 
-        onTick: (miolo, onComplete) => {
+        onTick: async (miolo, onComplete) => {
           
           miolo.logger.warn('KRON Task - ticking')
 
         },
-        onComplete: (miolo) => {
+        onComplete: async (miolo) => {
           miolo.logger.warn('KRON Task - completed')
         },
         start: true

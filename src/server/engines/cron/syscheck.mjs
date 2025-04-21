@@ -48,7 +48,7 @@ export function sys_check_config() {
   return {
     name: 'SysCheck',
     cronTime: '0,15,30,45 * * * *',
-    onTick: (miolo, _onCompleted) => {
+    onTick: async (miolo, _onCompleted) => {
       _sys_check_and_log(miolo.logger)
     },
     start: true   

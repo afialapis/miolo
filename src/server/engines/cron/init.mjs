@@ -17,10 +17,10 @@ export function init_cron_job(miolo, config) {
     config?.cronTime || '*/5 * * * *',
     
     // onTick(miolo, onComplete)
-    (onComplete) => {
+    async (onComplete) => {
       try {
         logger.silly(`[cron][Custom Job ${cyan(name)}] ${green_bold('ticks!')}`)
-        config.onTick(miolo, onComplete)
+        await config.onTick(miolo, onComplete)
       } catch(e) {
         logger.error(`[cron][Custom Job ${cyan(name)}] Error at onTick()`)
         logger.error(e)
@@ -28,11 +28,11 @@ export function init_cron_job(miolo, config) {
     },
 
     // onComplete(miolo)
-    () => {
+    async () => {
       logger.silly(`[cron][Custom Job ${cyan(name)}] ${green_bold('completed!')}`)
       if (config?.onComplete) {
         try {
-          config.onComplete(miolo)
+          await config.onComplete(miolo)
         } catch(e) {
           logger.error(`[cron][Custom Job ${cyan(name)}] Error at onComplete()`)
           logger.error(e)
