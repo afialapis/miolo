@@ -23,12 +23,12 @@ export async function miolo_cron(sconfig) {
   app.start = async () => {
     // Init and reset db connection
     await app.context.miolo.db.init_connection()
-    app.cron.start()
+    await app.cron.start()
   }
   
   app.stop = async () => {
-    app.context.miolo.db.drop_connections()
-    app.cron.stop()
+    await app.context.miolo.db.drop_connections()
+    await app.cron.stop()
   }
 
   app.restart = async () => {

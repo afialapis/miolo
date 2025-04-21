@@ -52,9 +52,9 @@ export function init_cron(app, custom) {
     return jobInfo
   }
 
-  const _start_job = (jobInfo) => {
+  const _start_job = async (jobInfo) => {
     try {
-      jobInfo.job.start()
+      await jobInfo.job.start()
       jobInfo.isActive= true
       logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${green_bold('started!')}`)
       return 1
@@ -65,26 +65,26 @@ export function init_cron(app, custom) {
     }
   }  
 
-  const _start_job_by_idx_or_name = (idxOrName) => {
+  const _start_job_by_idx_or_name = async (idxOrName) => {
     const jobInfo = _find_job_by_idx_or_name(idxOrName)
     if (jobInfo) {
-      const done = _start_job(jobInfo)
+      const done = await _start_job(jobInfo)
       return [done, jobInfo.name]
     }
     return [0, '']
   }
 
-  const _start_all_jobs = () => {
+  const _start_all_jobs = async () => {
     try {
       let started= [], errors= []
-      jobInfos.map(jobInfo => {
-        const done= _start_job(jobInfo)
+      for (const jobInfo of jobInfos) {
+        const done= await _start_job(jobInfo)
         if (done == 1) {
           started.push(jobInfo.name)
         } else {
           errors.push(jobInfo.name)
         }
-      })
+      }
       if (started.length > 0) {
         logger.info(`[cron] Started ${started.length} jobs: ${started}`)
       }
@@ -97,9 +97,9 @@ export function init_cron(app, custom) {
   
   }
 
-  const _stop_job = (jobInfo) => {
+  const _stop_job = async (jobInfo) => {
     try {
-      jobInfo.job.stop()
+      await jobInfo.job.stop()
       jobInfo.isActive= false
       logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${yellow_bold('stopped!')}`) 
       return 1
@@ -110,26 +110,26 @@ export function init_cron(app, custom) {
     }
   }
 
-  const _stop_job_by_idx_or_name = (idxOrName) => {
+  const _stop_job_by_idx_or_name = async (idxOrName) => {
     const jobInfo = _find_job_by_idx_or_name(idxOrName)
     if (jobInfo) {
-      const done = _stop_job(jobInfo)
+      const done = await _stop_job(jobInfo)
       return [done, jobInfo.name]
     }
     return [0, '']
   }
 
-  const _stop_all_jobs = () => {
+  const _stop_all_jobs = async () => {
     try {
       let stopped= [], errors= []
-      jobInfos.map(jobInfo => {
-        const done= _stop_job(jobInfo)
+      for (const jobInfo of jobInfos) {
+        const done= await _stop_job(jobInfo)
         if (done == 1) {
           stopped.push(jobInfo.name)
         } else {
           errors.push(jobInfo.name)
         }
-      })
+      }
       if (stopped.length > 0) {
         logger.info(`[cron] Stopped ${stopped.length} jobs: ${stopped}`)
       }
