@@ -14,8 +14,7 @@ async function main() {
       case 'dev':
         const devHandler = (await import ('./dev.mjs')).default
         const devEntry = args.entry || './src/server/server-dev.mjs'
-        const devServerName = args['server-name'] || 'miolo_server'
-        await devHandler({ appName, entry: devEntry, serverName: devServerName })
+        await devHandler({ appName, entry: devEntry, serverName })
         break
 
       case 'build-client':
@@ -47,7 +46,14 @@ async function main() {
 
       case 'restart':
         const restartHandler = (await import ('./restart.mjs')).default
-        await restartHandler({appName, serverName})
+        const restartDest = args.dest || './dist/server'
+        await restartHandler({appName, serverName, dest: restartDest})
+        break
+
+      case 'create-bin':
+        const createHandler = (await import ('./create-bin.mjs')).default
+        const createDest = args.dest || './dist/server'
+        await createHandler({appName, serverName, dest: createDest})
         break
 
       default:
