@@ -30,12 +30,13 @@ export default async function(appName, ssrEntry, ssrDest, entry, dest) {
       outDir: path.resolve(process.cwd(), ssrDest),
       ssr: path.resolve(process.cwd(), ssrEntry),
       rollupOptions: {
-        // Opciones adicionales de Rollup si las necesitas
+        // 
       },
     },
-    // Otras opciones de Vite si son necesarias
-    // root: path.resolve(process.cwd(), 'demo'), // Si tu root del proyecto es /demo
-    // plugins: [/* tus plugins */],
+    // server ssr's entry must bundle externals
+    ssr: {
+      noExternal: true
+    }
   })
   
   console.log(`[${appName}][prod] Building server from entry ${entry}`)
