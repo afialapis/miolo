@@ -3,7 +3,7 @@ import path from 'node:path'
 import { readFile, writeFile} from 'node:fs/promises'
 import { build } from 'vite'
 import {xeiraBundle} from 'xeira'
-import { cleanFolder } from './util.mjs'
+//import { cleanFolder } from './util.mjs'
 
 export async function _fixProdBuild(appName, filePath) {
   try {
@@ -19,8 +19,8 @@ export async function _fixProdBuild(appName, filePath) {
   }
 }
 
-export default async function({ appName, ssrEntry, ssrDest, entry, dest }) {
-  cleanFolder(dest)
+export default async function(appName, ssrEntry, ssrDest, entry, dest) {
+  //cleanFolder(dest)
 
   console.log(`[${appName}][prod] Building first the SSR entry ${ssrEntry}`)
   await build({

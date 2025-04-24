@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { pidFileCreate } from "./util.mjs"
 
-export default async function({appName, dest, serverName}) {
+export default async function(appName, dest, serverName) {
   // if (! fs.existsSync(CLI_DEST_MAIN)) {
   //   console.error(`[${appName}][prod][start] Cannot start server (prod): CLI bundle does not exist ${CLI_DEST_MAIN}`)
   //   return

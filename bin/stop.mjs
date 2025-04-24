@@ -1,6 +1,6 @@
 import { pidFileRead } from "./util.mjs";
 
-export default async function({appName}) {
+export default async function(appName) {
   console.log(`[${appName}][prod][stop] Stopping server...`)
 
   try {

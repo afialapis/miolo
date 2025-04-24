@@ -14,14 +14,14 @@ async function main() {
       case 'dev':
         const devHandler = (await import ('./dev.mjs')).default
         const devEntry = args.entry || './src/server/server-dev.mjs'
-        await devHandler({ appName, entry: devEntry, serverName })
+        await devHandler(appName, /*entry*/ devEntry, serverName)
         break
 
       case 'build-client':
         const buildClientHandler = (await import ('./build-client.mjs')).default
         const clientEntry = args.entry || './cli/entry-cli.jsx'
         const clientDest = args.dest || './dist/cli'
-        await buildClientHandler({ appName, entry: clientEntry, dest: clientDest })
+        await buildClientHandler(appName, /*entry*/ clientEntry, /*dest*/ clientDest)
         break
 
       case 'build-server':
@@ -30,30 +30,30 @@ async function main() {
         const ssrDest = args['ssr-dest'] || './dist/server'
         const serverEntry = args.entry || './src/server/server-prod.mjs'
         const serverDest = args.dest || './dist/server'
-        await buildServerHandler({ appName, ssrEntry, ssrDest, entry: serverEntry, dest: serverDest })
+        await buildServerHandler(appName, ssrEntry, ssrDest, /*entry*/ serverEntry, /*dest*/ serverDest)
         break
 
       case 'start':
         const startHandler = (await import ('./start.mjs')).default
         const startDest = args.dest || './dist/server'
-        await startHandler({appName, serverName, dest: startDest})
+        await startHandler(appName, /*dest*/ startDest, serverName)
         break
 
       case 'stop':
         const stopHandler = (await import ('./stop.mjs')).default
-        await stopHandler({appName})
+        await stopHandler(appName)
         break
 
       case 'restart':
         const restartHandler = (await import ('./restart.mjs')).default
         const restartDest = args.dest || './dist/server'
-        await restartHandler({appName, serverName, dest: restartDest})
+        await restartHandler({appName, /*dest*/ restartDest, serverName})
         break
 
       case 'create-bin':
         const createHandler = (await import ('./create-bin.mjs')).default
         const createDest = args.dest || './dist/server'
-        await createHandler({appName, serverName, dest: createDest})
+        await createHandler(appName, /*dest*/ createDest, serverName)
         break
 
       default:

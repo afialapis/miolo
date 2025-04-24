@@ -60,7 +60,7 @@ async function startDevServerProcess({ appName, entry }) {
 }
 
 
-export default async function({ appName, entry, serverName }) {
+export default async function(appName, entry, serverName) {
   console.log(`[${appName}][dev] Running DEV server ${serverName} from entry ${entry}`)
   await startDevServerProcess({ appName, entry })
 }

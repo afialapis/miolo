@@ -1,10 +1,10 @@
 
 import {xeiraBundle} from 'xeira'
-import { cleanFolder } from './util.mjs'
+//import { cleanFolder } from './util.mjs'
 
-export default async function({ appName, entry, dest }) {
+export default async function(appName, entry, dest) {
   console.log(`[${appName}][prod] Building client from entry ${entry}`)
-  cleanFolder(dest)
+  //cleanFolder(dest)
 
   // fs.copyFileSync(proot('./cli/index.html'), proot('./build/cli/index.html'))
   await xeiraBundle({

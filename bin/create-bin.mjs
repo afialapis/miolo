@@ -6,7 +6,7 @@ const __my_filename = fileURLToPath(import.meta.url)
 const __my_dirname = path.dirname(__my_filename)
 
 
-export default async function({appName, dest, serverName}) {
+export default async function(appName, dest, serverName) {
   console.log(`[${appName}][prod][create-bin] Creating bin files...`)
 
   const readSource = (f) => readFileSync(path.resolve(__my_dirname, f), {encoding:'utf8'})
