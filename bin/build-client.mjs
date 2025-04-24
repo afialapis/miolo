@@ -2,6 +2,8 @@
 import {xeiraBundle} from 'xeira'
 //import { cleanFolder } from './util.mjs'
 
+process.env.NODE_ENV = 'production'
+
 export default async function(appName, entry, dest) {
   console.log(`[${appName}][prod] Building client from entry ${entry}`)
   //cleanFolder(dest)

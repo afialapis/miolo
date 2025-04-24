@@ -5,6 +5,8 @@ import { build } from 'vite'
 import {xeiraBundle} from 'xeira'
 //import { cleanFolder } from './util.mjs'
 
+process.env.NODE_ENV = 'production'
+
 export async function _fixProdBuild(appName, filePath) {
   try {
     const content = await readFile(filePath, 'utf8')
