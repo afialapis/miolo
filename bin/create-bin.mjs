@@ -16,21 +16,21 @@ export default async function(appName, dest, serverName) {
   writeDest('util.mjs', utilContent)
 
   let startContent = readSource('./start.mjs')
-  startContent = startContent.replace('export default async function', 'async function start()')
+  startContent = startContent.replace('export default async function', 'async function start')
   startContent = startContent.replace('{appName, dest, serverName}', `{appName= ''${appName}, dest= '${dest}', serverName= '${serverName}'}`)
   startContent+= '\n'
   startContent+= 'start()'
   writeDest('start.mjs', startContent)
   
   let stopContent = readSource('./stop.mjs')
-  stopContent = stopContent.replace('export default async function', 'async function stop()')
+  stopContent = stopContent.replace('export default async function', 'async function stop')
   stopContent = stopContent.replace('{appName}', `{appName= ''${appName}}`)
   stopContent+= '\n'
   stopContent+= 'stop()'
   writeDest('stop.mjs', stopContent)
 
   let restartContent = readSource('./restart.mjs')
-  restartContent = restartContent.replace('export default async function', 'async function restart()')
+  restartContent = restartContent.replace('export default async function', 'async function restart')
   restartContent = restartContent.replace('{appName, dest, serverName}', `{appName= ''${appName}, dest= '${dest}', serverName= '${serverName}'}`)
   restartContent+= '\n'
   restartContent+= 'restart()'
