@@ -20,13 +20,13 @@ const MioloContextProvider = ({ context, children }) => {
     const resp = await fetcher.login(url, credentials)
 
     if (resp?.data) {
-      const nContext = {
-        ...innerContext,
-        ...resp?.data,
-      }
-
       if (resp?.data?.authenticated) {
-        setInnerContext(nContext)
+        setInnerContext(current => {
+          return {
+            ...current,
+            ...resp?.data,
+          }
+        })
       }
 
       return resp?.data
@@ -43,19 +43,28 @@ const MioloContextProvider = ({ context, children }) => {
     const _resp = await fetcher.logout(url)
     // resp.redirected= true
 
-    const nContext = {
-      ...innerContext,
-      user: undefined,
-      authenticated: false,
-    }
-
-    setInnerContext(nContext)
+    setInnerContext(current => {
+      return {
+        ...current,
+        user: undefined,
+        authenticated: false,
+      }
+    })
 
     return {
       user: undefined,
       authenticated: false,
     }
   }, [innerContext, mioloObj])
+
+  const updateUser = useCallback((user) => {
+    setInnerContext((current) => {
+      return {
+        ...current,
+        user,
+      }
+    })
+  }, [])
 
   const useSsrData = (name, defval, loader, modifier) => {
     return useSsrDataOrReload(innerContext, mioloObj, name, defval, loader, modifier)
@@ -66,6 +75,7 @@ const MioloContextProvider = ({ context, children }) => {
     {
       value: {
         user: innerContext.user,
+        updateUser,
         authenticated: innerContext.authenticated,
         fetcher: mioloObj.fetcher,
         login,
