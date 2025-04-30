@@ -14,20 +14,20 @@ const MioloContextProvider = ({context, children}) => {
   }, [context])
   
   const login = useCallback(async (credentials) => {
-    const {fetcher} = mioloObj
-    const {config} = innerContext
+    const { fetcher } = mioloObj
+    const { config } = innerContext
 
     const url = config.login_url || '/login'
     const resp = await fetcher.login(url, credentials)
 
     if (resp?.data) {
-      const nContext = {
-        ...innerContext,
-        ...resp?.data
-      }    
-
       if (resp?.data?.authenticated) {
-        setInnerContext(nContext)
+        setInnerContext(current => {
+          return {
+            ...current,
+            ...resp?.data,
+          }
+        })
       }
 
       return resp?.data
@@ -36,29 +36,36 @@ const MioloContextProvider = ({context, children}) => {
     return {}
   }, [innerContext, mioloObj])
 
-  
   const logout = useCallback(async () => {
-    const {fetcher} = mioloObj
-    const {config} = innerContext
+    const { fetcher } = mioloObj
+    const { config } = innerContext
 
     const url = config.logout_url || '/logout'
     const _resp = await fetcher.logout(url)
     // resp.redirected= true
 
-    const nContext = {
-      ...innerContext,
-      user: undefined,
-      authenticated: false
-    }    
+    setInnerContext(current => {
+      return {
+        ...current,
+        user: undefined,
+        authenticated: false,
+      }
+    })
 
-    setInnerContext(nContext)
-    
     return {
       user: undefined,
-      authenticated: false
+      authenticated: false,
     }
   }, [innerContext, mioloObj])
 
+  const updateUser = useCallback((user) => {
+    setInnerContext((current) => {
+      return {
+        ...current,
+        user,
+      }
+    })
+  }, [])
 
   const useSsrData = (name, defval, loader, modifier) => {
     return useSsrDataOrReload(innerContext, mioloObj, name, defval, loader, modifier)
@@ -71,6 +78,7 @@ const MioloContextProvider = ({context, children}) => {
         //setContext: setInnerContext,
         //miolo: mioloObj,
         user: innerContext.user,
+        updateUser,
         authenticated: innerContext.authenticated,
         fetcher: mioloObj.fetcher,
         //socket: mioloObj.socket,
