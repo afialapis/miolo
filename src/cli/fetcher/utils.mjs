@@ -8,9 +8,9 @@ export function json_to_query_string(obj) {
       if (Object.hasOwn(obj, key)) {
         const value = obj[key];
         if (Array.isArray(value)) {
-          value.forEach(item => uparams.append(key, encodeURIComponent(item)))
+          value.forEach(item => uparams.append(key, item))
         } else if (value !== undefined && value !== null) {
-          uparams.append(key, encodeURIComponent(value))
+          uparams.append(key, value)
         }
       }
     }
