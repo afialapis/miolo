@@ -1,6 +1,14 @@
 /**
  * Transform an JSON object to a query string
  */
+const _parse_value= (value) => {
+  try {
+    return value.replace(/\+/g, '%2B')
+  } catch(e) {
+    return value
+  }
+}
+
 export function json_to_query_string(obj) {
   if (obj && (Object.keys(obj).length>0)) {
     const uparams = new URLSearchParams()
@@ -8,9 +16,9 @@ export function json_to_query_string(obj) {
       if (Object.hasOwn(obj, key)) {
         const value = obj[key];
         if (Array.isArray(value)) {
-          value.forEach(item => uparams.append(key, item.replace(/\+/g, '%2B')))
+          value.forEach(item => uparams.append(key, _parse_value(item)))
         } else if (value !== undefined && value !== null) {
-          uparams.append(key, value.replace(/\+/g, '%2B'))
+          uparams.append(key, _parse_value(value))
         }
       }
     }
