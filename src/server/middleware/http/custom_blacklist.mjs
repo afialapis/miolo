@@ -12,5 +12,6 @@ export const CUSTOM_BLACKLIST_IPS= [
   '199.244.88.227', // Sundance International LLC (SIL-58)
   '198.12.222.107', // GoDaddy.com, LLC (GODAD)
   '212.128.118.10', // RIPE Network Coordination Centre (RIPE)
-  '103.218.240.46'  // Asia Pacific Network Information Centre (APNIC)
+  '103.218.240.46', // Asia Pacific Network Information Centre (APNIC)
+  '45.15.167.150'   // ??
 ]

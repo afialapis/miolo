@@ -1,3 +1,38 @@
+# 2.0.0
+
+· Use of `vite`
+
+· `DEV` mode now is `npx miolo dev --entry=./src/server/server-dev.mjs --server-name=my_server`
+
+· Two build modes:
+
+  - Based on `miolo/bin`:
+
+    ```package.json
+      "start": "npx miolo start --server-name=my_server  --dest=./build/server 1>> /var/log/myserver.log 2>&1",
+      "stop": "npx miolo stop 1>> /var/log/myserver.log 2>&1",
+      "restart": "npx miolo restart --server-name=my_server  --dest=./build/server 1>> /var/log/myserver.log 2>&1",
+    ```
+  - Deploying binaries (`node_modules` not required in `prod`):
+
+    ```package.json
+      "cp-html": "cp ./src/cli/index.html ./build/cli/index.html",
+      "create-bin": "npx miolo create-bin  --server-name=my_server  --dest=./build/server ",
+      "build-client": "npx miolo build-client --entry=./src/cli/entry-cli.jsx --dest=./build/cli && npm run cp-html",
+      "build-server": "npx miolo build-server --ssr-entry=./src/server/miolo/ssr/entry-server.jsx --ssr-dest=./build/server --entry=./src/server/server-prod.mjs --dest=./build/server",
+      "build": "npm run build-client && npm run build-server && npm run create-bin",
+
+      "start": "node ./build/server/start.mjs 1>> /var/log/myserver.log 2>&1",
+      "stop": "node ./build/server/stop.mjs 1>> /var/log/myserver.log 2>&1",
+      "restart": "node ./build/server/restart.mjs 1>> /var/log/myserver.log 2>&1",
+    ```  
+· Added support for decorators
+
+· Exporting a `miolo_cron()` server instance. Improved `cron` jobs handling
+
+· UI's `context` now has `updateUser()`
+
+
 # 1.1.9
 
 Fix `@koa/bodyparser`

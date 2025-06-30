@@ -17,14 +17,14 @@
     "restart": "npx miolo restart --server-name=miolo_demo_server  --dest=./dist/server"
   },
   "dependencies": {
-    "intre": "^2.5.0",
-    "miolo": "2.0.0-beta.17",
+    "intre": "^2.6.0",
+    "miolo": "2.0.0-beta.28",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.29.0"
   },
   "devDependencies": {
-    "vite": "^6.2.5",
+    "vite": "^7.0.0",
     "xeira": "^1.1.10"
   },
   "eslintConfig": {
