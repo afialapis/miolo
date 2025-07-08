@@ -1,3 +1,7 @@
+# 2.0.4
+
+· Improve `emailer` logs
+
 # 2.0.3
 
 · Fix `emailer` logs

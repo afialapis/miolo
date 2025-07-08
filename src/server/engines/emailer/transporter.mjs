@@ -15,7 +15,7 @@ export function _init_emailer_transporter({options, defaults, silent}) {
     nmailer.verify(function(error, _success) {
       if (error) {
         _loge(logger, '[emailer] Verifying ERROR')
-        _loge(logger, error)
+        _loge(logger, error?.message || error?.stack || error || 'Unknown error')
       } else {
         _logi(logger, '[emailer] Verifyed OK: Server is ready to take our messages')
       }
@@ -26,7 +26,11 @@ export function _init_emailer_transporter({options, defaults, silent}) {
     if (silent === true) {
       _logi(logger, '[emailer] *********************************')
       _logi(logger, '[emailer] This mail will not be send (emailing is disabled):')
-      _logi(logger, mail)
+      _logi(logger, `[emailer] From: ${mail?.from || '?'}`)
+      _logi(logger, `[emailer] To: ${mail?.to || '?'}`)
+      _logi(logger, `[emailer] Subject: ${mail?.subject || '?'}`)
+      _logi(logger, '[emailer] Mail body:')
+      _logi(logger, mail?.text || mail?.html || '--empty--')
       _logi(logger, '[emailer] *********************************')
 
       return {
@@ -57,8 +61,12 @@ export function _init_emailer_transporter({options, defaults, silent}) {
   function queue_email(mail, logger= undefined) {
     if (silent === true) {
       _logi(logger, '[emailer] *********************************')
-      _logi(logger, '[emailer] This mail will not be send (emailing is disabled):')
-      _logi(logger, mail)
+      _logi(logger, '[emailer] This mail will not be queued (emailing is disabled):')
+      _logi(logger, `[emailer] From: ${mail?.from || '?'}`)
+      _logi(logger, `[emailer] To: ${mail?.to || '?'}`)
+      _logi(logger, `[emailer] Subject: ${mail?.subject || '?'}`)
+      _logi(logger, '[emailer] Mail body:')
+      _logi(logger, mail?.text || mail?.html || '--empty--')
       _logi(logger, '[emailer] *********************************')
 
       return {
