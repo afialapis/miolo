@@ -15,7 +15,7 @@ export function _init_emailer_transporter({options, defaults, silent}) {
     nmailer.verify(function(error, _success) {
       if (error) {
         _loge(logger, '[emailer] Verifying ERROR')
-        _loge(error)
+        _loge(logger, error)
       } else {
         _logi(logger, '[emailer] Verifyed OK: Server is ready to take our messages')
       }
@@ -26,7 +26,7 @@ export function _init_emailer_transporter({options, defaults, silent}) {
     if (silent === true) {
       _logi(logger, '[emailer] *********************************')
       _logi(logger, '[emailer] This mail will not be send (emailing is disabled):')
-      _logi(mail)
+      _logi(logger, mail)
       _logi(logger, '[emailer] *********************************')
 
       return {
@@ -58,7 +58,7 @@ export function _init_emailer_transporter({options, defaults, silent}) {
     if (silent === true) {
       _logi(logger, '[emailer] *********************************')
       _logi(logger, '[emailer] This mail will not be send (emailing is disabled):')
-      _logi(mail)
+      _logi(logger, mail)
       _logi(logger, '[emailer] *********************************')
 
       return {
