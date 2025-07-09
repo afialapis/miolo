@@ -1,3 +1,7 @@
+# 2.0.5
+
+· Support for `.env` files
+
 # 2.0.4
 
 · Improve `emailer` logs

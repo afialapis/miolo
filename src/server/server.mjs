@@ -1,3 +1,5 @@
+import '@dotenvx/dotenvx/config'
+
 import Koa                                from 'koa'
 import { init_config }                    from './config/index.mjs'
 
