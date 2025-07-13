@@ -20,15 +20,21 @@
   },
   "exports": {
     "./server": {
+      "node": "./src/server/index.mjs", 
+      "import": "./src/server/index.mjs",
       "default": "./dist/server/miolo.server.node.mjs"
     },
     "./server-dev": {
       "default": "./src/server/server-dev.mjs"
     },
     "./cli": {
+      "node": "./src/cli/index.mjs", 
+      "import": "./src/cli/index.mjs",
       "default": "./dist/cli/miolo.cli.umd.js"
     },
     "./cli-react": {
+      "node": "./src/cli-react/index.mjs", 
+      "import": "./src/cli-react/index.mjs",
       "default": "./dist/cli-react/miolo.cli-react.umd.js"
     }
   },
@@ -55,16 +61,16 @@
     "pre-publish": "npm run dist && npm run site"
   },
   "dependencies": {
-    "@babel/plugin-proposal-decorators": "^7.27.1",
-    "@dotenvx/dotenvx": "^1.47.2",
+    "@babel/plugin-proposal-decorators": "^7.28.0",
+    "@dotenvx/dotenvx": "^1.47.5",
     "@koa/bodyparser": "^6.0.0",
     "@koa/cors": "^5.0.0",
-    "@koa/router": "^13.1.0",
+    "@koa/router": "^13.1.1",
     "@maxmind/geoip2-node": "^6.1.0",
     "@vitejs/plugin-react": "^4.6.0",
-    "cacheiro": "^0.4.3",
+    "cacheiro": "^0.4.4",
     "calustra": "^0.15.3",
-    "cron": "^4.3.1",
+    "cron": "^4.3.2",
     "deepmerge": "^4.3.1",
     "diskspace": "^2.0.0",
     "http-terminator": "^3.2.0",
@@ -81,12 +87,12 @@
     "koa-session": "^7.0.2",
     "koa-socket-2": "^2.0.0",
     "koa-static": "^5.0.0",
-    "nodemailer": "^7.0.4",
+    "nodemailer": "^7.0.5",
     "passport-local": "^1.0.0",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "tinguir": "^0.0.7",
-    "vite": "^7.0.0",
+    "vite": "^7.0.4",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
     "xeira": "^1.2.0",

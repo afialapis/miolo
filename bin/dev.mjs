@@ -62,16 +62,7 @@ async function startDevServerProcess({ appName, entry }) {
 }
 
 
-export default async function(appName, entry, serverName) {
-  console.log(`[${appName}][dev] Running DEV server ${serverName} from entry ${entry}`)
+export default async function(appName, entry) {
+  console.log(`[${appName}][dev] Running DEV server from entry ${entry}`)
   await startDevServerProcess({ appName, entry })
 }
-
-
-
-// export default async function({ appName, entry, serverName }) {
-//   console.log(`[${appName}][dev] Running DEV server ${serverName} from entry ${entry}`)
-//   const srv_module = await import(path.join(process.cwd(), entry))
-//   const server = srv_module[serverName]
-//   await server()  
-// }

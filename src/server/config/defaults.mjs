@@ -1,5 +1,13 @@
 const SESSION_MAX_AGE = 86400 * 10 * 1000
 
+
+//
+// Notice `miolo` has support for `.env` files
+// If you want to use it, just create a `.env` file in the root of your project
+// and set the variables you want to use.
+// Then you can configure miolo using process.env.WHATEVER.
+
+
 export default {
   name: 'miolo',
   http: {

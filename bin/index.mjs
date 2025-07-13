@@ -14,7 +14,7 @@ async function main() {
       case 'dev':
         const devHandler = (await import ('./dev.mjs')).default
         const devEntry = args.entry || './src/server/server-dev.mjs'
-        await devHandler(appName, /*entry*/ devEntry, serverName)
+        await devHandler(appName, /*entry*/ devEntry)
         break
 
       case 'build-client':
