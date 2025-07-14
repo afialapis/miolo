@@ -1,6 +1,6 @@
 
 import {xeiraBundle} from 'xeira'
-import { cleanFolder, copyFileSync, getAppName } from './util.mjs'
+import { cleanFolder, copyFileSync, getAppName, isFileExistingSync } from './util.mjs'
 
 process.env.NODE_ENV = 'production'
 
@@ -29,11 +29,9 @@ function _addCssLinkToHead(htmlString) {
 
 export default async function(appName, entry, htmlFile, dest) {
   console.log(`[${appName}][prod] Building client from entry ${entry}`)
+  
   cleanFolder(dest)
-
-  //fs.copyFileSync(proot('./cli/index.html'), proot('./build/cli/index.html'))
-  copyFileSync(htmlFile, `${dest}/index.html`, _addCssLinkToHead)
-
+  
   await xeiraBundle({
     source_index: entry,
     target: 'browser',
@@ -43,4 +41,15 @@ export default async function(appName, entry, htmlFile, dest) {
     bundler: 'rollup',
     bundle_node_polyfill: true
   })
+
+  const destCssFile = `${dest}/${appName}.${BUNDLE_SUFFIX}.css`
+  const destCssFileExists = isFileExistingSync(destCssFile)
+
+  copyFileSync(htmlFile, `${dest}/index.html`, (content) => {
+    if (destCssFileExists) {
+      content = _addCssLinkToHead(content)
+    }
+    return content
+  })
+  
 }

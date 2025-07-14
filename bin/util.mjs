@@ -47,3 +47,13 @@ export function copyFileSync(src, dest, modifier= undefined) {
     console.error(`[miolo] Error copying file from ${srcPath} to ${destPath}:`, error)
   }
 } 
+
+export function isFileExistingSync(filePath) {
+  try {
+    const fullPath = path.join(process.cwd(), filePath)   
+    return readdirSync(path.dirname(fullPath)).includes(path.basename(fullPath))
+  } catch (error) {
+    console.error(`[miolo] Error checking if file exists: ${filePath}`, error)
+    return false
+  }
+} 
