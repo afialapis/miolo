@@ -11,6 +11,7 @@
     "stop": "npx miolo stop",
     "restart": "npx miolo restart --server-name=miolo_demo_server  --dest=./dist/server"
   },
+  "type": "module",
   "dependencies": {
     "intre": "^2.6.1",
     "miolo": "..",

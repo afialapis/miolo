@@ -20,11 +20,11 @@ export const makeConfig = (authType, logLevel= 'debug') => {
     : {credentials}
 
   const client = isProduction
-    ? 'dist/cli/miolo-demo.iife.bundle.min.js'
+    ? '/dist/cli/miolo-demo.iife.bundle.min.js'
     : 'cli/entry-cli.jsx'
 
   const server = isProduction
-    ? proot('dist/server/entry-server.mjs')
+    ? proot('dist/server/entry-server.js')
     : 'server/ssr/entry-server.jsx'
   
   return {

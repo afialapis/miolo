@@ -18,6 +18,7 @@
   "bin": {
     "miolo": "./bin/index.mjs"
   },
+  "type": "module",
   "exports": {
     "./server": {
       "node": "./src/server/index.mjs", 
@@ -29,12 +30,12 @@
     },
     "./cli": {
       "node": "./src/cli/index.mjs", 
-      "import": "./src/cli/index.mjs",
+      "import": "./dist/cli/miolo.cli.mjs",
       "default": "./dist/cli/miolo.cli.umd.js"
     },
     "./cli-react": {
       "node": "./src/cli-react/index.mjs", 
-      "import": "./src/cli-react/index.mjs",
+      "import": "./dist/cli-react/miolo.cli-react.mjs",
       "default": "./dist/cli-react/miolo.cli-react.umd.js"
     }
   },
@@ -47,10 +48,10 @@
   "scripts": {
     "reset": "rm -fr node_modules package-lock.json npm-lock.yaml && npm i",
     "cli-clean": "rm -fr ./dist/cli/* ",
-    "cli-bundle": "npx xeira bundle --target=browser --source_index=./src/cli/index.mjs --bundle_folder=./dist/cli --bundle_name=miolo.cli --bundle_node_polyfill=true --bundle_extension=umd",
+    "cli-bundle": "npx xeira bundle --target=browser --source_index=./src/cli/index.mjs --bundle_folder=./dist/cli --bundle_name=miolo.cli --bundle_node_polyfill=true --bundle_extension=umd,mjs",
     "cli-dist": "npm run cli-clean && npm run cli-bundle",
     "cli-react-clean": "rm -fr ./dist/cli-react/*",
-    "cli-react-bundle": "npx xeira bundle --target=browser --source_index=./src/cli-react/index.mjs --bundle_folder=./dist/cli-react --bundle_name=miolo.cli-react --bundle_node_polyfill=true --bundle_extension=umd",
+    "cli-react-bundle": "npx xeira bundle --target=browser --source_index=./src/cli-react/index.mjs --bundle_folder=./dist/cli-react --bundle_name=miolo.cli-react --bundle_node_polyfill=true --bundle_extension=umd,mjs",
     "cli-react-dist": "npm run cli-react-clean && npm run cli-react-bundle",
     "server-clean": "rm -fr ./dist/server/*",
     "server-bundle": "npx xeira bundle --target=node --source_index=./src/server/index.mjs --bundle_folder=./dist/server --bundle_name=miolo.server --bundle_extension=node.mjs",
@@ -95,7 +96,7 @@
     "vite": "^7.0.4",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
-    "xeira": "^1.2.0",
+    "xeira": "^1.2.2",
     "yargs-parser": "^22.0.0"
   },
   "peerDependencies": {

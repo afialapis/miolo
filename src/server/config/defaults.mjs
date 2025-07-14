@@ -417,8 +417,8 @@ export default {
   },
     
   ssr: {
-    client: 'cli/index.jsx',
-    server: 'server/index.jsx',
+    client: 'cli/entry-cli.jsx',
+    server: 'server/ssr/entry-server.jsx',
     // html: '',
     // loader: async (ctx) => {}
   },

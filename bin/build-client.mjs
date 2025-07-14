@@ -1,6 +1,6 @@
 
 import {xeiraBundle} from 'xeira'
-import { cleanFolder, copyFileSync, getAppName, isFileExistingSync } from './util.mjs'
+import { /*cleanFolder,*/ copyFileSync, getAppName, isFileExistingSync } from './util.mjs'
 
 process.env.NODE_ENV = 'production'
 
@@ -29,8 +29,8 @@ function _addCssLinkToHead(htmlString) {
 
 export default async function(appName, entry, htmlFile, dest) {
   console.log(`[${appName}][prod] Building client from entry ${entry}`)
-  
-  cleanFolder(dest)
+
+  // cleanFolder(dest)
   
   await xeiraBundle({
     source_index: entry,

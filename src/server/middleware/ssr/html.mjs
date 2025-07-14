@@ -44,7 +44,7 @@ export const ssr_html_renderer_make = async (app, ssrConfig, devRender= undefine
     // prepare render() function for server entry
 
     // fallback function
-    let render = async(ctx, context) => base_html
+    let render = (ctx, context) => ''
     // if vite and DEV
     if ((!isProduction) && (app?.vite)) {
       if (devRender) {
@@ -59,8 +59,7 @@ export const ssr_html_renderer_make = async (app, ssrConfig, devRender= undefine
       try {
         render = (await import(ssrConfig.server)).render
       } catch(error) {
-        ctx.miolo.logger.error(`SSR Error:\n${error.toString()}`)
-        ctx.miolo.logger.error(error.stack)
+        ctx.miolo.logger.error(`SSR Error:\n${error.toString()}\n${error.stack}`)
       }
     }
 
@@ -69,11 +68,11 @@ export const ssr_html_renderer_make = async (app, ssrConfig, devRender= undefine
     try {
       ssr_html = render(ctx, context)
     } catch(error) {
-      ctx.miolo.logger.error(`SSR Error rendering server entry:\n${error.toString()}`)
+      ctx.miolo.logger.error(`SSR Error rendering server entry:\n${error.toString()}\n${error.stack}`)
     
       ssr_html= `
       <div>
-        MIOLO: SSR Error: ${error.toString()}
+        MIOLO: SSR Error: ${error.stack}
       </div>      
       `
     }

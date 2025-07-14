@@ -1,3 +1,23 @@
+# demo
+
+==> error en modo prod
+==> no pasar opciones en los scripts del pkg.json Y en server/config.
+    simplificar eso.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 1 - cli y clireact en otro pkg
 2 - ver si asi persisten problemas de doble react en demo con dependencia local
 
