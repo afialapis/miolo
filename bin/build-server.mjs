@@ -3,7 +3,7 @@ import path from 'node:path'
 import { readFile, writeFile} from 'node:fs/promises'
 import { build } from 'vite'
 import {xeiraBundle} from 'xeira'
-//import { cleanFolder } from './util.mjs'
+import { cleanFolder } from './util.mjs'
 
 process.env.NODE_ENV = 'production'
 
@@ -22,7 +22,7 @@ export async function _fixProdBuild(appName, filePath) {
 }
 
 export default async function(appName, ssrEntry, ssrDest, entry, dest) {
-  //cleanFolder(dest)
+  cleanFolder(dest)
 
   console.log(`[${appName}][prod] Building first the SSR entry ${ssrEntry}`)
   await build({
@@ -30,7 +30,16 @@ export default async function(appName, ssrEntry, ssrDest, entry, dest) {
       outDir: path.resolve(process.cwd(), ssrDest),
       ssr: path.resolve(process.cwd(), ssrEntry),
       rollupOptions: {
-        // 
+        /*
+        external: ['react', 'react-dom'],
+        output: {
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM'
+          }
+        }
+          */
+
       },
     },
     // server ssr's entry must bundle externals
