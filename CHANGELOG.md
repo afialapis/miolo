@@ -1,3 +1,10 @@
+# 2.0.6
+
+· Improved `demo`
+· Upgraded deps
+· No need of `server-name` in `npm run dev`
+
+
 # 2.0.5
 
 · Support for `.env` files

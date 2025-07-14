@@ -1,12 +1,11 @@
 import {readdirSync, rmSync, writeFileSync, readFileSync} from 'node:fs'
-import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 
 
-export async function getAppName() {
+export function getAppName() {
   try {
     const packageJsonPath = path.join(process.cwd(), 'package.json')
-    const content = await readFile(packageJsonPath, 'utf8')
+    const content = readFileSync(packageJsonPath, 'utf8')
     const packageData = JSON.parse(content)
     return packageData.name
   } catch (error) {
@@ -34,4 +33,17 @@ export function pidFileRead(appName) {
   return pid
 }
 
-
+export function copyFileSync(src, dest, modifier= undefined) {
+  const srcPath = path.join(process.cwd(), src)
+  const destPath = path.join(process.cwd(), dest)
+  try {
+    let content = readFileSync(srcPath, 'utf8')
+    if (modifier) {
+      content = modifier(content)
+    }
+    writeFileSync(destPath, content, {encoding:'utf8',flag:'w'})
+    console.log(`[miolo] Copied file from ${srcPath} to ${destPath}`)
+  } catch (error) {
+    console.error(`[miolo] Error copying file from ${srcPath} to ${destPath}:`, error)
+  }
+} 

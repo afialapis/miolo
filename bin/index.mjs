@@ -7,7 +7,7 @@ async function main() {
   const command = args._[0]
 
   try {
-    const appName = await getAppName()
+    const appName = getAppName()
     const serverName = args['server-name'] || 'miolo_server'
 
     switch (command) {
@@ -20,8 +20,9 @@ async function main() {
       case 'build-client':
         const buildClientHandler = (await import ('./build-client.mjs')).default
         const clientEntry = args.entry || './cli/entry-cli.jsx'
+        const htmlFile = args['html-file'] || './cli/index.html'
         const clientDest = args.dest || './dist/cli'
-        await buildClientHandler(appName, /*entry*/ clientEntry, /*dest*/ clientDest)
+        await buildClientHandler(appName, /*entry*/ clientEntry, htmlFile, /*dest*/ clientDest)
         break
 
       case 'build-server':

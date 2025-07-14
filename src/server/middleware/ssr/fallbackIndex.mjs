@@ -23,7 +23,6 @@ export const fallbackIndexHTML = `
 
 <body>
 	<div id="root">{children}</div>
-	<script type="module" src="{client}"></script>
 </body>
 </html>
 `
