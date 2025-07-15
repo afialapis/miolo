@@ -1,6 +1,6 @@
 import React , {useState, useEffect, useCallback} from 'react'
 import Context from './MioloContext.mjs'
-import { miolo_client } from '../../cli/index.mjs'
+import { miolo_client } from 'miolo-cli'
 import { useSsrDataOrReload } from '../ssr/useSsrDataOrReload.mjs'
 
 

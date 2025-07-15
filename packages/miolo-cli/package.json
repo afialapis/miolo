@@ -1,0 +1,46 @@
+{
+  "name": "miolo-cli",
+  "version": "3.0.0-beta.1",
+  "description": "cli utils for miolo",
+  "author": "Donato Lorenzo <donato@afialapis.com>",
+  "contributors": [
+    "Donato Lorenzo <donato@afialapis.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afialapis/miolo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/afialapis/miolo/issues"
+  },
+  "homepage": "https://www.afialapis.com/os/miolo",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+      "node": "./src/index.mjs", 
+      "import": "./dist/miolo-cli.mjs",
+      "default": "./dist/miolo-cli.umd.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "reset": "rm -fr node_modules package-lock.json npm-lock.yaml && npm i",
+    "clean": "rm -fr ./dist/* ",
+    "bundle": "npx xeira bundle --target=browser --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo-cli --bundle_node_polyfill=true --bundle_extension=umd,mjs",
+    "dist": "npm run clean && npm run bundle",
+    "pre-publish": "npm run dist"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "node-fetch": "^3.3.2",
+    "xeira": "^1.2.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "../../node_modules/xeira/configs/eslint.cjs"
+    ]
+  }
+}

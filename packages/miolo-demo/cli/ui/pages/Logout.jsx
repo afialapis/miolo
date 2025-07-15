@@ -1,5 +1,5 @@
 import React from 'react'
-import {withMioloContext} from 'miolo/cli-react'
+import {withMioloContext} from 'miolo-react'
 import LogoutForm from './LogoutForm.jsx'
 
 const Logout = ({logout}) => {

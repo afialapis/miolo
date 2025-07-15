@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { withMioloContext } from 'miolo/cli-react'
+import { withMioloContext } from 'miolo-react'
 import Page from './layout/Page.jsx'
 import Todos from './pages/Todos.jsx'
 import Login from './pages/Login.jsx'

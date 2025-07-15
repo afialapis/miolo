@@ -1,7 +1,7 @@
 import React from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { BrowserRouter  } from 'react-router-dom'
-import { AppBrowser } from 'miolo/cli-react'
+import { AppBrowser } from 'miolo-react'
 import Index from './ui/Index.jsx'
 
 

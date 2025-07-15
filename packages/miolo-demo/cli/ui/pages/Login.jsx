@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react'
 import { useNavigate } from "react-router-dom"
-import {withMioloContext} from 'miolo/cli-react'
+import {withMioloContext} from 'miolo-react'
 import LoginForm from './LoginForm.jsx'
 
 const Login = ({login}) => {

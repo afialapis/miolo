@@ -15,96 +15,19 @@
   },
   "homepage": "https://www.afialapis.com/os/miolo",
   "license": "MIT",
-  "bin": {
-    "miolo": "./bin/index.mjs"
-  },
   "type": "module",
-  "exports": {
-    "./server": {
-      "node": "./src/server/index.mjs", 
-      "import": "./src/server/index.mjs",
-      "default": "./dist/server/miolo.server.node.mjs"
-    },
-    "./server-dev": {
-      "default": "./src/server/server-dev.mjs"
-    },
-    "./cli": {
-      "node": "./src/cli/index.mjs", 
-      "import": "./dist/cli/miolo.cli.mjs",
-      "default": "./dist/cli/miolo.cli.umd.js"
-    },
-    "./cli-react": {
-      "node": "./src/cli-react/index.mjs", 
-      "import": "./dist/cli-react/miolo.cli-react.mjs",
-      "default": "./dist/cli-react/miolo.cli-react.umd.js"
-    }
-  },
-  "files": [
-    "bin",
-    "src",
-    "logo",
-    "dist"
-  ],
+  "private": true,
+  "workspaces": ["packages/*"],
   "scripts": {
-    "reset": "rm -fr node_modules package-lock.json npm-lock.yaml && npm i",
-    "cli-clean": "rm -fr ./dist/cli/* ",
-    "cli-bundle": "npx xeira bundle --target=browser --source_index=./src/cli/index.mjs --bundle_folder=./dist/cli --bundle_name=miolo.cli --bundle_node_polyfill=true --bundle_extension=umd,mjs",
-    "cli-dist": "npm run cli-clean && npm run cli-bundle",
-    "cli-react-clean": "rm -fr ./dist/cli-react/*",
-    "cli-react-bundle": "npx xeira bundle --target=browser --source_index=./src/cli-react/index.mjs --bundle_folder=./dist/cli-react --bundle_name=miolo.cli-react --bundle_node_polyfill=true --bundle_extension=umd,mjs",
-    "cli-react-dist": "npm run cli-react-clean && npm run cli-react-bundle",
-    "server-clean": "rm -fr ./dist/server/*",
-    "server-bundle": "npx xeira bundle --target=node --source_index=./src/server/index.mjs --bundle_folder=./dist/server --bundle_name=miolo.server --bundle_extension=node.mjs",
-    "server-dist": "npm run server-clean && npm run server-bundle",
-    "dist": "npm run cli-dist && npm run cli-react-dist && npm run server-dist",
-    "site": "npx xeira site",
-    "test": "npx xeira test --files=./test/index.mjs",
-    "pre-publish": "npm run dist && npm run site"
-  },
-  "dependencies": {
-    "@babel/plugin-proposal-decorators": "^7.28.0",
-    "@dotenvx/dotenvx": "^1.47.5",
-    "@koa/bodyparser": "^6.0.0",
-    "@koa/cors": "^5.0.0",
-    "@koa/router": "^13.1.1",
-    "@maxmind/geoip2-node": "^6.1.0",
-    "@vitejs/plugin-react": "^4.6.0",
-    "cacheiro": "^0.4.4",
-    "calustra": "^0.15.3",
-    "cron": "^4.3.2",
-    "deepmerge": "^4.3.1",
-    "diskspace": "^2.0.0",
-    "http-terminator": "^3.2.0",
-    "intre": "^2.6.1",
-    "jwt-simple": "^0.5.6",
-    "koa": "^3.0.0",
-    "koa-compress": "^5.1.1",
-    "koa-connect": "^2.1.0",
-    "koa-favicon": "^2.1.0",
-    "koa-mount": "^4.2.0",
-    "koa-passport": "^6.0.0",
-    "koa-proxies": "^0.12.4",
-    "koa-ratelimit": "^6.0.0",
-    "koa-session": "^7.0.2",
-    "koa-socket-2": "^2.0.0",
-    "koa-static": "^5.0.0",
-    "nodemailer": "^7.0.5",
-    "passport-local": "^1.0.0",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
-    "tinguir": "^0.0.7",
-    "vite": "^7.0.4",
-    "winston": "^3.17.0",
-    "winston-daily-rotate-file": "^5.0.0",
-    "xeira": "^1.2.3",
-    "yargs-parser": "^22.0.0"
-  },
-  "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "reset": "turbo run reset --parallel",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "site": "npx xeira site"
   },
   "devDependencies": {
-    "node-fetch": "^3.3.2"
+    "turbo": "^2.4.0",
+    "xeira": "^1.2.3"
   },
   "eslintConfig": {
     "extends": [

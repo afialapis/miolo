@@ -1,0 +1,91 @@
+{
+  "name": "miolo",
+  "version": "3.0.0-beta.1",
+  "description": "all-in-one koa-based server",
+  "author": "Donato Lorenzo <donato@afialapis.com>",
+  "contributors": [
+    "Donato Lorenzo <donato@afialapis.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afialapis/miolo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/afialapis/miolo/issues"
+  },
+  "homepage": "https://www.afialapis.com/os/miolo",
+  "license": "MIT",
+  "bin": {
+    "miolo": "./bin/index.mjs"
+  },
+  "type": "module",
+  "exports": {
+    "./server": {
+      "node": "./src/index.mjs", 
+      "import": "./src/index.mjs",
+      "default": "./dist/server/miolo.node.mjs"
+    },
+    "./server-dev": {
+      "default": "./src/server-dev.mjs"
+    }
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "scripts": {
+    "reset": "rm -fr node_modules package-lock.json npm-lock.yaml && npm i",
+    "clean": "rm -fr ./dist/server/*",
+    "bundle": "npx xeira bundle --target=node --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo --bundle_extension=node.mjs",
+    "dist": "npm run clean && npm run bundle",
+    "site": "npx xeira site",
+    "test": "npx xeira test --files=./test/index.mjs",
+    "pre-publish": "npm run dist"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.28.0",
+    "@dotenvx/dotenvx": "^1.47.5",
+    "@koa/bodyparser": "^6.0.0",
+    "@koa/cors": "^5.0.0",
+    "@koa/router": "^13.1.1",
+    "@maxmind/geoip2-node": "^6.1.0",
+    "@vitejs/plugin-react": "^4.6.0",
+    "cacheiro": "^0.4.4",
+    "calustra": "^0.15.3",
+    "cron": "^4.3.2",
+    "deepmerge": "^4.3.1",
+    "diskspace": "^2.0.0",
+    "http-terminator": "^3.2.0",
+    "intre": "^2.6.1",
+    "jwt-simple": "^0.5.6",
+    "koa": "^3.0.0",
+    "koa-compress": "^5.1.1",
+    "koa-connect": "^2.1.0",
+    "koa-favicon": "^2.1.0",
+    "koa-mount": "^4.2.0",
+    "koa-passport": "^6.0.0",
+    "koa-proxies": "^0.12.4",
+    "koa-ratelimit": "^6.0.0",
+    "koa-session": "^7.0.2",
+    "koa-socket-2": "^2.0.0",
+    "koa-static": "^5.0.0",
+    "nodemailer": "^7.0.5",
+    "passport-local": "^1.0.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "tinguir": "^0.0.7",
+    "vite": "^7.0.4",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "yargs-parser": "^22.0.0"
+  },
+  "devDependencies": {
+    "node-fetch": "^3.3.2",
+    "xeira": "^1.2.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "../../node_modules/xeira/configs/eslint.react.cjs"
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from "react-router-dom"
-import {withMioloContext} from 'miolo/cli-react'
+import {withMioloContext} from 'miolo-react'
 import useAuthType from '../useAuthType.mjs'
 
 const ToolbarLink = ({path, name}) => {

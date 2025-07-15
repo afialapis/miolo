@@ -11,7 +11,7 @@ const proot = (p) => path.join(process.cwd(), p)
 export const makeConfig = (authType, logLevel= 'debug') => {
   const isProduction = process.env.NODE_ENV === 'production'
 
-  const indexHTMLPath=  proot('cli/index.html') // proot(`cli/${isProduction ? 'index.html' : 'index.dev.html'}`)
+  const indexHTMLPath=  proot(isProduction ? 'dist/cli/index.html' : 'cli/index.html') // proot(`cli/${isProduction ? 'index.html' : 'index.dev.html'}`)
   const indexHTML = readFileSync(indexHTMLPath, 'utf8').replace(/--AUTH_TYPE--/g, process.env.AUTH_TYPE || 'credentials')
 
   const auth = 

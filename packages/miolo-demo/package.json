@@ -15,10 +15,14 @@
   "type": "module",
   "dependencies": {
     "intre": "^2.6.1",
-    "miolo": "..",
+    "miolo-react": "../miolo-react",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",    
     "react-router-dom": "6.29.0"
+  },
+  "devDependencies": {
+    "miolo": "../miolo",
+    "xeira": "^1.2.3"
   },
   "overrides": {
     "react": "$react",
@@ -26,10 +30,10 @@
   },
   "eslintConfig": {
     "extends": [
-      "../node_modules/xeira/configs/eslint.react.mjs"
+      "../../node_modules/xeira/configs/eslint.react.mjs"
     ]
   },
   "babel": {
-    "extends": "../node_modules/xeira/configs/babel.react.mjs"
+    "extends": "../../node_modules/xeira/configs/babel.react.mjs"
   }
 }

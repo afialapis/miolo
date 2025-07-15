@@ -1,6 +1,6 @@
 import React from 'react'
 import { StaticRouter } from 'react-router-dom/server.js'
-import { AppServer } from 'miolo/cli-react'
+import { AppServer } from 'miolo-react'
 import Index from '../../cli/ui/Index.jsx'
 import { renderToString } from 'react-dom/server'
 
