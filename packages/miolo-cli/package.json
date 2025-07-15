@@ -17,19 +17,22 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-      "node": "./src/index.mjs", 
+    ".": {
+      "development": "./src/index.mjs", 
       "import": "./dist/miolo-cli.mjs",
       "default": "./dist/miolo-cli.umd.js"
+    }
   },
   "files": [
-    "src"
+    "dist"
   ],
   "scripts": {
-    "reset": "rm -fr node_modules package-lock.json npm-lock.yaml && npm i",
-    "clean": "rm -fr ./dist/* ",
-    "bundle": "npx xeira bundle --target=browser --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo-cli --bundle_node_polyfill=true --bundle_extension=umd,mjs",
+    "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
+    "clean": "rm -fr ./dist/*",
+    "bundle": "npx xeira bundle --target=browser --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo-cli --bundle_extension=umd,mjs",
     "dist": "npm run clean && npm run bundle",
-    "pre-publish": "npm run dist"
+    "pre-publish": "npm run dist",
+    "publish": "npm publish"
   },
   "dependencies": {
     "socket.io-client": "^4.8.1"

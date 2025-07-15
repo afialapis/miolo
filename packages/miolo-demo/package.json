@@ -3,21 +3,22 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "reset": "rm -fr node_modules package-lock.json npm-lock.yaml && npm i",
+    "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
     "dev": "npx miolo dev --entry=./server/server-dev.mjs",
     "build-client": "npx miolo build-client --entry=./cli/entry-cli.jsx --html-file=./cli/index.html --dest=./dist/cli",
     "build-server": "npx miolo build-server --ssr-entry=server/ssr/entry-server.jsx --ssr-dest=./dist/server --entry=./server/server-prod.mjs --dest=./dist/server",
     "build": "npm run build-client && npm run build-server",
     "start": "npx miolo start --server-name=miolo_demo_server  --dest=./dist/server",
     "stop": "npx miolo stop",
-    "restart": "npx miolo restart --server-name=miolo_demo_server  --dest=./dist/server"
+    "restart": "npx miolo restart --server-name=miolo_demo_server  --dest=./dist/server",
+    "prod": "npm run build && npm run start"
   },
   "type": "module",
   "dependencies": {
+    "miolo-react": "file:../miolo-react",
     "intre": "^2.6.1",
-    "miolo-react": "../miolo-react",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",    
+    "react-dom": "^18.3.1",
     "react-router-dom": "6.29.0"
   },
   "devDependencies": {

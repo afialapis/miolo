@@ -34,17 +34,18 @@
     "src"
   ],
   "scripts": {
-    "reset": "rm -fr node_modules package-lock.json npm-lock.yaml && npm i",
+    "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
     "clean": "rm -fr ./dist/server/*",
     "bundle": "npx xeira bundle --target=node --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo --bundle_extension=node.mjs",
     "dist": "npm run clean && npm run bundle",
     "site": "npx xeira site",
     "test": "npx xeira test --files=./test/index.mjs",
-    "pre-publish": "npm run dist"
+    "pre-publish": "npm run dist",
+    "publish": "npm publish"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.28.0",
-    "@dotenvx/dotenvx": "^1.47.5",
+    "@dotenvx/dotenvx": "^1.47.6",
     "@koa/bodyparser": "^6.0.0",
     "@koa/cors": "^5.0.0",
     "@koa/router": "^13.1.1",
@@ -80,6 +81,7 @@
     "yargs-parser": "^22.0.0"
   },
   "devDependencies": {
+    "esbuild": "^0.25.6",
     "node-fetch": "^3.3.2",
     "xeira": "^1.2.3"
   },

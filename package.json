@@ -17,13 +17,19 @@
   "license": "MIT",
   "type": "module",
   "private": true,
+  "packageManager": "npm@10.9.2",
   "workspaces": ["packages/*"],
   "scripts": {
-    "reset": "turbo run reset --parallel",
-    "build": "turbo run build",
-    "dev": "turbo run dev",
+    "clean-root": "rm -fr node_modules package-lock.json .turbo",
+    "clean-pkgs": "rm -fr packages/**/node_modules packages/**/.turbo packages/**/dist/* && mkdir -p packages/miolo-demo/dist/cli && mkdir -p packages/miolo-demo/dist/server",
+    "reset": "turbo telemetry disable && npm run clean-root && npm run clean-pkgs && npm i",
     "lint": "turbo run lint",
-    "site": "npx xeira site"
+    "dist": "turbo run dist",
+    "site": "npx xeira site",
+    "test": "turbo run test --filter=miolo",
+    "demo": "turbo run dev --filter=miolo-demo",
+    "demo-prod": "turbo run prod --filter=miolo-demo",
+    "publish": "turbo run publish --filter=miolo,miolo-cli,miolo-react"
   },
   "devDependencies": {
     "turbo": "^2.4.0",
