@@ -14,7 +14,7 @@ const dbConfig = {
 
 const logLevel= 'warn'
 
-export default {
+export const config = {
 
   http: {
     port: 8001,

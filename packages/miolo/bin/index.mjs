@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import yargs from 'yargs-parser'
+import { intre_locale_init } from 'intre'
 import { init_env_config } from './env.mjs'
+
 
 async function main() {
   const args = yargs(process.argv.slice(2))
@@ -9,7 +11,7 @@ async function main() {
   try {
     init_env_config()
     const appName = process.env.MIOLO_NAME
-    const serverName = args['server-name'] || 'miolo_server'
+    intre_locale_init(process.env.MIOLO_INTRE_LOCALE)
 
     switch (command) {
       case 'dev':
@@ -40,7 +42,7 @@ async function main() {
         process.env.NODE_ENV = 'production'
         const startHandler = (await import ('./start.mjs')).default
         const startDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
-        await startHandler(appName, /*dest*/ startDest, serverName)
+        await startHandler(appName, /*dest*/ startDest)
         break
 
       case 'stop':
@@ -53,15 +55,15 @@ async function main() {
         process.env.NODE_ENV = 'production'
         const restartHandler = (await import ('./restart.mjs')).default
         const restartDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
-        await restartHandler({appName, /*dest*/ restartDest, serverName})
+        await restartHandler({appName, /*dest*/ restartDest})
         break
 
-      case 'create-bin':
-        process.env.NODE_ENV = 'production'
-        const createHandler = (await import ('./create-bin.mjs')).default
-        const createDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
-        await createHandler(appName, /*dest*/ createDest, serverName)
-        break
+      //case 'create-bin':
+      //  process.env.NODE_ENV = 'production'
+      //  const createHandler = (await import ('./create-bin.mjs')).default
+      //  const createDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
+      //  await createHandler(appName, /*dest*/ createDest, serverName)
+      //  break
 
       default:
         console.error(`[miolo] Unknown command: ${command}`)

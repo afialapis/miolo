@@ -8,9 +8,9 @@
     "build-client": "npx miolo build-client",
     "build-server": "npx miolo build-server",
     "build": "npm run build-client && npm run build-server",
-    "start": "npx miolo start --server-name=miolo_demo_server",
+    "start": "npx miolo start",
     "stop": "npx miolo stop",
-    "restart": "npx miolo restart --server-name=miolo_demo_server",
+    "restart": "npx miolo restart",
     "prod": "npm run build && npm run start"
   },
   "type": "module",
