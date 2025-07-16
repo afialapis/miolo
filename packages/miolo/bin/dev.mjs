@@ -1,8 +1,6 @@
 import path from 'node:path'
 import { fork } from 'node:child_process'
 
-process.env.NODE_ENV = 'development'
-
 let serverProcess = null
 // let retryCount = 0
 // const maxRetries = 5

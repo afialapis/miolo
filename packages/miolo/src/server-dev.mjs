@@ -18,8 +18,8 @@ export async function miolo_dev(sconfig) {
   
   // Vite DEV server init
   const devInit= async (app, config) => {
-    await init_vite_dev_server_middleware(app, config.vite)
-    await init_watcher_dev_server_middleware(app, config.dev.watcher, config.ssr)
+    await init_vite_dev_server_middleware(app, config.build.vite)
+    await init_watcher_dev_server_middleware(app, config.build.dev.watcher, config.build.ssr)
   }
 
   // Vite SSR side

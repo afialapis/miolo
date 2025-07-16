@@ -1,5 +1,3 @@
-import '@dotenvx/dotenvx/config'
-
 import Koa                                from 'koa'
 import { init_config }                    from './config/index.mjs'
 
@@ -41,7 +39,7 @@ async function miolo(sconfig, devInit= undefined, devRender= undefined) {
   // Vite Dev Server
   if (devInit) {
     await devInit(app, config)
-    // await init_vite_dev_server_middleware(app, config.vite)
+    // await init_vite_dev_server_middleware(app, config.build.vite)
   }
   
   

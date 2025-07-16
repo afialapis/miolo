@@ -11,7 +11,9 @@ const proot = (p) => path.join(process.cwd(), p)
 export const makeConfig = (authType, logLevel= 'debug') => {
   const isProduction = process.env.NODE_ENV === 'production'
 
-  const indexHTMLPath=  proot(isProduction ? 'dist/cli/index.html' : 'cli/index.html') // proot(`cli/${isProduction ? 'index.html' : 'index.dev.html'}`)
+  // If production, we need the modified by miolo version (with the link to the css file)
+  const indexHTMLPath=  proot(isProduction ? 'dist/cli/index.html' : 'cli/index.html') 
+
   const indexHTML = readFileSync(indexHTMLPath, 'utf8').replace(/--AUTH_TYPE--/g, process.env.AUTH_TYPE || 'credentials')
 
   const auth = 
@@ -111,24 +113,25 @@ export const makeConfig = (authType, logLevel= 'debug') => {
     //  //new_namespace: (namespace) => {},
     //  
     //}    
-
-    ssr: {
-      html: indexHTML,
+    build: {
       client,
-      server,
-      loader
-    }, 
-    vite: {
-      base: '/',
-      root: ''
-    },
-    dev: {
-      watch: {
-        dirs: [
-          //path.join(process.cwd(), 'cli'),
-          path.join(process.cwd(), 'server'),
-          //path.join(process.cwd(), 'bin'),
-        ]
+      ssr: {
+        html: indexHTML,
+        server,
+        loader
+      }, 
+      vite: {
+        base: '/',
+        root: ''
+      },
+      dev: {
+        watch: {
+          dirs: [
+            //path.join(process.cwd(), 'cli'),
+            path.join(process.cwd(), 'server'),
+            //path.join(process.cwd(), 'bin'),
+          ]
+        }
       }
     }
   }

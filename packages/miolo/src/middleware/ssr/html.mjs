@@ -27,7 +27,7 @@ function _add_client_script_to_body(htmlString, client) {
 
 
 // HTML renderer
-export const ssr_html_renderer_make = async (app, ssrConfig, devRender= undefined) => {
+export const ssr_html_renderer_make = async (app, ssrConfig, client, devRender= undefined) => {
   const isProduction = process.env.NODE_ENV === 'production'
 
   // check HTML
@@ -81,7 +81,7 @@ export const ssr_html_renderer_make = async (app, ssrConfig, devRender= undefine
       .replace('{context}', JSON.stringify(context, null, 2))  
       .replace('{children}', ssr_html)
     
-    parsed_html = _add_client_script_to_body(parsed_html, ssrConfig?.client)
+    parsed_html = _add_client_script_to_body(parsed_html, client)
 
     return parsed_html
   }

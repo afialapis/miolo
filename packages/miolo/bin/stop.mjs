@@ -1,7 +1,5 @@
 import { pidFileRead } from "./util.mjs"
 
-process.env.NODE_ENV = 'production'
-
 export default async function(appName) {
   console.log(`[${appName}][prod][stop] Stopping server...`)
 

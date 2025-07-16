@@ -5,12 +5,12 @@
   "scripts": {
     "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
     "dev": "npx miolo dev --entry=./server/server-dev.mjs",
-    "build-client": "npx miolo build-client --entry=./cli/entry-cli.jsx --html-file=./cli/index.html --dest=./dist/cli",
-    "build-server": "npx miolo build-server --ssr-entry=server/ssr/entry-server.jsx --ssr-dest=./dist/server --entry=./server/server-prod.mjs --dest=./dist/server",
+    "build-client": "npx miolo build-client --html-file=./cli/index.html",
+    "build-server": "npx miolo build-server",
     "build": "npm run build-client && npm run build-server",
-    "start": "npx miolo start --server-name=miolo_demo_server  --dest=./dist/server",
+    "start": "npx miolo start --server-name=miolo_demo_server",
     "stop": "npx miolo stop",
-    "restart": "npx miolo restart --server-name=miolo_demo_server  --dest=./dist/server",
+    "restart": "npx miolo restart --server-name=miolo_demo_server",
     "prod": "npm run build && npm run start"
   },
   "type": "module",

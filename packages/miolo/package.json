@@ -23,7 +23,7 @@
     "./server": {
       "node": "./src/index.mjs", 
       "import": "./src/index.mjs",
-      "default": "./dist/server/miolo.node.mjs"
+      "default": "./dist/miolo.node.mjs"
     },
     "./server-dev": {
       "default": "./src/server-dev.mjs"
@@ -35,12 +35,10 @@
   ],
   "scripts": {
     "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
-    "clean": "rm -fr ./dist/server/*",
+    "clean": "rm -fr ./dist/*",
     "bundle": "npx xeira bundle --target=node --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo --bundle_extension=node.mjs",
     "dist": "npm run clean && npm run bundle",
-    "site": "npx xeira site",
     "test": "npx xeira test --files=./test/index.mjs",
-    "pre-publish": "npm run dist",
     "publish": "npm publish"
   },
   "dependencies": {

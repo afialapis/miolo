@@ -1,5 +1,3 @@
-import '@dotenvx/dotenvx/config'
-
 import { init_config }                    from './config/index.mjs'
 import { init_context_middleware }         from './middleware/context/index.mjs'
 import { init_cron }                       from './engines/cron/index.mjs'

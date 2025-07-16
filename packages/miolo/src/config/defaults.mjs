@@ -9,10 +9,10 @@ const SESSION_MAX_AGE = 86400 * 10 * 1000
 
 
 export default {
-  name: 'miolo',
+  name: process.env?.MIOLO_NAME || 'miolo',
   http: {
-    port: 8001,
-    hostname: 'localhost',
+    port: process.env?.MIOLO_PORT || 8001,
+    hostname: process.env?.MIOLO_HOSTNAME || 'localhost',
 
     catcher_url: '/sys/jserror',
     
@@ -37,19 +37,19 @@ export default {
 
     ratelimit: {
       /* eslint-disable no-unused-vars */
-      max: 1000,
-      duration: 60 * 1000, // miliseconds
+      max: parseInt(process.env.MIOLO_RATELIMIT_MAX || 1000),
+      duration: parseInt(process.env.MIOLO_RATELIMIT_DURATION || 60 * 1000), // miliseconds
       errorMessage: 'Rate Limit reached',      
       //whitelist: (ctx) => false,
       //blacklist: (ctx) => false,
-      whitelist_ips: [],
-      blacklist_ips: [],
+      whitelist_ips: process.env.MIOLO_RATELIMIT_WHITELIST_IPS?.split(',') || [],
+      blacklist_ips: process.env.MIOLO_RATELIMIT_BLACKLIST_IPS?.split(',') || [],
       ipsum_folder: '/var/ipsum' // https://github.com/stamparm/ipsum
     },
 
     request: {
-      lazy: 1, // seconds to consider lazy a request
-      slow: 2, // seconds to consider slow a request
+      lazy: parseInt(process.env.MIOLO_REQUEST_LAZY || 1), // seconds to consider lazy a request
+      slow: parseInt(process.env.MIOLO_REQUEST_SLOW || 2), // seconds to consider slow a request
       onStart: undefined,
       // (ctx, times) => { return begin_result}
       onDone: undefined,
@@ -57,7 +57,7 @@ export default {
       geoip: {
         enabled: false,
         db: '/var/lib/GeoIP/GeoLite2-City.mmdb',
-        local_ips: [
+        local_ips: process.env.MIOLO_GEOIP_LOCAL_IPS?.split(',') || [
           '127.0.0.1'
         ]
       }
@@ -65,13 +65,13 @@ export default {
     
   },
   session: {
-    salt: 'SUPER_SALTY_YES?',
-    secret: 'SUPER_SECRET_KEY_KERE',
+    salt: process.env.MIOLO_SESSION_SALT || 'SUPER_SALTY_YES?',
+    secret: process.env.MIOLO_SESSION_SECRET || 'SUPER_SECRET_KEY_KERE',
     options: {
       /** (number || 'session') maxAge in ms (default is 1 days) */
       /** 'session' will result in a cookie that expires when session/browser is closed */
       /** Warning: If a session cookie is stolen, this cookie will never expire */
-      maxAge: SESSION_MAX_AGE,
+      maxAge: parseInt(process.env.MIOLO_SESSION_MAX_AGE || SESSION_MAX_AGE),
       
       /** (boolean) automatically commit headers (default true) */
       //autoCommit: true, 
@@ -95,7 +95,7 @@ export default {
       /** You may want to set it as true in your Production environement,
        *  while false at DEV time.
        */
-      secure: true, 
+      secure: process.env?.MIOLO_SESSION_SECURE === 'true',
       
       /** (string) session cookie sameSite options (default null, don't set it) */
       sameSite: 'lax', // 'strict', 
@@ -103,12 +103,12 @@ export default {
   },
   db: {
     config: {
-        dialect:  'postgres',
-        host:     'localhost',
-        port:     5432,
-        database: 'miolo',
-        user:     'postgres',
-        password: 'postgres',
+        dialect:  process.env.MIOLO_DB_DIALECT || 'postgres',
+        host:     process.env.MIOLO_DB_HOST || 'localhost',
+        port:     process.env.MIOLO_DB_PORT || 5432,
+        database: process.env.MIOLO_DB_DATABASE || 'miolo',
+        user:     process.env.MIOLO_DB_USER || 'postgres',
+        password: process.env.MIOLO_DB_PASSWORD || 'postgres',
         max:      5,          // Maximum number of connection in pool
         min:      0,          // Minimum number of connection in pool
         idleTimeoutMillis: 10000,  // The maximum time, in milliseconds, that a connection can be idle before being released. Use with combination of evict for proper working, for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
@@ -181,17 +181,18 @@ export default {
     */],
   },
   log: {
-    level: 'debug',
+    level: process.env.MIOLO_LOG_LEVEL || 'debug',
     format: {
       locale: 'en-GB'
     },
     console: {
-      enabled: true,
+      enabled: process.env.MIOLO_LOG_CONSOLE_ENABLED === 'true',
+      level: process.env.MIOLO_LOG_CONSOLE_LEVEL || process.env.MIOLO_LOG_LEVEL || 'debug',
     },
     file: {
-      enabled: true,
-
-      filename: '/var/log/afialapis/%MIOLO%.log',
+      enabled: process.env.MIOLO_LOG_FILE_ENABLED === 'true',
+      level: process.env.MIOLO_LOG_FILE_LEVEL || process.env.MIOLO_LOG_LEVEL || 'debug',
+      filename: process.env.MIOLO_LOG_FILE_PATH || '/var/log/afialapis/%MIOLO%.log',
       
       //frequency: undefined,
       //datePattern: 'YYYY-MM-DD',
@@ -211,23 +212,25 @@ export default {
       hup_patch: false
     },
     mail: {
-      enabled: false,
-      level: 'warn',
-      name: 'miolo',
-      from: 'miolo@mail.com',
-      to: 'errors@mail.com'      
+      enabled: process.env.MIOLO_LOG_MAIL_ENABLED 
+      ? process.env.MIOLO_LOG_MAIL_ENABLED === 'true' 
+      : false,
+      level: process.env.MIOLO_LOG_MAIL_LEVEL || process.env.MIOLO_LOG_LEVEL || 'warn',
+      name: process.env.MIOLO_NAME || 'miolo',
+      from: process.env.MIOLO_LOG_MAIL_FROM || 'noreply@mail.com',
+      to: process.env.MIOLO_LOG_MAIL_TO || 'noreply@mail.com'      
     }
   },
   mail: {
-    silent: true,
+    silent: process.env.MIOLO_MAILER_SILENT === 'true',
     options: {
       //
       // General options
       //
       // port – is the port to connect to (defaults to 587 is secure is false or 465 if true)
-      port: 25,
+      port: parseInt(process.env.MIOLO_MAILER_PORT || 25),
       // host – is the hostname or IP address to connect to (defaults to ‘localhost’)
-      host: 'mail.com',
+      host: process.env.MIOLO_MAILER_HOST || 'mail.com',
       // auth – defines authentication data 
       //        If authentication data is not present, the connection is considered authenticated from the start. 
       //        Otherwise you would need to provide the authentication options object.
@@ -235,7 +238,20 @@ export default {
       //   - user is the username
       //   - pass is the password for the user if normal login is used
       // authMethod – defines preferred authentication method, defaults to ‘PLAIN’
-      authMethod: 'PLAIN',
+      authMethod: process.env.MIOLO_MAILER_AUTH_METHOD || 'PLAIN',
+      ... process.env.MIOLO_MAILER_AUTH_METHOD === 'LOGIN'
+        ? {
+          auth: {
+            user: process.env.MIOLO_MAILER_SMTP_USER || 'noreply@mail.com',
+            pass: process.env.MIOLO_MAILER_SMTP_PASS || '****',
+            type: 'login',
+          },
+          secure: true,
+        }
+        : {
+          secure: false
+        },
+
       //
       // TLS options
       //
@@ -244,7 +260,8 @@ export default {
       //          In most cases set this value to true if you are connecting to port 465. For port 587 or 25 keep it false
       //    ** Setting secure to false does not mean that you would not use an encrypted connection. Most SMTP servers allow 
       //       connection upgrade via STARTTLS command but to use this you have to connect using plaintext first
-      secure: false,
+     
+      
       // tls – defines additional node.js TLSSocket options to be passed to the socket constructor, eg. {rejectUnauthorized: true}.
       tls: {
           // do not fail on invalid certs
@@ -297,9 +314,9 @@ export default {
       //         Read about proxy support in Nodemailer from here: https://nodemailer.com/smtp/proxies/
     },
     defaults: {
-      name: 'miolo',
-      from: 'miolo@mail.com',
-      to: 'errors@mail.com'
+      name: process.env.MIOLO_NAME || 'miolo',
+      from: process.env.MIOLO_MAILER_FROM || 'noreply@mail.com',
+      to: process.env.MIOLO_MAILER_TO || 'noreply@mail.com'
     }
   },
   auth: {
@@ -361,20 +378,22 @@ export default {
         host: '127.0.0.1',
         port: 6379
       },
-      version: 1,
+      version: parseInt(process.env.MIOLO_CACHE_VERSION || 1),
       clean: false,
     },
     
     // specific cache options for calustra
     calustra: {
       namespace: 'miolo-calustra',
-      ttl: 86400*1000,
+      ttl: parseInt(process.env.MIOLO_CACHE_CALUSTRA_TTL || 86400*1000),
+      version: parseInt(process.env.MIOLO_CACHE_CALUSTRA_VERSION || process.env.MIOLO_CACHE_VERSION || 1)
     },
 
     // specific cache options for koa-session
     session: {
       namespace: 'miolo-session',
-      ttl: SESSION_MAX_AGE,
+      ttl: parseInt(process.env.MIOLO_CACHE_SESSION_TTL || process.env.MIOLO_SESSION_MAX_AGE || SESSION_MAX_AGE),
+      version: parseInt(process.env.MIOLO_CACHE_SESSION_VERSION || process.env.MIOLO_CACHE_VERSION || 1)
     },
     
     // custom cache instances
@@ -403,31 +422,33 @@ export default {
     }]
     */
   },
-
-  // vite: false, 
-  vite: {
-    base: '/',
-    root: '',
-    watch: {
-      // During tests we edit the files too fast and sometimes chokidar
-      // misses change events, so enforce polling for consistency
-      usePolling: true,
-      interval: 100,
-    }, 
-  },
+  build: {
     
-  ssr: {
-    client: 'cli/entry-cli.jsx',
-    server: 'server/ssr/entry-server.jsx',
-    // html: '',
-    // loader: async (ctx) => {}
-  },
-
-  dev: {
-    watcher: {
-      enabled: true,
-      // dirs: []    By default, server's entry dir
+    client: process.env.MIOLO_BUILD_CLIENT_ENTRY,
+    // vite: false, 
+    vite: {
+      base: '/',
+      root: '',
+      watch: {
+        // During tests we edit the files too fast and sometimes chokidar
+        // misses change events, so enforce polling for consistency
+        usePolling: true,
+        interval: 100,
+      }, 
     },
+      
+    ssr: {
+      server: process.env.MIOLO_BUILD_SERVER_SSR_ENTRY,
+      // html: '',
+      // loader: async (ctx) => {}
+    },
+
+    dev: {
+      watcher: {
+        enabled: true,
+        // dirs: []    By default, server's entry dir
+      },
+    }
   }
 };
 

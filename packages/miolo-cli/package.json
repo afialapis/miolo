@@ -31,7 +31,6 @@
     "clean": "rm -fr ./dist/*",
     "bundle": "npx xeira bundle --target=browser --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo-cli --bundle_extension=umd,mjs",
     "dist": "npm run clean && npm run bundle",
-    "pre-publish": "npm run dist",
     "publish": "npm publish"
   },
   "dependencies": {
