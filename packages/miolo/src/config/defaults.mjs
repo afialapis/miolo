@@ -28,13 +28,17 @@ export default {
     //   - true      enable @koa/cors
     //   - {options} enable @koa/cors and use the custom options
     //
-    cors: 'simple',
+    cors: process.env.MIOLO_HTTP_CORS==='true'
+      ? true
+      : process.env.MIOLO_HTTP_CORS==='simple'
+      ? 'simple'
+      : false,
 
     // proxy can be:
     //   - false
     //   - true      enable koa-proxies and use default options
     //   - {options} enable koa-proxies and use the custom options
-    proxy: false,
+    proxy: process.env.MIOLO_HTTP_PROXY==='true',
 
     ratelimit: {
       /* eslint-disable no-unused-vars */
@@ -56,8 +60,8 @@ export default {
       onDone: undefined,
       // (ctx, begin_result, times) => {},
       geoip: {
-        enabled: false,
-        db: '/var/lib/GeoIP/GeoLite2-City.mmdb',
+        enabled: process.env.MIOLO_GEOIP_ENABLED==='true',
+        db: process.env.MIOLO_GEOIP_DB,
         local_ips: process.env.MIOLO_GEOIP_LOCAL_IPS?.split(',') || [
           '127.0.0.1'
         ]
@@ -104,15 +108,20 @@ export default {
   },
   db: {
     config: {
-        dialect:  process.env.MIOLO_DB_DIALECT || 'postgres',
-        host:     process.env.MIOLO_DB_HOST || 'localhost',
-        port:     process.env.MIOLO_DB_PORT || 5432,
-        database: process.env.MIOLO_DB_DATABASE || 'miolo',
-        user:     process.env.MIOLO_DB_USER || 'postgres',
-        password: process.env.MIOLO_DB_PASSWORD || 'postgres',
-        max:      5,          // Maximum number of connection in pool
-        min:      0,          // Minimum number of connection in pool
-        idleTimeoutMillis: 10000,  // The maximum time, in milliseconds, that a connection can be idle before being released. Use with combination of evict for proper working, for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
+        dialect:  process.env.MIOLO_DB_DIALECT,
+        host:     process.env.MIOLO_DB_HOST,
+        port:     process.env.MIOLO_DB_PORT,
+        database: process.env.MIOLO_DB_DATABASE,
+        user:     process.env.MIOLO_DB_USER,
+        password: process.env.MIOLO_DB_PASSWORD,
+        // Maximum number of connection in pool
+        max:      parseInt(process.env.MIOLO_DB_POOL_MAX),
+        // Minimum number of connection in pool
+        min:      parseInt(process.env.MIOLO_DB_POOL_MIN),
+        // The maximum time, in milliseconds, that a connection can be idle before being released. 
+        // Use with combination of evict for proper working,
+        //   for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
+        idleTimeoutMillis: parseInt(process.env.MIOLO_DB_POOL_IDLE_TIMEOUT_MS), 
     },
     options: {
       tables: []
@@ -430,7 +439,9 @@ export default {
     client: process.env.NODE_ENV === 'production'
       ? `${process.env.MIOLO_BUILD_CLIENT_DEST}/${process.env.MIOLO_NAME}.${process.env.MIOLO_BUNDLE_SUFFIX}.js`
       : process.env.MIOLO_BUILD_CLIENT_ENTRY,
-    // vite: false, 
+    
+    html: process.env.MIOLO_BUILD_HTML_FILE,
+
     vite: {
       base: '/',
       root: '',
@@ -445,14 +456,13 @@ export default {
     ssr: {
       server: process.env.NODE_ENV === 'production'
       ? path.join(process.cwd(), `${process.env.MIOLO_BUILD_SERVER_DEST}/entry-server.js`)
-      : process.env.MIOLO_BUILD_SERVER_SSR_ENTRY,
-      // html: '',
+      : process.env.MIOLO_BUILD_SERVER_SSR_ENTRY
       // loader: async (ctx) => {}
     },
 
     dev: {
       watcher: {
-        enabled: true,
+        enabled: process.env.MIOLO_DEV_WATCH_ENABLED==='true',
         dirs: process.env.MIOLO_DEV_WATCH_DIRS.split(',').map(dir => path.join(process.cwd(), dir)),
       },
     }

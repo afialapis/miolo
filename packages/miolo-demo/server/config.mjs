@@ -38,11 +38,6 @@ export const makeConfig = (logLevel= 'debug') => {
         }
       }
     },    
-    session: {
-      options: {
-        secure: false
-      }
-    },
     db: {
       config: {
         dialect:  'postgres',

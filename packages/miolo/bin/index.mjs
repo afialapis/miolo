@@ -15,7 +15,7 @@ async function main() {
       case 'dev':
         process.env.NODE_ENV = 'development'
         const devHandler = (await import ('./dev.mjs')).default
-        const devEntry = args.entry || './src/server/server-dev.mjs'
+        const devEntry = args.entry || process.env.MIOLO_DEV_SERVER_ENTRY
         await devHandler(appName, /*entry*/ devEntry)
         break
 
