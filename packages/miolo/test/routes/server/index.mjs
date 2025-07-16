@@ -1,10 +1,9 @@
-import { miolo } from '../../../src/server/index.mjs'
-import { makeConfig } from './config.mjs'
+import { miolo } from '../../../src/index.mjs'
 
 
 async function test_server () {  
-
-  const app = miolo(makeConfig(), undefined)
+  const config = await import('./config.mjs')
+  const app = miolo(config, undefined)
   await app.start()
 
   return app

@@ -10,7 +10,7 @@ const SESSION_MAX_AGE = 86400 * 10 * 1000
 
 
 export default {
-  name: process.env.MIOLO_NAME,
+  name: process.env.MIOLO_NAME || 'miolo',
   http: {
     port: process.env?.MIOLO_PORT || 8001,
     hostname: process.env?.MIOLO_HOSTNAME || 'localhost',
@@ -108,20 +108,20 @@ export default {
   },
   db: {
     config: {
-        dialect:  process.env.MIOLO_DB_DIALECT,
-        host:     process.env.MIOLO_DB_HOST,
-        port:     process.env.MIOLO_DB_PORT,
-        database: process.env.MIOLO_DB_DATABASE,
-        user:     process.env.MIOLO_DB_USER,
-        password: process.env.MIOLO_DB_PASSWORD,
+        dialect:  process.env.MIOLO_DB_DIALECT || 'postgres',
+        host:     process.env.MIOLO_DB_HOST || 'localhost',
+        port:     process.env.MIOLO_DB_PORT || 5432,
+        database: process.env.MIOLO_DB_DATABASE || 'miolo',
+        user:     process.env.MIOLO_DB_USER || 'postgres',
+        password: process.env.MIOLO_DB_PASSWORD || 'postgres',
         // Maximum number of connection in pool
-        max:      parseInt(process.env.MIOLO_DB_POOL_MAX),
+        max:      parseInt(process.env.MIOLO_DB_POOL_MAX || 5),
         // Minimum number of connection in pool
-        min:      parseInt(process.env.MIOLO_DB_POOL_MIN),
+        min:      parseInt(process.env.MIOLO_DB_POOL_MIN || 0),
         // The maximum time, in milliseconds, that a connection can be idle before being released. 
         // Use with combination of evict for proper working,
         //   for more details read https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870,
-        idleTimeoutMillis: parseInt(process.env.MIOLO_DB_POOL_IDLE_TIMEOUT_MS), 
+        idleTimeoutMillis: parseInt(process.env.MIOLO_DB_POOL_IDLE_TIMEOUT_MS || 10000), 
     },
     options: {
       tables: []
@@ -440,7 +440,7 @@ export default {
       ? `${process.env.MIOLO_BUILD_CLIENT_DEST}/${process.env.MIOLO_NAME}.${process.env.MIOLO_BUNDLE_SUFFIX}.js`
       : process.env.MIOLO_BUILD_CLIENT_ENTRY,
     
-    html: process.env.MIOLO_BUILD_HTML_FILE,
+    html: process.env.MIOLO_BUILD_HTML_FILE || './src/cli/index.html',
 
     vite: {
       base: '/',
@@ -463,7 +463,7 @@ export default {
     dev: {
       watcher: {
         enabled: process.env.MIOLO_DEV_WATCH_ENABLED==='true',
-        dirs: process.env.MIOLO_DEV_WATCH_DIRS.split(',').map(dir => path.join(process.cwd(), dir)),
+        dirs: process.env.MIOLO_DEV_WATCH_DIRS?.split(',')?.map(dir => path.join(process.cwd(), dir)) || [],
       },
     }
   }

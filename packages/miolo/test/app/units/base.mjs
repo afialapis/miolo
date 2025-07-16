@@ -1,7 +1,7 @@
 import assert from 'assert'
 import fetch from 'node-fetch'
 import test_server from '../server/index.mjs'
-import {miolo_client} from '../../../src/cli/index.mjs'
+import {miolo_client} from '../../../../miolo-cli/src/index.mjs'
 
 import {users_make_table_from_conn} from '../server/db/users.mjs'
 import {todos_make_table_from_conn} from '../server/db/todos.mjs'

@@ -2,7 +2,7 @@ import assert from 'assert'
 import fetch from 'node-fetch'
 import data from '../data.mjs'
 import test_server from '../server/index.mjs'
-import {miolo_client} from '../../../src/cli/index.mjs'
+import {miolo_client} from '../../../../miolo-cli/src/index.mjs'
 
 const dbType = 'postgres'
 

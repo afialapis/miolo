@@ -13,7 +13,7 @@ export function test_restarts_server_start () {
     this.timeout(3000)
 
     it(`[miolo-test-restarts][server] should start app`, async function() {
-      app = test_server()
+      app = await test_server()
       await app.start()
       conn = await app.context.miolo.db.get_connection(dbType, {
         reset: true
