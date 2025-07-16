@@ -3,14 +3,20 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "create-bin": "npx miolo create-bin --dest=./dist/server",
     "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
     "dev": "npx miolo dev",
     "build-client": "npx miolo build-client",
     "build-server": "npx miolo build-server",
-    "build": "npm run build-client && npm run build-server",
-    "start": "npx miolo start",
-    "stop": "npx miolo stop",
-    "restart": "npx miolo restart",
+    "build": "npm run build-client && npm run build-server && npm run create-bin",
+    "x-start": "npx miolo start",
+    "x-stop": "npx miolo stop",
+    "x-restart": "npx miolo restart",
+
+    "start": "node ./dist/server/run.mjs start",
+    "stop": "node ./dist/server/run.mjs stop",
+    "restart": "node ./dist/server/run.mjs restart",
+
     "prod": "npm run build && npm run start"
   },
   "type": "module",

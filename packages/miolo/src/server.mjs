@@ -32,7 +32,7 @@ async function miolo(sconfig, devInit= undefined, devRender= undefined) {
 
   // Init some pieces
   const config = init_config(sconfig)
-  
+
   // attach to app some custom miolo methods
   init_context_middleware(app, config)
 
@@ -41,7 +41,6 @@ async function miolo(sconfig, devInit= undefined, devRender= undefined) {
     await devInit(app, config)
     // await init_vite_dev_server_middleware(app, config.build.vite)
   }
-  
   
   // CORS and other headers
   init_headers_middleware(app, config.http)    

@@ -18,28 +18,23 @@ function _html_read(htmlFile) {
   }
 }
 
-
-function _add_client_script_to_body(htmlString, client) {
+function _feed_html(htmlString, client, context, ssr_html) {
+  const contextScript = `<script> window.__CONTEXT = ${JSON.stringify(context, null, 2)}</script>`
+  const rootDiv = `<div id="root">${ssr_html}</div>`
   const linkTag =
     process.env.NODE_ENV === 'production'
       ? `  <script src="${client}" async></script>`
       : `  <script type="module" src="${client}"></script>`
   
-  // Expresión regular para encontrar la etiqueta </body> de cierre.
-  // Usamos un grupo de captura para mantener el contenido antes de </body>.
-  const bodyCloseTagRegex = /(<\/body>)/i;
-
-  // Busca la etiqueta </body> en el HTML.
-  const match = htmlString.match(bodyCloseTagRegex);
-
-  if (match) {
-    // Si se encuentra </body>, inserta la etiqueta <link> justo antes de ella.
-    return htmlString.replace(bodyCloseTagRegex, `${linkTag}\n$&`);
-  } else {
-    // Si no se encuentra </body>, devuelve el HTML original sin modificar.
-    console.warn(`[miolo] No se encontró la etiqueta <body> en el HTML proporcionado.`);
-    return htmlString;
-  }
+  // head
+  const headCloseTagRegex = /(<\/head>)/i
+  htmlString= htmlString.replace(headCloseTagRegex, `${contextScript}\n$&`)
+  
+  // body
+  const bodyCloseTagRegex = /(<\/body>)/i
+  htmlString= htmlString.replace(bodyCloseTagRegex, `${rootDiv}\n${linkTag}\n$&`)
+  
+  return htmlString
 }
 
 
@@ -48,12 +43,7 @@ export const ssr_html_renderer_make = async (app, ssrConfig, htmlFile, client, d
   const isProduction = process.env.NODE_ENV === 'production'
 
   // check HTML
-  let tmplHtml = _html_read(htmlFile)
-  for (const vrb of ['{context}', '{children}']) {
-    if (tmplHtml.indexOf(vrb) < 0) {
-      app.context.miolo.logger.error(`[ssr] Provided HTML for rendering has no ${vrb} template variable`)
-    }
-  }
+  const tmplHtml = _html_read(htmlFile)
 
   const ssr_html_renderer = async (ctx, context) => {
     let base_html= tmplHtml
@@ -94,11 +84,7 @@ export const ssr_html_renderer_make = async (app, ssrConfig, htmlFile, client, d
       `
     }
     
-    let parsed_html = base_html
-      .replace('{context}', JSON.stringify(context, null, 2))  
-      .replace('{children}', ssr_html)
-    
-    parsed_html = _add_client_script_to_body(parsed_html, client)
+    const parsed_html = _feed_html(base_html, client, context, ssr_html)
 
     return parsed_html
   }

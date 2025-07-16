@@ -1,5 +1,5 @@
 import path from 'node:path'
-import {miolo_dev} from '../src/server-dev.mjs'
+import {miolo_dev} from '../../src/server-dev.mjs'
 
 async function _miolo_dev_start_server() {
   const config = await import(path.join(process.cwd(), process.env.MIOLO_CONFIG))

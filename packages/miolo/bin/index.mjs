@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import path from 'node:path'
 import yargs from 'yargs-parser'
 import { intre_locale_init } from 'intre'
 import { init_env_config } from './env.mjs'
@@ -8,62 +9,70 @@ async function main() {
   const args = yargs(process.argv.slice(2))
   const command = args._[0]
 
+  // Init env
+  init_env_config()
+  process.env.NODE_ENV = 'production'
+  intre_locale_init(process.env.MIOLO_INTRE_LOCALE)  
+
+  // Init vars
+  const appName = args['app-name'] || process.env.MIOLO_NAME
+  const serverExt = 'node.bundle.mjs'
+
   try {
-    init_env_config()
-    const appName = process.env.MIOLO_NAME
-    intre_locale_init(process.env.MIOLO_INTRE_LOCALE)
 
     switch (command) {
       case 'dev':
         process.env.NODE_ENV = 'development'
-        const devHandler = (await import ('./dev.mjs')).default
+        const devHandler = (await import ('./dev/dev.mjs')).default
         await devHandler(appName)
         break
 
       case 'build-client':
-        process.env.NODE_ENV = 'production'
-        const buildClientHandler = (await import ('./build-client.mjs')).default
-        const clientEntry = args.entry || process.env.MIOLO_BUILD_CLIENT_ENTRY
+        const entry = args.entry || process.env.MIOLO_BUILD_CLIENT_ENTRY
         const htmlFile = args['html-file'] || process.env.MIOLO_BUILD_HTML_FILE
-        const clientDest = args.dest || process.env.MIOLO_BUILD_CLIENT_DEST 
-        await buildClientHandler(appName, /*entry*/ clientEntry, htmlFile, /*dest*/ clientDest)
+        const cliDest = args.dest || process.env.MIOLO_BUILD_CLIENT_DEST 
+
+        const buildClientHandler = (await import ('./prod-build/build-client.mjs')).default
+        await buildClientHandler(appName, entry, htmlFile, cliDest)
         break
 
       case 'build-server':
-        process.env.NODE_ENV = 'production'
-        const buildServerHandler = (await import ('./build-server.mjs')).default
-        const ssrEntry = args['ssr-entry'] || process.env.MIOLO_BUILD_SERVER_SSR_ENTRY
-        const ssrDest = args['ssr-dest'] || process.env.MIOLO_BUILD_SERVER_DEST
-        const serverDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
-        await buildServerHandler(appName, ssrEntry, ssrDest,  /*dest*/ serverDest)
+        // Based on command line params or .env
+        const ssrEntry= args['ssr-entry'] || process.env.MIOLO_BUILD_SERVER_SSR_ENTRY
+        const ssrDest= args['ssr-dest'] || process.env.MIOLO_BUILD_SERVER_DEST
+        const srvDest= args.dest || process.env.MIOLO_BUILD_SERVER_DEST
+      
+        const buildServerHandler = (await import ('./prod-build/build-server.mjs')).default
+        await buildServerHandler(appName, ssrEntry, ssrDest, srvDest)
         break
 
       case 'start':
-        process.env.NODE_ENV = 'production'
-        const startHandler = (await import ('./start.mjs')).default
-        const startDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
-        await startHandler(appName, /*dest*/ startDest)
+        
+        const destFile =  args.dest || path.join(process.cwd(), `${process.env.MIOLO_BUILD_SERVER_DEST}/${appName}.${serverExt}`)
+
+        const startHandler = (await import ('./prod-run/start.mjs')).default
+        await startHandler(appName, destFile)
         break
 
       case 'stop':
-        process.env.NODE_ENV = 'production'
-        const stopHandler = (await import ('./stop.mjs')).default
+        const stopHandler = (await import ('./prod-run/stop.mjs')).default
         await stopHandler(appName)
         break
 
       case 'restart':
-        process.env.NODE_ENV = 'production'
-        const restartHandler = (await import ('./restart.mjs')).default
-        const restartDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
-        await restartHandler({appName, /*dest*/ restartDest})
+        const restartDestFile =  args.dest || path.join(process.cwd(), `${process.env.MIOLO_BUILD_SERVER_DEST}/${appName}.${serverExt}`)
+
+        const restartHandler = (await import ('./prod-run/restart.mjs')).default
+        await restartHandler(appName, restartDestFile)
         break
 
-      //case 'create-bin':
-      //  process.env.NODE_ENV = 'production'
-      //  const createHandler = (await import ('./create-bin.mjs')).default
-      //  const createDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
-      //  await createHandler(appName, /*dest*/ createDest, serverName)
-      //  break
+      case 'create-bin':
+        const dest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
+        const cbinDestFile = path.join(process.cwd(), `${dest}/${appName}.${serverExt}`)
+        
+        const createHandler = (await import ('./prod-bin/create-bin.mjs')).default
+        await createHandler(appName, dest, cbinDestFile)
+        break
 
       default:
         console.error(`[miolo] Unknown command: ${command}`)

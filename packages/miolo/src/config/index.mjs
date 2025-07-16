@@ -1,5 +1,5 @@
 import merge from 'deepmerge'
-import base_config from './defaults.mjs'
+import make_config_defaults from './defaults.mjs'
 
 function _get_auth_type(config) {
   if (config?.auth?.basic) {
@@ -18,15 +18,13 @@ function _get_auth_type(config) {
 }
 
 
-function init_config(config) {
+export function init_config(config) {
+  // delay import of defaults, so env vars can be there
+  const base_config = make_config_defaults()
   const all_config= merge(base_config, config)
   
   all_config.auth_type = _get_auth_type(config)
   all_config.use_catcher = all_config?.http?.catcher_url ? true : false
-  
-  return all_config
-}
 
-export {
-  init_config
+  return all_config
 }

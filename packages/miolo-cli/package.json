@@ -1,6 +1,6 @@
 {
   "name": "miolo-cli",
-  "version": "3.0.0-beta.11",
+  "version": "3.0.0-beta.16",
   "description": "cli utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -24,7 +24,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",

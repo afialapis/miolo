@@ -3,8 +3,7 @@ import path from 'node:path'
 import { readFile, writeFile} from 'node:fs/promises'
 import { build } from 'vite'
 import {xeiraBundle} from 'xeira'
-import { cleanFolder } from './util.mjs'
-
+import { cleanFolder } from '../util.mjs'
 
 
 export async function _fixProdBuild(appName, filePath) {
@@ -22,9 +21,12 @@ export async function _fixProdBuild(appName, filePath) {
 }
 
 export default async function(appName, ssrEntry, ssrDest, dest) {
+  console.log(`[${appName}][prod] Building first the SSR entry ${ssrEntry}`)
+
+  // clean dest folder
   cleanFolder(dest)
 
-  console.log(`[${appName}][prod] Building first the SSR entry ${ssrEntry}`)
+  // Build SSR entry
   await build({
     build: {
       outDir: path.resolve(process.cwd(), ssrDest),
@@ -36,12 +38,17 @@ export default async function(appName, ssrEntry, ssrDest, dest) {
       noExternal: true
     }
   })
+  
 
+  // Build server entry
+  console.log(`[${appName}][prod] Building server entry ${ssrEntry}`)
 
   const serverExt = 'node.bundle.mjs'
+  const serverIdx = process.env.MIOLO_NAME=='miolo-demo'
+    ? '../miolo/bin/prod-build/prod-start.mjs'
+    : 'node_modules/miolo/bin/prod-build/prod-start.mjs'
   await xeiraBundle({
-    //source_index: 'node_modules/miolo/packages/miolo/bin/prod_start.mjs',
-    source_index: '../miolo/bin/prod_start.mjs',
+    source_index: serverIdx,
     target: 'node',
     bundle_folder: dest,
     bundle_name: appName,

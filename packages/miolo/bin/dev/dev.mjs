@@ -3,6 +3,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { fork } from 'node:child_process'
 
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -19,7 +20,7 @@ function _isProcessRunning(pid) {
   }
 }
 
-async function startDevServerProcess({ appName }) {
+async function startDevServerProcess({ appName }) {  
   const serverPath = path.join(__dirname, './dev_start.mjs')
   serverProcess = fork(serverPath)
 
@@ -65,7 +66,12 @@ async function startDevServerProcess({ appName }) {
 }
 
 
-export default async function(appName) {
+export default async function(appName= undefined) {
+
+
+  // Based on command line params or .env
+  appName = appName || process.env.MIOLO_NAME
+  
   console.log(`[${appName}][dev] Running DEV server`)
   await startDevServerProcess({ appName })
 }

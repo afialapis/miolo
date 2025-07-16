@@ -1,6 +1,6 @@
 {
   "name": "miolo-react",
-  "version": "3.0.0-beta.11",
+  "version": "3.0.0-beta.16",
   "description": "React utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -24,7 +24,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
@@ -32,7 +33,6 @@
     "bundle": "npx xeira bundle --target=browser --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo-react --bundle_node_polyfill=true --bundle_extension=umd,mjs",
     "dist": "npm run clean && npm run bundle"
   },
-
   "dependencies": {
     "miolo-cli": "../miolo-cli"
   },  

@@ -13,16 +13,10 @@ export const fallbackIndexHTML = `
 	<!-- Touch Icons - iOS and Android 2.1+ 180x180 pixels in size. --> 
 	<!--<link rel="apple-touch-icon-precomposed" href="/favicon.ico"/>-->
 	<!-- Firefox, Chrome, Safari, IE 11+ and Opera. 196x196 pixels in size. -->
-	<link rel="icon" href="/favicon.ico"/>
-
-
-	<script>
-		window.__CONTEXT = {context}
-	</script>	
+	<link rel="icon" href="/favicon.ico"/>	
 </head>
-
 <body>
-	<div id="root">{children}</div>
+
 </body>
 </html>
 `

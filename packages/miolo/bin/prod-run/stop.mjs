@@ -1,6 +1,7 @@
-import { pidFileRead } from "./util.mjs"
+import { pidFileRead } from "./pid.mjs"
 
-export default async function(appName) {
+export default async function stop(appName) {
+  // stop server by killin gprocess
   console.log(`[${appName}][prod][stop] Stopping server...`)
 
   try {
