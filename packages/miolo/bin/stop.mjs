@@ -15,6 +15,5 @@ export default async function(appName) {
     console.error(_)
 
     return 0
-  }  
-
+  }
 }

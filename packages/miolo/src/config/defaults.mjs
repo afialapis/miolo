@@ -1,3 +1,4 @@
+import path from 'path'
 const SESSION_MAX_AGE = 86400 * 10 * 1000
 
 
@@ -9,7 +10,7 @@ const SESSION_MAX_AGE = 86400 * 10 * 1000
 
 
 export default {
-  name: process.env?.MIOLO_NAME || 'miolo',
+  name: process.env.MIOLO_NAME,
   http: {
     port: process.env?.MIOLO_PORT || 8001,
     hostname: process.env?.MIOLO_HOSTNAME || 'localhost',
@@ -349,6 +350,7 @@ export default {
     //        callback: a middleware function
     //      }, ...]
   },
+
   middlewares: [
     // async (ctx, next) => {}
     // Remember to call `await next()`
@@ -422,9 +424,12 @@ export default {
     }]
     */
   },
+
   build: {
     
-    client: process.env.MIOLO_BUILD_CLIENT_ENTRY,
+    client: process.env.NODE_ENV === 'production'
+      ? `${process.env.MIOLO_BUILD_CLIENT_DEST}/${process.env.MIOLO_NAME}.${process.env.MIOLO_BUNDLE_SUFFIX}.js`
+      : process.env.MIOLO_BUILD_CLIENT_ENTRY,
     // vite: false, 
     vite: {
       base: '/',
@@ -438,7 +443,9 @@ export default {
     },
       
     ssr: {
-      server: process.env.MIOLO_BUILD_SERVER_SSR_ENTRY,
+      server: process.env.NODE_ENV === 'production'
+      ? path.join(process.cwd(), `${process.env.MIOLO_BUILD_SERVER_DEST}/entry-server.js`)
+      : process.env.MIOLO_BUILD_SERVER_SSR_ENTRY,
       // html: '',
       // loader: async (ctx) => {}
     },
@@ -446,7 +453,7 @@ export default {
     dev: {
       watcher: {
         enabled: true,
-        // dirs: []    By default, server's entry dir
+        dirs: process.env.MIOLO_DEV_WATCH_DIRS.split(',').map(dir => path.join(process.cwd(), dir)),
       },
     }
   }

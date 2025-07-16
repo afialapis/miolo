@@ -2,17 +2,17 @@ import {readdirSync, rmSync, writeFileSync, readFileSync} from 'node:fs'
 import path from 'node:path'
 
 
-export function getAppName() {
-  try {
-    const packageJsonPath = path.join(process.cwd(), 'package.json')
-    const content = readFileSync(packageJsonPath, 'utf8')
-    const packageData = JSON.parse(content)
-    return packageData.name
-  } catch (error) {
-    console.error('[miolo] Error reading package.json:', error)
-    return 'miolo'
-  }
-}
+// export function getAppName() {
+//   try {
+//     const packageJsonPath = path.join(process.cwd(), 'package.json')
+//     const content = readFileSync(packageJsonPath, 'utf8')
+//     const packageData = JSON.parse(content)
+//     return packageData.name
+//   } catch (error) {
+//     console.error('[miolo] Error reading package.json:', error)
+//     return 'miolo'
+//   }
+// }
 
 export function cleanFolder(folder) {
   readdirSync(folder).forEach(file => {

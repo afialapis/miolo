@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import yargs from 'yargs-parser'
-import { getAppName } from './util.mjs'
 import { init_env_config } from './env.mjs'
 
 async function main() {
@@ -8,13 +7,13 @@ async function main() {
   const command = args._[0]
 
   try {
-    const appName = getAppName()
+    init_env_config()
+    const appName = process.env.MIOLO_NAME
     const serverName = args['server-name'] || 'miolo_server'
 
     switch (command) {
       case 'dev':
         process.env.NODE_ENV = 'development'
-        init_env_config()
         const devHandler = (await import ('./dev.mjs')).default
         const devEntry = args.entry || './src/server/server-dev.mjs'
         await devHandler(appName, /*entry*/ devEntry)
@@ -22,7 +21,6 @@ async function main() {
 
       case 'build-client':
         process.env.NODE_ENV = 'production'
-        init_env_config()
         const buildClientHandler = (await import ('./build-client.mjs')).default
         const clientEntry = args.entry || process.env.MIOLO_BUILD_CLIENT_ENTRY
         const htmlFile = args['html-file'] || './cli/index.html'
@@ -32,7 +30,6 @@ async function main() {
 
       case 'build-server':
         process.env.NODE_ENV = 'production'
-        init_env_config()
         const buildServerHandler = (await import ('./build-server.mjs')).default
         const ssrEntry = args['ssr-entry'] || process.env.MIOLO_BUILD_SERVER_SSR_ENTRY
         const ssrDest = args['ssr-dest'] || process.env.MIOLO_BUILD_SERVER_DEST
@@ -43,7 +40,6 @@ async function main() {
 
       case 'start':
         process.env.NODE_ENV = 'production'
-        init_env_config()
         const startHandler = (await import ('./start.mjs')).default
         const startDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
         await startHandler(appName, /*dest*/ startDest, serverName)
@@ -51,14 +47,12 @@ async function main() {
 
       case 'stop':
         process.env.NODE_ENV = 'production'
-        init_env_config()
         const stopHandler = (await import ('./stop.mjs')).default
         await stopHandler(appName)
         break
 
       case 'restart':
         process.env.NODE_ENV = 'production'
-        init_env_config()
         const restartHandler = (await import ('./restart.mjs')).default
         const restartDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
         await restartHandler({appName, /*dest*/ restartDest, serverName})
@@ -66,7 +60,6 @@ async function main() {
 
       case 'create-bin':
         process.env.NODE_ENV = 'production'
-        init_env_config()
         const createHandler = (await import ('./create-bin.mjs')).default
         const createDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
         await createHandler(appName, /*dest*/ createDest, serverName)

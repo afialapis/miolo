@@ -21,18 +21,8 @@ export const makeConfig = (authType, logLevel= 'debug') => {
     : authType=='basic' ? {basic: basic_auth}
     : {credentials}
 
-  const client = isProduction
-    ? '/dist/cli/miolo-demo.iife.bundle.min.js'
-    : 'cli/entry-cli.jsx'
-
-  const server = isProduction
-    ? proot('dist/server/entry-server.js')
-    : 'server/ssr/entry-server.jsx'
-  
   return {
     http: {
-      port: 8001,
-      hostname: 'localhost',
       catcher_url: '/sys/jserror',
 
       //
@@ -114,24 +104,11 @@ export const makeConfig = (authType, logLevel= 'debug') => {
     //  
     //}    
     build: {
-      client,
+      // client,
       ssr: {
         html: indexHTML,
-        server,
+        //server,
         loader
-      }, 
-      vite: {
-        base: '/',
-        root: ''
-      },
-      dev: {
-        watch: {
-          dirs: [
-            //path.join(process.cwd(), 'cli'),
-            path.join(process.cwd(), 'server'),
-            //path.join(process.cwd(), 'bin'),
-          ]
-        }
       }
     }
   }

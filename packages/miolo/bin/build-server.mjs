@@ -27,18 +27,7 @@ export default async function(appName, ssrEntry, ssrDest, entry, dest) {
     build: {
       outDir: path.resolve(process.cwd(), ssrDest),
       ssr: path.resolve(process.cwd(), ssrEntry),
-      rollupOptions: {
-        /*
-        external: ['react', 'react-dom'],
-        output: {
-          globals: {
-            react: 'React',
-            'react-dom': 'ReactDOM'
-          }
-        }
-          */
-
-      },
+      rollupOptions: {},
     },
     // server ssr's entry must bundle externals
     ssr: {
