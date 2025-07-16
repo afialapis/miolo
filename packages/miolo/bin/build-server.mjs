@@ -5,6 +5,8 @@ import { build } from 'vite'
 import {xeiraBundle} from 'xeira'
 import { cleanFolder } from './util.mjs'
 
+
+
 export async function _fixProdBuild(appName, filePath) {
   try {
     const content = await readFile(filePath, 'utf8')
@@ -19,7 +21,7 @@ export async function _fixProdBuild(appName, filePath) {
   }
 }
 
-export default async function(appName, ssrEntry, ssrDest, entry, dest) {
+export default async function(appName, ssrEntry, ssrDest, dest) {
   cleanFolder(dest)
 
   console.log(`[${appName}][prod] Building first the SSR entry ${ssrEntry}`)
@@ -34,11 +36,12 @@ export default async function(appName, ssrEntry, ssrDest, entry, dest) {
       noExternal: true
     }
   })
-  
-  console.log(`[${appName}][prod] Building server from entry ${entry}`)
+
+
   const serverExt = 'node.bundle.mjs'
   await xeiraBundle({
-    source_index: entry,
+    //source_index: 'node_modules/miolo/packages/miolo/bin/prod_start.mjs',
+    source_index: '../miolo/bin/prod_start.mjs',
     target: 'node',
     bundle_folder: dest,
     bundle_name: appName,

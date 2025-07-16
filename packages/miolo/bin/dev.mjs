@@ -1,5 +1,10 @@
+
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { fork } from 'node:child_process'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 let serverProcess = null
 // let retryCount = 0
@@ -14,8 +19,8 @@ function _isProcessRunning(pid) {
   }
 }
 
-async function startDevServerProcess({ appName, entry }) {
-  const serverPath = path.join(process.cwd(), entry)
+async function startDevServerProcess({ appName }) {
+  const serverPath = path.join(__dirname, './dev_start.mjs')
   serverProcess = fork(serverPath)
 
   console.log(`[${appName}][dev] Server process started with pid ${serverProcess.pid} from ${process.pid}`)
@@ -54,13 +59,13 @@ async function startDevServerProcess({ appName, entry }) {
         }, 2000)
       }
 
-      startDevServerProcess({ appName, entry }) // Inicia un nuevo proceso
+      startDevServerProcess({ appName }) // Inicia un nuevo proceso
     }
   })
 }
 
 
-export default async function(appName, entry) {
-  console.log(`[${appName}][dev] Running DEV server from entry ${entry}`)
-  await startDevServerProcess({ appName, entry })
+export default async function(appName) {
+  console.log(`[${appName}][dev] Running DEV server`)
+  await startDevServerProcess({ appName })
 }

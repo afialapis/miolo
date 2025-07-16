@@ -15,8 +15,7 @@ async function main() {
       case 'dev':
         process.env.NODE_ENV = 'development'
         const devHandler = (await import ('./dev.mjs')).default
-        const devEntry = args.entry || process.env.MIOLO_DEV_SERVER_ENTRY
-        await devHandler(appName, /*entry*/ devEntry)
+        await devHandler(appName)
         break
 
       case 'build-client':
@@ -33,9 +32,8 @@ async function main() {
         const buildServerHandler = (await import ('./build-server.mjs')).default
         const ssrEntry = args['ssr-entry'] || process.env.MIOLO_BUILD_SERVER_SSR_ENTRY
         const ssrDest = args['ssr-dest'] || process.env.MIOLO_BUILD_SERVER_DEST
-        const serverEntry = args.entry || process.env.MIOLO_BUILD_SERVER_ENTRY
         const serverDest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
-        await buildServerHandler(appName, ssrEntry, ssrDest, /*entry*/ serverEntry, /*dest*/ serverDest)
+        await buildServerHandler(appName, ssrEntry, ssrDest,  /*dest*/ serverDest)
         break
 
       case 'start':

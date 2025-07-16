@@ -8,7 +8,8 @@ export default async function(appName, dest, serverName) {
   const destFile =  path.join(process.cwd(), `${dest}/${appName}.${serverExt}`)
 
   const srv_module = await import(destFile)  
-  const server = srv_module[serverName]
+  //const server = srv_module[serverName]
+  const server = srv_module.default
 
   const pid = pidFileCreate(appName)
   console.log(`[${appName}][prod][start] Starting server. PID is ${pid}...`)

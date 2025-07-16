@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "2.1.0-beta.1",
+  "version": "3.0.0-beta.9",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -29,7 +29,10 @@
     "test": "turbo run test --filter=miolo",
     "demo": "turbo run dev --filter=miolo-demo",
     "demo-prod": "turbo run prod --filter=miolo-demo",
-    "publish": "npm run site && turbo run publish --filter=miolo,miolo-cli,miolo-react"
+    "publish-miolo": "cd ./packages/miolo && npm run dist && npm publish && cd ../..",
+    "publish-miolo-cli": "cd ./packages/miolo-cli && npm run dist && npm publish && cd ../..",
+    "publish-miolo-react": "cd ./packages/miolo-react && npm run dist && npm publish && cd ../..",
+    "publish-all": "npm run site && npm run publish-miolo && npm run publish-miolo-cli && npm run publish-miolo-react"
   },
   "devDependencies": {
     "turbo": "^2.4.0",
