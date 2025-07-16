@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react'
 import {withMioloContext} from 'miolo-react'
 import TodosList from './TodosList.jsx'
-import useAuthType from '../useAuthType.mjs'
 
 function _showTitle  (title) {
   if (document!=undefined) {
@@ -17,7 +16,7 @@ async function _todoListLoader(context, fetcher) {
 }
 
 const Todos = ({authenticated, fetcher, useSsrData}) => {
-  const authType = useAuthType()
+  const [authType] = useSsrData('authType', 'guest')
   const [todoList, setTodoList, refreshTodoList] = useSsrData('todoList', [], _todoListLoader)
 
   const addTodo = useCallback((text) => {

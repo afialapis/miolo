@@ -23,7 +23,7 @@ async function main() {
         process.env.NODE_ENV = 'production'
         const buildClientHandler = (await import ('./build-client.mjs')).default
         const clientEntry = args.entry || process.env.MIOLO_BUILD_CLIENT_ENTRY
-        const htmlFile = args['html-file'] || './cli/index.html'
+        const htmlFile = args['html-file'] || process.env.MIOLO_BUILD_HTML_FILE
         const clientDest = args.dest || process.env.MIOLO_BUILD_CLIENT_DEST 
         await buildClientHandler(appName, /*entry*/ clientEntry, htmlFile, /*dest*/ clientDest)
         break

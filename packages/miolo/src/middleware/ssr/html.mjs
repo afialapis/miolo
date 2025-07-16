@@ -1,5 +1,22 @@
+import path from 'path'
+import { readFileSync } from 'fs'
 import { fallbackIndexHTML } from './fallbackIndex.mjs'
 
+function _html_read(htmlFile) {
+  try {
+    const isProduction = process.env.NODE_ENV === 'production'
+    const proot = (p) => path.join(process.cwd(), p)
+    const indexHTMLPath=  proot(isProduction 
+        ? `${process.env.MIOLO_BUILD_CLIENT_DEST}/index.html`
+        : htmlFile) 
+
+    const indexHTML = readFileSync(indexHTMLPath, 'utf8')
+    return indexHTML
+  } catch(error) {
+    console.error(`[miolo] Error reading HTML file ${htmlFile}: ${error}`)
+    return fallbackIndexHTML
+  }
+}
 
 
 function _add_client_script_to_body(htmlString, client) {
@@ -27,11 +44,11 @@ function _add_client_script_to_body(htmlString, client) {
 
 
 // HTML renderer
-export const ssr_html_renderer_make = async (app, ssrConfig, client, devRender= undefined) => {
+export const ssr_html_renderer_make = async (app, ssrConfig, htmlFile, client, devRender= undefined) => {
   const isProduction = process.env.NODE_ENV === 'production'
 
   // check HTML
-  let tmplHtml = ssrConfig?.html || fallbackIndexHTML
+  let tmplHtml = _html_read(htmlFile)
   for (const vrb of ['{context}', '{children}']) {
     if (tmplHtml.indexOf(vrb) < 0) {
       app.context.miolo.logger.error(`[ssr] Provided HTML for rendering has no ${vrb} template variable`)

@@ -1,7 +1,6 @@
 import React from 'react'
 import { NavLink } from "react-router-dom"
 import {withMioloContext} from 'miolo-react'
-import useAuthType from '../useAuthType.mjs'
 
 const ToolbarLink = ({path, name}) => {
   return (
@@ -21,8 +20,8 @@ const ToolbarButton = ({onClick, name, authenticated}) => {
   )
 }
 
-const Header = ({authenticated, fetcher}) => {
-  const authType = useAuthType()
+const Header = ({authenticated, fetcher, useSsrData}) => {
+  const [authType] = useSsrData('authType', 'guest')
 
   const handleBasicLogin = () => {
     fetcher.set_auth({

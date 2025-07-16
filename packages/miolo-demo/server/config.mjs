@@ -1,20 +1,13 @@
 import path from 'path'
-import {readFileSync} from 'fs'
 import def_routes from './routes/index.mjs'
 import credentials from './auth/credentials.mjs'
 import basic_auth from './auth/basic.mjs'
-import { loader } from './ssr/loader.mjs'
+import { miolo_demo_ssr_loader_make } from './ssr/loader.mjs'
 
-//const proot = (p) => path.join(process.env.NODE_ROOT, p)
 const proot = (p) => path.join(process.cwd(), p)
 
-export const makeConfig = (authType, logLevel= 'debug') => {
-  const isProduction = process.env.NODE_ENV === 'production'
-
-  // If production, we need the modified by miolo version (with the link to the css file)
-  const indexHTMLPath=  proot(isProduction ? 'dist/cli/index.html' : 'cli/index.html') 
-
-  const indexHTML = readFileSync(indexHTMLPath, 'utf8').replace(/--AUTH_TYPE--/g, process.env.AUTH_TYPE || 'credentials')
+export const makeConfig = (logLevel= 'debug') => {
+  const authType = process.env.MIOLO_DEMO_AUTH_TYPE || 'guest'
 
   const auth = 
       authType=='guest' ? {guest: {}}
@@ -104,11 +97,8 @@ export const makeConfig = (authType, logLevel= 'debug') => {
     //  
     //}    
     build: {
-      // client,
       ssr: {
-        html: indexHTML,
-        //server,
-        loader
+        loader: miolo_demo_ssr_loader_make(authType)
       }
     }
   }

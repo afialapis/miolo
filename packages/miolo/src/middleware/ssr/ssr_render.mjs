@@ -12,7 +12,7 @@ export async function init_ssr_render_middleware(app, config, devRender= undefin
 
   const ssr_build_context = ssr_context_builder_make(app, ssrConfig)
   const ssr_loader = ssr_loader_make(app, ssrConfig)
-  const ssr_html_renderer = await ssr_html_renderer_make(app, ssrConfig, config.build.client, devRender)
+  const ssr_html_renderer = await ssr_html_renderer_make(app, ssrConfig, config.build.html, config.build.client, devRender)
 
   async function render_ssr_middleware(ctx) {
     try {

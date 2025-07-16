@@ -5,11 +5,10 @@ import Page from './layout/Page.jsx'
 import Todos from './pages/Todos.jsx'
 import Login from './pages/Login.jsx'
 import Logout from './pages/Logout.jsx'
-import useAuthType from './useAuthType.mjs'
 
 
-const Index = ({authenticated/*, socket*/}) => {
-  const authType = useAuthType()
+const Index = ({authenticated/*, socket*/, useSsrData}) => {
+  const [authType] = useSsrData('authType', 'guest')
 
   // console.log('miolo-demo UI Index ')
   // console.log({user, authenticated})
