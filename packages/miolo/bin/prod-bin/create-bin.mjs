@@ -28,4 +28,6 @@ export default async function(appName, dest, destFile) {
   writeDest('restart.mjs', restartContent)
   
   copyFileSync(path.join(__my_dirname, './run.mjs'), path.join(process.cwd(), dest, 'run.mjs'))
+  copyFileSync(path.join(__my_dirname, '../../src/config/.env'), path.join(process.cwd(), dest, '.env'))
+
 }

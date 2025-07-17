@@ -1,4 +1,5 @@
 import merge from 'deepmerge'
+import { init_env_config } from './env.mjs'
 import make_config_defaults from './defaults.mjs'
 
 function _get_auth_type(config) {
@@ -18,12 +19,17 @@ function _get_auth_type(config) {
 }
 
 
-export function init_config(config) {
+export function init_config(makeConfig) {
+  // Init environment vars
+  init_env_config()
+
   // delay import of defaults, so env vars can be there
   const base_config = make_config_defaults()
-  const all_config= merge(base_config, config)
+  const custom_config = makeConfig()
+  const all_config= merge(base_config, custom_config)
   
-  all_config.auth_type = _get_auth_type(config)
+  // Some addendum
+  all_config.auth_type = _get_auth_type(all_config)
   all_config.use_catcher = all_config?.http?.catcher_url ? true : false
 
   return all_config

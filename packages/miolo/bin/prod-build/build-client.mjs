@@ -4,7 +4,14 @@ import {xeiraBundle} from 'xeira'
 import { cleanFolder, copyFileSync, isFileExistingSync } from '../util.mjs'
 
 function _addCssLinkToHead(appName, htmlString, dest) {
-  const linkTag = `  <link href="${dest}/${appName}.${process.env.MIOLO_BUILD_CLIENT_SUFFIX}.css" rel="stylesheet" media="all">`
+  
+  const webDest = dest.startsWith('./') 
+    ? dest.replace('./', '/')
+    : dest.startsWith('/') 
+    ? dest
+    : `/${dest}`
+
+  const linkTag = `  <link href="${webDest}/${appName}.${process.env.MIOLO_BUILD_CLIENT_SUFFIX}.css" rel="stylesheet" media="all">`
   
   // Expresión regular para encontrar la etiqueta </head> de cierre.
   // Usamos un grupo de captura para mantener el contenido antes de </head>.

@@ -14,7 +14,7 @@ import { init_watcher_dev_server_middleware } from './middleware/vite/watcher.mj
  * miolo_dev() will be available thourgh a different 
  *   package import (miolo/server-dev)
  */
-export async function miolo_dev(sconfig) {
+export async function miolo_dev(makeConfig) {
   
   // Vite DEV server init
   const devInit= async (app, config) => {
@@ -37,7 +37,7 @@ export async function miolo_dev(sconfig) {
     }
   }
   
-  return await miolo(sconfig, devInit, devRender)
+  return await miolo(makeConfig, devInit, devRender)
 }
 
 

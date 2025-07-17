@@ -1,18 +1,6 @@
-import {readdirSync, rmSync, writeFileSync, readFileSync, existsSync} from 'node:fs'
+import {readdirSync, rmSync, writeFileSync, readFileSync} from 'node:fs'
 import path from 'node:path'
 
-
-export function getAppNameFromPkg(pkgPath) {
-  try {
-    const packageJsonPath = path.join(pkgPath, 'package.json')
-    const content = readFileSync(packageJsonPath, 'utf8')
-    const packageData = JSON.parse(content)
-    return packageData.name
-  } catch (error) {
-    console.error('[miolo] Error reading package.json:', error)
-    return 'miolo'
-  }
-}
 
 export function cleanFolder(folder) {
   readdirSync(folder).forEach(file => {
@@ -42,15 +30,3 @@ export function isFileExistingSync(filePath) {
     return false
   }
 } 
-
-export function findClosestPackageJson(dir) {
-  if (existsSync(path.join(dir, 'package.json'))) {
-    return dir
-  }
-  const parentDir = path.dirname(dir)
-  if (parentDir === dir) {
-    return null
-  }
-  return findClosestPackageJson(parentDir)
-}
-

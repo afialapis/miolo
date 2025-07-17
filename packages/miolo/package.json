@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "3.0.0-beta.16",
+  "version": "3.0.0-beta.23",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -20,14 +20,9 @@
   },
   "type": "module",
   "exports": {
-    "./server": {
-      "node": "./src/index.mjs", 
-      "import": "./src/index.mjs",
-      "default": "./dist/miolo.node.mjs"
-    },
-    "./server-dev": {
-      "default": "./src/server-dev.mjs"
-    }
+    "node": "./src/index.mjs", 
+    "import": "./src/index.mjs",
+    "default": "./dist/miolo.node.mjs"
   },
   "files": [
     "bin",

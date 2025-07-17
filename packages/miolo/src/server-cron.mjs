@@ -2,7 +2,7 @@ import { init_config }                     from './config/index.mjs'
 import { init_context_middleware }         from './middleware/context/index.mjs'
 import { init_cron }                       from './engines/cron/index.mjs'
 
-export async function miolo_cron(sconfig) {
+export async function miolo_cron(makeConfig) {
 
   const app = {
     use: () => {},
@@ -10,7 +10,7 @@ export async function miolo_cron(sconfig) {
   }
 
   // Init some pieces
-  const config = init_config(sconfig)
+  const config = init_config(makeConfig)
   
   // attach to app some custom miolo methods
   init_context_middleware(app, config)

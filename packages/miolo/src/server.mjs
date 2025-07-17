@@ -26,12 +26,12 @@ import { init_ssr_render_middleware }      from './middleware/ssr/ssr_render.mjs
 import { init_cron }                       from './engines/cron/index.mjs'
 import { init_http_server }                from './engines/http/index.mjs'
 
-async function miolo(sconfig, devInit= undefined, devRender= undefined) {
+async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
 
   const app = new Koa()
 
   // Init some pieces
-  const config = init_config(sconfig)
+  const config = init_config(makeConfig)
 
   // attach to app some custom miolo methods
   init_context_middleware(app, config)

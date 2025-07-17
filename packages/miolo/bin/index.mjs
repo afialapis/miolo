@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 import path from 'node:path'
 import yargs from 'yargs-parser'
-import { intre_locale_init } from 'intre'
-import { init_env_config } from './env.mjs'
+import { init_env_config } from '../src/config/env.mjs'
 
 
 async function main() {
@@ -11,8 +10,6 @@ async function main() {
 
   // Init env
   init_env_config()
-  process.env.NODE_ENV = 'production'
-  intre_locale_init(process.env.MIOLO_INTRE_LOCALE)  
 
   // Init vars
   const appName = args['app-name'] || process.env.MIOLO_NAME
@@ -38,12 +35,13 @@ async function main() {
 
       case 'build-server':
         // Based on command line params or .env
+        const srvEntry= args['entry'] || process.env.MIOLO_BUILD_SERVER_ENTRY
         const ssrEntry= args['ssr-entry'] || process.env.MIOLO_BUILD_SERVER_SSR_ENTRY
         const ssrDest= args['ssr-dest'] || process.env.MIOLO_BUILD_SERVER_DEST
         const srvDest= args.dest || process.env.MIOLO_BUILD_SERVER_DEST
       
         const buildServerHandler = (await import ('./prod-build/build-server.mjs')).default
-        await buildServerHandler(appName, ssrEntry, ssrDest, srvDest)
+        await buildServerHandler(appName, ssrEntry, ssrDest, srvEntry, srvDest)
         break
 
       case 'start':
@@ -68,7 +66,7 @@ async function main() {
 
       case 'create-bin':
         const dest = args.dest || process.env.MIOLO_BUILD_SERVER_DEST
-        const cbinDestFile = path.join(process.cwd(), `${dest}/${appName}.${serverExt}`)
+        const cbinDestFile = `./${appName}.${serverExt}`
         
         const createHandler = (await import ('./prod-bin/create-bin.mjs')).default
         await createHandler(appName, dest, cbinDestFile)

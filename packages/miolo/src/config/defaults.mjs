@@ -441,7 +441,7 @@ export default function make_config_defaults() {
     build: {
       
       client: process.env.NODE_ENV === 'production'
-        ? `${process.env.MIOLO_BUILD_CLIENT_DEST}/${process.env.MIOLO_NAME}.${process.env.MIOLO_BUILD_CLIENT_SUFFIX}.js`
+        ? `${process.env.MIOLO_BUILD_CLIENT_DEST || './dist/cli'}/${process.env.MIOLO_NAME || 'miolo'}.${process.env.MIOLO_BUILD_CLIENT_SUFFIX || 'iife.bundle.min'}.js`
         : process.env.MIOLO_BUILD_CLIENT_ENTRY,
       
       html: process.env.MIOLO_BUILD_HTML_FILE || './src/cli/index.html',
@@ -459,8 +459,8 @@ export default function make_config_defaults() {
         
       ssr: {
         server: process.env.NODE_ENV === 'production'
-        ? path.join(process.cwd(), `${process.env.MIOLO_BUILD_SERVER_DEST}/entry-server.js`)
-        : process.env.MIOLO_BUILD_SERVER_SSR_ENTRY
+        ? path.join(process.cwd(), `${process.env.MIOLO_BUILD_SERVER_DEST || './dist/server'}/entry-server.js`)
+        : process.env.MIOLO_BUILD_SERVER_SSR_ENTRY || './src/server/ssr/entry-server.jsx',
         // loader: async (ctx) => {}
       },
 

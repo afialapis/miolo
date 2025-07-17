@@ -21,10 +21,17 @@ function _html_read(htmlFile) {
 function _feed_html(htmlString, client, context, ssr_html) {
   const contextScript = `<script> window.__CONTEXT = ${JSON.stringify(context, null, 2)}</script>`
   const rootDiv = `<div id="root">${ssr_html}</div>`
+  
+  const webClient = client.startsWith('./') 
+    ? client.replace('./', '/')
+    : client.startsWith('/') 
+    ? client
+    : `/${client}`
+
   const linkTag =
     process.env.NODE_ENV === 'production'
-      ? `  <script src="${client}" async></script>`
-      : `  <script type="module" src="${client}"></script>`
+      ? `  <script src="${webClient}" async></script>`
+      : `  <script type="module" src="${webClient}"></script>`
   
   // head
   const headCloseTagRegex = /(<\/head>)/i
@@ -66,7 +73,7 @@ export const ssr_html_renderer_make = async (app, ssrConfig, htmlFile, client, d
       try {
         render = (await import(ssrConfig.server)).render
       } catch(error) {
-        ctx.miolo.logger.error(`SSR Error:\n${error.toString()}\n${error.stack}`)
+        ctx.miolo.logger.error(`SSR Error for ${ssrConfig.server}:\n${error.toString()}\n${error.stack}`)
       }
     }
 

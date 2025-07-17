@@ -20,11 +20,11 @@ export async function _fixProdBuild(appName, filePath) {
   }
 }
 
-export default async function(appName, ssrEntry, ssrDest, dest) {
+export default async function(appName, ssrEntry, ssrDest, srvEntry, srvDest) {
   console.log(`[${appName}][prod] Building first the SSR entry ${ssrEntry}`)
 
   // clean dest folder
-  cleanFolder(dest)
+  cleanFolder(srvDest)
 
   // Build SSR entry
   await build({
@@ -37,20 +37,15 @@ export default async function(appName, ssrEntry, ssrDest, dest) {
     ssr: {
       noExternal: true
     }
-  })
-  
+  })  
 
-  // Build server entry
-  console.log(`[${appName}][prod] Building server entry ${ssrEntry}`)
+  console.log(`[${appName}][prod] Building server entry for ${srvEntry}`)
 
   const serverExt = 'node.bundle.mjs'
-  const serverIdx = process.env.MIOLO_NAME=='miolo-demo'
-    ? '../miolo/bin/prod-build/prod-start.mjs'
-    : 'node_modules/miolo/bin/prod-build/prod-start.mjs'
   await xeiraBundle({
-    source_index: serverIdx,
+    source_index: srvEntry,
     target: 'node',
-    bundle_folder: dest,
+    bundle_folder: srvDest,
     bundle_name: appName,
     bundle_extension: serverExt,
     bundler: 'rollup',
@@ -58,6 +53,6 @@ export default async function(appName, ssrEntry, ssrDest, dest) {
   })
   
   console.log(`[${appName}][prod] Fixing server build (prod)...`)
-  const destFile =  path.join(process.cwd(), `${dest}/${appName}.${serverExt}`)
+  const destFile =  path.join(process.cwd(), `${srvDest}/${appName}.${serverExt}`)
   await _fixProdBuild(appName, destFile)
 }
