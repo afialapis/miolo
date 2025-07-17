@@ -9,6 +9,7 @@ async function main() {
   const command = args._[0]
 
   // Init env
+  process.env.NODE_ENV = 'production'
   init_env_config()
 
   // Init vars

@@ -2,6 +2,7 @@
 async function miolo_run() {
   const args = process.argv.slice(2)
   const command = args[0]
+  process.env.NODE_ENV = 'production'
 
   try {
     switch (command) {

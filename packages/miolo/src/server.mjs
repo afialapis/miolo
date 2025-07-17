@@ -27,7 +27,6 @@ import { init_cron }                       from './engines/cron/index.mjs'
 import { init_http_server }                from './engines/http/index.mjs'
 
 async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
-
   const app = new Koa()
 
   // Init some pieces

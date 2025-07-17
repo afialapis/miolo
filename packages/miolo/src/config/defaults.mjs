@@ -16,8 +16,8 @@ export default function make_config_defaults() {
     http: {
       port: process.env?.MIOLO_PORT || 8001,
       hostname: process.env?.IS_DOCKER === "true" 
-        ? '0.0.0.0' 
-        : process.env?.MIOLO_HOSTNAME || 'localhost',
+        ? (process.env?.MIOLO_HOSTNAME_DOCKER || '0.0.0.0') 
+        : (process.env?.MIOLO_HOSTNAME || 'localhost'),
 
       catcher_url: '/sys/jserror',
       
@@ -98,7 +98,7 @@ export default function make_config_defaults() {
         //rolling: false, 
         
         /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
-        //renew: false, 
+        renew: process.env?.MIOLO_SESSION_RENEW === 'true', 
 
         /** (boolean) secure cookie*/
         /** You may want to set it as true in your Production environement,
@@ -107,13 +107,15 @@ export default function make_config_defaults() {
         secure: process.env?.MIOLO_SESSION_SECURE === 'true',
         
         /** (string) session cookie sameSite options (default null, don't set it) */
-        sameSite: 'lax', // 'strict', 
+        sameSite: process.env.MIOLO_SESSION_SAME_SITE || 'lax', // 'strict', 
       }
     },
     db: {
       config: {
           dialect:  process.env.MIOLO_DB_DIALECT || 'postgres',
-          host:     process.env.MIOLO_DB_HOST || 'localhost',
+          host:     process.env?.IS_DOCKER === "true" 
+                    ? (process.env.MIOLO_DB_DOCKER_HOST || 'postgres')
+                    : (process.env.MIOLO_DB_HOST || 'localhost'),
           port:     process.env.MIOLO_DB_PORT || 5432,
           database: process.env.MIOLO_DB_DATABASE || 'miolo',
           user:     process.env.MIOLO_DB_USER || 'postgres',
@@ -388,10 +390,12 @@ export default function make_config_defaults() {
       // Default options passed to cacheiro for
       // every other cache
       default: {
-        type: 'combined',
+        type: process.env.MIOLO_CACHE_TYPE || 'combined',
         redis: {
-          host: '127.0.0.1',
-          port: 6379
+          host: process.env?.IS_DOCKER === "true" 
+          ? (process.env.MIOLO_REDIS_HOSTNAME_DOCKER || 'redis')
+          : (process.env.MIOLO_REDIS_HOSTNAME || '127.0.0.1'),
+          port: parseInt(process.env.MIOLO_REDIS_PORT || 6379)
         },
         version: parseInt(process.env.MIOLO_CACHE_VERSION || 1),
         clean: false,
@@ -459,8 +463,8 @@ export default function make_config_defaults() {
         
       ssr: {
         server: process.env.NODE_ENV === 'production'
-        ? path.join(process.cwd(), `${process.env.MIOLO_BUILD_SERVER_DEST || './dist/server'}/entry-server.js`)
-        : process.env.MIOLO_BUILD_SERVER_SSR_ENTRY || './src/server/ssr/entry-server.jsx',
+          ? path.join(process.cwd(), `${process.env.MIOLO_BUILD_SERVER_DEST || './dist/server'}/entry-server.js`)
+          : process.env.MIOLO_BUILD_SERVER_SSR_ENTRY || './src/server/ssr/entry-server.jsx',
         // loader: async (ctx) => {}
       },
 

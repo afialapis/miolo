@@ -1,7 +1,6 @@
 import { pidFileCreate } from "./pid.mjs"
 
 export default async function start(appName, destFile) {
-
   // Start server
   console.log(`[${appName}][prod][start] Starting server from ${destFile}...`)
 

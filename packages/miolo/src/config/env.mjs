@@ -26,8 +26,7 @@ function _get_miolo_config_path_on_build(proyEnvPath, srvDest) {
 }
 
 
-export function init_env_config(production= true) {
-  process.env.NODE_ENV = production !== false ? 'production' : 'development'
+export function init_env_config() {
   intre_locale_init(process.env.MIOLO_INTRE_LOCALE)  
 
   const proyEnvPath = findClosestPackageJson(process.cwd())

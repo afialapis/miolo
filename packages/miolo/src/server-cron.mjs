@@ -3,7 +3,6 @@ import { init_context_middleware }         from './middleware/context/index.mjs'
 import { init_cron }                       from './engines/cron/index.mjs'
 
 export async function miolo_cron(makeConfig) {
-
   const app = {
     use: () => {},
     context: {}
