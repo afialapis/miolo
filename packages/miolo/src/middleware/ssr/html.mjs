@@ -1,6 +1,15 @@
 import path from 'path'
 import { readFileSync } from 'fs'
 import { fallbackIndexHTML } from './fallbackIndex.mjs'
+import { nanoid } from 'nanoid'
+
+let _script_version = undefined
+const get_script_version = () => {
+  if (!_script_version) {
+    _script_version = nanoid()
+  }
+  return _script_version
+}
 
 function _html_read(htmlFile) {
   try {
@@ -30,7 +39,7 @@ function _feed_html(htmlString, client, context, ssr_html) {
 
   const linkTag =
     process.env.NODE_ENV === 'production'
-      ? `  <script src="${webClient}" async></script>`
+      ? `  <script src="${webClient}?v=${get_script_version()}" async></script>`
       : `  <script type="module" src="${webClient}"></script>`
   
   // head

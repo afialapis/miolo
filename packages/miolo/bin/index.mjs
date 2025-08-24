@@ -24,6 +24,12 @@ async function main() {
         const devHandler = (await import ('./dev/dev.mjs')).default
         await devHandler(appName)
         break
+      
+      case 'deb':
+        process.env.NODE_ENV = 'development'
+        const debHandler = (await import ('./dev/dev.mjs')).default
+        await debHandler(appName, true)
+        break
 
       case 'build-client':
         const entry = args.entry || process.env.MIOLO_BUILD_CLIENT_ENTRY

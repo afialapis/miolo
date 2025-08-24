@@ -1,11 +1,23 @@
 import { blue, red, yellow } from 'tinguir'
 import Router    from '@koa/router'
 
+const ERRORS_AS_WARNINGS = [
+  'Minified React error'
+]
+
 function init_route_catch_js_error(app, route) {
   
   async function catch_js_error(ctx) {
-    const { error, warning, path, agent } = ctx.request.body
+    let { error, warning, path, agent } = ctx.request.body
     const logger = ctx.miolo.logger
+
+    if (error) {
+      ERRORS_AS_WARNINGS.map(e => {
+        if (error.msg.indexOf(e) >= 0) {
+         warning = error 
+        }
+      })
+    }
 
     if (warning) {
       const msg= 

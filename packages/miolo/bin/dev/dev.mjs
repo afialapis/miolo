@@ -20,9 +20,19 @@ function _isProcessRunning(pid) {
   }
 }
 
-async function startDevServerProcess({ appName }) {  
+async function startDevServerProcess({ appName, debug }) {  
   const serverPath = path.join(__dirname, './dev_start.mjs')
-  serverProcess = fork(serverPath)
+
+  const execArgv = [];
+  if (debug===true) {
+    const newDebugPort = process.debugPort + 1;
+    console.log(`[${appName}][dev] Debugging enabled. Attaching debugger to child process on port ${newDebugPort}`);
+    execArgv.push(`--inspect=${newDebugPort}`);
+  }
+
+  serverProcess = fork(serverPath, [], {
+    execArgv: execArgv
+  }) 
 
   console.log(`[${appName}][dev] Server process started with pid ${serverProcess.pid} from ${process.pid}`)
 
@@ -60,18 +70,16 @@ async function startDevServerProcess({ appName }) {
         }, 2000)
       }
 
-      startDevServerProcess({ appName }) // Inicia un nuevo proceso
+      startDevServerProcess({ appName, debug }) // Inicia un nuevo proceso
     }
   })
 }
 
 
-export default async function(appName= undefined) {
-
-
+export default async function(appName= undefined, debug= false) {
   // Based on command line params or .env
   appName = appName || process.env.MIOLO_NAME
   
   console.log(`[${appName}][dev] Running DEV server`)
-  await startDevServerProcess({ appName })
+  await startDevServerProcess({ appName, debug })
 }

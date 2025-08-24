@@ -1,6 +1,7 @@
 
 import path from 'node:path'
 import {xeiraBundle} from 'xeira'
+import { nanoid } from 'nanoid'
 import { cleanFolder, copyFileSync, isFileExistingSync } from '../util.mjs'
 
 function _addCssLinkToHead(appName, htmlString, dest) {
@@ -11,7 +12,7 @@ function _addCssLinkToHead(appName, htmlString, dest) {
     ? dest
     : `/${dest}`
 
-  const linkTag = `  <link href="${webDest}/${appName}.${process.env.MIOLO_BUILD_CLIENT_SUFFIX}.css" rel="stylesheet" media="all">`
+  const linkTag = `  <link href="${webDest}/${appName}.${process.env.MIOLO_BUILD_CLIENT_SUFFIX}.css?v=${nanoid()}" rel="stylesheet" media="all">`
   
   // Expresión regular para encontrar la etiqueta </head> de cierre.
   // Usamos un grupo de captura para mantener el contenido antes de </head>.
