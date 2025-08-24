@@ -18,7 +18,11 @@ export default class Parser {
       }
       return def
     }
-    return this.parse_value_str(fields[name], required, def)
+    try {
+      return this.parse_value_str(fields[name], required, def)
+    } catch (e) {
+      throw `parse_field_str() Error for ${name}: ${e}`
+    }
   }
   
   parse_value_int(v, required= false, def= undefined) {
@@ -40,7 +44,11 @@ export default class Parser {
       }
       return def
     }
-    return this.parse_value_int(fields[name], required, def)
+    try {
+      return this.parse_value_int(fields[name], required, def)
+    } catch (e) {
+      throw `parse_field_int() Error for ${name}: ${e}`
+    }
   }
   
   parse_value_float(v, required= false, def= undefined) {
@@ -62,8 +70,11 @@ export default class Parser {
       }
       return def
     }
-  
-    return this.parse_value_float(fields[name], required, def) 
+    try {
+      return this.parse_value_float(fields[name], required, def) 
+    } catch (e) {
+      throw `parse_field_float() Error for ${name}: ${e}`
+    }
   }
   
   parse_value_bool(v, required= false, def= undefined) {
@@ -90,8 +101,11 @@ export default class Parser {
       }
       return def
     }
-  
-    return this.parse_value_bool(fields[name], required, def) 
+    try {
+      return this.parse_value_bool(fields[name], required, def) 
+    } catch (e) {
+      throw `parse_field_bool() Error for ${name}: ${e}`
+    }
   }
   
   parse_value_obj(v, required= false, def= undefined) {
@@ -121,6 +135,10 @@ export default class Parser {
       }
       return def
     }
-    return this.parse_value_obj(fields[name], required, def)
+    try {
+      return this.parse_value_obj(fields[name], required, def)
+    } catch (e) {
+      throw `parse_field_obj() Error for ${name}: ${e}`
+    }
   }
 }
