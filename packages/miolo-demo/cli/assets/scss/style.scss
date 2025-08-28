@@ -7,3 +7,10 @@
 @use "loading.scss";
 @use "todos.scss";
 @use "login.scss";
+
+// Tailwind is supported by xeira/miolo, but we need to include it here.
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+

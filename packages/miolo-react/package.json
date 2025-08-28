@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "miolo-cli": "../miolo-cli"
-  },  
+  },
   "peerDependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -49,7 +49,7 @@
     }
   },
   "devDependencies": {
-    "xeira": "^1.2.3"
+    "xeira": "^1.3.1"
   },
   "eslintConfig": {
     "extends": [

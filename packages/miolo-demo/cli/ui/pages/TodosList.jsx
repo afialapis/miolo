@@ -13,7 +13,7 @@ const TodosList = ({authType, authenticated, todoList, addTodo, toggleTodo, remo
   return (
     <div className="todos">
       <div className="todos-header">
-        <h1>To Do List</h1>
+        <h1 className="text-3xl font-bold underline">To Do List</h1>
         <div className="todos-add">
           <div className="input-container">
             <input type="text" 

@@ -80,7 +80,7 @@ const Todos = ({authenticated, fetcher, useSsrData}) => {
     refreshTodoList()
   }, [fetcher, refreshTodoList])
 
-  return (
+  return (   
     <TodosList
       authType       = {authType}
       authenticated  = {authenticated}
