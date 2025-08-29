@@ -62,7 +62,120 @@ render:
     ctx.session.token (if guest auth)
                  
 
+# Use `tailwind`
 
+```sh
+npm install tailwind
+```
+
+In your css entry:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+Create `postcss.config.js`
+
+```js
+import tailwindcss from '@tailwindcss/postcss'
+import autoprefixer from 'autoprefixer'
+
+export default {
+  plugins: [
+    tailwindcss,
+    autoprefixer,
+  ],
+}
+
+```
+
+Create `tailwind.config.js`:
+
+```js
+export default {
+  content: [
+    "./cli/**/*.{js,jsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+
+# Use `shadcn`
+
+```sh
+npm install class-variance-authority clsx tailwind-merge lucide-react tw-animate-css
+```
+
+`miolo` config:
+```js
+  build: {
+    vite: {
+      resolve: {
+        alias: {
+          "@": path.resolve(proot('cli')),
+        },
+      },        
+    }
+  }
+```
+
+Ensure `package.json`:
+
+```json
+  "imports": {
+    "#cli/*": "./cli/*",
+    ...
+  },
+```
+
+Modify `jsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    ...
+    "baseUrl": "./",
+    "paths": {
+      ...
+      "#cli": ["./cli"],    
+    }    
+  }
+  ...
+}
+```
+
+Create `components.json`:
+
+```json
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": false,
+  "tailwind": {
+    "config": "",
+    "css": "cli/styles/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "#cli/components",
+    "utils": "#cli/lib/utils",
+    "ui": "#cli/components/ui",
+    "lib": "#cli/lib",
+    "hooks": "#cli/hooks"
+  },
+  "iconLibrary": "lucide"
+}
+```
+
+Create `cli/styles/globals.css`, `cli/lib/utils.mjs`
 
 # Changelog
 

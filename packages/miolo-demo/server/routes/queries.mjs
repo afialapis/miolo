@@ -1,4 +1,4 @@
-import {todos_count_last_hours, todos_insert_fake} from '../db/todos.mjs'
+import {todos_count_last_hours, todos_insert_fake} from '#server/db/todos.mjs'
 
 
 async function q_todos_insert_fake(ctx) {

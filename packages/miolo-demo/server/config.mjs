@@ -1,8 +1,8 @@
 import path from 'path'
-import def_routes from './routes/index.mjs'
-import credentials from './auth/credentials.mjs'
-import basic_auth from './auth/basic.mjs'
-import { miolo_demo_ssr_loader_make } from './ssr/loader.mjs'
+import def_routes from '#server/routes/index.mjs'
+import credentials from '#server/auth/credentials.mjs'
+import basic_auth from '#server/auth/basic.mjs'
+import { miolo_demo_ssr_loader_make } from '#server/ssr/loader.mjs'
 
 const proot = (p) => path.join(process.cwd(), p)
 
@@ -87,6 +87,13 @@ export default function makeConfig () {
     build: {
       ssr: {
         loader: miolo_demo_ssr_loader_make(authType)
+      },
+      vite: {
+        resolve: {
+          alias: {
+            "@": path.resolve(proot('cli')),
+          },
+        },        
       }
     }
   }
