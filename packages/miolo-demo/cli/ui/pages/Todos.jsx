@@ -81,16 +81,16 @@ const Todos = ({authenticated, fetcher, useSsrData}) => {
   }, [fetcher, refreshTodoList])
 
   return (   
-    <TodosList
-      authType       = {authType}
-      authenticated  = {authenticated}
-      todoList       = {todoList}
-      addTodo        = {addTodo}
-      toggleTodo     = {toggleTodo}
-      removeTodo     = {removeTodo}
-      checkLastHours  = {checkLastHours}
-      insertFakeTodo = {insertFakeTodo}
-    />
+      <TodosList
+        authType       = {authType}
+        authenticated  = {authenticated}
+        todoList       = {todoList}
+        addTodo        = {addTodo}
+        toggleTodo     = {toggleTodo}
+        removeTodo     = {removeTodo}
+        checkLastHours  = {checkLastHours}
+        insertFakeTodo = {insertFakeTodo}
+      />
   )
 }
 

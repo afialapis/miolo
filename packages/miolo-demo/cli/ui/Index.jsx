@@ -4,11 +4,9 @@ import { withMioloContext } from 'miolo-react'
 import Page from '#cli/ui/layout/Page.jsx'
 import Todos from '#cli/ui/pages/Todos.jsx'
 import Login from '#cli/ui/pages/Login.jsx'
-import Logout from '#cli/ui/pages/Logout.jsx'
 import { ThemeProvider } from "#cli/components/ui/theme-provider.jsx"
 
-const Index = ({authenticated/*, socket*/, useSsrData}) => {
-  const [authType] = useSsrData('authType', 'guest')
+const Index = ({authenticated/*, socket*/}) => {
 
   // console.log('miolo-demo UI Index ')
   // console.log({user, authenticated})
@@ -25,14 +23,7 @@ const Index = ({authenticated/*, socket*/, useSsrData}) => {
             <Route path={'/'} element={<Login/>}/>
           :
             <Route path={'/'} element={<Page/>}>
-
               <Route index      element={<Todos/>}/>
-              
-              { (authType==='guest')
-                ? null
-                : <Route path={'logout'} element={<Logout/>}/>
-              }
-
               <Route path={'*'} element={<Todos/>}/>
             </Route>
         }

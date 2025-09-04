@@ -88,13 +88,13 @@ export default function makeConfig () {
       ssr: {
         loader: miolo_demo_ssr_loader_make(authType)
       },
-      vite: {
-        resolve: {
-          alias: {
-            "@": path.resolve(proot('cli')),
-          },
-        },        
-      }
+      //vite: {
+      //  resolve: {
+      //    alias: {
+      //      "@": path.resolve(proot('cli')),
+      //    },
+      //  },        
+      //}
     }
   }
 }

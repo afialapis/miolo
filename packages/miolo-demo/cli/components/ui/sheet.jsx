@@ -4,7 +4,7 @@ import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { XIcon } from "lucide-react"
 
-import { cn } from "cli/lib/utils"
+import { cn } from "#cli/lib/utils"
 
 function Sheet({
   ...props

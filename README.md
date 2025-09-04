@@ -65,7 +65,7 @@ render:
 # Use `tailwind`
 
 ```sh
-npm install tailwind
+npm install tailwind @tailwindcss/postcss
 ```
 
 In your css entry:
@@ -113,22 +113,22 @@ npm install class-variance-authority clsx tailwind-merge lucide-react tw-animate
 
 `miolo` config:
 ```js
-  build: {
-    vite: {
-      resolve: {
-        alias: {
-          "@": path.resolve(proot('cli')),
-        },
-      },        
-    }
-  }
+  # build: {
+  #   vite: {
+  #     resolve: {
+  #       alias: {
+  #         "@": path.resolve(proot('cli')),
+  #       },
+  #     },        
+  #   }
+  # }
 ```
 
 Ensure `package.json`:
 
 ```json
   "imports": {
-    "#cli/*": "./cli/*",
+    "#cli/*": "./src/cli/*",
     ...
   },
 ```
@@ -142,7 +142,7 @@ Modify `jsconfig.json`:
     "baseUrl": "./",
     "paths": {
       ...
-      "#cli": ["./cli"],    
+      "#cli": ["./src/cli"],    
     }    
   }
   ...
@@ -159,12 +159,13 @@ Create `components.json`:
   "tsx": false,
   "tailwind": {
     "config": "",
-    "css": "cli/styles/globals.css",
+    "css": "src/cli/styles/globals.css",
     "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
   "aliases": {
+    // Must be relative to the baseUrl defined in jsconfig.json
     "components": "#cli/components",
     "utils": "#cli/lib/utils",
     "ui": "#cli/components/ui",

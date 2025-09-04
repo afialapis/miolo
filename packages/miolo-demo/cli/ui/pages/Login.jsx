@@ -1,29 +1,31 @@
-import React, {useCallback, useState} from 'react'
+import React, {useCallback} from 'react'
 import { useNavigate } from "react-router-dom"
 import {withMioloContext} from 'miolo-react'
-import LoginForm from './LoginForm.jsx'
+import {LoginForm} from '#cli/components/login-form.jsx'
 
 const Login = ({login}) => {
   const navigate = useNavigate()
-  const [message, setMessage]= useState(undefined)
  
   const doTheLogin = useCallback(async (username, password) => {
     const resp = await login({username, password})
 
     if (resp.authenticated) {
-      setMessage(undefined)
       navigate("/")
-    } else {
-      setMessage(resp.info)
     }
+
+    return resp
     
   }, [login, navigate]) 
 
   return (
-    <LoginForm
-      onLogin = {doTheLogin}
-      message = {message}
-    />
+
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <LoginForm
+          onLogin = {doTheLogin}
+        />
+      </div>
+    </div>    
   )
 }
 
