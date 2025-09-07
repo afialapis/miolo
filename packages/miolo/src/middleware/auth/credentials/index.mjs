@@ -148,6 +148,18 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
   login_router.post(url_logout_f, handleLogOut)
   
   app.use(login_router.routes())
+
+  async function _save_session_id (ctx, next) {
+    try{
+      ctx.sessionId = undefined
+      if (ctx.session.authenticated) {
+        ctx.sessionId = ctx.getSessionStoreKey(ctx.session?.externalKey)
+      }
+    } catch(_) {}
+
+    await next()
+  }
+  app.use(_save_session_id)  
 }
 
 export {init_credentials_auth_middleware}
