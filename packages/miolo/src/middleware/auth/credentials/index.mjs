@@ -106,6 +106,8 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
           ctx.redirect(url_login_redirect)
         }
 
+        
+
         const res= await ctx.login(user)
 
         return res

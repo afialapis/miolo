@@ -1,6 +1,6 @@
 {
   "name": "miolo-cli",
-  "version": "3.0.0-beta.102",
+  "version": "3.0.0-beta.103",
   "description": "cli utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -28,6 +28,7 @@
     "src"
   ],
   "scripts": {
+    "lint": "npx xeira lint ./src",
     "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
     "clean": "rm -fr ./dist/*",
     "bundle": "npx xeira bundle --target=browser --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo-cli --bundle_extension=umd,mjs",
@@ -38,6 +39,6 @@
   },
   "devDependencies": {
     "node-fetch": "^3.3.2",
-    "xeira": "^2.0.0-beta.4"
+    "xeira": "^2.0.0-beta.7"
   }
 }

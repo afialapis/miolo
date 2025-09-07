@@ -13,7 +13,7 @@ export const ssr_context_builder_make = (app, ssrConfig) => {
       ssr_data: ssr_data,
       extra: ctx?.extra
     }
-
+    
     return context
   }
   

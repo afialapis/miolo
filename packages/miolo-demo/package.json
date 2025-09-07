@@ -3,9 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "lint": "npx xeira lint ./src",
     "create-bin": "npx miolo create-bin --dest=./dist/server",
     "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
     "dev": "npx miolo dev",
+    "deb": "npx miolo deb",
     "build-client": "npx miolo build-client",
     "build-server": "npx miolo build-server",
     "build": "npm run build-client && npm run build-server && npm run create-bin",
@@ -28,7 +30,7 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@tailwindcss/postcss": "^4.1.12",
+    "@tailwindcss/postcss": "^4.1.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "intre": "^3.0.0-beta.1",
@@ -38,12 +40,12 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "6.29.0",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.12",
-    "tw-animate-css": "^1.3.7"
+    "tailwindcss": "^4.1.13",
+    "tw-animate-css": "^1.3.8"
   },
   "devDependencies": {
     "miolo": "../miolo",
-    "xeira": "^2.0.0-beta.4"
+    "xeira": "^2.0.0-beta.7"
   },
   "overrides": {
     "react": "$react",

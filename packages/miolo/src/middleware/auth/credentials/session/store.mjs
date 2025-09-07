@@ -49,6 +49,10 @@ class SessionStore {
     const cache = await this.init_cache()
     await cache.unsetItem(key)
   }
+
+  getInnerKey(key) {
+    return this._cache.getInnerKey(key)
+  }
 }
 
 

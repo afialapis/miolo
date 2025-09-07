@@ -23,6 +23,12 @@
       "dependsOn": [],
       "outputs": []
     },
+    "deb": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [],
+      "outputs": []
+    },
     "prod": {
       "cache": false,
       "persistent": true,

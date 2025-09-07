@@ -19,6 +19,19 @@ function init_session_middleware(app, sessionConfig, cacheConfig) {
   }
   
   app.use(createSession(options, app))
+  
+  app.use (async (ctx, next) => {
+    ctx.getSessionId = () => {
+      if (ctx.session?.authenticated === true) {
+        const external = ctx.session?.externalKey
+        if (external) {
+          return store.getInnerKey(external)
+        }
+      }
+      return undefined
+    }
+    await next()
+  })
 }
 
 export {init_session_middleware}
