@@ -39,29 +39,36 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
   const url_logout_f = url_logout || '/logout'
   
   // init passport
-  const serialize_user = (user, done) => {
+  const serialize_user = (ctx) => (user, done) => {
     process.nextTick(function() {
-      get_user_id_f(user, done, app.context.miolo)
+      ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
+      get_user_id_f(user, done, ctx)
     })
   }
 
-  const deserialize_user = (id, done) => {
+  const deserialize_user = (ctx) => (id, done) => {
     process.nextTick(function() {
-      find_user_by_id_f(id, done, app.context.miolo)
+      ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
+      find_user_by_id_f(id, done, ctx)
     })
   }
 
-  const local_strategy= new LocalStrategy.Strategy (
+  const local_strategy= (ctx) => new LocalStrategy.Strategy (
     (username, password, done) => {
-      local_auth_user_f(username, password, done, app.context.miolo)
+      ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
+      local_auth_user_f(username, password, done, ctx)
   })
+
+  app.use((ctx, next) => {
+    passport.serializeUser(serialize_user(ctx));
+    passport.deserializeUser(deserialize_user(ctx));
+    passport.use(local_strategy(ctx));
+    return next();
+  });
+  
 
   init_session_middleware(app, sessionConfig, cacheConfig)
   
-  passport.serializeUser(serialize_user)
-  passport.deserializeUser(deserialize_user)
-  passport.use(local_strategy)
-
   app.use(passport.initialize())
   app.use(passport.session())
 
@@ -70,7 +77,7 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
       if (ctx.session.authenticated) {
         ctx.session.user = ctx.state.user
       }
-    } catch(_) {}
+    } catch(_) {}  
     await next()
   }
   app.use(_ensure_ctx_user)
@@ -81,6 +88,7 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
       if (user === false) {
         ctx.session.user = undefined
         ctx.session.authenticated = false
+        ctx.sessionId = undefined
 
         ctx.body = { 
           user: undefined,
@@ -106,10 +114,7 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
           ctx.redirect(url_login_redirect)
         }
 
-        
-
         const res= await ctx.login(user)
-
         return res
       }
     })(ctx)
@@ -119,6 +124,7 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
     if (ctx.session.authenticated) {
       ctx.session.user = undefined
       ctx.session.authenticated = false
+      ctx.sessionId = undefined
 
       await ctx.logout()
       ctx.body = { 
@@ -147,19 +153,8 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
   login_router.get (url_logout_f, handleLogOut)
   login_router.post(url_logout_f, handleLogOut)
   
-  app.use(login_router.routes())
+  app.use(login_router.routes()) 
 
-  async function _save_session_id (ctx, next) {
-    try{
-      ctx.sessionId = undefined
-      if (ctx.session.authenticated) {
-        ctx.sessionId = ctx.getSessionStoreKey(ctx.session?.externalKey)
-      }
-    } catch(_) {}
-
-    await next()
-  }
-  app.use(_save_session_id)  
 }
 
 export {init_credentials_auth_middleware}

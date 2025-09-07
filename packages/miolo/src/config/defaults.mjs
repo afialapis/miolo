@@ -342,10 +342,12 @@ export default function make_config_defaults() {
       //  paths: [],
       //},
       //credentials: {
-      //  get_user_id:  (user, done, miolo) => done(null, user.id), // default
-      //  find_user_by_id: (id, done, miolo) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
-      //  local_auth_user: (username, password, done, miolo) => done(null, {id: 1})
-      //                   // auth=> done(null, user) noauth=> done(null, false, {message: ''}) err=> done(error, null)
+      //  get_user_id:  (user, done, ctx) => done(null, user.id), // default
+      //  find_user_by_id: (id, done, ctx) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
+      //  local_auth_user: (username, password, done, ctx) => done(null, {id: 1})
+      //                   auth  => done(null, user) 
+      //                   noauth=> done(null, false, {message: ''}) 
+      //                   err   => done(error, null)
       //  url_login : '/login',
       //  url_logout: '/logout',
       //  url_login_redirect: undefined
