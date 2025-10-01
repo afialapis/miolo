@@ -77,6 +77,8 @@ export default function make_config_defaults() {
       salt: process.env.MIOLO_SESSION_SALT || 'SUPER_SALTY_YES?',
       secret: process.env.MIOLO_SESSION_SECRET || 'SUPER_SECRET_KEY_KERE',
       options: {
+        /** (string) cookie key (default is koa.sess) */
+        key: process.env.MIOLO_SESSION_KEY || `${process.env.MIOLO_NAME || 'koa'}.sess`,
         /** (number || 'session') maxAge in ms (default is 1 days) */
         /** 'session' will result in a cookie that expires when session/browser is closed */
         /** Warning: If a session cookie is stolen, this cookie will never expire */
