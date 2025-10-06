@@ -41,22 +41,34 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
   // init passport
   const serialize_user = (ctx) => (user, done) => {
     process.nextTick(function() {
-      ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
-      get_user_id_f(user, done, ctx)
+      try {
+        ctx.miolo.logger.debug(`[auth] serializing user...`)
+        ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
+        return get_user_id_f(user, done, ctx)
+      } catch(error) {
+        ctx.miolo.logger.error(`[auth] Error serializing user: ${error}`)
+        return done(error, null)
+      }
     })
   }
 
   const deserialize_user = (ctx) => (id, done) => {
     process.nextTick(function() {
-      ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
-      find_user_by_id_f(id, done, ctx)
+      try {
+        ctx.miolo.logger.debug(`[auth] deserializing user...`)
+        ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
+        return find_user_by_id_f(id, done, ctx)
+      } catch(error) {
+        ctx.miolo.logger.error(`[auth] Error deserializing user: ${error}`)
+        return done(error, null)
+      }
     })
   }
 
   const local_strategy= (ctx) => new LocalStrategy.Strategy (
     (username, password, done) => {
       ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
-      local_auth_user_f(username, password, done, ctx)
+      return local_auth_user_f(username, password, done, ctx)
   })
 
   app.use((ctx, next) => {

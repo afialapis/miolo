@@ -6,22 +6,24 @@ const get_user_id = (user, done, ctx) => {
   ctx.miolo.logger.debug(`[miolo-test-app][credentials] get_user_id() - name ${user?.name} - sessionId ${ctx.sessionId}`)
   const uid= user?.id
   if (uid!=undefined) {
-    done(null, uid)
+    return done(null, uid)
   } else {
-    done(false, null)
+    const err = new Error('User object is missing an ID for serialization')
+    return done(err, null)
   }
 }
 
 const find_user_by_id = (id, done, ctx) => {
   ctx.miolo.logger.debug(`[miolo-test-app][credentials] find_user_by_id() - id ${id} - sessionId ${ctx.sessionId}`)
   ctx.miolo.db.get_connection().then((conn) => {
-    q_find_user_by_id(conn, id).then(user => {
+    return q_find_user_by_id(conn, id).then(user => {
       ctx.miolo.logger.debug('[miolo-test-app][credentials] find_user_by_id()', JSON.stringify(user))
 
       if (user==undefined) {
-        done('User not found', null)
+        const err = new Error('User not found')
+        return done(err, null)
       } else {
-        done(null, user)
+        return done(null, user)
       }
     })
   })

@@ -15,7 +15,13 @@ export async function init_vite_dev_server_middleware(app, viteConfig) {
     // const tailwindConfigPath = resolve(process.cwd(), 'tailwind.config.js')
 
     vite = await createServer({
-      server: { middlewareMode: true },
+      server: { 
+        middlewareMode: true ,
+        port: process.env?.MIOLO_PORT || 8001,
+        hmr: {
+          port: (process.env?.MIOLO_PORT || 8001) - 1000
+        }
+      },
       appType: 'custom',
       plugins: [react.default(
         {
