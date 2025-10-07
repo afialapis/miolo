@@ -1,4 +1,4 @@
-import {omit_nil, trim_left, json_to_query_string, parse_login_cookie} from './utils.mjs'
+import {omit_nil, trim_left, json_to_query_string} from './utils.mjs'
 
 class Fetcher {
   /**
@@ -7,7 +7,6 @@ class Fetcher {
   constructor(config) {
     this.config= config
     this.auth = undefined
-    this.cookie = undefined
   }
 
   set_auth(auth) {
@@ -33,10 +32,6 @@ class Fetcher {
       }
 
       headers['Authorization']= sauth
-    }
-
-    if (this.cookie) {
-      headers['Cookie']= this.cookie
     }
 
     return headers
@@ -149,12 +144,10 @@ class Fetcher {
 
   async login(url, {username, password}) {
     const res= await this._fetch('POST', url || '/login', {username, password})
-    this.cookie= parse_login_cookie(res.response)
     return res
   }
 
   async logout(url) {
-    this.cookie= undefined
     const res= await this._fetch('POST', url || '/logout', {})
     return res  
   }
