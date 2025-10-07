@@ -51,6 +51,10 @@ class SessionStore {
   }
 
   getInnerKey(key) {
+    if (this._cache === undefined) {
+      this.logger.error('[session-store] Calling getInnerKey() before cache is inited')
+      return key
+    }
     return this._cache.getInnerKey(key)
   }
 }
@@ -59,5 +63,6 @@ class SessionStore {
 export function init_session_cache_store(cacheConfig, logger) {
   const options = miolo_cacher_options_for_session({cache: cacheConfig}, logger)
   const store = new SessionStore(options, logger)
+  store.init_cache()
   return store
 }
