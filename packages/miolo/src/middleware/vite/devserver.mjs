@@ -19,7 +19,7 @@ export async function init_vite_dev_server_middleware(app, viteConfig) {
         middlewareMode: true ,
         port: process.env?.MIOLO_PORT || 8001,
         hmr: {
-          port: (process.env?.MIOLO_PORT || 8001) - 1000
+          port: process.env?.MIOLO_DEV_PORT || ((process.env?.MIOLO_PORT || 8001) - 1000)
         }
       },
       appType: 'custom',
