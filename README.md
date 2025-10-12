@@ -64,45 +64,14 @@ render:
 
 # Use `tailwind`
 
-```sh
-npm install tailwind @tailwindcss/postcss
-```
-
 In your css entry:
 
 ```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
-Create `postcss.config.js`
-
-```js
-import tailwindcss from '@tailwindcss/postcss'
-import autoprefixer from 'autoprefixer'
-
-export default {
-  plugins: [
-    tailwindcss,
-    autoprefixer,
-  ],
-}
-
+@import "tailwindcss";
 ```
 
-Create `tailwind.config.js`:
-
-```js
-export default {
-  content: [
-    "./cli/**/*.{js,jsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-```
+No need of `postcss.config.js`
+No need of `tailwind.config.js` => use CSS @theme and company instead
 
 
 # Use `shadcn`

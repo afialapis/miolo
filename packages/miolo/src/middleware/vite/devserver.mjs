@@ -1,18 +1,18 @@
 
 import koaConnect from 'koa-connect'
 // import { resolve } from 'path'
+import {createServer} from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindVite from '@tailwindcss/vite'
 
 // Vite Dev Server
 export async function init_vite_dev_server_middleware(app, viteConfig) {
   const isProduction = process.env.NODE_ENV === 'production'
   let vite
-
+  
   if (!isProduction) {
-    const { createServer } = await import('vite')
-    const react = await import('@vitejs/plugin-react')
-    const tailwindcss = await import('@tailwindcss/vite')
-
     // const tailwindConfigPath = resolve(process.cwd(), 'tailwind.config.js')
+    // const tailwindConfig = await import(tailwindConfigPath)
 
     vite = await createServer({
       server: { 
@@ -23,7 +23,7 @@ export async function init_vite_dev_server_middleware(app, viteConfig) {
         }
       },
       appType: 'custom',
-      plugins: [react.default(
+      plugins: [react(
         {
           babel: {
             plugins: [
@@ -31,12 +31,15 @@ export async function init_vite_dev_server_middleware(app, viteConfig) {
             ]
           }
         }),
-        tailwindcss.default(/*{base: tailwindConfigPath}*/)
+        tailwindVite(
+          // @tailwindcss/vite does not accept params
+          //{config: tailwindConfig}
+        )
       ],
       ...viteConfig || {},
       // 
       base: viteConfig?.base || '/',
-      root: viteConfig?.root || '',
+      root: viteConfig?.root || process.cwd(),
       watch: {
         // During tests we edit the files too fast and sometimes chokidar
         // misses change events, so enforce polling for consistency
