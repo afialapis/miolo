@@ -1,6 +1,6 @@
 {
   "name": "miolo-cli",
-  "version": "3.0.0-beta.112",
+  "version": "3.0.0-beta.113",
   "description": "cli utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -39,6 +39,6 @@
   },
   "devDependencies": {
     "node-fetch": "^3.3.2",
-    "xeira": "^2.0.0-beta.7"
+    "xeira": "^2.0.0-beta.8"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "miolo-react",
-  "version": "3.0.0-beta.112",
+  "version": "3.0.0-beta.113",
   "description": "React utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -49,6 +49,6 @@
     }
   },
   "devDependencies": {
-    "xeira": "^2.0.0-beta.7"
+    "xeira": "^2.0.0-beta.8"
   }
 }

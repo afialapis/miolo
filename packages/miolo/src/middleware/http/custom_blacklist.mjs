@@ -13,5 +13,7 @@ export const CUSTOM_BLACKLIST_IPS= [
   '198.12.222.107', // GoDaddy.com, LLC (GODAD)
   '212.128.118.10', // RIPE Network Coordination Centre (RIPE)
   '103.218.240.46', // Asia Pacific Network Information Centre (APNIC)
-  '45.15.167.150'   // ??
+  '45.15.167.150',  // ??
+  '165.227.173.41', // Frankfurt am Main, DE
+  '147.135.220.53', // 
 ]
