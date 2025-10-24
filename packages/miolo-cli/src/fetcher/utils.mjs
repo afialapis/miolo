@@ -39,3 +39,16 @@ export function omit_nil(obj) {
     return acc
   }, {})
 }
+
+export function null_to_undefined(value) {
+  if (Array.isArray(value)) {
+    return value.map(null_to_undefined)
+  } else if (value && typeof value === 'object') {
+    const result = {}
+    for (const [key, val] of Object.entries(value)) {
+      result[key] = val === null ? undefined : null_to_undefined(val)
+    }
+    return result
+  }
+  return value
+}

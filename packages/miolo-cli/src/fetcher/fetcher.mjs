@@ -1,4 +1,4 @@
-import {omit_nil, trim_left, json_to_query_string} from './utils.mjs'
+import {omit_nil, trim_left, json_to_query_string, null_to_undefined} from './utils.mjs'
 
 class Fetcher {
   /**
@@ -89,7 +89,8 @@ class Fetcher {
     }
   
     if (response.headers.get('content-type').indexOf('json') >= 0) {
-      const data= await response.json()
+      let data= await response.json()
+      data = null_to_undefined(data)
   
       return {
         data,
