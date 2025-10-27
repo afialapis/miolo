@@ -17,6 +17,11 @@ function init_catcher_middleware(app) {
     // this allows you to pass `this.onerror`
     // to node-style callbacks.
     if (err == null) return
+    
+    // Ignore this error 
+    // Appearing since Koa 3.1 + koa-static 6.x + koa-send 7.x
+    if (err.code === 'ERR_STREAM_PREMATURE_CLOSE') return
+
 
     // When dealing with cross-globals a normal `instanceof` check doesn't work properly.
     // See https://github.com/koajs/koa/issues/1466
@@ -41,11 +46,11 @@ function init_catcher_middleware(app) {
 
     // Log the error depending on the status
     const ip = this.headers["x-real-ip"] || this.headers["x-orig-ip"] || this.ip || '127.0.0.1'
-    if (_ONLY_WARN.indexOf(statusCode)>=0) {
+    if ((_ONLY_WARN.indexOf(statusCode)>=0) || (err.message.indexOf('Premature close')>=0)) {
       logger.warn(`[${ip}] ${this.method} ${this.url} - ${statusCode}: ${err.message}`)
     } else {
-      logger.error(err)
-    }    
+      logger.error(`[${ip}] ${this.method} ${this.url} - ${statusCode}: ${err.message}`)
+    }
 
     // nothing we can do here other
     // than delegate to the app-level
