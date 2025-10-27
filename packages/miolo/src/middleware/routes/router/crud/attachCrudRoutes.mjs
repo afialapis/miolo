@@ -32,7 +32,7 @@ function attachCrudRoutes(router, crudConfigs, logger) {
               ctx.miolo.logger.error(`[router] Unauthorized access. Throwing error ${auth.error_code}`)
               ctx.throw(
                 auth.error_code,
-                'Unauthorized',
+                new Error('Unauthorized'),
                 {}
               )
             } else if (auth.action=='redirect') {

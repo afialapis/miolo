@@ -102,32 +102,32 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
         ctx.session.authenticated = false
         ctx.sessionId = undefined
 
+        // This will show error logs on the catcher middleware
+        // ctx.throw(401)
+        
+        ctx.status= 401
+
         ctx.body = { 
           user: undefined,
           authenticated: false,
           info: info,
           error: err
         }
-
-        // This will show error logs on the catcher middleware
-        // ctx.throw(401)
-        
-        ctx.response.status= 401
       } else {
 
         ctx.session.user = ctx.state.user
         ctx.session.authenticated = true
 
+        if (url_login_redirect!=undefined) {
+          ctx.redirect(url_login_redirect)
+        } else {
+          await ctx.login(user)
+        }
+
         ctx.body = { 
           user : user,
           authenticated: true
         }
-        if (url_login_redirect!=undefined) {
-          ctx.redirect(url_login_redirect)
-        }
-
-        const res= await ctx.login(user)
-        return res
       }
     })(ctx)
   }
@@ -137,25 +137,26 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
       ctx.session.user = undefined
       ctx.session.authenticated = false
       ctx.sessionId = undefined
-
-      await ctx.logout()
-      ctx.body = { 
-        user: undefined,
-        authenticated: false 
-      }      
+  
       if (url_logout_redirect!=undefined) {
         ctx.redirect(url_logout_redirect)
+      } else {
+        await ctx.logout()
       }
-    } else {
 
       ctx.body = { 
         user: undefined,
         authenticated: false 
-      }
+      }    
+    } else {
       // This will show error logs on the catcher middleware
       // ctx.throw(401)
       
-      ctx.response.status= 401
+      ctx.status= 401
+      ctx.body = { 
+        user: undefined,
+        authenticated: false 
+      }
     }
   }
   

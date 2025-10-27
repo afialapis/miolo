@@ -29,7 +29,7 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
               ctx.miolo.logger.error(`Unauthorized access. Throwing error ${routeAuth.error_code}`)
               ctx.throw(
                 routeAuth.error_code,
-                'Unauthorized',
+                new Error('Unauthorized'),
                 {}
               )
             } else if (routeAuth.action=='redirect') {
