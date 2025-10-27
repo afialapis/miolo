@@ -42,7 +42,7 @@ function init_catcher_middleware(app) {
     // Log the error depending on the status
     const ip = this.headers["x-real-ip"] || this.headers["x-orig-ip"] || this.ip || '127.0.0.1'
     if (_ONLY_WARN.indexOf(statusCode)>=0) {
-      logger.warn(`[${ip}] ${this.method} ${this.url} - ${status}: ${err.message}`)
+      logger.warn(`[${ip}] ${this.method} ${this.url} - ${statusCode}: ${err.message}`)
     } else {
       logger.error(err)
     }    
