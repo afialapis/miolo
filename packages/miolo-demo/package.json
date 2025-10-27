@@ -45,11 +45,8 @@
     "miolo": "../miolo",
     "xeira": "^2.0.0-beta.8"
   },
-  "overrides": {
+  "XX__overrides": {
     "react": "$react",
     "react-dom": "$react-dom"
-  },
-  "babel": {
-    "extends": "../../node_modules/xeira/configs/babel.config.json"
   }
 }

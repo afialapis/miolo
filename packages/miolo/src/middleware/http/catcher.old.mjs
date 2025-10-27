@@ -3,82 +3,13 @@
  * @param ctx
  */
 
-// import http from 'http'
-import statuses from 'statuses'
-import util from 'node:util'
-
+import http from 'http'
 const _ONLY_WARN= [401, 403]
 
 function init_catcher_middleware(app) {
   const logger= app.context.miolo.logger
   
   async function catcher_middleware(err) {
-    // don't do anything if there is no error.
-    // this allows you to pass `this.onerror`
-    // to node-style callbacks.
-    if (err == null) return
-
-    // When dealing with cross-globals a normal `instanceof` check doesn't work properly.
-    // See https://github.com/koajs/koa/issues/1466
-    // We can probably remove it once jest fixes https://github.com/facebook/jest/issues/2549.
-    const isNativeError =
-      Object.prototype.toString.call(err) === '[object Error]' ||
-      err instanceof Error
-    if (!isNativeError) err = new Error(util.format('non-error thrown: %j', err))
-
-    let headerSent = false
-    if (this.headerSent || !this.writable) {
-      headerSent = err.headerSent = true
-    }
-
-    // delegate
-    this.app.emit('error', err, this)
-
-    
-    let statusCode = err.status || err.statusCode
-    // default to 500
-    if (typeof statusCode !== 'number' || !statuses.message[statusCode]) statusCode = 500    
-
-    // Log the error depending on the status
-    const ip = this.headers["x-real-ip"] || this.headers["x-orig-ip"] || this.ip || '127.0.0.1'
-    if (_ONLY_WARN.indexOf(statusCode)>=0) {
-      logger.warn(`[${ip}] ${this.method} ${this.url} - ${status}: ${err.message}`)
-    } else {
-      logger.error(err)
-    }    
-
-    // nothing we can do here other
-    // than delegate to the app-level
-    // handler and log.
-    if (headerSent) {
-      return
-    }
-
-    const { res } = this
-
-    // first unset all headers
-    /* istanbul ignore else */
-    if (typeof res.getHeaderNames === 'function') {
-      res.getHeaderNames().forEach(name => res.removeHeader(name))
-    } else {
-      res._headers = {} // Node < 7.7
-    }
-
-    // then set those specified
-    this.set(err.headers)
-
-    // force text/plain
-    this.type = 'text'
-
-
-    // respond
-    const code = statuses.message[statusCode]
-    const msg = err.expose ? err.message : code
-    this.status = err.status = statusCode
-    this.length = Buffer.byteLength(msg)
-    res.end(msg)
-    
-    /*
     if (!err) return
 
     // wrap non-error object
@@ -143,7 +74,6 @@ function init_catcher_middleware(app) {
     this.body = JSON.stringify(this.body || '', null, 2)
     this.length = Buffer.byteLength(this.body)
     this.res.end(this.body)
-    */
   }
 
   app.context.onerror = catcher_middleware

@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Menu, X, Github, Sun, Moon, LogOut } from "lucide-react";
 import { Outlet } from 'react-router-dom'
-import { useTheme } from "#cli/components/ui/theme-provider";
+import { useTheme } from "#cli/components/ui/theme-provider.jsx";
 
 import {withMioloContext} from 'miolo-react'
 
-const Layout= ({useSsrData, logout}) => {
+const Layout= ({/*useSsrData,*/ logout}) => {
 
-  const [authType] = useSsrData('authType', 'guest')
+  // const [authType] = useSsrData('authType', 'guest')
   const {isDark, setTheme} = useTheme()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

@@ -1,14 +1,14 @@
-import {useState, useCallback} from "react"
+import React, {useState, useCallback} from "react"
 import { cn } from "#cli/lib/utils"
-import { Button } from "#cli/components/ui/button"
+import { Button } from "#cli/components/ui/button.jsx"
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "#cli/components/ui/card"
-import { Input } from "#cli/components/ui/input"
-import { Label } from "#cli/components/ui/label"
+} from "#cli/components/ui/card.jsx"
+import { Input } from "#cli/components/ui/input.jsx"
+import { Label } from "#cli/components/ui/label.jsx"
 
 export function LoginForm({className, onLogin}) {
   const [username, setUsername] = useState('')
