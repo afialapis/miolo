@@ -14,7 +14,7 @@ import {
     auth,
     bodyField,
     before: (ctx) => {return goon/!goon},
-    after : (ctx, result) => {return result},
+    after : (ctx, data) => {return data},
     
     routes: an array of tables config, where each config can be:
       - a simple string with the table name
@@ -36,7 +36,7 @@ import {
           auth,
           bodyField,
           before: (ctx) => {return goon/!goon},
-          after : (ctx, result) => {return result},
+          after : (ctx, data) => {return data},
     
         }      
   }]

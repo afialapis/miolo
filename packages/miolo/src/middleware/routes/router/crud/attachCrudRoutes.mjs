@@ -37,10 +37,17 @@ function attachCrudRoutes(router, crudConfigs, logger) {
               )
             } else if (auth.action=='redirect') {
               ctx.miolo.logger.warn(`[router] Unauthorized access. Redirecting to ${auth.redirect_url}`)
+              ctx.body= {
+                ok: false,
+                error: 'Unathorized'
+              }
               ctx.redirect(auth.redirect_url)
             } else {
               ctx.miolo.logger.error(`[router] Crud path ${route.url} specified auth but no action`)
-              ctx.body= {}
+              ctx.body= {
+                ok: false,
+                error: 'Unathorized'
+              }
             }
           }
           return authenticated
@@ -57,12 +64,15 @@ function attachCrudRoutes(router, crudConfigs, logger) {
           throw new Error(`[router] Could not get model for ${route.name}`)
         }
 
-        let result = {}
+        let data = {}
         try {
           const authenticated = await _crud_auth_callback(ctx, op)
 
           if (! authenticated) {
-            ctx.body= {}
+            ctx.body= {
+              ok: false,
+              error: 'Unathorized'
+            }
             return
           }
           
@@ -72,7 +82,10 @@ function attachCrudRoutes(router, crudConfigs, logger) {
           }
 
           if (! goon) {
-            ctx.body= {}
+            ctx.body= {
+              ok: false,
+              error: 'Not allowd'
+            }
             return
           }
 
@@ -87,19 +100,19 @@ function attachCrudRoutes(router, crudConfigs, logger) {
             fieldNames,
           }
           
-          result= await callback(model, uinfo)
+          data= await callback(model, uinfo)
           
           if (route?.after) {
-            result= await route.after(ctx, result)
+            data= await route.after(ctx, data)
           }
         } catch(error) {
           ctx.miolo.logger.error(`[router] Unexpected error on CRUD ${route.name}-${op}`)
           ctx.miolo.logger.error(error)
         }
 
-        result= _pack_body_field(result)
+        data= _pack_body_field(data)
 
-        ctx.body= result
+        ctx.body= {ok: true, data}
       }
 
       const route_read = async (ctx) => {

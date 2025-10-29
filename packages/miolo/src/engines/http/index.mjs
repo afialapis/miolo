@@ -69,7 +69,7 @@ export function init_http_server(app, config) {
     server: undefined,
     start: _http_start,
     stop: async () => {
-      logger.warn(`[http] stop() stop() function still not attached. Is server running?`)
+      logger.warn(`[http] stop() function still not attached. Is server running?`)
     },
     hostname: config.hostname,
     port: config.port

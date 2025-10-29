@@ -89,11 +89,11 @@ class Fetcher {
     }
   
     if (response.headers.get('content-type').indexOf('json') >= 0) {
-      let data= await response.json()
-      data = null_to_undefined(data)
+      let resp= await response.json()
+      resp = null_to_undefined(resp)
   
       return {
-        data,
+        ...resp,
         status: response.status,
         response
       }
@@ -101,6 +101,7 @@ class Fetcher {
   
     const data= await response.text()
     return {
+      ok: true,
       data,
       status: response.status,
       response
@@ -120,7 +121,8 @@ class Fetcher {
       }
 
       return {
-        data: e,
+        ok: false,
+        error: e,
         status: -1,
       }
     }
@@ -137,7 +139,8 @@ class Fetcher {
       }
 
       return {
-        data: e,
+        ok: false,
+        error: e,
         status: -1
       }
     }
@@ -154,23 +157,23 @@ class Fetcher {
   }
 
   async read(url, params, auth= undefined) {
-    const result = await this.get(`${url}/read`, params, auth)
-    return result.data
+    return await this.get(`${url}/read`, params, auth)
   }
 
   async key_list(url, params, auth= undefined) {
-    const result = await this.get(`${url}/key_list`, params, auth)
-    return result.data
+    return await this.get(`${url}/key_list`, params, auth)
   }  
 
   async name_list(url, params, auth= undefined) {
-    const result = await this.key_list(url, params, auth)
-    return Object.values(result)
+    const resp = await this.key_list(url, params, auth)
+    if (resp?.data) {
+      resp.data = Object.values(resp.data)
+    }
+    return resp
   }
 
   async find(url, id, auth= undefined) {
-    const result = await this.get(`${url}/find`, { id: id }, auth)
-    return result.data
+    return await this.get(`${url}/find`, { id: id }, auth)
   }
 
   async distinct(url, field, params, auth= undefined) {
@@ -178,26 +181,24 @@ class Fetcher {
       ...params,
       distinct_field: field
     }
-    const result = await this.get(`${url}/distinct`, nparams, auth)
-    return result.data   
+    return await this.get(`${url}/distinct`, nparams, auth) 
   }
 
   async upsave(url, data, auth= undefined) {
-    let result
+    let resp
     if (data.id == undefined) {
       delete data.id
-      result= await this.post(`${url}/save`, data, auth)
+      resp= await this.post(`${url}/save`, data, auth)
     } else {
-      result= await this.post(`${url}/update`, data, auth)
+      resp= await this.post(`${url}/update`, data, auth)
     }
     
-    return result.data
+    return resp
   }  
 
   async remove(url, id, auth= undefined) {
     const data = { id: id }
-    const result = await this.post(`${url}/delete`, data, auth)
-    return result.data
+    return await this.post(`${url}/delete`, data, auth)
   }
 }
 

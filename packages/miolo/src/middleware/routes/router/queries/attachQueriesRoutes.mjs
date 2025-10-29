@@ -1,4 +1,7 @@
-import {query_string_to_json} from '../utils.mjs'
+import Joi from 'joi'
+import {
+  query_string_to_json,
+  ensure_response_is_ok_data} from '../utils.mjs'
 
 function attachQueriesRoutes(router, queriesConfigs, logger) {
 
@@ -48,7 +51,7 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
       }
 
       const _route_callback = async (ctx) => {
-        let result = {}
+        let data = {}
         try {
           try {
             if ((route.method == 'GET') && (!ctx.request?.body)) {
@@ -59,8 +62,8 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
                 }
               }
             }
-          } catch(e) {
-            ctx.miolo.logger.error(`[router] Error while trying to qet query params for ${ctx.request.url}`)
+          } catch(error) {
+            ctx.miolo.logger.error(`[router] Error while trying to qet query params for ${ctx.request.url}: ${error?.message || '?'}`)
           }
 
           const authenticated = await _route_auth_callback(ctx)
@@ -76,18 +79,67 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
           if (! goon) {
             return
           }
+
+          if (route?.schema) {
+            if (! Joi.isSchema(route.schema)) {
+              ctx.miolo.logger.error(`[router] Expecting schema at ${url} but something else was found (${typeof route.schema})`)
+              ctx.body = {
+                ok: false,
+                error: 'Invalid schema'
+              }
+              return
+            }
+
+            console.log(route.schema?.validate)
+            console.log(Object.keys(route.schema))
+            try {
+              // const v = route?.schema.validate(ctx.request.body)
+              const v = Joi.attempt(ctx.request.body, route.schema)
+              /*
+              if (v?.error) {
+                ctx.miolo.logger.warn(`[router] Schema invalidated data for ${url}: ${v.error}`)
+                ctx.body = {
+                  ok: false,
+                  error: v.error
+                }
+                return
+              } else if (v?.value) {
+                ctx.miolo.logger.silly(`[router] Schema validated data for ${url} successfully`)
+                ctx.request.body = v.value
+              } else {
+                ctx.miolo.logger.warn(`[router] Schema returned unknown result for ${url}: ${JSON.stringify(v)}. Let's ignore it.`)
+              }*/
+              if (v) {
+                ctx.miolo.logger.silly(`[router] Schema validated data for ${url} successfully`)
+                ctx.request.body = v
+              } else {
+                ctx.miolo.logger.warn(`[router] Schema validated data for ${url}... maybe`)
+              }
+            } catch(error) {
+              ctx.miolo.logger.error(`[router] Error validating schema at ${url}: ${error?.message || error}`)
+              ctx.body = {
+                ok: false,
+                error: error?.message || error
+              }
+              return
+            }
+          }
       
-          result= await route.callback(ctx)
+          const result = await route.callback(ctx)
+          ctx.body = ensure_response_is_ok_data(ctx, result)
           
           if (route?.after) {
-            result= await route.after(ctx, result)
+            const result = await route.after(ctx, ctx.body)
+            ctx.body = ensure_response_is_ok_data(ctx, result)
           }
         } catch(error) {
           ctx.miolo.logger.error(`[router] Unexpected error on Query ${route.callback?.name} at ${url}`)
           ctx.miolo.logger.error(error)
+          ctx.body = {
+            ok: false,
+            error: error?.message || error
+          }
         }
-
-        return result
       }
 
       const router_method = route.method.toLowerCase()

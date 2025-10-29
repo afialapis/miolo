@@ -13,7 +13,7 @@ import { make_endpoint_from_fn } from '../utils.mjs'
 
     auth,
     before: (ctx) => {return goon/!goon},
-    after : (ctx, result) => {return result},
+    after : (ctx, data) => {return data},
     
 
     routes: [
@@ -21,13 +21,13 @@ import { make_endpoint_from_fn } from '../utils.mjs'
       {
         url: '/crud/todos/fake',
         method: 'GET', // 'POST'
-        callback: async (ctx) => { ctx.body = result } ,  
+        callback: async (ctx) => { ctx.body = data } ,  
           // or
-        callback_fn: async (miolo, params) => { return result } , 
+        callback_fn: async (miolo, params) => { return data } , 
 
         auth,
         before: (ctx) => {return goon/!goon},
-        after : (ctx, result) => {return result},
+        after : (ctx, data) => {return data},
       }
     ]
   }   
@@ -95,7 +95,8 @@ const getQueriesConfig = (config) => {
         ]),
 
         before: route?.before || comm_before,
-        after: route?.after || comm_after
+        after: route?.after || comm_after,
+        schema: route?.schema
       }
 
       parsed_routes.push(parsed_route)

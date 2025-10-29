@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 export let EMAIL_QUEUE = {}
 
 export async function email_queue_an_email(email, logger= undefined) {
-  const _loge = logger?.info || console.error
+  const _loge = logger?.error || console.error
 
   try {
     const id = uuidv4()
@@ -18,7 +18,8 @@ export async function email_queue_an_email(email, logger= undefined) {
   }
 }
 
-export function email_queue_pop_pendings(logger= undefined) {
+/* eslint-disable no-unused-vars */
+export function email_queue_pop_pendings(logger= undefined) { 
 
   let grouped = {}
 

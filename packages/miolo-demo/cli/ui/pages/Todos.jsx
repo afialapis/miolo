@@ -10,7 +10,7 @@ function _showTitle  (title) {
 
 async function _todoListLoader(context, fetcher) {
   _showTitle('loading todos...')
-  const nTodoList = await fetcher.read('crud/todos')     
+  const {data: nTodoList} = await fetcher.read('crud/todos')     
   _showTitle('todos loaded!')
   return nTodoList
 }
@@ -29,7 +29,7 @@ const Todos = ({authenticated, fetcher, useSsrData}) => {
         done: false,
       }
 
-      const todoId= await fetcher.upsave('crud/todos', todoObject)
+      const {data: todoId}= await fetcher.upsave('crud/todos', todoObject)
       todoObject.id= todoId
 
       setTodoList([todoObject, ...todoList])
@@ -50,7 +50,7 @@ const Todos = ({authenticated, fetcher, useSsrData}) => {
   
       setTodoList(nTodoList)
 
-      const _res= await fetcher.upsave('crud/todos', nTodoList[selectedTodoIndex])
+      await fetcher.upsave('crud/todos', nTodoList[selectedTodoIndex])
     }
 
     toggleIt()
@@ -71,12 +71,12 @@ const Todos = ({authenticated, fetcher, useSsrData}) => {
 
   
   const checkLastHours = useCallback(async ({hours}) => {
-    const res= await fetcher.get('crud/todos/last_hours', {hours})
-    alert(`You have added ${res.data} todos in the last ${hours} hours`)
+    const {data}= await fetcher.get('crud/todos/last_hours', {hours})
+    alert(`You have added ${data} todos in the last ${hours} hours`)
   }, [fetcher])
 
   const insertFakeTodo = useCallback(async () => {
-    const _tid= await fetcher.post('crud/todos/fake')
+    await fetcher.post('crud/todos/fake')
     refreshTodoList()
   }, [fetcher, refreshTodoList])
 

@@ -2,8 +2,9 @@ import nodemailer from 'nodemailer'
 import { email_queue_an_email, email_queue_pop_pendings, email_queue_remove_ids } from './queue.mjs'
 
 
-const _logi = (logger, msg) => logger?.info ? logger.info(msg) : console.info(msg)
-const _loge = (logger, msg) => logger?.error ? logger.info(msg) : console.error(msg)
+const _logi = (logger, msg) => logger?.info ? logger.info(msg) : console.log(msg)
+const _logs = (logger, msg) => logger?.silly ? logger.silly(msg) : console.log(msg)
+const _loge = (logger, msg) => logger?.error ? logger.error(msg) : console.error(msg)
 
 
 export function _init_emailer_transporter({options, defaults, silent}) {
@@ -11,13 +12,13 @@ export function _init_emailer_transporter({options, defaults, silent}) {
   const nmailer = nodemailer.createTransport(options, defaults)
 
   function verify_emailer(logger= undefined) {
-    _logi(logger, '[emailer] Verifying...')
+    _logs(logger, '[emailer] Verifying...')
     nmailer.verify(function(error, _success) {
       if (error) {
         _loge(logger, '[emailer] Verifying ERROR')
         _loge(logger, error?.message || error?.stack || error || 'Unknown error')
       } else {
-        _logi(logger, '[emailer] Verifyed OK: Server is ready to take our messages')
+        _logs(logger, '[emailer] Verifyed OK: Server is ready to take our messages')
       }
     })
   }
@@ -78,7 +79,7 @@ export function _init_emailer_transporter({options, defaults, silent}) {
     } else {
       try {
         const q = email_queue_an_email(mail, logger)
-        _logi(logger, `[emailer] Queued email: ${mail?.from || ''} => ${mail?.to || ''} (${mail?.subject || ''})`)
+        _logs(logger, `[emailer] Queued email: ${mail?.from || ''} => ${mail?.to || ''} (${mail?.subject || ''})`)
 
         return {
           ok: q.ok,
@@ -112,20 +113,20 @@ export function _init_emailer_transporter({options, defaults, silent}) {
   
     for (const email of pending) {
       if (email.count > 1) {
-        _logi(logger, `[emailer] Sending queued and stacked email [${email.subject}](x${email.count})...`)
+        _logs(logger, `[emailer] Sending queued and stacked email [${email.subject}](x${email.count})...`)
         email.subject = `${email.subject} (x${email.count})`
       } else {
-        _logi(logger, `[emailer] Sending queued email [${email.subject}]...`)
+        _logs(logger, `[emailer] Sending queued email [${email.subject}]...`)
       }
 
       send_email(email).then((res) => {
-        _logi(logger, `[emailer] Queued email [${email.subject}]sent ${res.ok ? 'OK' : 'NOT OK'}`)
+        _logs(logger, `[emailer] Queued email [${email.subject}]sent ${res.ok ? 'OK' : 'NOT OK'}`)
         if (res.ok) {
           delete email_queue_remove_ids(email.ids, logger)
         }
       })
     }
-    _logi(logger, `[emailer] Sent emails ${pending.length} from queue`)
+    _logs(logger, `[emailer] Sent emails ${pending.length} from queue`)
   }
   
   const emailer= {

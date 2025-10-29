@@ -45,7 +45,6 @@ export default function make_config_defaults() {
       proxy: process.env.MIOLO_HTTP_PROXY==='true',
 
       ratelimit: {
-        /* eslint-disable no-unused-vars */
         max: parseInt(process.env.MIOLO_RATELIMIT_MAX || 1000),
         duration: parseInt(process.env.MIOLO_RATELIMIT_DURATION || 60 * 1000), // miliseconds
         errorMessage: 'Rate Limit reached',      
@@ -154,7 +153,7 @@ export default function make_config_defaults() {
       //   error_code: 401
       // }, 
       // before: async (ctx) => {return bool} // If bool false, query callback not run
-      // after : async (ctx, result) => {return modified_result}
+      // after : async (ctx, data) => {return modified_data}
       
       crud: [{
         prefix: '',
@@ -187,12 +186,13 @@ export default function make_config_defaults() {
             {
               url: '/../..',
               method: 'GET/POST',
-              callback: async (ctx) => { ctx.body = result } ,  
+              callback: async (ctx) => { ctx.body = data } ,  
               // or
-              callback_fn: async (miolo, params) => { return result } ,  
+              callback_fn: async (miolo, params) => { return data } ,  
               auth: ...,
-              before: ...,
-              after : ...
+              before:  async (ctx) => { return true/false },
+              after :  async (ctx, data) => { return data },
+              schema: a Joi schema
             },          
           ], 
         },

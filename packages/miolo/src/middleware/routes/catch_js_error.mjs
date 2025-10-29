@@ -40,7 +40,7 @@ function init_route_catch_js_error(app, route) {
       logger.error(msg)
     }
 
-    ctx.body = {result: 1}
+    ctx.body = {ok: true, data: 1}
   }
 
   const catch_js_error_router = new Router()

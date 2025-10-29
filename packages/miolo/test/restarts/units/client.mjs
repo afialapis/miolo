@@ -18,13 +18,13 @@ export function test_restarts_client () {
 
   describe(`[miolo-test-restarts][client]`, function() {
     it(`[miolo-test-restarts][client] should fetch test_01 from crud (read, unfiltered)`, async function() {
-      const response= await fetcher.read(`api/test_01`)
-      assert.strictEqual(response.length, data.length)
+      const {data}= await fetcher.read(`api/test_01`)
+      assert.strictEqual(data.length, data.length)
     })
     
     it(`[miolo-test-restarts][client] should fetch test_01 from crud (read, filtered by name)`, async function() {
-      const response= await fetcher.read(`api/test_01`, {name: 'Peter'})
-      assert.strictEqual(response.length, data.filter(r => r.name=='Peter').length)
+      const {data}= await fetcher.read(`api/test_01`, {name: 'Peter'})
+      assert.strictEqual(data.length, data.filter(r => r.name=='Peter').length)
     })
   })
 }
@@ -33,8 +33,8 @@ export function test_restarts_client_fail () {
 
   describe(`[miolo-test-restarts][client]`, function() {
     it(`[miolo-test-restarts][client] should check server is no longer available`, async function() {
-      const response= await fetcher.read(`api/test_01`)
-      assert.strictEqual(response.code, 'ECONNREFUSED')
+      const {data}= await fetcher.read(`api/test_01`)
+      assert.strictEqual(data.code, 'ECONNREFUSED')
     })
     
 
