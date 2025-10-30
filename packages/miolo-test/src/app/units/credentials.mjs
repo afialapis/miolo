@@ -17,6 +17,7 @@ const AUTH= {
 }
 
 const expect = global.expect
+let cookie 
 
 function test_app_credentials() {
 
@@ -25,7 +26,14 @@ function test_app_credentials() {
   let last_tid
   test_app_base('credentials', (fetcher) => {
     it(`[miolo-test-app][credentials] should login`, async function() {
-      const {user, authenticated}= await login(fetcher, AUTH)
+      const resp = await login(fetcher, AUTH)
+       
+      cookie = resp.response.headers.get('set-cookie')
+      fetcher.get_headers = () => {
+        return {'Cookie': cookie}
+      }
+
+      const {user, authenticated} = resp.data
       assert.strictEqual(user.username, AUTH.username)
       assert.strictEqual(authenticated, true)
     })

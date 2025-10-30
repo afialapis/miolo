@@ -52,8 +52,11 @@ const init_basic_auth_middleware = ( app, options ) => {
       }
 
       ctx.body= {
-        user: undefined,
-        authenticated: false
+        ok: true,
+        data: {
+          user: undefined,
+          authenticated: false
+        }
       }
       ctx.response.status= 401
       ctx.response.headers['WWW-Authenticate']= 'Basic realm="' + realm.replace(/"/g, '\\"') + '"'

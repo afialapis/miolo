@@ -452,7 +452,9 @@ export default function make_config_defaults() {
         ? `${process.env.MIOLO_BUILD_CLIENT_DEST || './dist/cli'}/${process.env.MIOLO_NAME || 'miolo'}.${process.env.MIOLO_BUILD_CLIENT_SUFFIX || 'iife.bundle.min'}.js`
         : process.env.MIOLO_BUILD_CLIENT_ENTRY,
       
-      html: process.env.MIOLO_BUILD_HTML_FILE || './src/cli/index.html',
+      html: process.env.MIOLO_BUILD_HTML_FILE==='false'
+            ? '' 
+            : process.env.MIOLO_BUILD_HTML_FILE || './src/cli/index.html',
 
       vite: {
         base: '/',

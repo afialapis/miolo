@@ -11,10 +11,12 @@ export function getInfoFromPkg(pkgPath) {
     let srvDest = './dist/server'
     try {
       const start = packageData.scripts.start
-      const regex = /^node\s+(.*?)\/run\.mjs(?:$|\s)/;
-      const match = start.match(regex);
-      if (match) {
-        srvDest = match[1]
+      if (start) {
+        const regex = /^node\s+(.*?)\/run\.mjs(?:$|\s)/;
+        const match = start.match(regex);
+        if (match) {
+          srvDest = match[1]
+        }
       }
     } catch(err) {
       console.error('[miolo] Error reading <start> package.json:', err)

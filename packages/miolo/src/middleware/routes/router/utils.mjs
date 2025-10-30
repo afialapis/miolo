@@ -26,7 +26,7 @@ export function make_endpoint_from_fn(fn) {
       const result = await fn(ctx.miolo, params)
       response = ensure_response_is_ok_data(ctx, result)
     } catch(error) {
-      ctx.miolo.logger.debug(`[router] ${fn.name}()Unexpected error. ${error?.message || error}`)
+      ctx.miolo.logger.debug(`[router] ${fn.name}() Unexpected error. ${error?.message || error}`)
       response= {
         ok: false,
         error: error?.message || error
@@ -50,7 +50,7 @@ export function make_endpoint_from_fn(fn) {
 
 export function ensure_response_is_ok_data(ctx, response) {
   if ((response?.ok === undefined) && (response?.data === undefined) && (response?.error === undefined)) {
-    ctx.miolo.logger.debug(`[router] Response without ok/[data/error] fields. Fields are: ${Object.keys(response)}. Let's wrap it on an ok response`)
+    ctx.miolo.logger.debug(`[router] Response without ok/[data/error] fields. It is: ${JSON.stringify(response)}. Let's wrap it on an ok response`)
     return {
       ok: true,
       data: response

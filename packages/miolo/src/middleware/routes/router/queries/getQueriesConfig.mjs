@@ -1,5 +1,4 @@
 import merge from 'deepmerge'
-
 import {
   DEFAULT_AUTH_USER,
   DEFAULT_BEFORE_CALLBACK,

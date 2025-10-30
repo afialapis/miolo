@@ -1,0 +1,19 @@
+{
+  "name": "miolo-test",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "lint": "npx xeira lint ./src",
+    "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
+    "test": "NODE_OPTIONS=\"--conditions=development\" npx xeira test --files=./src/index.mjs"
+  },
+  "type": "module",
+  "dependencies": {
+    "intre": "^3.0.0-beta.2",
+    "miolo": "../miolo",
+    "miolo-cli": "../miolo-cli",
+    "miolo-react": "../miolo-react",
+    "node-fetch": "^3.3.2",
+    "xeira": "^2.0.0-beta.8"
+  }
+}

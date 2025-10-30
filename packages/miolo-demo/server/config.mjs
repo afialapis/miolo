@@ -7,7 +7,6 @@ import { miolo_demo_ssr_loader_make } from '#server/ssr/loader.mjs'
 const proot = (p) => path.join(process.cwd(), p)
 
 export default function makeConfig () {
-
   const authType = process.env.MIOLO_DEMO_AUTH_TYPE || 'guest'
 
   const auth = 

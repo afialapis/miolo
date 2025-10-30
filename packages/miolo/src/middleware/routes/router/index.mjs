@@ -4,7 +4,6 @@ import attachCrudRoutes from './crud/attachCrudRoutes.mjs'
 import getQueriesConfig from './queries/getQueriesConfig.mjs'
 import attachQueriesRoutes from './queries/attachQueriesRoutes.mjs'
 
-
 function init_router(app, routes) {
   const logger = app.context.miolo.logger
 

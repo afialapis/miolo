@@ -9,7 +9,7 @@ export const set_auth = (fetcher, auth) => {
 
 export const login = async (fetcher, {username, password}) => {
   const res= await fetcher.login('/login', {username, password})
-  return res.data
+  return res
 }
 
 export const logout = async (fetcher)  => {
@@ -70,6 +70,7 @@ export const clean_todos = async (fetcher) => {
   const res= await fetcher.post('/queries/todos/clean', {})
   const ok= res?.response?.redirected !== true
   return ok
+  //return true
 }
 
 

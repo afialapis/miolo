@@ -3,7 +3,7 @@ import {find_user_by_id as q_find_user_by_id,
         auth_user as q_auth_user} from '#server/db/users.mjs'
 
 const get_user_id = (user, done, ctx) => { 
-  ctx.miolo.logger.debug(`[miolo-test-app][credentials] get_user_id() - name ${user?.name} - sessionId ${ctx.sessionId}`)
+  ctx.miolo.logger.debug(`[miolo-demo][credentials] get_user_id() - name ${user?.name} - sessionId ${ctx.sessionId}`)
   const uid= user?.id
   if (uid!=undefined) {
     return done(null, uid)
@@ -14,10 +14,10 @@ const get_user_id = (user, done, ctx) => {
 }
 
 const find_user_by_id = (id, done, ctx) => {
-  ctx.miolo.logger.debug(`[miolo-test-app][credentials] find_user_by_id() - id ${id} - sessionId ${ctx.sessionId}`)
+  ctx.miolo.logger.debug(`[miolo-demo][credentials] find_user_by_id() - id ${id} - sessionId ${ctx.sessionId}`)
   ctx.miolo.db.get_connection().then((conn) => {
     return q_find_user_by_id(conn, id).then(user => {
-      ctx.miolo.logger.debug('[miolo-test-app][credentials] find_user_by_id()', JSON.stringify(user))
+      ctx.miolo.logger.debug('[miolo-demo][credentials] find_user_by_id()', JSON.stringify(user))
 
       if (user==undefined) {
         const err = new Error('User not found')
@@ -34,11 +34,11 @@ const local_auth_user = (username, password, done, ctx) => {
   // noauth=> done(null, false, {message: ''}) 
   // err=> done(error, null)
 
-  ctx.miolo.logger.debug(`[miolo-test-app][credentials] local_auth_user() - checking credentials for ${username} - sessionId ${ctx.sessionId}`)
+  ctx.miolo.logger.debug(`[miolo-demo][credentials] local_auth_user() - checking credentials for ${username} - sessionId ${ctx.sessionId}`)
 
   ctx.miolo.db.get_connection().then((conn) => {
     q_auth_user(conn, username, password).then(user => {
-      ctx.miolo.logger.debug('[miolo-test-app][credentials] local_auth_user() - User logged in', JSON.stringify(user))
+      ctx.miolo.logger.debug('[miolo-demo][credentials] local_auth_user() - User logged in', JSON.stringify(user))
   
       if (user==undefined) {
         done(null, false, 'Invalid credentials')

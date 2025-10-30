@@ -24,7 +24,6 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
       logger.debug(`[router] Routing ${route.callback?.name || 'callback'} to ${route.method} ${url}${checkAuth ? ' (auth)' : ''}`)
 
       const _route_auth_callback = async (ctx) => {
-        
         if (checkAuth) {
           const authenticated= ctx?.session?.authenticated === true
           if (!authenticated) {
@@ -40,7 +39,6 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
               ctx.redirect(routeAuth.redirect_url)
             } else {
               ctx.miolo.logger.error(`Route path ${route.url} specified auth but no action`)
-              ctx.body= {}
             }
           }
 
@@ -51,7 +49,6 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
       }
 
       const _route_callback = async (ctx) => {
-        let data = {}
         try {
           try {
             if ((route.method == 'GET') && (!ctx.request?.body)) {
@@ -68,6 +65,10 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
 
           const authenticated = await _route_auth_callback(ctx)
           if (! authenticated) {
+            ctx.body= {
+              ok: false,
+              error: 'Not authorized'
+            }
             return
           }
           
@@ -77,10 +78,16 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
           }
 
           if (! goon) {
+            ctx.body= {
+              ok: false,
+              error: 'Route was aborted by a <before> callback'
+            }
             return
           }
 
           if (route?.schema) {
+            
+            // Check schema is actually a schema
             if (! Joi.isSchema(route.schema)) {
               ctx.miolo.logger.error(`[router] Expecting schema at ${url} but something else was found (${typeof route.schema})`)
               ctx.body = {
@@ -89,18 +96,17 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
               }
               return
             }
+             
 
-            console.log(route.schema?.validate)
-            console.log(Object.keys(route.schema))
+
             try {
-              // const v = route?.schema.validate(ctx.request.body)
-              const v = Joi.attempt(ctx.request.body, route.schema)
-              /*
+              const v = route.schema.validate(ctx.request.body)
+              
               if (v?.error) {
-                ctx.miolo.logger.warn(`[router] Schema invalidated data for ${url}: ${v.error}`)
+                ctx.miolo.logger.warn(`[router] Schema invalidated data for ${url}: ${v.error}\n${v.error.annotate(true)}`)
                 ctx.body = {
                   ok: false,
-                  error: v.error
+                  error: v.error.toString()
                 }
                 return
               } else if (v?.value) {
@@ -108,13 +114,8 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
                 ctx.request.body = v.value
               } else {
                 ctx.miolo.logger.warn(`[router] Schema returned unknown result for ${url}: ${JSON.stringify(v)}. Let's ignore it.`)
-              }*/
-              if (v) {
-                ctx.miolo.logger.silly(`[router] Schema validated data for ${url} successfully`)
-                ctx.request.body = v
-              } else {
-                ctx.miolo.logger.warn(`[router] Schema validated data for ${url}... maybe`)
               }
+              
             } catch(error) {
               ctx.miolo.logger.error(`[router] Error validating schema at ${url}: ${error?.message || error}`)
               ctx.body = {
@@ -126,7 +127,13 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
           }
       
           const result = await route.callback(ctx)
-          ctx.body = ensure_response_is_ok_data(ctx, result)
+          
+          if (ctx.body!==undefined) {
+            ctx.body = ensure_response_is_ok_data(ctx, ctx.body)
+          } else {
+            ctx.body = ensure_response_is_ok_data(ctx, result)
+          }
+          
           
           if (route?.after) {
             const result = await route.after(ctx, ctx.body)

@@ -7,7 +7,7 @@ const local_auth_user = async (username, password, miolo) => {
   // noauth=> done(null, false, {message: ''}) 
   // err=> done(error, null)
 
-  //console.log('[miolo-test-app][basic] local_auth_user()', username, password)
+  //console.log('[miolo-demo][basic] local_auth_user()', username, password)
 
   const conn= await miolo.db.get_connection()
   const user = await q_auth_user(conn, username, password)

@@ -76,7 +76,12 @@ const Todos = ({authenticated, fetcher, useSsrData}) => {
   }, [fetcher])
 
   const insertFakeTodo = useCallback(async () => {
-    await fetcher.post('crud/todos/fake')
+    const {ok, error, data} = await fetcher.post('crud/todos/fake', {done: true})
+    if (!ok) {
+      alert(`Error adding fake todo: ${error}`)
+    } else {
+      alert(`Fake todo added with id ${data}`)
+    }
     refreshTodoList()
   }, [fetcher, refreshTodoList])
 
@@ -90,6 +95,7 @@ const Todos = ({authenticated, fetcher, useSsrData}) => {
         removeTodo     = {removeTodo}
         checkLastHours  = {checkLastHours}
         insertFakeTodo = {insertFakeTodo}
+        refreshTodoList = {refreshTodoList}
       />
   )
 }

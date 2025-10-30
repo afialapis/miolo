@@ -1,7 +1,7 @@
 import assert from 'assert'
 import fetch from 'node-fetch'
-import data from '../data.mjs'
-import {miolo_client} from '../../../../miolo-cli/src/index.mjs'
+// import data from '../data.mjs'
+import {miolo_client} from 'miolo-cli'
 
 const {fetcher} = miolo_client({
   config: {
@@ -33,8 +33,8 @@ export function test_restarts_client_fail () {
 
   describe(`[miolo-test-restarts][client]`, function() {
     it(`[miolo-test-restarts][client] should check server is no longer available`, async function() {
-      const {data}= await fetcher.read(`api/test_01`)
-      assert.strictEqual(data.code, 'ECONNREFUSED')
+      const {error}= await fetcher.read(`api/test_01`)
+      assert.strictEqual(error.code, 'ECONNREFUSED')
     })
     
 

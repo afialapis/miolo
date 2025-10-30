@@ -1,25 +1,27 @@
 import {intre_now} from 'intre'
 
-async function todos_read(miolo, params) {
-  const conn= await miolo.db.get_connection()
+async function todos_read(ctx, params) {
+  const conn= await ctx.miolo.db.get_connection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  miolo.logger.debug(`[todos_read] Reading todos...`, {section: 'todos-read'})
+  ctx.miolo.logger.debug(`[todos_read] Reading todos...`, {section: 'todos-read'})
 
   const Todos = await conn.get_model('todos')
   const todos = await Todos.read(options)
 
-  miolo.logger.debug(`[todos_read] Read ${todos.length} todos!`, {section: 'todos-read'})
+  ctx.miolo.logger.debug(`[todos_read] Read ${todos.length} todos!`, {section: 'todos-read'})
 
   return todos
 }
 
 
-async function todos_count_last_hours(miolo, params) { 
-  miolo.logger.info(`[todos] Counting last ${params.hours} hours todos... `, {section: 'todos-hour'})
+async function todos_count_last_hours(ctx) { 
+  const params = ctx.request.body
 
-  const conn= await miolo.db.get_connection()
+  ctx.miolo.logger.info(`[todos] Counting last ${params.hours} hours todos... `, {section: 'todos-hour'})
+
+  const conn= await ctx.miolo.db.get_connection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
@@ -33,13 +35,14 @@ async function todos_count_last_hours(miolo, params) {
   const data= await conn.select(query, [one_hour_ago], options) 
   const res= data[0]['cnt']
 
-  miolo.logger.info(`[todos] Counted last ${params.hours} hours todos: ${res} `, {section: 'todos-hour'})
+  ctx.miolo.logger.info(`[todos] Counted last ${params.hours} hours todos: ${res} `, {section: 'todos-hour'})
 
   return res
 }
 
-async function todos_insert_fake(miolo, params) {
-  const conn= await miolo.db.get_connection()
+async function todos_insert_fake(ctx) {
+  const params = ctx.request.body
+  const conn= await ctx.miolo.db.get_connection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
@@ -47,7 +50,7 @@ async function todos_insert_fake(miolo, params) {
 
   const d= {
     name: 'Fake todo',
-    done: true
+    done: params?.done===true
   }
   const tid= await Todos.insert(d, options)
 

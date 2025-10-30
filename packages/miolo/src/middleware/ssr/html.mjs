@@ -12,6 +12,10 @@ const get_script_version = () => {
 }
 
 function _html_read(htmlFile) {
+  
+  if (!htmlFile) {
+    return fallbackIndexHTML
+  }
   try {
     const isProduction = process.env.NODE_ENV === 'production'
     const proot = (p) => path.join(process.cwd(), p)
@@ -80,7 +84,9 @@ export const ssr_html_renderer_make = async (app, ssrConfig, htmlFile, client, d
     // if non-vite or prod
     } else {
       try {
-        render = (await import(ssrConfig.server)).render
+        if (ssrConfig?.server !== 'false') {
+          render = (await import(ssrConfig.server)).render
+        }
       } catch(error) {
         ctx.miolo.logger.error(`SSR Error for ${ssrConfig.server}:\n${error.toString()}\n${error.stack}`)
       }

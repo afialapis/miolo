@@ -5,7 +5,7 @@ const miolo_demo_ssr_loader_make = (authType) => {
 
   const loader = async (ctx) => {
     //ctx.miolo.logger.info(`[ssr-loader] ...`)
-    const todoList= await todos_read(ctx.miolo,  {})
+    const todoList= await todos_read(ctx,  {})
     
     const data = {
       authType,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, Trash2, Plus, Bone, CircleQuestionMark, Bomb } from 'lucide-react';
+import { Check, Trash2, Plus, Bone, CircleQuestionMark, Bomb, RefreshCw } from 'lucide-react';
 
 const throwAnError = () => { 
   const obj= {}
@@ -15,6 +15,7 @@ const TodosList = ({
   removeTodo,
   checkLastHours,
   insertFakeTodo,
+  refreshTodoList
 }) => {
   const [inputText, setInputText] = useState('');
   const [hours, setHours] = useState(1);
@@ -47,7 +48,7 @@ const TodosList = ({
           <button
             type="submit"
             disabled={!(authType!=='credentials' || authenticated)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <Plus size={18} />
             Add
@@ -55,9 +56,16 @@ const TodosList = ({
         </div>
         <div className="flex gap-2 mt-4">
           <button
+            onClick={refreshTodoList}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
+          >
+            <RefreshCw size={18} />
+            Refresh
+          </button>
+          <button
             onClick={() => insertFakeTodo()}
             disabled={!(authType!=='credentials' || authenticated)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <Bone size={18} />
             Insert fake
@@ -65,14 +73,14 @@ const TodosList = ({
 
           <button
             onClick={() => checkLastHours({hours})}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <CircleQuestionMark size={18} />
             {`How many todos I have added in the last ${hours} hours?`}  
           </button>   
           <button
             onClick={() => throwAnError()}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <Bomb size={18} />
             {`Throw an JS error`}  

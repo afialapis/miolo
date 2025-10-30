@@ -11,9 +11,10 @@ function attachCrudRoutes(router, crudConfigs, logger) {
 
       const _pack_body_field = (data) => {
         if (route.bodyField == undefined) {
-          return data
+          return {data}
         }
         return {
+          bodyField: route.bodyField,
           [route.bodyField]: data
         }
       }
@@ -109,10 +110,8 @@ function attachCrudRoutes(router, crudConfigs, logger) {
           ctx.miolo.logger.error(`[router] Unexpected error on CRUD ${route.name}-${op}`)
           ctx.miolo.logger.error(error)
         }
-
-        data= _pack_body_field(data)
-
-        ctx.body= {ok: true, data}
+       
+        ctx.body= {ok: true, ..._pack_body_field(data)}
       }
 
       const route_read = async (ctx) => {

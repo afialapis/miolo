@@ -108,25 +108,29 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
         ctx.status= 401
 
         ctx.body = { 
-          user: undefined,
-          authenticated: false,
-          info: info,
+          ok: err==undefined,
+          data: {
+            user: undefined,
+            authenticated: false,
+            info: info,
+          },
           error: err
         }
       } else {
-
-        ctx.session.user = ctx.state.user
+        await ctx.login(user)
+        ctx.session.user = user // ctx.state.user
         ctx.session.authenticated = true
 
         if (url_login_redirect!=undefined) {
           ctx.redirect(url_login_redirect)
-        } else {
-          await ctx.login(user)
         }
-
+        
         ctx.body = { 
-          user : user,
-          authenticated: true
+          ok: true,
+          data: {
+            user : user,
+            authenticated: true
+          }
         }
       }
     })(ctx)
@@ -145,8 +149,11 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
       }
 
       ctx.body = { 
-        user: undefined,
-        authenticated: false 
+        ok: true,
+        data: {
+          user: undefined,
+          authenticated: false 
+        }
       }    
     } else {
       // This will show error logs on the catcher middleware
@@ -154,8 +161,11 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
       
       ctx.status= 401
       ctx.body = { 
-        user: undefined,
-        authenticated: false 
+        ok: true,
+        data: {
+          user: undefined,
+          authenticated: false 
+        }
       }
     }
   }

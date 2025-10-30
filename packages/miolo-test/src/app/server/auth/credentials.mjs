@@ -3,25 +3,27 @@ import {find_user_by_id as q_find_user_by_id,
         auth_user as q_auth_user} from '../db/users.mjs'
 
 // eslint-disable-next-line no-unused-vars
-const get_user_id = (user, done, miolo) => { 
-  //console.log('[miolo-test-app][credentials] get_user_id()', user)
+const get_user_id = (user, done, ctx) => { 
+  // console.log(`[miolo-test-app][credentials] get_user_id() - name ${user?.name} - sessionId ${ctx.sessionId}`)
   const uid= user?.id
   if (uid!=undefined) {
-    done(null, uid)
+    return done(null, uid)
   } else {
-    done(false, null)
+    const err = new Error('User object is missing an ID for serialization')
+    return done(err, null)
   }
 }
 
-const find_user_by_id = (id, done, miolo) => {
-  //console.log('[miolo-test-app][credentials] find_user_by_id()', id)
-  miolo.db.get_connection().then((conn) => {
+const find_user_by_id = (id, done, ctx) => {
+  // console.log('[miolo-test-app][credentials] find_user_by_id()', id)
+  ctx.miolo.db.get_connection().then((conn) => {
     q_find_user_by_id(conn, id).then(user => {
       //console.log('[miolo-test-app][credentials] find_user_by_id()', JSON.stringify(user))
       if (user==undefined) {
-        done('User not found', null)
+        const err = new Error('User not found')
+        return done(err, null)
       } else {
-        done(null, user)
+        return done(null, user)
       }
     })
   })
@@ -29,16 +31,16 @@ const find_user_by_id = (id, done, miolo) => {
 
 }
 
-const local_auth_user = (username, password, done, miolo) => {
+const local_auth_user = (username, password, done, ctx) => {
   // auth=> done(null, user) 
   // noauth=> done(null, false, {message: ''}) 
   // err=> done(error, null)
 
-  //console.log('[miolo-test-app][credentials] local_auth_user() - checking credentials for ', username)
+  // console.log('[miolo-test-app][credentials] local_auth_user() - checking credentials for ', username)
 
-  miolo.db.get_connection().then((conn) => {
+  ctx.miolo.db.get_connection().then((conn) => {
     q_auth_user(conn, username, password).then(user => {
-      //console.log('[miolo-test-app][credentials] local_auth_user() - User logged in', user)
+      // console.log('[miolo-test-app][credentials] local_auth_user() - User logged in', user)
   
       if (user==undefined) {
         done(null, false, 'Invalid credentials')

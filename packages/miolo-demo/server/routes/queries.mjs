@@ -1,30 +1,24 @@
 import Joi from 'joi'
 import {todos_count_last_hours, todos_insert_fake} from '#server/db/todos.mjs'
 
-
-async function q_todos_insert_fake(ctx) {
-  const tid= await todos_insert_fake(ctx.miolo, ctx.request.body)
-
-  ctx.body = {id: tid}
-}
-
-const schema = Joi.object({
-  hours: Joi.number().min(1).max(24)
-})
-
 export default [{
   prefix: '/crud',
   routes: [
     {
       url: '/todos/last_hours',
       method: 'GET',
-      callback_fn: todos_count_last_hours,
-      schema
+      callback: todos_count_last_hours,
+      schema: Joi.object({
+        hours: Joi.number().min(1).max(24)
+      })
     },
     {
       url: '/todos/fake',
       method: 'POST',
-      callback: q_todos_insert_fake,
+      callback: todos_insert_fake,
+      schema: Joi.object({
+        done: Joi.bool().optional().default(false)
+      }),
       auth: {
         require: true,
         action: 'redirect',

@@ -12,7 +12,9 @@ const dbConfig = {
   password: 'postgres'
 }
 
-export const makeConfig = (logLevel= 'warn') => {
+const logLevel= 'warn'
+
+export const makeConfig = () => {
   return {
     http: {
       port: 8001,
@@ -24,7 +26,7 @@ export const makeConfig = (logLevel= 'warn') => {
       // Folders to be mounted by koa for static content
       //
       static: {
-        favicon: path.resolve(__my_dirname, '../../../demo/server/static/img/favicon.ico'),
+        favicon: path.resolve(__my_dirname, '../../../../miolo-demo/server/static/img/favicon.ico'),
         //folders: {
         //  '/static': path.resolve(__my_dirname, 'static')
         //}        
@@ -36,7 +38,7 @@ export const makeConfig = (logLevel= 'warn') => {
     db: {
       config: dbConfig,
       options: {
-        log: logLevel,
+        log: logLevel
       }
     },
     log: {
@@ -62,7 +64,7 @@ export const makeConfig = (logLevel= 'warn') => {
     
       queries: [
         {
-          prefix: '/noauth',
+          prefix: '/foo',
           routes: [{
             url: '/query',
             method: 'GET',
@@ -72,20 +74,6 @@ export const makeConfig = (logLevel= 'warn') => {
               ctx.body= res
             }
           }]
-        },
-        {
-          prefix: '/auth',
-          routes: [
-            {
-              url: '/query',
-              method: 'GET',
-              callback: (_ctx) => {},
-              auth: {
-                require: true,
-                action: 'redirect',
-                redirect_url: '/'
-              }    
-            }]
         }
       ]
     },
@@ -93,13 +81,8 @@ export const makeConfig = (logLevel= 'warn') => {
       guest: {
 
       }
-    },
-    cache: {
-      custom: {
-        test: {
-          ttl: 5 * 1000
-        }
-      }
     }
   }
 }
+
+
