@@ -1,7 +1,7 @@
 import merge from 'deepmerge'
 import { init_env_config } from './env.mjs'
 import make_config_defaults from './defaults.mjs'
-import isPlainObject from 'is-plain-object'
+import {isPlainObject} from 'is-plain-object'
 
 function _get_auth_type(config) {
   if (config?.auth?.basic) {
