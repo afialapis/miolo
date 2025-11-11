@@ -28,6 +28,10 @@ export function ensure_response_is_ok_data(ctx, response) {
   }
   
   const ok = response?.ok !== false
-  const data = response?.data || response || {}
+  const data = (response?.data!==undefined) 
+    ? response.data
+    : (response!==undefined)
+    ? response
+    : {}
   return {ok, data}
 }
