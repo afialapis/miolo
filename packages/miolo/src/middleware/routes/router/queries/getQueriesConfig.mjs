@@ -97,7 +97,7 @@ const getQueriesConfig = (config) => {
         before: route?.before || comm_before,
         after: route?.after || comm_after,
         schema: route?.schema,
-        keep_body: route?.keep_body !== true
+        keep_body: route?.keep_body === true
       }
 
       parsed_routes.push(parsed_route)
