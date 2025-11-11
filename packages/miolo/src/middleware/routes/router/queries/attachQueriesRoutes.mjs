@@ -127,10 +127,12 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
       
           const result = await route.callback(ctx, ctx.request.body)
           
-          if (ctx.body!==undefined) {
-            ctx.body = ensure_response_is_ok_data(ctx, ctx.body)
-          } else {
-            ctx.body = ensure_response_is_ok_data(ctx, result)
+          if (! route.keep_body) {
+            if (ctx.body!==undefined) {
+              ctx.body = ensure_response_is_ok_data(ctx, ctx.body)
+            } else {
+              ctx.body = ensure_response_is_ok_data(ctx, result)
+            }
           }
           
           if (route?.after) {

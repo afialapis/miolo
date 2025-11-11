@@ -193,11 +193,13 @@ export default function make_config_defaults() {
                 //  and milo will wrap into {ok: true, data: <anything>}
                 // or by yourself:
                 // ctx.body = {ok: true/false, data|error}
+                //  (you may want {keep_body: true})
               } ,  
               auth: ...,
               before:  async (ctx) => { return true/false },
               after :  async (ctx, data) => { return data },
-              schema: a Joi schema
+              schema: a Joi schema,
+              keep_body: false by default. If true, miolo wont wnsure ctx.body after callback.
             },          
           ], 
         },

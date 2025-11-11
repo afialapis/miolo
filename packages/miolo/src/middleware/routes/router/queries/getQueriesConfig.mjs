@@ -26,11 +26,13 @@ import {
           //  and milo will wrap into {ok: true, data: <anything>}
           // or by yourself:
           // ctx.body = {ok: true/false, data|error}
+          //  (you may want {keep_body: true})
         } ,  
         auth,
         before:  async (ctx) => { return true/false },
         after :  async (ctx, data) => { return data },
-        schema: a Joi schema
+        schema: a Joi schema,
+        keep_body: false by default. If true, miolo wont wnsure ctx.body after callback.
       }
     ]
   }   
@@ -94,7 +96,8 @@ const getQueriesConfig = (config) => {
 
         before: route?.before || comm_before,
         after: route?.after || comm_after,
-        schema: route?.schema
+        schema: route?.schema,
+        keep_body: route?.keep_body !== true
       }
 
       parsed_routes.push(parsed_route)
