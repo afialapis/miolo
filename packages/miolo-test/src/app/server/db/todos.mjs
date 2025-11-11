@@ -18,8 +18,8 @@ export async function todos_make_table_from_conn(conn) {
   return true
 }
 
-export async function todos_make_table(miolo) {
-  const conn = await miolo.db.get_connection()
+export async function todos_make_table(ctx) {
+  const conn = await ctx.miolo.db.get_connection()
   return todos_make_table_from_conn(conn)
 }
 
@@ -34,13 +34,12 @@ export async function todos_read(miolo, params) {
   return todos
 }
 
-
-export async function todos_count_last_hour(miolo, params) { 
-  const conn = await miolo.db.get_connection()
+export async function todos_count_last_hour(ctx, params) { 
+  const conn = await ctx.miolo.db.get_connection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const h = miolo.parser.parse_value_int(params?.h, false, 1)
+  const h = ctx.miolo.parser.parse_value_int(params?.h, false, 1)
 
   const one_hour_ago = intre_now() - 60*60*h
 
@@ -52,11 +51,11 @@ export async function todos_count_last_hour(miolo, params) {
   const data= await conn.select(query, [one_hour_ago], options) 
   const res= data[0]['cnt']
 
-  return res
+  return {data: res}
 }
 
-export async function todos_insert_fake(miolo, params) {
-  const conn = await miolo.db.get_connection()
+export async function todos_insert_fake(ctx, params) {
+  const conn = await ctx.miolo.db.get_connection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
@@ -67,5 +66,13 @@ export async function todos_insert_fake(miolo, params) {
     done: true
   }
   const tid= await Todos.insert(d, options)
-  return tid
+  return {id: tid}
+}
+
+export async function todos_clean(ctx) {
+  const conn= await ctx.miolo.db.get_connection()
+  const qry= 'DELETE FROM todos'
+  const res= await conn.executeAndCount(qry)
+
+  return res
 }

@@ -186,9 +186,14 @@ export default function make_config_defaults() {
             {
               url: '/../..',
               method: 'GET/POST',
-              callback: async (ctx) => { ctx.body = data } ,  
-              // or
-              callback_fn: async (miolo, params) => { return data } ,  
+              callback: async (ctx, params) => { 
+                return {ok: true/false, data|error} 
+                // or:
+                //  return <anything>
+                //  and milo will wrap into {ok: true, data: <anything>}
+                // or by yourself:
+                // ctx.body = {ok: true/false, data|error}
+              } ,  
               auth: ...,
               before:  async (ctx) => { return true/false },
               after :  async (ctx, data) => { return data },

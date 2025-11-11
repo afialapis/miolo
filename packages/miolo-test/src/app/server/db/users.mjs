@@ -28,8 +28,8 @@ export async function users_make_table_from_conn(conn) {
   return true
 }
 
-export async function users_make_table(miolo) {
-  const conn = await miolo.db.get_connection()
+export async function users_make_table(ctx) {
+  const conn = await ctx.miolo.db.get_connection()
   return users_make_table_from_conn(conn)
 }
 

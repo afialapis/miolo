@@ -1,32 +1,5 @@
 import {users_make_table} from '../db/users.mjs'
-import {todos_make_table, todos_count_last_hour, todos_insert_fake} from '../db/todos.mjs'
-
-
-async function q_users_make_table(ctx) {
-  const ok = await users_make_table(ctx.miolo)
-
-  ctx.body = ok
-}
-
-async function q_todos_make_table(ctx) {
-  const ok = await todos_make_table(ctx.miolo)
-
-  ctx.body = ok
-}
-
-async function q_todos_insert_fake(ctx) {
-  const tid= await todos_insert_fake(ctx.miolo, ctx.request.body)
-
-  ctx.body = {id: tid}
-}
-async function q_todos_clean(ctx) {
-  const conn= await ctx.miolo.db.get_connection()
-  const qry= 'DELETE FROM todos'
-  const res= await conn.executeAndCount(qry)
-
-  ctx.body = res
-}
-
+import {todos_make_table, todos_count_last_hour, todos_insert_fake, todos_clean} from '../db/todos.mjs'
 
 
 export default [{
@@ -35,12 +8,12 @@ export default [{
     {
       url: '/users/make_table',
       method: 'POST',
-      callback: q_users_make_table      
+      callback: users_make_table      
     },
     {
       url: '/todos/make_table',
       method: 'POST',
-      callback: q_todos_make_table,       
+      callback: todos_make_table,       
     },
     {
       url: '/todos/last_hour',
@@ -50,7 +23,7 @@ export default [{
     {
       url: '/todos/fake',
       method: 'POST',
-      callback: q_todos_insert_fake,
+      callback: todos_insert_fake,
       auth: {
         require: true,
         action: 'redirect',
@@ -60,7 +33,7 @@ export default [{
     {
       url: '/todos/clean',
       method: 'POST',
-      callback: q_todos_clean,
+      callback: todos_clean,
       auth: {
         require: true,
         action: 'redirect',

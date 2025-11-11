@@ -75,18 +75,17 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
           let goon= true
           if (route?.before) {
             goon= await route.before(ctx)
-          }
 
-          if (! goon) {
-            ctx.body= {
-              ok: false,
-              error: 'Route was aborted by a <before> callback'
+            if (! goon) {
+              ctx.body= {
+                ok: false,
+                error: `Route was aborted by a <before> callback (${route.before?.name})`
+              }
+              return
             }
-            return
           }
 
           if (route?.schema) {
-            
             // Check schema is actually a schema
             if (! Joi.isSchema(route.schema)) {
               ctx.miolo.logger.error(`[router] Expecting schema at ${url} but something else was found (${typeof route.schema})`)
@@ -126,14 +125,13 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
             }
           }
       
-          const result = await route.callback(ctx)
+          const result = await route.callback(ctx, ctx.request.body)
           
           if (ctx.body!==undefined) {
             ctx.body = ensure_response_is_ok_data(ctx, ctx.body)
           } else {
             ctx.body = ensure_response_is_ok_data(ctx, result)
           }
-          
           
           if (route?.after) {
             const result = await route.after(ctx, ctx.body)

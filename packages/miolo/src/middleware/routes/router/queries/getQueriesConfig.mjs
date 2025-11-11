@@ -4,7 +4,6 @@ import {
   DEFAULT_BEFORE_CALLBACK,
   DEFAULT_AFTER_CALLBACK
 } from "../defaults.mjs"
-import { make_endpoint_from_fn } from '../utils.mjs'
 
 /**
   {
@@ -20,13 +19,18 @@ import { make_endpoint_from_fn } from '../utils.mjs'
       {
         url: '/crud/todos/fake',
         method: 'GET', // 'POST'
-        callback: async (ctx) => { ctx.body = data } ,  
-          // or
-        callback_fn: async (miolo, params) => { return data } , 
-
+        callback: async (ctx, params) => { 
+          return {ok: true/false, data|error} 
+          // or:
+          //  return <anything>
+          //  and milo will wrap into {ok: true, data: <anything>}
+          // or by yourself:
+          // ctx.body = {ok: true/false, data|error}
+        } ,  
         auth,
-        before: (ctx) => {return goon/!goon},
-        after : (ctx, data) => {return data},
+        before:  async (ctx) => { return true/false },
+        after :  async (ctx, data) => { return data },
+        schema: a Joi schema
       }
     ]
   }   
@@ -76,12 +80,7 @@ const getQueriesConfig = (config) => {
         continue
       }
       
-      let cb=undefined
-      if ((! route.callback) && (! route.callback_fn)) {
-        continue
-      } else {
-        cb = route.callback || make_endpoint_from_fn(route.callback_fn)
-      }
+      let cb=route?.callback 
 
       const parsed_route= {
         url: route.url,
