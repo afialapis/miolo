@@ -1,11 +1,3 @@
-const DEFAULT_BEFORE_CALLBACK = async (ctx) => {
-  return true
-}
-
-const DEFAULT_AFTER_CALLBACK = async (ctx, result) => {
-  return result
-}
-
 const DEFAULT_AUTH_USER = {
   require: false,     // true / false / 'read-only'
   action: 'redirect', // 'error'
@@ -23,7 +15,5 @@ const DEFAULT_USE_USER_FIELDS = {
 
 export {
   DEFAULT_AUTH_USER,
-  DEFAULT_USE_USER_FIELDS,
-  DEFAULT_BEFORE_CALLBACK,
-  DEFAULT_AFTER_CALLBACK
+  DEFAULT_USE_USER_FIELDS
 }

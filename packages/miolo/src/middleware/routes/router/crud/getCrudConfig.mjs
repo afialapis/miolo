@@ -3,8 +3,6 @@ import merge from 'deepmerge'
 import {
   DEFAULT_AUTH_USER,
   DEFAULT_USE_USER_FIELDS,
-  DEFAULT_BEFORE_CALLBACK,
-  DEFAULT_AFTER_CALLBACK
 } from "../defaults.mjs"
 
 /**
@@ -69,8 +67,8 @@ const getCrudConfig = (config) => {
     }
     
     const comm_bodyField = crud?.bodyField || config?.bodyField
-    const comm_before = crud?.before || config?.before || DEFAULT_BEFORE_CALLBACK
-    const comm_after = crud?.after || config?.after || DEFAULT_AFTER_CALLBACK
+    const comm_before = crud?.before || config?.before
+    const comm_after = crud?.after || config?.after
 
 
     const comm_auth= merge.all([

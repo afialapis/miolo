@@ -1,8 +1,6 @@
 import merge from 'deepmerge'
 import {
-  DEFAULT_AUTH_USER,
-  DEFAULT_BEFORE_CALLBACK,
-  DEFAULT_AFTER_CALLBACK
+  DEFAULT_AUTH_USER
 } from "../defaults.mjs"
 
 /**
@@ -66,8 +64,8 @@ const getQueriesConfig = (config) => {
       return
     }
     
-    const comm_before = instance?.before || config?.before || DEFAULT_BEFORE_CALLBACK
-    const comm_after = instance?.after || config?.after || DEFAULT_AFTER_CALLBACK
+    const comm_before = instance?.before || config?.before
+    const comm_after = instance?.after || config?.after
 
     const comm_auth= merge.all([
       DEFAULT_AUTH_USER,
