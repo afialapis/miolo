@@ -3,13 +3,32 @@
  */
 import qs from 'qs'
 
-export function query_string_to_json(url) {     
-  let search= url.indexOf('?')>=0 ? url.substr(url.indexOf('?')+1) : '';
-  if (search) {
-    return qs.parse(search)
+export function query_string_to_json(url) {
+  const search = url.includes('?') ? url.substring(url.indexOf('?') + 1) : ''
+  if (!search) return {}
+
+  const parsed = qs.parse(search)
+  //
+  function reviveTypes(value) {
+    if (Array.isArray(value)) return value.map(reviveTypes)
+    if (value && typeof value === 'object') {
+      const result = {}
+      for (const key in value) {
+        if (Object.hasOwn(value, key)) result[key] = reviveTypes(value[key])
+      }
+      return result
+    }
+    // Try to convert to boolean, number o null
+    if (value === 'true') return true
+    if (value === 'false') return false
+    if (value === 'null') return null
+    if (!isNaN(value) && value !== '') return Number(value)
+    return value
   }
-  return {}
+
+  return reviveTypes(parsed)
 }
+
 
 export function ensure_response_is_ok_data(ctx, response) {
   if ((response?.ok === undefined) && (response?.data === undefined) && (response?.error === undefined)) {

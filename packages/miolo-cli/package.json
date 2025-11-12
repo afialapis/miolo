@@ -1,6 +1,6 @@
 {
   "name": "miolo-cli",
-  "version": "3.0.0-beta.130",
+  "version": "3.0.0-beta.131",
   "description": "cli utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -18,7 +18,7 @@
   "type": "module",
   "exports": {
     ".": {
-      "development": "./src/index.mjs", 
+      "development": "./src/index.mjs",
       "import": "./dist/miolo-cli.mjs",
       "default": "./dist/miolo-cli.umd.js"
     }
@@ -35,6 +35,7 @@
     "dist": "npm run clean && npm run bundle"
   },
   "dependencies": {
+    "qs": "^6.14.0",
     "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
