@@ -1,6 +1,6 @@
 import {intre_now} from 'intre'
 
-async function todos_read(ctx, params) {
+async function todos_read(ctx, _params) {
   const conn= await ctx.miolo.db.get_connection()
   // TODO : handle transactions
   const options= {transaction: undefined}
@@ -16,9 +16,7 @@ async function todos_read(ctx, params) {
 }
 
 
-async function todos_count_last_hours(ctx) { 
-  const params = ctx.request.body
-
+async function todos_count_last_hours(ctx, params) { 
   ctx.miolo.logger.info(`[todos] Counting last ${params.hours} hours todos... `, {section: 'todos-hour'})
 
   const conn= await ctx.miolo.db.get_connection()
@@ -40,8 +38,7 @@ async function todos_count_last_hours(ctx) {
   return res
 }
 
-async function todos_insert_fake(ctx) {
-  const params = ctx.request.body
+async function todos_insert_fake(ctx, params) {
   const conn= await ctx.miolo.db.get_connection()
   // TODO : handle transactions
   const options= {transaction: undefined}

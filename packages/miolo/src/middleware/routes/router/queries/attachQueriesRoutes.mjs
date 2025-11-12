@@ -95,9 +95,7 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
               }
               return
             }
-             
-
-
+            
             try {
               const v = route.schema.validate(ctx.request.body)
               
