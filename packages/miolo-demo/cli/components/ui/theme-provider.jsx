@@ -33,8 +33,6 @@ export function ThemeProvider({
 
     root.classList.add(theme)
     setIsDark(theme === "dark")
-
-    console.log(root.classList)
   }, [theme])
 
   const value = {
