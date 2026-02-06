@@ -5,7 +5,6 @@ const init_custom_auth_middleware = ( app, callback ) => {
   const logger= app.context.miolo.logger
 
   try {
-
     const custom_auth_middleware= callback(app)
 
     if (typeof custom_auth_middleware === 'function') {

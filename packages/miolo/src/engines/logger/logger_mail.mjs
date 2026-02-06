@@ -2,6 +2,7 @@
 import util from 'util'
 import winston from 'winston'
 import { uncolor } from 'tinguir'
+import buildErrorEmailBody from './buildErrorEmailBody.mjs'
 
 function init_logger_to_mail(config, emailer) {
 
@@ -37,7 +38,7 @@ function init_logger_to_mail(config, emailer) {
     let self = this;
 
     let title = ''
-    let body = ''
+    let body = info?.message || ''
 
     try {
       try {
@@ -52,15 +53,28 @@ function init_logger_to_mail(config, emailer) {
       title = `Could not create a title for the error (${err.toString()})`
     }
 
+    const html = buildErrorEmailBody(info)
+
     try {
-      try {
-        body = uncolor(info.message)
-      } catch(err) {
-        body = info.message.toString()
-      }  
+      const nbody = uncolor(body)
+      if (nbody.length > 0) {
+        body = nbody
+      }
     } catch(err) {
       body = `Could not create a body for the error (${err.toString()})`
     }
+
+    console.log('----------------')
+    console.log('----------------')
+    console.log('----------------')
+    console.log('----------------')
+    console.log('----------------')
+    console.log(html)
+    console.log('----------------')
+    console.log('----------------')
+    console.log('----------------')
+    console.log('----------------')
+    console.log('----------------')
     
     try {
       let subject = `${config?.name} [${info.level.toUpperCase()}] ${title}`
@@ -69,7 +83,8 @@ function init_logger_to_mail(config, emailer) {
         from    : this.from,
         to      : this.to,
         subject : subject, 
-        text    : body
+        text    : body,
+        html    : html
       }
 
       emailer.queue_email(mail)

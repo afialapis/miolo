@@ -16,4 +16,6 @@ export const CUSTOM_BLACKLIST_IPS= [
   '45.15.167.150',  // ??
   '165.227.173.41', // Frankfurt am Main, DE
   '147.135.220.53', // 
+  '47.237.23.78',   // SG
+  
 ]

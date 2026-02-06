@@ -1,6 +1,6 @@
 {
   "name": "miolo-cli",
-  "version": "3.0.0-beta.133",
+  "version": "3.0.0-beta.134",
   "description": "cli utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -35,8 +35,8 @@
     "dist": "npm run clean && npm run bundle"
   },
   "dependencies": {
-    "qs": "^6.14.0",
-    "socket.io-client": "^4.8.1"
+    "qs": "^6.14.1",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "xeira": "^2.0.0-beta.8"

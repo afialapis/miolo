@@ -6,6 +6,7 @@ import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
 import {init_logger_to_mail} from './logger_mail.mjs'
 import { createLogger, format, transports } from 'winston'
 import { reopenTransportOnHupSignal } from './reopenTransportOnHupSignal.mjs'
+import injectStackTrace from './injectStackTrace.mjs'
 // import  'winston-daily-rotate-file'
 // import { /*intre_to_str,*/ intre_now } from 'intre'
 
@@ -252,6 +253,7 @@ const init_logger = (config, emailer, prefix= 'miolo') => {
     level: config?.level || 'silly',
     format: combine(
       errors({ stack: true }),
+      injectStackTrace(),
       timestamp(),
       printf(myFormat)
     ),
