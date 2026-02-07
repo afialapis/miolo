@@ -14,7 +14,7 @@ const injectStackTrace = format((info) => {
     // 2. Buscamos en qué línea del stack aparece tu wrapper
     const wrapperIndex = stackLines.findIndex(line => line.includes(wrapperAnchor));
 
-    let cleanStackLines;
+    let cleanStackLines = [];
 
     if (wrapperIndex !== -1) {
       // CASO ÉXITO: Encontramos tu wrapper.

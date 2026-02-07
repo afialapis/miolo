@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "3.0.0-beta.134",
+  "version": "3.0.0-beta.135",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -21,7 +21,7 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "clean-root": "rm -fr node_modules package-lock.json .turbo",
-    "clean-pkgs": "rm -fr packages/**/node_modules packages/**/.turbo packages/**/dist/* && mkdir -p packages/miolo-demo/dist/cli && mkdir -p packages/miolo-demo/dist/server",
+    "clean-pkgs": "rm -fr packages/**/node_modules packages/**/.turbo packages/**/dist/* && mkdir -p packages/miolo-demo/dist/cli && mkdir -p packages/miolo-demo/dist/server && mkdir -p packages/miolo-sample/dist/cli && mkdir -p packages/miolo-sample/dist/server",
     "reset": "npm run clean-root && npm run clean-pkgs && npm i && turbo telemetry disable",
     "lint": "turbo run lint",
     "dist": "turbo run dist",
@@ -31,6 +31,9 @@
     "demo": "turbo run dev --filter=miolo-demo",
     "demo-deb": "turbo run deb --filter=miolo-demo",
     "demo-prod": "turbo run prod --filter=miolo-demo",
+    "sample": "turbo run dev --filter=miolo-sample",
+    "sample-deb": "turbo run deb --filter=miolo-sample",
+    "sample-prod": "turbo run prod --filter=miolo-sample",
     "publish-miolo": "cd ./packages/miolo && npm run dist && npm publish && cd ../..",
     "publish-miolo-cli": "cd ./packages/miolo-cli && npm run dist && npm publish && cd ../..",
     "publish-miolo-react": "cd ./packages/miolo-react && npm run dist && npm publish && cd ../..",

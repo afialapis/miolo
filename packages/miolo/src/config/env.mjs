@@ -5,7 +5,7 @@ import { intre_locale_init } from 'intre'
 import { getInfoFromPkg, findClosestPackageJson } from './util.mjs'
 
 function _get_miolo_config_path(proyEnvPath, appName) {
-  const mioloEnv = appName=='miolo-demo'
+  const mioloEnv = (appName=='miolo-demo' || appName=='miolo-sample')
     ? '../miolo/src/config/.env'
     : 'node_modules/miolo/src/config/.env'
 

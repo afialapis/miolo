@@ -1,0 +1,55 @@
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+/*
+.skeleton-loading h1,
+.skeleton-loading h2,
+.skeleton-loading h3,
+.skeleton-loading p,
+.skeleton-loading span,
+.skeleton-loading div:not(:empty) {
+  @apply
+    bg-gray-200
+    dark:bg-gray-700
+    rounded-md
+    text-transparent
+    relative
+    overflow-hidden;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  
+  / * Esto asegura que los elementos vacíos tengan un tamaño * /
+  min-height: 1rem;
+}
+*/
+
+.skeleton-loading input,
+.skeleton-loading button,
+.skeleton-loading a,
+.skeleton-loading .skeleton-apply {
+  @apply 
+    bg-gray-200
+    dark:bg-gray-700
+    rounded-md
+    text-transparent
+    relative
+    overflow-hidden;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  pointer-events: none; /* Para deshabilitar la interacción */
+}
+
+/* Manejo de imágenes y elementos con aspecto */
+.skeleton-loading img,
+.skeleton-loading [data-aspect] {
+  @apply bg-gray-200 dark:bg-gray-700;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/*
+.skeleton-loading h1,
+.skeleton-loading h2,
+.skeleton-loading h3 {
+  height: 1.5em; / * Define una altura para los títulos * /
+}
+*/

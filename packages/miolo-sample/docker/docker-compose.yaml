@@ -1,0 +1,79 @@
+services:
+  redis:
+    # Redis info
+    #  Important! Disallow external access: "127.0.0.1:6379"
+    #  Customize persistence: "--save 60 1"
+    #    Info: https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/
+    #  Ensure No-Replica mode: "--replicaof no one --maxmemory-policy noeviction"
+    #    Info: https://awstip.com/fixing-intermittent-read-only-replica-issues-in-redis-with-docker-compose-2ae7c3821be8
+    image: redis:latest
+    container_name: redis
+    restart: "unless-stopped"
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    networks:
+      - afialapis-app-network
+    command: redis-server --save 60 1 --replicaof no one --maxmemory-policy noeviction
+  
+  postgres:
+    # Postgres info
+    #  Important! Disallow external access: "127.0.0.1:5432"
+    #  Important! PGDATA needs to point to a subfolder
+    #    Info: https://hub.docker.com/_/postgres
+    image: postgres:13
+    container_name: postgres
+    restart: "unless-stopped"
+    #shm_size: 1gb
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - /postgres_data:/var/lib/postgresql/data/
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    networks:
+      - afialapis-app-network
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "postgres"
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+  miolo-sample:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: miolo-sample
+    working_dir: /miolo-sample
+    volumes:
+      - ..:/miolo-sample
+      - /var/ipsum:/var/ipsum
+      - /var/lib/GeoIP:/var/lib/GeoIP
+      - /var/log/afialapis:/var/log/afialapis
+      #- /var/run/sendmail:/var/run/sendmail
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    ports:
+      - "8005:8005"
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - afialapis-app-network
+    environment:
+      IS_DOCKER: "true"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    restart: "unless-stopped"
+    command:
+      /usr/bin/tail -f /dev/null # keep container alive
+
+networks:
+  afialapis-app-network:
+    external: true
+
+volumes:
+  redis_data:
+  postgres_data:

@@ -38,7 +38,7 @@ function init_logger_to_mail(config, emailer) {
     let self = this;
 
     let title = ''
-    let body = info?.message || ''
+    //let body = info?.message || ''
 
     try {
       try {
@@ -55,27 +55,15 @@ function init_logger_to_mail(config, emailer) {
 
     const html = buildErrorEmailBody(info)
 
-    try {
-      const nbody = uncolor(body)
-      if (nbody.length > 0) {
-        body = nbody
-      }
-    } catch(err) {
-      body = `Could not create a body for the error (${err.toString()})`
-    }
+    // try {
+    //   const nbody = uncolor(body)
+    //   if (nbody.length > 0) {
+    //     body = nbody
+    //   }
+    // } catch(err) {
+    //   body = `Could not create a body for the error (${err.toString()})`
+    // }
 
-    console.log('----------------')
-    console.log('----------------')
-    console.log('----------------')
-    console.log('----------------')
-    console.log('----------------')
-    console.log(html)
-    console.log('----------------')
-    console.log('----------------')
-    console.log('----------------')
-    console.log('----------------')
-    console.log('----------------')
-    
     try {
       let subject = `${config?.name} [${info.level.toUpperCase()}] ${title}`
 
@@ -83,7 +71,7 @@ function init_logger_to_mail(config, emailer) {
         from    : this.from,
         to      : this.to,
         subject : subject, 
-        text    : body,
+        //text    : body,
         html    : html
       }
 

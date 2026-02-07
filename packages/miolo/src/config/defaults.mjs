@@ -118,9 +118,10 @@ export default function make_config_defaults() {
                     ? (process.env.MIOLO_DB_DOCKER_HOST || 'postgres')
                     : (process.env.MIOLO_DB_HOST || 'localhost'),
           port:     process.env.MIOLO_DB_PORT || 5432,
-          database: process.env.MIOLO_DB_DATABASE || 'miolo',
-          user:     process.env.MIOLO_DB_USER || 'postgres',
-          password: process.env.MIOLO_DB_PASSWORD || 'postgres',
+          database: process.env.MIOLO_DB_DATABASE,
+          filename: process.env.MIOLO_DB_FILENAME,
+          user:     process.env.MIOLO_DB_USER,
+          password: process.env.MIOLO_DB_PASSWORD,
           // Maximum number of connection in pool
           max:      parseInt(process.env.MIOLO_DB_POOL_MAX || 5),
           // Minimum number of connection in pool

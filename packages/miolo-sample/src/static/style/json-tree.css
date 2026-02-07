@@ -1,0 +1,54 @@
+.json-tree-viewer {
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: #272822; /* Fondo oscuro */
+  color: #f8f8f2; /* Color de texto claro */
+  padding: 10px;
+  border-radius: 4px;
+  overflow: auto;
+  max-height: 500px;
+}
+
+.json-node {
+  margin-left: 20px; /* Indentación para nodos anidados */
+  white-space: nowrap; /* Evita que los valores se rompan en múltiples líneas */
+}
+
+.json-key {
+  color: #a6e22e; /* Color para las claves (verde) */
+  font-weight: bold;
+}
+
+.json-value-string {
+  color: #e6db74; /* Color para strings (amarillo) */
+}
+
+.json-value-number {
+  color: #ae81ff; /* Color para números (morado) */
+}
+
+.json-value-boolean {
+  color: #fd971f; /* Color para booleanos (naranja) */
+}
+
+.json-value-null {
+  color: #66d9ef; /* Color para null (azul claro) */
+}
+
+.json-object,
+.json-array {
+  display: inline-flex; /* Permite que el icono y el contenido estén en la misma línea */
+  align-items: center;
+}
+
+.toggle-icon {
+  cursor: pointer;
+  margin-right: 5px;
+  color: #66d9ef; /* Color para los iconos de expandir/contraer */
+  font-size: 0.8em; /* Un poco más pequeño */
+}
+
+.indent {
+  margin-left: 20px; /* Indentación para el contenido expandido */
+}

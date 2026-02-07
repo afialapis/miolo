@@ -1,0 +1,2 @@
+DROP TABLE todo;
+DROP TABLE u_user;
