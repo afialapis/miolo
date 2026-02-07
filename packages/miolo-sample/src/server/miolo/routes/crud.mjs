@@ -1,5 +1,5 @@
 export default [{
-  prefix: '/api',
+  prefix: '/crud',
   auth: {
     require: true,
     action: 'redirect',
@@ -8,7 +8,7 @@ export default [{
   routes: [
     {
       name: 'todo',
-      mode: 'r'
+      mode: 'rw'
     },
   ]
 }]

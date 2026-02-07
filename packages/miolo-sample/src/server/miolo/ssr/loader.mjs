@@ -6,7 +6,8 @@ const loader = async (ctx) => {
   let todos= []
   
   try {
-    todos = await db_todo_read(ctx.miolo, {})
+    todos = await db_todo_read(ctx, {})
+    todos = todos.sort((a, b) => b.created_at - a.created_at)
   } catch(_) {}
     
   const data = {

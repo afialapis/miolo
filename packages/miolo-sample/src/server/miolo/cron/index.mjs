@@ -11,7 +11,7 @@ export default function init_cron() {
 
   cronList.push({
     name: 'miolo-sample-foo',
-    cronTime: '* */30 * * * *',
+    cronTime: '*/30 * * * *',
     onTick: onTickFoo,
     start: true
   })

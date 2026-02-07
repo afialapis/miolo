@@ -1,16 +1,19 @@
 import { 
-  db_todo_read,
-  db_todo_find
+  db_todo_read
 } from "#server/db/io/todos/read.mjs"
 
-export async function r_todo_list(ctx, _params) {
+import { 
+  db_todo_find
+} from "#server/db/io/todos/find.mjs"
+
+export async function r_todo_list(ctx, params) {
   // const _p = ctx.miolo.parser
   // TODO Use some filtering here, or caching
   
   try {
     ctx.miolo.logger.info(`[r_todo_list] Reading todo list`)
 
-    const res= await db_todo_read(ctx.miolo, {})
+    const res= await db_todo_read(ctx.miolo, params)
 
     ctx.miolo.logger.info(`[r_todo_list] Read todo list`)
     return { ok: true, data: res}
@@ -23,15 +26,13 @@ export async function r_todo_list(ctx, _params) {
 
 
 export async function r_todo_find(ctx, params) {
-  const _p = ctx.miolo.parser
   
   try {
-    const tid = _p.parse_value_int(params.id, true)
-    ctx.miolo.logger.info(`[r_todo_find] Reading todo for tid ${tid}`)
+    ctx.miolo.logger.info(`[r_todo_find] Reading todo for tid ${params?.id}`)
 
-    const todo= await db_todo_find(ctx.miolo, tid)
+    const todo= await db_todo_find(ctx.miolo, params)
 
-    ctx.miolo.logger.info(`[r_todo_find] Read todo for tid ${tid}`)
+    ctx.miolo.logger.info(`[r_todo_find] Read todo for tid ${params?.id}`)
     return { ok: todo?.id!==undefined, data: todo}
 
   } catch(error) {
