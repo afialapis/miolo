@@ -38,31 +38,24 @@ function init_logger_to_mail(config, emailer) {
     let self = this;
 
     let title = ''
-    //let body = info?.message || ''
-
     try {
       try {
         title= info.message.split("\n")[0]
-      } catch(e) {
-        title= info.message.toString();
+      } catch(_) {
+        title= info.message.toString()
       }
-
       title= uncolor(title)
-      
     } catch(err) {
       title = `Could not create a title for the error (${err.toString()})`
     }
 
-    const html = buildErrorEmailBody(info)
+    let body = info?.message || ''
+    try {
+      body = uncolor(body)
+    } catch(_) { }
 
-    // try {
-    //   const nbody = uncolor(body)
-    //   if (nbody.length > 0) {
-    //     body = nbody
-    //   }
-    // } catch(err) {
-    //   body = `Could not create a body for the error (${err.toString()})`
-    // }
+
+    const html = buildErrorEmailBody(info)
 
     try {
       let subject = `${config?.name} [${info.level.toUpperCase()}] ${title}`
@@ -71,7 +64,7 @@ function init_logger_to_mail(config, emailer) {
         from    : this.from,
         to      : this.to,
         subject : subject, 
-        //text    : body,
+        text    : body,
         html    : html
       }
 
@@ -79,7 +72,7 @@ function init_logger_to_mail(config, emailer) {
       self.emit("logged")
       callback(null, true)
 
-    } catch(error) {
+    } catch(_) {
       // TODO - How to exxpose info from here
       self.emit("logged");
       callback(null, true);    

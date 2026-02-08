@@ -25,11 +25,11 @@ export function email_queue_pop_pendings(logger= undefined) {
 
   Object.values(EMAIL_QUEUE)
     .filter(e => !e.sent)
-    .forEach(({ id: eid, from, to, subject }) => {
+    .forEach(({ id: eid, from, to, subject, text, html }) => {
       const key = `${from}_${to}_${subject}`
       
       if (!grouped[key]) {
-        grouped[key] = { to_subject_key: key, from, to, subject, count: 0, ids: [] }
+        grouped[key] = { to_subject_key: key, from, to, subject, text, html, count: 0, ids: [] }
       }
 
       grouped[key].count++
