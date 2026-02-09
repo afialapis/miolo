@@ -3,7 +3,13 @@ export function sys_email_queue_config() {
     name: 'Emailer',
     cronTime: '* * * * *',
     onTick: async (miolo, _onCompleted) => {
-      await miolo.emailer.queue_send_emails(miolo.logger)
+
+      const n = await miolo.emailer.queue_send_emails(miolo.logger)
+      if (n == -1) {
+        miolo.logger.error(`[emailer] Error sending emails`)
+      } else {
+        miolo.logger.info(`[emailer] Sent ${n} emails`)
+      }
     },
     start: true   
   }

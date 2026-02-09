@@ -103,30 +103,36 @@ export function _init_emailer_transporter({options, defaults, silent}) {
   async function queue_send_emails(logger= undefined) {
     const pending = email_queue_pop_pendings(logger)
     if (pending.length <= 0) {
-      return
+      return 0
     }
-    _logi(logger, `[emailer] Sending emails queue (${pending.length} emails)`)
-  
-    // const emailString = await client.lPop('email_queue')
-    // if (!emailString) break
-    // const email = JSON.parse(emailString)
-  
-    for (const email of pending) {
-      if (email.count > 1) {
-        _logs(logger, `[emailer] Sending queued and stacked email [${email.subject}](x${email.count})...`)
-        email.subject = `${email.subject} (x${email.count})`
-      } else {
-        _logs(logger, `[emailer] Sending queued email [${email.subject}]...`)
-      }
-
-      send_email(email).then((res) => {
-        _logs(logger, `[emailer] Queued email [${email.subject}]sent ${res.ok ? 'OK' : 'NOT OK'}`)
-        if (res.ok) {
-          delete email_queue_remove_ids(email.ids, logger)
+    try {
+      _logi(logger, `[emailer] Sending emails queue (${pending.length} emails)`)
+    
+      // const emailString = await client.lPop('email_queue')
+      // if (!emailString) break
+      // const email = JSON.parse(emailString)
+    
+      for (const email of pending) {
+        if (email.count > 1) {
+          _logs(logger, `[emailer] Sending queued and stacked email [${email.subject}](x${email.count})...`)
+          email.subject = `${email.subject} (x${email.count})`
+        } else {
+          _logs(logger, `[emailer] Sending queued email [${email.subject}]...`)
         }
-      })
+
+        send_email(email).then((res) => {
+          _logs(logger, `[emailer] Queued email [${email.subject}]sent ${res.ok ? 'OK' : 'NOT OK'}`)
+          if (res.ok) {
+            delete email_queue_remove_ids(email.ids, logger)
+          }
+        })
+      }
+      _logs(logger, `[emailer] Sent emails ${pending.length} from queue`)
+      return pending.length
+    } catch(error) {
+      _loge(logger, `[emailer] Error sending emails queue: ${error}`)
+      return -1
     }
-    _logs(logger, `[emailer] Sent emails ${pending.length} from queue`)
   }
   
   const emailer= {

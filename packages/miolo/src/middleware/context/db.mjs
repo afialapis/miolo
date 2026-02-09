@@ -1,5 +1,5 @@
 import { getConnection as miolo_db_connection_pg, dropConnections as miolo_db_drop_connections_pg } from 'calustra/conn-postgres'
-import { getConnection as miolo_db_connection_sqlite, dropConnections as miolo_db_drop_connections_sqlite } from 'calustra/conn-sqlite'
+// import { getConnection as miolo_db_connection_sqlite, dropConnections as miolo_db_drop_connections_sqlite } from 'calustra/conn-sqlite'
 import {  miolo_cacher_options_for_calustra } from './cache/options.mjs'
 
 export function init_context_db (config, logger) {
@@ -14,12 +14,17 @@ export function init_context_db (config, logger) {
       cache: miolo_cacher_options_for_calustra(config, logger)
     }
     
-    let conn = undefined
+    //    let conn = undefined
+    //    if (config.db.config.dialect === 'sqlite') {
+    //      conn = await miolo_db_connection_sqlite(config.db.config, dbOptions)
+    //    } else {
+    //      conn = await miolo_db_connection_pg(config.db.config, dbOptions)
+    //    }
+
+    let conn = await miolo_db_connection_pg(config.db.config, dbOptions)
     if (config.db.config.dialect === 'sqlite') {
-      conn = await miolo_db_connection_sqlite(config.db.config, dbOptions)
-    } else {
-      conn = await miolo_db_connection_pg(config.db.config, dbOptions)
-    }
+      logger.error(`[miolo] SQLite is not supported yet`)
+    } 
     
     conn.get_model = conn.getModel
     
@@ -42,12 +47,17 @@ export function init_context_db (config, logger) {
       log: logger
     }
 
-    let conn = undefined
+    //    let conn = undefined
+    //    if (config.db.config.dialect === 'sqlite') {
+    //      conn = await miolo_db_connection_sqlite(config.db.config, dbOptions)
+    //    } else {
+    //      conn = await miolo_db_connection_pg(config.db.config, dbOptions)
+    //    }   
+    
+    let conn = await miolo_db_connection_pg(config.db.config, dbOptions)
     if (config.db.config.dialect === 'sqlite') {
-      conn = await miolo_db_connection_sqlite(config.db.config, dbOptions)
-    } else {
-      conn = await miolo_db_connection_pg(config.db.config, dbOptions)
-    }    
+      logger.error(`[miolo] SQLite is not supported yet`)
+    }     
 
     return conn.get_model(name)
   }  
@@ -63,9 +73,10 @@ export function init_context_db (config, logger) {
     },
     get_connection: get_connection_wrap,
     get_model: get_model_wrap,
-    drop_connections: (config.db.config.dialect === 'sqlite')
-      ? miolo_db_drop_connections_sqlite
-      : miolo_db_drop_connections_pg
+    drop_connections:miolo_db_drop_connections_pg
+    // drop_connections: (config.db.config.dialect === 'sqlite')
+    //   ? miolo_db_drop_connections_sqlite
+    //   : miolo_db_drop_connections_pg
   }
 
   return db

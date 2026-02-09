@@ -20,7 +20,6 @@ export async function email_queue_an_email(email, logger= undefined) {
 
 /* eslint-disable no-unused-vars */
 export function email_queue_pop_pendings(logger= undefined) { 
-
   let grouped = {}
 
   Object.values(EMAIL_QUEUE)
