@@ -8,15 +8,29 @@ async function main() {
   const args = yargs(process.argv.slice(2))
   const command = args._[0]
 
-  // Init env
-  process.env.NODE_ENV = 'production'
-  init_env_config()
-
-  // Init vars
-  const appName = args['app-name'] || process.env.MIOLO_NAME
-  const serverExt = 'node.bundle.mjs'
-
   try {
+    // Special handling for 'create' command - doesn't need env config
+    if (command === 'create') {
+      const createAppName = args._[1]
+      const createOptions = {
+        port: args.port,
+        auth: args.auth,
+        dest: args.dest
+      }
+      
+      const createAppHandler = (await import ('./create/create.mjs')).default
+      await createAppHandler(createAppName, createOptions)
+      return
+    }
+
+    // Init env for other commands
+    process.env.NODE_ENV = 'production'
+    init_env_config()
+
+    // Init vars
+    const appName = args['app-name'] || process.env.MIOLO_NAME
+    const serverExt = 'node.bundle.mjs'
+
 
     switch (command) {
       case 'dev':
@@ -81,7 +95,7 @@ async function main() {
 
       default:
         console.error(`[miolo] Unknown command: ${command}`)
-        console.log('[miolo] Available commands: dev, build-client, build-server, start, stop, restart')
+        console.log('[miolo] Available commands: create, dev, build-client, build-server, start, stop, restart')
         process.exit(1)
     }
   } catch (error) {

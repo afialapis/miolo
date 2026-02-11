@@ -15,26 +15,16 @@
 #.Trashes
 
 ### Windows ###
-# Windows image file caches
 Thumbs.db
 ehthumbs.db
-
-# Folder config file
 Desktop.ini
-
-# Recycle Bin used on file shares
 $RECYCLE.BIN/
 
 # App specific
 
-#coverage
 node_modules
-#bower_components
-#.tmp
-#build
-dist
+.tmp
 npm-debug.log*
-#*.sublime-project
 .pyc
 *.ods#
 *.xls#
@@ -42,16 +32,11 @@ npm-debug.log*
 *.odt#
 *.doc#
 *.docx#
-# package-lock.json
-
-backups/db
 *_pycache_
-
 .yalc
+.vscode/
 
-
-docker/data
 
 .editorconfig
-.vscode/
 .env
+.env.*

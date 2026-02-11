@@ -35,11 +35,13 @@ const local_auth_user = (username, password, done, ctx) => {
 }
 
 export default {
-  get_user_id, 
-  find_user_by_id, 
-  local_auth_user,
-  url_login : '/user/login',
-  url_logout: '/user/logout',
-  url_login_redirect: undefined,
-  url_logout_redirect: '/'
+  credentials: {
+    get_user_id, 
+    find_user_by_id, 
+    local_auth_user,
+    url_login : '/user/login',
+    url_logout: '/user/logout',
+    url_login_redirect: undefined,
+    url_logout_redirect: '/'
+  }
 }
