@@ -7,7 +7,7 @@ export async function r_todo_count_last_hours(ctx, params) {
   // TODO : handle transactions
   const options= {transaction: undefined}
 
-  const one_hour_ago = intre_now() - 60*60 * parseInt(params.hours)
+  const one_hour_ago = intre_now() - (60*60 * parseInt(params.hours))
 
   const query = `
     SELECT COUNT(1) as cnt

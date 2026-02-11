@@ -1,6 +1,6 @@
 "use client"
 import React, { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { ChevronRight, HousePlug, Route, RouteOff, Cable, ChartSpline } from "lucide-react"
 
 import {

@@ -2,8 +2,8 @@ import { useMemo } from "react"
 import { cva } from "class-variance-authority";
 
 import { cn } from "#cli/lib/utils.mjs"
-import { Label } from "#cli/components/ui/label"
-import { Separator } from "#cli/components/ui/separator"
+import { Label } from "#cli/components/ui/label.jsx"
+import { Separator } from "#cli/components/ui/separator.jsx"
 
 function FieldSet({
   className,

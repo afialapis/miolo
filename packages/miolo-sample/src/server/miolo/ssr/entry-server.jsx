@@ -1,5 +1,5 @@
 import React from 'react'
-import { StaticRouter } from 'react-router-dom/server.js'
+import { StaticRouter } from 'react-router'
 import { AppServer } from 'miolo-react'
 import App from '../../../cli/App.jsx'
 import { renderToString } from 'react-dom/server'

@@ -41,8 +41,8 @@
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "farrapa": "^3.0.0-beta.2",
-    "intre": "^3.0.0-beta.2",
+    "farrapa": "^3.0.0-beta.3",
+    "intre": "^3.0.0-beta.3",
     "lucide-react": "^0.563.0",
     "miolo-cli": "file:../miolo-cli",
     "miolo-react": "file:../miolo-react",
@@ -50,7 +50,7 @@
     "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router-dom": "^6.29.0",
+    "react-router": "^7.13.0",
     "recharts": "^3.7.0",
     "sonner": "^2.0.7",
     "tailwind": "^4.0.0",
@@ -61,6 +61,6 @@
   "devDependencies": {
     "miolo": "file:../miolo",
     "sass-embedded": "^1.97.3",
-    "xeira": "^2.0.0-beta.8"
+    "xeira": "^2.0.0-beta.10"
   }
 }

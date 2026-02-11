@@ -2,7 +2,7 @@ import React from 'react'
 import useBreads from '#cli/context/data/useBreads.mjs'
 
 import TodosProvider from '../todos/context/TodosProvider.jsx'
-import Todos from '../todos/Todos'
+import Todos from '../todos/Todos.jsx'
 
 export default function Dashboard() {
 

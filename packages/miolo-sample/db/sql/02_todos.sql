@@ -1,9 +1,14 @@
 create table todo (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  --sqlite
+  --id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  id serial,
   description text,
   done boolean,
-  created_at INTEGER DEFAULT (strftime('%s', 'now')),
-  last_update_at INTEGER DEFAULT (strftime('%s', 'now')),
+  --sqlite
+  --created_at INTEGER DEFAULT (strftime('%s', 'now')),
+  --last_update_at INTEGER DEFAULT (strftime('%s', 'now')),
+  created_At int default extract(epoch from now()),
+  last_update_At int default extract(epoch from now()),
   created_by int,
   last_update_by int
 );

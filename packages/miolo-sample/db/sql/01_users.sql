@@ -1,5 +1,7 @@
 CREATE TABLE u_user (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    --sqlite
+    --id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    id serial,
     username text,
     password text,
     name text,

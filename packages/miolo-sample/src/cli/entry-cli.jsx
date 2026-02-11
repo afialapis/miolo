@@ -1,6 +1,6 @@
 import React from 'react'
 import { hydrateRoot } from 'react-dom/client'
-import { BrowserRouter  } from 'react-router-dom'
+import { BrowserRouter  } from 'react-router'
 import { AppBrowser } from 'miolo-react'
 import App from './App.jsx'
 
@@ -12,12 +12,7 @@ const domNode = document.getElementById('root')
 
 hydrateRoot(domNode, 
   <AppBrowser>
-    <BrowserRouter
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >  
+    <BrowserRouter>  
       <App/>
     </BrowserRouter>
   </AppBrowser>

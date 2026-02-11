@@ -1,6 +1,6 @@
 {
   "name": "miolo-cli",
-  "version": "3.0.0-beta.141",
+  "version": "3.0.0-beta.143",
   "description": "cli utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -39,6 +39,6 @@
     "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
-    "xeira": "^2.0.0-beta.8"
+    "xeira": "^2.0.0-beta.10"
   }
 }

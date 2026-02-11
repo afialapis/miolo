@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router'
 import { Toaster } from '#cli/components/ui/sonner.jsx'
 import { AppSidebar } from "#cli/layout/app-sidebar.jsx"
 import {

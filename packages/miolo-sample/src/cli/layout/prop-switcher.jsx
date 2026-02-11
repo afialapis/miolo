@@ -1,8 +1,8 @@
 "use client"
 
-import React from "react"
-import { useLocation } from "react-router-dom"
-import { ChevronsUpDown, Cable, House } from "lucide-react"
+import React from 'react'
+import { useLocation } from 'react-router'
+import { ChevronsUpDown, Cable, House } from 'lucide-react'
 
 import {
   DropdownMenu,
@@ -12,14 +12,14 @@ import {
   DropdownMenuSeparator,
   //DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "#cli/components/ui/dropdown-menu.jsx"
+} from '#cli/components/ui/dropdown-menu.jsx'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "#cli/components/ui/patched/sidebar.jsx"
-import useDataContext from "#cli/context/data/useDataContext.mjs"
+} from '#cli/components/ui/patched/sidebar.jsx'
+import useDataContext from '#cli/context/data/useDataContext.mjs'
 
 export function PropSwitcher() {
   const { isMobile } = useSidebar()

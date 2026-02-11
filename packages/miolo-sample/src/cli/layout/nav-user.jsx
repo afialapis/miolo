@@ -3,7 +3,7 @@
 import React from "react"
 import useSessionContext from '#cli/context/session/useSessionContext.mjs'
 import useThemeContext from '#cli/context/theme/useThemeContext.mjs'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import {
   ChevronsUpDown,

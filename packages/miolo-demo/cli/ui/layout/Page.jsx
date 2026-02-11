@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Menu, X, Github, Sun, Moon, LogOut } from "lucide-react";
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router'
 import { useTheme } from "#cli/components/ui/theme-provider.jsx";
 
 import {withMioloContext} from 'miolo-react'

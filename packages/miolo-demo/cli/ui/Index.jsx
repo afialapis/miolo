@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router'
 import { withMioloContext } from 'miolo-react'
 import Page from '#cli/ui/layout/Page.jsx'
 import Todos from '#cli/ui/pages/Todos.jsx'
