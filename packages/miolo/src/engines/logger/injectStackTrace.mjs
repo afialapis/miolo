@@ -9,10 +9,23 @@ const injectStackTrace = format((info) => {
     // 1. Definimos nuestro "Ancla".
     // Es el archivo que actúa de frontera entre tu framework y el código de negocio.
     // Usamos una cadena parcial única para identificarlo.
-    const wrapperAnchor = 'src/engines/logger/index.mjs'; 
+    // DEV:  'src/engines/logger/index.mjs'
+    // PROD: ''
 
     // 2. Buscamos en qué línea del stack aparece tu wrapper
-    const wrapperIndex = stackLines.findIndex(line => line.includes(wrapperAnchor));
+    let wrapperIndex = stackLines.findIndex(line => line.includes('src/engines/logger/index.mjs'))
+    if (wrapperIndex == -1) {
+      for (const [lidx, l] of stackLines.entries()) {
+        if (l.includes(`${process.env.MIOLO_NAME || 'miolo'}.node.bundle.mjs`)) {
+          const segs = ['Format.transform', 'DerivedLogger']
+          segs.forEach(seg => {
+            if (l.includes(seg)) {
+              wrapperIndex = lidx
+            }
+          })
+        }
+      }
+    }
 
     let cleanStackLines = stackLines;
 

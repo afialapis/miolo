@@ -8,7 +8,7 @@ export function sys_email_queue_config() {
       if (n == -1) {
         miolo.logger.error(`[emailer] Error sending emails`)
       } else {
-        miolo.logger.info(`[emailer] Sent ${n} emails`)
+        miolo.logger.verbose(`[emailer] Sent ${n} emails`)
       }
     },
     start: true   

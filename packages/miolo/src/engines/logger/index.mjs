@@ -1,6 +1,6 @@
 // import fs from 'fs'
 // import path from 'path'
-import { red, cyan, magenta, yellow, gray, red_light } from 'tinguir'
+import { red, cyan, magenta, yellow, blue_light, blue } from 'tinguir'
 /* https://github.com/winstonjs/winston/issues/925 */
 /* https://github.com/winstonjs/winston/issues/287 */
 import {init_logger_to_mail} from './logger_mail.mjs'
@@ -16,11 +16,11 @@ const { combine, timestamp, _label, printf, errors } = format
 
 const init_logger = (config, emailer, prefix= 'miolo') => {
   const LEVEL_COLORS= {
-    silly  : gray,
-    debug  : magenta,
+    silly  : blue_light,
+    debug  : blue,
     verbose: cyan,
-    info   : yellow,
-    warn   : red_light,
+    info   : magenta,
+    warn   : yellow,
     error  : red
   }
 

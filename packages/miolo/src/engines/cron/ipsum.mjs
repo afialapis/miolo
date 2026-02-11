@@ -87,7 +87,7 @@ function _ipsum_ips_from_file(folder= _IPSUM_DEF_FOLDER, logger) {
 
 function ipsum_update(folder= _IPSUM_DEF_FOLDER, callback, logger) {
   const lerr = logger ? logger.error : console.error
-  const ldbg = logger ? logger.debug : console.log
+  const linf = logger ? logger.info : console.log
 
   if (! fs.existsSync(folder)) {
     lerr(`[cron][${cyan('IPsum')}] Folder ${folder} does not exist`)
@@ -95,7 +95,7 @@ function ipsum_update(folder= _IPSUM_DEF_FOLDER, callback, logger) {
   }
 
   try {
-    ldbg(`[cron][${cyan('IPsum')}] Updating file...`)
+    linf(`[cron][${cyan('IPsum')}] Updating file...`)
 
     ipsum_download_file((content) => {
       
@@ -105,7 +105,7 @@ function ipsum_update(folder= _IPSUM_DEF_FOLDER, callback, logger) {
       const ntot = content.split('\n').length
       const ips = _ipsum_ips_from_content(content, logger)
       const nfilt = ips.length
-      ldbg(`[cron][${cyan('IPsum')}] File downloaded. ${ntot} ips on the list (${nfilt} appearing in ${_IPSUM_NLISTS} or more lists)`)
+      linf(`[cron][${cyan('IPsum')}] File downloaded. ${ntot} ips on the list (${nfilt} appearing in ${_IPSUM_NLISTS} or more lists)`)
       
       if (callback) {
         callback(ips)
