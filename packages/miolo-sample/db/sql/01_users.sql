@@ -20,4 +20,11 @@ CREATE TABLE u_user (
 );
 
 
-INSERT INTO u_user (username, password, name, email) VALUES ('devel@afialapis.com', '49e1db7b03b5a307e4374b40d3c9cc9a72b0e38dee90f6192f6ff9c029e36914e2784acb593afa4d6790ea4e4a9d9dfefe30fc1738e19fdb4d1dcd2f3c8d503c', 'Afialapis', 'devel@afialapis.com')
+INSERT INTO u_user 
+  (username, password, name, email) 
+VALUES 
+  ('miolo-sample@miolo-sample.com',
+   '3dc91ce0dd374a6daf9ccaa4f64c5e0972eb2e7c9857a6aa524174897c0f7c55a3853e696ef8b4c3156f5fd39d65a49496a929f278ae96577e948fb85546e222', 
+   'miolo-sample', 
+   'miolo-sample@miolo-sample.com')
+;

@@ -15,10 +15,10 @@ async function main() {
       const createOptions = {
         port: args.port,
         auth: args.auth,
-        dest: args.dest
+        dest: args.d || args.dest  // Support both --d and --dest
       }
       
-      const createAppHandler = (await import ('./create/create.mjs')).default
+      const createAppHandler = (await import ('./create/index.mjs')).default
       await createAppHandler(createAppName, createOptions)
       return
     }
