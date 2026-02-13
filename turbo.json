@@ -13,6 +13,7 @@
       "outputs": []
     },
     "dist": {
+      "inputs": ["$TURBO_DEFAULT$", "!packages/miolo-demo/**", "!packages/miolo-sample/**", "!packages/miolo-test/**"],
       "cache": true,
       "dependsOn": ["^dist"],
       "outputs": ["dist/**"]

@@ -13,6 +13,7 @@ bower_components
 .tmp
 npm-debug.log*
 .turbo
+.bkp
 
 # others
 **/build

@@ -153,8 +153,8 @@ export function copyTemplate(sourcePath, destPath, appName, options = {}) {
         fs.copyFileSync(srcPath, destItemPath)
       }
     } else if (stat.isDirectory()) {
-      // Only copy src/, db/ and docker/ directories
-      if (item === 'src' || item === 'docker'|| item === 'db') {
+      // Copy src/, db/, docker/, and .agent/ directories
+      if (item === 'src' || item === 'docker' || item === 'db' || item === '.agent') {
         copyDirectory(srcPath, destItemPath, appName, options)
       }
     }

@@ -74,6 +74,17 @@ for (const dir of dirsToCopy) {
   }
 }
 
+// Copy skills from workspace root
+const skillsSrc = path.resolve(__dirname, '../../../../skills')
+const skillsDest = path.join(templatePath, '.agent', 'skills')
+if (fs.existsSync(skillsSrc)) {
+  fs.mkdirSync(path.join(templatePath, '.agent'), { recursive: true })
+  copyDirRecursive(skillsSrc, skillsDest)
+  console.log('[prepare-template]   ✓ Copied skills/')
+} else {
+  console.warn('[prepare-template]   ⚠ Skills directory not found at', skillsSrc)
+}
+
 // Step 4: Update package.json versions
 console.log('[prepare-template] Updating package.json versions...')
 const templatePackageJsonPath = path.join(templatePath, 'package.json')
