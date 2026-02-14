@@ -16,7 +16,7 @@ async function _todoListLoader(context, fetcher) {
 }
 
 const Todos = ({authenticated, fetcher, useSsrData}) => {
-  const [authType] = useSsrData('authType', 'guest')
+  const [authMode] = useSsrData('authMode', 'guest')
   const [todoList, setTodoList, refreshTodoList] = useSsrData('todoList', [], _todoListLoader)
 
   const addTodo = useCallback((text) => {
@@ -87,7 +87,7 @@ const Todos = ({authenticated, fetcher, useSsrData}) => {
 
   return (   
       <TodosList
-        authType       = {authType}
+        authMode       = {authMode}
         authenticated  = {authenticated}
         todoList       = {todoList}
         addTodo        = {addTodo}

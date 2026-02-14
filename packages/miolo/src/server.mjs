@@ -15,7 +15,7 @@ import { init_route_catch_js_error }       from './middleware/routes/catch_js_er
 import { init_guest_auth_middleware }      from './middleware/auth/guest.mjs'
 import { init_basic_auth_middleware }      from './middleware/auth/basic.mjs'
 import { init_local_auth_middleware }      from './middleware/auth/local/index.mjs'
-import { init_custom_auth_middleware }     from './middleware/auth/custom.mjs'
+import { init_google_auth_middleware }     from './middleware/auth/google/index.mjs'
 
 import { init_extra_middlewares }          from './middleware/extra.mjs'
 import { init_router }                     from './middleware/routes/router/index.mjs'
@@ -68,20 +68,20 @@ async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
   }
 
   // auth middleware
-  if (config.auth_type == 'guest') {
+  if (config.auth.guest.enabled === true) {
     init_guest_auth_middleware(app, config.auth.guest, config?.session)
   }  
 
-  if (config.auth_type == 'basic') {
+  if (config.auth.basic.enabled === true) {
     init_basic_auth_middleware(app, config.auth.basic)
   }
 
-  if (config.auth_type == 'local') {
+  if (config.auth.local.enabled === true) {
     init_local_auth_middleware(app, config.auth.local, config?.session, config?.cache)
   }
 
-  if (config.auth_type == 'custom') {
-    init_custom_auth_middleware(app, config.auth.custom)
+  if (config.auth.google.enabled === true) {
+    init_google_auth_middleware(app, config.auth.google, config?.session, config?.cache)
   }
 
   // extra middlewares

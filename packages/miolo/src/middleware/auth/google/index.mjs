@@ -18,6 +18,17 @@ import { init_session_middleware } from '../local/session/index.mjs'
 //   url_logout_redirect: '/'
 // }
 
+/*
+1. Cliente → GET /auth/google (handleGoogleLogin)
+            ↓
+2. Servidor → REDIRECT a Google (automático)
+            ↓
+3. Usuario autentica en GOOGLE.COM
+            ↓
+4. Google → REDIRECT a /auth/google/callback (automático)
+            ↓
+5. Servidor procesa (handleGoogleCallback) → Respuesta
+*/
 
 const def_get_user_id = (user, done, ctx) => done(null, user.id)
 

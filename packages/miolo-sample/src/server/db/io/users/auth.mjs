@@ -1,8 +1,6 @@
 import { intre_now } from 'intre'
 import { sha512 } from '#server/utils/crypt.mjs'
 
-const _USER_FIELDS= 'id, username, name, email, active, last_login_date, last_login_ip, last_conn_at, login_count, admin'
-
 const _USER_LAST_CONN_DELAY = 5 * 1000
 let _USER_LAST_CONN_UPDATE = 0
 const _should_update_user_last_conn = () => {
@@ -22,7 +20,7 @@ export async function db_find_user_by_id(miolo, uid) {
   const options= {transaction: undefined}
 
   const query = `
-    SELECT ${_USER_FIELDS}
+    SELECT *
       FROM u_user
      WHERE id = $1`    
 
@@ -31,7 +29,6 @@ export async function db_find_user_by_id(miolo, uid) {
   if (data.length == 0) {
     return undefined
   }
-
 
   let user= undefined
 
@@ -92,5 +89,37 @@ export async function db_auth_user(miolo, username, password) {
   miolo.logger.debug(`[db_auth_user] authing: ${username} => ${msg || 'ok'}`)
 
   return [data, msg]
+}
+
+export async function db_user_find_or_create_from_google(miolo, email, name, google_id, google_picture) {
+  miolo.logger.debug(`[db_user_find_or_create_from_google] checking: ${email}`)
+  const conn= await miolo.db.get_connection()
+  // TODO : handle transactions
+  const options= {transaction: undefined}
+
+  const query = `
+    SELECT id
+      FROM u_user
+     WHERE google_id = $1`
+  
+  const ruser= await conn.selectOne(query, [google_id], options) 
+
+  if (ruser?.id == undefined) {
+    miolo.logger.debug(`[db_user_find_or_create_from_google] user ${email} not found, creating`)
+
+    let data = {
+      name,
+      email,
+      google_id,
+      google_picture,
+      active: true
+    }
+    const uid = await conn.insert('u_user', data, options)
+    data.id = uid
+    return data
+  } else {
+    miolo.logger.debug(`[db_user_find_or_create_from_google] user ${email} found, returning`)
+    return ruser
+  }
 }
 

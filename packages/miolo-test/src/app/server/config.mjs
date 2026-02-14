@@ -5,6 +5,7 @@
 
 import def_routes from './routes/index.mjs'
 import local from './auth/local.mjs'
+import google from './auth/google.mjs'
 import basic_auth from './auth/basic.mjs'
 
 import path from 'path'
@@ -12,11 +13,11 @@ import { fileURLToPath } from 'url'
 const __my_filename = fileURLToPath(import.meta.url)
 const __my_dirname = path.dirname(__my_filename)
 
-export const makeConfig = (authType, logLevel= 'error') => {
+export const makeConfig = (authMode, logLevel= 'error') => {
   const auth = 
-      authType=='guest' ? {guest: {}}
-    : authType=='basic' ? {basic: basic_auth}
-    : {local}
+      authMode=='guest' ? {guest: {}}
+    : authMode=='basic' ? {basic: basic_auth}
+    : {local, google}
   
   return () => {
     return {

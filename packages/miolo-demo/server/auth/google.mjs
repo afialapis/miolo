@@ -1,7 +1,4 @@
-import {
-  db_find_user_by_id,
-  db_user_find_or_create_from_google
-} from '#server/db/io/users/auth.mjs'
+import {db_find_user_by_id} from '#server/db/io/users/auth.mjs'
         
 const get_user_id = (user, done, ctx) => {
   ctx.miolo.logger.debug(`[auth][google] get_user_id() - name ${user?.name} - sessionId ${ctx.sessionId}`)
@@ -27,27 +24,36 @@ const find_user_by_id = (id, done, ctx) => {
   })
 }
 
-const google_auth_user = async (accessToken, refreshToken, profile, done, ctx) => {
+const google_auth_user = (accessToken, refreshToken, profile, done, ctx) => {
   
+
   try {
     // Extract Google profile info
-    const google_id = profile.id
+    const googleId = profile.id
     const email = profile.emails?.[0]?.value
     const name = profile.displayName
-    const google_picture = profile.photos?.[0]?.value
+    const picture = profile.photos?.[0]?.value
 
     ctx.miolo.logger.debug(`[auth][google] google_auth_user() - checking credentials for ${email} - sessionId ${ctx.sessionId}`)
     
     ctx.miolo.logger.info(`[auth][google] Authenticating user: ${email}`)
-
-    return db_user_find_or_create_from_google(ctx.miolo, email, name, google_id, google_picture).then((user) => {
-      ctx.miolo.logger.debug('[auth][google] google_auth_user() - User logged in', JSON.stringify(user))
-      return done(null, user)
-    })
+    
+    // TODO: Create db_user_find_or_create_from_google function
+    // For now, returning a mock user
+    const user = {
+      id: 1,
+      email,
+      name,
+      google_id: googleId,
+      picture
+    }
+    ctx.miolo.logger.debug('[auth][google] google_auth_user() - User logged in', JSON.stringify(user))
+    
+    done(null, user)
     
   } catch (error) {
     ctx.miolo.logger.error(`[auth][google] Error authenticating user: ${error}`)
-    return done(error, null)
+    done(error, null)
   }
 }
 

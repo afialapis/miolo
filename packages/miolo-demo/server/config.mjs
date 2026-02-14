@@ -1,18 +1,19 @@
 import path from 'path'
 import def_routes from '#server/routes/index.mjs'
 import local from '#server/auth/local.mjs'
+import google from '#server/auth/google.mjs'
 import basic_auth from '#server/auth/basic.mjs'
 import { miolo_demo_ssr_loader_make } from '#server/ssr/loader.mjs'
 
 const proot = (p) => path.join(process.cwd(), p)
 
 export default function makeConfig () {
-  const authType = process.env.MIOLO_DEMO_AUTH_TYPE || 'guest'
+  const authMode = process.env.MIOLO_DEMO_AUTH_MODE || 'guest'
 
   const auth = 
-      authType=='guest' ? {guest: {}}
-    : authType=='basic' ? {basic: basic_auth}
-    : {local}
+      authMode=='guest' ? {guest: {}}
+    : authMode=='basic' ? {basic: basic_auth}
+    : {local, google}
 
   return{
     http: {
@@ -85,7 +86,7 @@ export default function makeConfig () {
     //}    
     build: {
       ssr: {
-        loader: miolo_demo_ssr_loader_make(authType)
+        loader: miolo_demo_ssr_loader_make(authMode)
       },
       //vite: {
       //  resolve: {

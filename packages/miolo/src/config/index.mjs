@@ -3,22 +3,6 @@ import { init_env_config } from './env.mjs'
 import make_config_defaults from './defaults.mjs'
 import {isPlainObject} from 'is-plain-object'
 
-function _get_auth_type(config) {
-  if (config?.auth?.basic) {
-    return 'basic'
-  }
-
-  if (config?.auth?.local) {
-    return 'local'
-  }
-
-  if (config?.auth?.custom) {
-    return 'custom'
-  }
-
-  return 'guest'
-}
-
 
 export function init_config(makeConfig) {
   // Init environment vars
@@ -32,8 +16,17 @@ export function init_config(makeConfig) {
   const all_config= merge(base_config, custom_config, {isMergeableObject: isPlainObject})
 
   // Some addendum
-  all_config.auth_type = _get_auth_type(all_config)
   all_config.use_catcher = all_config?.http?.catcher_url ? true : false
+
+  for (const auth_type of ['guest', 'basic', 'local', 'google']) {
+    if (all_config.auth?.[auth_type] == undefined) {
+      all_config.auth[auth_type] = {
+        enabled: false
+      }
+    } else if (all_config.auth[auth_type]?.enabled == undefined) {
+      all_config.auth[auth_type].enabled = true
+    }
+  }
 
   return all_config
 }

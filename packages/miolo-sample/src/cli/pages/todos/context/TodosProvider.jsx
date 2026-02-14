@@ -6,7 +6,7 @@ import useSessionContext from '#cli/context/session/useSessionContext.mjs'
 
 const TodosProvider = ({children}) => {
   const [status, setStatus] = useState('loaded')
-  const {useSsrData, fetcher, authType, authenticated} = useSessionContext()
+  const {useSsrData, fetcher, authenticated} = useSessionContext()
   const [useCrud, setUseCrud] = useState(true)
   
   const [todoList, setTodoList, refreshTodoList] = useSsrData('todos', [], async (context, fetcher) => {
@@ -112,7 +112,7 @@ const TodosProvider = ({children}) => {
       removeTodo,
       checkLastHours,
       insertFakeTodo,
-      canEdit: (authType!=='local' || authenticated),
+      canEdit: authenticated,
       useCrud, 
       setUseCrud
     }}>

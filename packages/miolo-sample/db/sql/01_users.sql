@@ -10,6 +10,9 @@ CREATE TABLE u_user (
 
     admin boolean,
 
+    google_id text,
+    google_picture text,
+
     last_login_date integer,
     last_login_ip text,
     login_count integer DEFAULT 0,

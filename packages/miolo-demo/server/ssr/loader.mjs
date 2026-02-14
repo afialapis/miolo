@@ -1,14 +1,14 @@
 import { todos_read } from '#server/db/todos.mjs'
 
 
-const miolo_demo_ssr_loader_make = (authType) => {
+const miolo_demo_ssr_loader_make = (authMode) => {
 
   const loader = async (ctx) => {
     //ctx.miolo.logger.info(`[ssr-loader] ...`)
     const todoList= await todos_read(ctx,  {})
     
     const data = {
-      authType,
+      authMode,
       todoList
     }
 

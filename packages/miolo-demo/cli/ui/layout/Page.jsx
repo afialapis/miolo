@@ -7,9 +7,8 @@ import { useTheme } from "#cli/components/ui/theme-provider.jsx";
 
 import {withMioloContext} from 'miolo-react'
 
-const Layout= ({/*useSsrData,*/ logout}) => {
+const Layout= ({logout}) => {
 
-  // const [authType] = useSsrData('authType', 'guest')
   const {isDark, setTheme} = useTheme()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

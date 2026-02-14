@@ -386,16 +386,6 @@ export default function make_config_defaults() {
       //  url_login_redirect: undefined
       //  url_logout_redirect: '/'
       //}
-      //custom: callback,
-      //  here callback receives (app)
-      //  and returns:
-      //    - a middleware function
-      //    or
-      //    - an array like [{
-      //        method: 'GET' // POST,...
-      //        url:    '/aa/bb',
-      //        callback: a middleware function
-      //      }, ...]
     },
 
     middlewares: [
