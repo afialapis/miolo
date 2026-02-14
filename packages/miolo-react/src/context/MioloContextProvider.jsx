@@ -13,12 +13,12 @@ const MioloContextProvider = ({context, children}) => {
     setMioloObj(miolo_client(context))
   }, [context])
   
-  const login = useCallback(async (credentials) => {
+  const login = useCallback(async (params) => {
     const { fetcher } = mioloObj
     const { config } = innerContext
 
     const url = config.login_url || '/login'
-    const resp = await fetcher.login(url, credentials)
+    const resp = await fetcher.login(url, params)
 
     if (resp?.data) {
       if (resp?.data?.authenticated) {

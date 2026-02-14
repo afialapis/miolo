@@ -1,41 +1,49 @@
 /* eslint-disable no-unused-vars*/
 import passport from 'koa-passport'
-import LocalStrategy from 'passport-local'
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import Router from '@koa/router'
-import { init_session_middleware } from './session/index.mjs'
+import { init_session_middleware } from '../local/session/index.mjs'
 
-// local: {
-//   get_user_id:     (user, done) => done(null, user.id), // default
-//   find_user_by_id: (id, done) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
-//   local_auth_user: (username, password, done) => done(null, {id: 1})
+// google: {
+//   get_user_id:     (user, done, ctx) => done(null, user.id), // default
+//   find_user_by_id: (id, done, ctx) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
+//   google_auth_user: (accessToken, refreshToken, profile, done, ctx) => done(null, {id: 1})
 //                    // auth=> done(null, user) noauth=> done(null, false, {message: ''}) err=> done(error, null)
+//   client_id: 'your-google-client-id',
+//   client_secret: 'your-google-client-secret',
+//   url_login : '/auth/google',
+//   url_callback : '/auth/google/callback',
+//   url_logout: '/logout',
+//   url_login_redirect: undefined
+//   url_logout_redirect: '/'
 // }
 
 
 const def_get_user_id = (user, done, ctx) => done(null, user.id)
 
 const def_find_user_by_id = (id, done, ctx) => {
-  const err = Error('You need to define auth.local.find_user_by_id')
+  const err = Error('You need to define auth.google.find_user_by_id')
   done(err, null)
 }
 
-const def_local_auth_user = (username, password, done, ctx) => {
-  const err = Error('You need to define auth.local.local_auth_user')
+const def_google_auth_user = (accessToken, refreshToken, profile, done, ctx) => {
+  const err = Error('You need to define auth.google.google_auth_user')
   done(err, null)
 }
 
 
-const init_local_auth_middleware = ( app, options, sessionConfig, cacheConfig) => {
-  const {get_user_id, find_user_by_id, local_auth_user, 
-         url_login, url_logout, url_login_redirect, url_logout_redirect} = options
-
-  //const local_options = {}
+const init_google_auth_middleware = (app, options, sessionConfig, cacheConfig) => {
+  const {get_user_id, find_user_by_id, google_auth_user,
+         client_id, client_secret, 
+         url_login, url_callback, url_logout, url_login_redirect, url_logout_redirect} = options
 
   // fallback funcs
   const get_user_id_f = get_user_id || def_get_user_id
   const find_user_by_id_f = find_user_by_id || def_find_user_by_id
-  const local_auth_user_f = local_auth_user || def_local_auth_user
-  const url_login_f = url_login || '/login'
+  const google_auth_user_f = google_auth_user || def_google_auth_user
+  
+  const url_login_f = url_login || '/auth/google'
+  const url_callback_f = url_callback || '/auth/google/callback'
   const url_logout_f = url_logout || '/logout'
   
   // init passport
@@ -65,16 +73,23 @@ const init_local_auth_middleware = ( app, options, sessionConfig, cacheConfig) =
     })
   }
 
-  const local_strategy= (ctx) => new LocalStrategy.Strategy (
-    (username, password, done) => {
+  const google_strategy = (ctx) => new GoogleStrategy(
+    {
+      clientID: client_id,
+      clientSecret: client_secret,
+      callbackURL: url_callback_f,
+      passReqToCallback: true
+    },
+    (req, accessToken, refreshToken, profile, done) => {
       ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
-      return local_auth_user_f(username, password, done, ctx)
-  })
+      return google_auth_user_f(accessToken, refreshToken, profile, done, ctx)
+    }
+  )
 
   app.use((ctx, next) => {
     passport.serializeUser(serialize_user(ctx));
     passport.deserializeUser(deserialize_user(ctx));
-    passport.use(local_strategy(ctx));
+    passport.use('google', google_strategy(ctx));
     return next();
   });
   
@@ -95,8 +110,12 @@ const init_local_auth_middleware = ( app, options, sessionConfig, cacheConfig) =
   app.use(_ensure_ctx_user)
 
   // handle auth routes
-  const handleLogIn = (ctx, next) => {
-    return passport.authenticate('local', async function(err, user, info, _status) {
+  const handleGoogleLogin = passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })
+
+  const handleGoogleCallback = (ctx, next) => {
+    return passport.authenticate('google', async function(err, user, info, _status) {
       if (user === false) {
         ctx.session.user = undefined
         ctx.session.authenticated = false
@@ -116,6 +135,7 @@ const init_local_auth_middleware = ( app, options, sessionConfig, cacheConfig) =
           },
           error: err
         }
+
       } else {
         await ctx.login(user)
         ctx.session.user = user // ctx.state.user
@@ -171,13 +191,13 @@ const init_local_auth_middleware = ( app, options, sessionConfig, cacheConfig) =
   }
   
   // Init the router
-  const login_router = new Router()
-  login_router.post(url_login_f,  handleLogIn)
-  login_router.get (url_logout_f, handleLogOut)
-  login_router.post(url_logout_f, handleLogOut)
+  const google_router = new Router()
+  google_router.get(url_login_f,    handleGoogleLogin)
+  google_router.get(url_callback_f, handleGoogleCallback)
+  google_router.get(url_logout_f,   handleLogOut)
+  google_router.post(url_logout_f,  handleLogOut)
   
-  app.use(login_router.routes()) 
-
+  app.use(google_router.routes()) 
 }
 
-export {init_local_auth_middleware}
+export {init_google_auth_middleware}

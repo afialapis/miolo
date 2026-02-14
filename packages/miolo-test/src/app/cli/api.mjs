@@ -3,8 +3,8 @@ import { TODOS } from '../data.mjs'
 
 global.fetch = fetch
 
-export const set_auth = (fetcher, auth) => {
-  fetcher.set_auth(auth)
+export const set_http_auth = (fetcher, auth) => {
+  fetcher.set_http_auth(auth)
 }
 
 export const login = async (fetcher, {username, password}) => {

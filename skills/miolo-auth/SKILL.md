@@ -1,6 +1,6 @@
 ---
 name: miolo-auth
-description: Authentication configuration and strategies for miolo applications. Use when implementing, modifying, or troubleshooting authentication, configuring auth strategies (local, basic, guest), or setting up user sessions.
+description: Authentication configuration and strategies for miolo applications. Use when implementing, modifying, or troubleshooting authentication, configuring auth strategies (local, basic, guest, google), or setting up user sessions.
 ---
 
 # Miolo Authentication
@@ -16,6 +16,7 @@ src/server/miolo/auth/
 ├── local.mjs          # Username/password authentication
 ├── basic.mjs          # HTTP Basic authentication
 ├── guest.mjs          # Guest/anonymous access
+├── google.mjs         # Google OAuth2 authentication
 └── custom.mjs         # Custom authentication logic
 ```
 
@@ -100,24 +101,90 @@ export default {
 }
 ```
 
-## Guest/Anonymous Access
+## Google OAuth2 Authentication
 
-Allow unauthenticated access (useful for read-only apps).
+OAuth2 authentication using Google accounts.
 
-**File:** `src/server/miolo/auth/guest.mjs`
+**File:** `src/server/miolo/auth/google.mjs`
 
 ```javascript
+import { db_find_user_by_id } from '#server/db/io/users/auth.mjs'
+
 export default {
-  async login(ctx) {
-    return {
-      ok: true,
-      user: { id: 0, username: 'guest', role: 'guest' }
-    }
+  google: {
+    get_user_id: (user, done, _ctx) => {
+      const uid = user?.id
+      if (uid != undefined) {
+        done(null, uid)
+      } else {
+        done(false, null)
+      }
+    },
+    
+    find_user_by_id: (id, done, ctx) => {
+      db_find_user_by_id(ctx.miolo, id).then(user => {
+        if (user == undefined) {
+          done('User not found', null)
+        } else {
+          done(null, user)
+        }
+      })
+    },
+    
+    google_auth_user: (accessToken, refreshToken, profile, done, ctx) => {
+      // Extract Google profile info
+      const googleId = profile.id
+      const email = profile.emails?.[0]?.value
+      const name = profile.displayName
+      const picture = profile.photos?.[0]?.value
+      
+      // Find or create user from Google profile
+      // TODO: Implement db_user_find_or_create_from_google
+      const user = {
+        id: 1,
+        email,
+        name,
+        google_id: googleId,
+        picture
+      }
+      
+      done(null, user)
+    },
+    
+    client_id: process.env.MIOLO_AUTH_GOOGLE_CLIENT_ID,
+    client_secret: process.env.MIOLO_AUTH_GOOGLE_CLIENT_SECRET,
+    callback_url: process.env.MIOLO_AUTH_GOOGLE_CALLBACK_URL || 'http://localhost:8001/auth/google/callback',
+    url_login: '/auth/google',
+    url_callback: '/auth/google/callback',
+    url_logout: '/user/logout',
+    url_logout_redirect: '/'
   }
 }
 ```
 
+**Key elements:**
+- `google_auth_user(accessToken, refreshToken, profile, done, ctx)` - Validates Google profile, returns user or error
+- `client_id` / `client_secret` - Google OAuth2 credentials from environment
+- `callback_url` - Where Google redirects after authentication
+- OAuth2 flow routes: `/auth/google` (start) and `/auth/google/callback` (return)
+
+**Environment variables (.env):**
+```
+MIOLO_AUTH_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+MIOLO_AUTH_GOOGLE_CLIENT_SECRET=your-google-client-secret
+MIOLO_AUTH_GOOGLE_CALLBACK_URL=http://localhost:8001/auth/google/callback
+```
+
+**OAuth2 Flow:**
+1. User clicks "Login with Google" → redirects to `/auth/google`
+2. Google authentication page opens
+3. User authenticates with Google
+4. Google redirects back to `/auth/google/callback`
+5. `google_auth_user` processes Google profile
+6. User is logged in and redirected to home
+
 ## User Session
+
 
 After successful login, user is available in routes:
 

@@ -6,21 +6,21 @@ class Fetcher {
    */
   constructor(config) {
     this.config= config
-    this.auth = undefined
+    this.http_auth = undefined
   }
 
-  set_auth(auth) {
+  set_http_auth(auth) {
     if (auth) {
       const {username, password}= auth
-      this.auth= {username, password}
+      this.http_auth= {username, password}
     }
   }
 
   get_headers() {
     let headers = {}
 
-    if (this.auth) {
-      let {username, password}= this.auth
+    if (this.http_auth) {
+      let {username, password}= this.http_auth
       username= username || ''
       password= password || ''
 
@@ -48,8 +48,8 @@ class Fetcher {
     return endpoint
   }
 
-  async _fetch (method, url, params, auth= undefined) {
-    this.set_auth(auth)
+  async _fetch (method, url, params, http_auth= undefined) {
+    this.set_http_auth(http_auth)
 
     let request = {
       method,
@@ -109,10 +109,10 @@ class Fetcher {
 
   }
   
-  async get(url, params, auth= undefined) {
+  async get(url, params, http_auth= undefined) {
     /* eslint no-unused-vars:0 */
     try {
-      const resp = await this._fetch('GET', url, omit_nil(params), auth)
+      const resp = await this._fetch('GET', url, omit_nil(params), http_auth)
       return resp
     } catch(e) {
       if (this.config?.silent_fail !== true) {
@@ -128,9 +128,9 @@ class Fetcher {
     }
   }
 
-  async post(url, data, auth= undefined) {
+  async post(url, data, http_auth= undefined) {
     try {
-      const resp = await this._fetch('POST', url, data, auth)
+      const resp = await this._fetch('POST', url, data, http_auth)
       return resp
     } catch(e) {
       if (this.config?.silent_fail !== true) {
@@ -146,8 +146,8 @@ class Fetcher {
     }
   }  
 
-  async login(url, {username, password}) {
-    const res= await this._fetch('POST', url || '/login', {username, password})
+  async login(url, params) {
+    const res= await this._fetch('POST', url || '/login', params)
     return res
   }
 
@@ -156,49 +156,49 @@ class Fetcher {
     return res  
   }
 
-  async read(url, params, auth= undefined) {
-    return await this.get(`${url}/read`, params, auth)
+  async read(url, params, http_auth= undefined) {
+    return await this.get(`${url}/read`, params, http_auth)
   }
 
-  async key_list(url, params, auth= undefined) {
-    return await this.get(`${url}/key_list`, params, auth)
+  async key_list(url, params, http_auth= undefined) {
+    return await this.get(`${url}/key_list`, params, http_auth)
   }  
 
-  async name_list(url, params, auth= undefined) {
-    const resp = await this.key_list(url, params, auth)
+  async name_list(url, params, http_auth= undefined) {
+    const resp = await this.key_list(url, params, http_auth)
     if (resp?.data) {
       resp.data = Object.values(resp.data)
     }
     return resp
   }
 
-  async find(url, id, auth= undefined) {
-    return await this.get(`${url}/find`, { id: id }, auth)
+  async find(url, id, http_auth= undefined) {
+    return await this.get(`${url}/find`, { id: id }, http_auth)
   }
 
-  async distinct(url, field, params, auth= undefined) {
+  async distinct(url, field, params, http_auth= undefined) {
     const nparams= {
       ...params,
       distinct_field: field
     }
-    return await this.get(`${url}/distinct`, nparams, auth) 
+    return await this.get(`${url}/distinct`, nparams, http_auth) 
   }
 
-  async upsave(url, data, auth= undefined) {
+  async upsave(url, data, http_auth= undefined) {
     let resp
     if (data.id == undefined) {
       delete data.id
-      resp= await this.post(`${url}/save`, data, auth)
+      resp= await this.post(`${url}/save`, data, http_auth)
     } else {
-      resp= await this.post(`${url}/update`, data, auth)
+      resp= await this.post(`${url}/update`, data, http_auth)
     }
     
     return resp
   }  
 
-  async remove(url, id, auth= undefined) {
+  async remove(url, id, http_auth= undefined) {
     const data = { id: id }
-    return await this.post(`${url}/delete`, data, auth)
+    return await this.post(`${url}/delete`, data, http_auth)
   }
 }
 

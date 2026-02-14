@@ -1,6 +1,7 @@
 import path from 'path'
-const SESSION_MAX_AGE = 86400 * 10 * 1000
 
+const SESSION_MAX_AGE = 86400 * 10 * 1000
+const root = (dir) => path.resolve(process.cwd(), dir)
 
 //
 // Notice `miolo` has support for `.env` files
@@ -22,8 +23,12 @@ export default function make_config_defaults() {
       catcher_url: '/sys/jserror',
       
       static: {
-        favicon: '',
-        folders: {}
+        favicon: root('src/static/img/favicon.ico'),
+        folders: {
+          '/build': root('build'),
+          '/static': root('src/static'),
+          '/': root('src/static/public')
+        }        
       },
       
       // cors can be:
@@ -351,6 +356,9 @@ export default function make_config_defaults() {
       //  realm: '',
       //  paths: [],
       //},
+      //guest: {
+      //  make_guest_token: undefined // (session) => ''
+      //},
       //local: {
       //  get_user_id:  (user, done, ctx) => done(null, user.id), // default
       //  find_user_by_id: (id, done, ctx) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
@@ -363,9 +371,21 @@ export default function make_config_defaults() {
       //  url_login_redirect: undefined
       //  url_logout_redirect: '/'
       //}
-      //guest: {
-      //  make_guest_token: undefined // (session) => ''
-      //},
+      //google: {
+      //  get_user_id:  (user, done, ctx) => done(null, user.id), // default
+      //  find_user_by_id: (id, done, ctx) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
+      //  google_auth_user: (accessToken, refreshToken, profile, done, ctx) => done(null, {id: 1})
+      //                   auth  => done(null, user) 
+      //                   noauth=> done(null, false, {message: ''}) 
+      //                   err   => done(error, null)
+      //  client_id: 'your-google-client-id',
+      //  client_secret: 'your-google-client-secret',    
+      //  url_login : '/auth/google',
+      //  url_callback : '/auth/google/callback',
+      //  url_logout: '/logout',
+      //  url_login_redirect: undefined
+      //  url_logout_redirect: '/'
+      //}
       //custom: callback,
       //  here callback receives (app)
       //  and returns:

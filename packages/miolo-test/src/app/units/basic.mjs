@@ -1,7 +1,7 @@
 import assert from 'assert'
 import test_app_base from "./base.mjs"
 import {
-  set_auth,
+  set_http_auth,
   insert_todos,
   insert_fake_todo,
   remove_todos,
@@ -22,8 +22,8 @@ function test_app_basic() {
   test_app_base('basic', (fetcher) => {
 
     it(`[miolo-test-app][basic] should set auth`, async function() {
-      set_auth(fetcher, AUTH)
-      assert.strictEqual(fetcher.auth.username, AUTH.username)
+      set_http_auth(fetcher, AUTH)
+      assert.strictEqual(fetcher.http_auth.username, AUTH.username)
     })
 
     it(`[miolo-test-app][basic] should clean todos`, async function() {
