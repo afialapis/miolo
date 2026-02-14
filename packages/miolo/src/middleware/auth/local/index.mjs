@@ -25,7 +25,7 @@ const def_local_auth_user = (username, password, done, ctx) => {
 }
 
 
-const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheConfig) => {
+const init_local_auth_middleware = ( app, options, sessionConfig, cacheConfig) => {
   const {get_user_id, find_user_by_id, local_auth_user, 
          url_login, url_logout, url_login_redirect, url_logout_redirect} = options
 
@@ -180,4 +180,4 @@ const init_credentials_auth_middleware = ( app, options, sessionConfig, cacheCon
 
 }
 
-export {init_credentials_auth_middleware}
+export {init_local_auth_middleware}

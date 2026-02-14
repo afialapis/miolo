@@ -26,7 +26,7 @@ export default async function create(appName, options = {}) {
     // Parse options
     const { 
       port, 
-      auth: authMethod = 'credentials',
+      auth: authMethod = 'local',
       dest = `./${appName}`
     } = options
 

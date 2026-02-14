@@ -1,6 +1,6 @@
 ---
 name: miolo-auth
-description: Authentication configuration and strategies for miolo applications. Use when implementing, modifying, or troubleshooting authentication, configuring auth strategies (credentials, basic, guest), or setting up user sessions.
+description: Authentication configuration and strategies for miolo applications. Use when implementing, modifying, or troubleshooting authentication, configuring auth strategies (local, basic, guest), or setting up user sessions.
 ---
 
 # Miolo Authentication
@@ -13,7 +13,7 @@ Miolo supports multiple built-in authentication strategies in `src/server/miolo/
 
 ```
 src/server/miolo/auth/
-├── credentials.mjs    # Username/password authentication
+├── local.mjs          # Username/password authentication
 ├── basic.mjs          # HTTP Basic authentication
 ├── guest.mjs          # Guest/anonymous access
 └── custom.mjs         # Custom authentication logic
@@ -24,7 +24,7 @@ src/server/miolo/auth/
 Authentication is configured in `src/server/miolo/index.mjs`:
 
 ```javascript
-import auth from './auth/credentials.mjs'
+import auth from './auth/local.mjs'
 // or: import auth from './auth/basic.mjs'
 // or: import auth from './auth/guest.mjs'
 
@@ -34,11 +34,11 @@ export default {
 }
 ```
 
-## Credentials Strategy (Default)
+## Local Strategy (Default)
 
 Username/password authentication with database-backed users.
 
-**File:** `src/server/miolo/auth/credentials.mjs`
+**File:** `src/server/miolo/auth/local.mjs`
 
 ```javascript
 import { db_user_auth } from '#server/db/io/users/auth.mjs'
@@ -289,7 +289,7 @@ export default {
 ## Examples from miolo-sample
 
 See actual implementations:
-- `src/server/miolo/auth/credentials.mjs` - Default auth strategy
+- `src/server/miolo/auth/local.mjs` - Default auth strategy
 - `src/server/db/io/users/auth.mjs` - User authentication query
 - `src/server/db/io/users/pwd.mjs` - Password change logic
 - `src/server/utils/crypt.mjs` - Hashing utilities

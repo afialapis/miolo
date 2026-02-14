@@ -41,13 +41,13 @@ const TodosList = ({
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder={(authType!=='credentials' || authenticated) ? "Things to be done..." : "LogIn in order to be able to add todos :/"}
-            disabled={!(authType!=='credentials' || authenticated)}
+            placeholder={(authType!=='local' || authenticated) ? "Things to be done..." : "LogIn in order to be able to add todos :/"}
+            disabled={!(authType!=='local' || authenticated)}
             className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
           />
           <button
             type="submit"
-            disabled={!(authType!=='credentials' || authenticated)}
+            disabled={!(authType!=='local' || authenticated)}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <Plus size={18} />
@@ -64,7 +64,7 @@ const TodosList = ({
           </button>
           <button
             onClick={() => insertFakeTodo()}
-            disabled={!(authType!=='credentials' || authenticated)}
+            disabled={!(authType!=='local' || authenticated)}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <Bone size={18} />
@@ -104,7 +104,7 @@ const TodosList = ({
                 <div className="flex items-center space-x-3">
                   <button
                     onClick={() => toggleTodo(todo.id)}
-                    disabled={!(authType!=='credentials' || authenticated)}
+                    disabled={!(authType!=='local' || authenticated)}
                     className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                       todo.done
                         ? 'bg-green-500 border-green-500 text-white'
@@ -126,7 +126,7 @@ const TodosList = ({
                 </div>
                 <button
                   onClick={() => removeTodo(todo.id)}
-                  disabled={!(authType!=='credentials' || authenticated)}
+                  disabled={!(authType!=='local' || authenticated)}
                   className="p-1.5 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 rounded-full hover:bg-red-50 dark:hover:bg-gray-700 transition-colors"
                   aria-label="Delete todo"
                 >

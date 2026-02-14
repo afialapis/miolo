@@ -63,7 +63,7 @@ export async function r_get_profile(ctx, params) {
 
 ### Credentials Auth Methods
 
-When using credentials authentication strategy, additional methods are available:
+When using local authentication strategy, additional methods are available:
 
 ```javascript
 export async function r_user_login(ctx, params) {
@@ -99,14 +99,14 @@ export async function r_protected_route(ctx, params) {
 }
 ```
 
-**Available methods (credentials auth):**
+**Available methods (local auth):**
 - `ctx.isAuthenticated()` - Returns `true` if user is authenticated
 - `ctx.isUnauthenticated()` - Returns `true` if user is NOT authenticated
 - `await ctx.login(username, password)` - Attempt to authenticate user
 - `ctx.logout()` - End user session
 
 **User access:**
-- `ctx.state.user` - Authenticated user object (credentials auth)
+- `ctx.state.user` - Authenticated user object (local auth)
 - `ctx.session.user` - User object (all auth methods)
 
 ### Backend Usage Example

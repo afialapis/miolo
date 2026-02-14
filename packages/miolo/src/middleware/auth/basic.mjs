@@ -1,6 +1,6 @@
 import koa_mount from 'koa-mount'
 
-const _get_credentials = (req) => {
+const _get_basic_credentials = (req) => {
   let sauth= req?.headers?.authorization
 
   if (! sauth) {
@@ -31,7 +31,7 @@ const init_basic_auth_middleware = ( app, options ) => {
   async function basic_auth_middleware(ctx, next) {
     let au_user
     try {
-      au_user= _get_credentials(ctx.request)
+      au_user= _get_basic_credentials(ctx.request)
     } catch(_) {}
 
     const unauth_err = () => {

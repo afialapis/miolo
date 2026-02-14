@@ -8,8 +8,8 @@ function _get_auth_type(config) {
     return 'basic'
   }
 
-  if (config?.auth?.credentials) {
-    return 'credentials'
+  if (config?.auth?.local) {
+    return 'local'
   }
 
   if (config?.auth?.custom) {

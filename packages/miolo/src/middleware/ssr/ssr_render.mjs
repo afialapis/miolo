@@ -20,8 +20,8 @@ export async function init_ssr_render_middleware(app, config, devRender= undefin
         hostname: httpConfig?.hostname,
         port: httpConfig?.port,
         catcher_url: httpConfig?.catcher_url,
-        login_url: authConfig?.credentials?.url_login,
-        logout_url: authConfig?.credentials?.url_logout,
+        login_url: authConfig?.local?.url_login,
+        logout_url: authConfig?.local?.url_logout,
         //socket: {
         //  enabled: socketConfig?.enabled===true,
         //  config: socketConfig?.config?.cli || {}

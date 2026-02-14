@@ -351,7 +351,7 @@ export default function make_config_defaults() {
       //  realm: '',
       //  paths: [],
       //},
-      //credentials: {
+      //local: {
       //  get_user_id:  (user, done, ctx) => done(null, user.id), // default
       //  find_user_by_id: (id, done, ctx) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
       //  local_auth_user: (username, password, done, ctx) => done(null, {id: 1})

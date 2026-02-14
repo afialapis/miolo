@@ -112,7 +112,7 @@ const TodosProvider = ({children}) => {
       removeTodo,
       checkLastHours,
       insertFakeTodo,
-      canEdit: (authType!=='credentials' || authenticated),
+      canEdit: (authType!=='local' || authenticated),
       useCrud, 
       setUseCrud
     }}>

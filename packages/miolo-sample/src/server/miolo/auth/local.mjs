@@ -35,7 +35,7 @@ const local_auth_user = (username, password, done, ctx) => {
 }
 
 export default {
-  credentials: {
+  local: {
     get_user_id, 
     find_user_by_id, 
     local_auth_user,

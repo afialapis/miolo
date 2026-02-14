@@ -1,5 +1,5 @@
 import http from './http.mjs'
-import auth from './auth/credentials.mjs'
+import auth from './auth/local.mjs'
 import db from './db.mjs'
 import routes from './routes/index.mjs'
 import cache from './cache.mjs'

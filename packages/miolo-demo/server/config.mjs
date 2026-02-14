@@ -1,6 +1,6 @@
 import path from 'path'
 import def_routes from '#server/routes/index.mjs'
-import credentials from '#server/auth/credentials.mjs'
+import local from '#server/auth/local.mjs'
 import basic_auth from '#server/auth/basic.mjs'
 import { miolo_demo_ssr_loader_make } from '#server/ssr/loader.mjs'
 
@@ -12,7 +12,7 @@ export default function makeConfig () {
   const auth = 
       authType=='guest' ? {guest: {}}
     : authType=='basic' ? {basic: basic_auth}
-    : {credentials}
+    : {local}
 
   return{
     http: {
