@@ -18,7 +18,7 @@ export function init_config(makeConfig) {
   // Some addendum
   all_config.use_catcher = all_config?.http?.catcher_url ? true : false
 
-  for (const auth_type of ['guest', 'basic', 'local', 'google']) {
+  for (const auth_type of ['guest', 'basic', 'passport']) {
     if (all_config.auth?.[auth_type] == undefined) {
       all_config.auth[auth_type] = {
         enabled: false

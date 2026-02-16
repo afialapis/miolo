@@ -360,32 +360,28 @@ export default function make_config_defaults() {
       //guest: {
       //  make_guest_token: undefined // (session) => ''
       //},
-      //local: {
+      //passport: {
       //  get_user_id:  (user, done, ctx) => done(null, user.id), // default
       //  find_user_by_id: (id, done, ctx) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
       //  local_auth_user: (username, password, done, ctx) => done(null, {id: 1})
       //                   auth  => done(null, user) 
       //                   noauth=> done(null, false, {message: ''}) 
       //                   err   => done(error, null)
-      //  url_login : '/login',
-      //  url_logout: '/logout',
-      //  url_login_redirect: undefined
-      //  url_logout_redirect: '/'
-      //}
-      //google: {
-      //  get_user_id:  (user, done, ctx) => done(null, user.id), // default
-      //  find_user_by_id: (id, done, ctx) => done(null, {id: 1}),  // ok=> done(null, user)  err=> done(error, null)
+      //  local_url_login : '/login',
+      //  local_url_logout: '/logout',
+      //  local_url_login_redirect: undefined
+      //  local_url_logout_redirect: '/'
       //  google_auth_user: (accessToken, refreshToken, profile, done, ctx) => done(null, {id: 1})
       //                   auth  => done(null, user) 
       //                   noauth=> done(null, false, {message: ''}) 
       //                   err   => done(error, null)
-      //  client_id: 'your-google-client-id',
-      //  client_secret: 'your-google-client-secret',    
-      //  url_login : '/auth/google',
-      //  url_callback : '/auth/google/callback',
-      //  url_logout: '/logout',
-      //  url_login_redirect: undefined
-      //  url_logout_redirect: '/'
+      //  google_client_id: 'your-google-client-id',
+      //  google_client_secret: 'your-google-client-secret',    
+      //  google_url_login : '/auth/google',
+      //  google_url_callback : '/auth/google/callback',
+      //  google_url_logout: '/logout',
+      //  google_url_login_redirect: undefined
+      //  google_url_logout_redirect: '/'
       //}
     },
 

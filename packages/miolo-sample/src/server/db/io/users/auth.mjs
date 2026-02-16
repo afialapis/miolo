@@ -20,7 +20,8 @@ export async function db_find_user_by_id(miolo, uid) {
   const options= {transaction: undefined}
 
   const query = `
-    SELECT *
+    SELECT id, username, name, email, active, admin, google_id, google_picture, 
+           last_login_date, last_login_ip, login_count, last_conn_at, created_at, last_update_at
       FROM u_user
      WHERE id = $1`    
 
@@ -98,7 +99,8 @@ export async function db_user_find_or_create_from_google(miolo, email, name, goo
   const options= {transaction: undefined}
 
   const query = `
-    SELECT *
+    SELECT id, username, name, email, active, admin, google_id, google_picture, 
+           last_login_date, last_login_ip, login_count, last_conn_at, created_at, last_update_at
       FROM u_user
      WHERE google_id = $1`
   
