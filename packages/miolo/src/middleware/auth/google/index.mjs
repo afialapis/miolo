@@ -61,11 +61,11 @@ const init_google_auth_middleware = (app, options, sessionConfig, cacheConfig) =
   const serialize_user = (ctx) => (user, done) => {
     process.nextTick(function() {
       try {
-        ctx.miolo.logger.debug(`[auth][local] serializing user...`)
+        ctx.miolo.logger.debug(`[auth][google] serializing user...`)
         ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
         return get_user_id_f(user, done, ctx)
       } catch(error) {
-        ctx.miolo.logger.error(`[auth][local] Error serializing user: ${error}`)
+        ctx.miolo.logger.error(`[auth][google] Error serializing user: ${error}`)
         return done(error, null)
       }
     })
@@ -74,11 +74,11 @@ const init_google_auth_middleware = (app, options, sessionConfig, cacheConfig) =
   const deserialize_user = (ctx) => (id, done) => {
     process.nextTick(function() {
       try {
-        ctx.miolo.logger.debug(`[auth][local] deserializing user...`)
+        ctx.miolo.logger.debug(`[auth][google] deserializing user...`)
         ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
         return find_user_by_id_f(id, done, ctx)
       } catch(error) {
-        ctx.miolo.logger.error(`[auth][local] Error deserializing user: ${error}`)
+        ctx.miolo.logger.error(`[auth][google] Error deserializing user: ${error}`)
         return done(error, null)
       }
     })
@@ -91,7 +91,7 @@ const init_google_auth_middleware = (app, options, sessionConfig, cacheConfig) =
       callbackURL: url_callback_f,
       passReqToCallback: true
     },
-    (req, accessToken, refreshToken, profile, done) => {
+    (_req, accessToken, refreshToken, profile, done) => {
       ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
       return google_auth_user_f(accessToken, refreshToken, profile, done, ctx)
     }
@@ -126,8 +126,10 @@ const init_google_auth_middleware = (app, options, sessionConfig, cacheConfig) =
   })
 
   const handleGoogleCallback = (ctx, next) => {
+    ctx.miolo.logger.debug(`[auth][google] handleGoogleCallback() - authenticating...`)
     return passport.authenticate('google', async function(err, user, info, _status) {
-      if (user === false) {
+      if (err || (user === false)) {
+        ctx.miolo.logger.debug(`[auth][google] handleGoogleCallback() - user not authenticated`)
         ctx.session.user = undefined
         ctx.session.authenticated = false
         ctx.sessionId = undefined
@@ -147,28 +149,33 @@ const init_google_auth_middleware = (app, options, sessionConfig, cacheConfig) =
           error: err
         }
 
+        ctx.redirect('/')
+
       } else {
+        ctx.miolo.logger.debug(`[auth][google] handleGoogleCallback() - user authenticated`)
         await ctx.login(user)
         ctx.session.user = user // ctx.state.user
         ctx.session.authenticated = true
         
-        ctx.body = { 
-          ok: true,
-          data: {
-            user : user,
-            authenticated: true
-          }
-        }
+        // ctx.body = { 
+        //   ok: true,
+        //   data: {
+        //     user : user,
+        //     authenticated: true
+        //   }
+        // }
 
-        if (url_login_redirect!=undefined) {
-          ctx.redirect(url_login_redirect)
-        }
+        //if (url_login_redirect!=undefined) {
+        //  ctx.redirect(url_login_redirect)
+        //}
+        ctx.redirect('/')
       }
-    })(ctx)
+    })(ctx, next)
   }
 
   const handleLogOut = async (ctx, next) => {
     if (ctx.session.authenticated) {
+      ctx.miolo.logger.debug(`[auth][google] handleLogOut() - logging out...`)
       ctx.session.user = undefined
       ctx.session.authenticated = false
       ctx.sessionId = undefined
@@ -187,6 +194,7 @@ const init_google_auth_middleware = (app, options, sessionConfig, cacheConfig) =
         await ctx.logout()
       }  
     } else {
+      ctx.miolo.logger.debug(`[auth][google] handleLogOut() - logging out (unauthed)...`)
       // This will show error logs on the catcher middleware
       // ctx.throw(401)
       

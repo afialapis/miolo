@@ -27,6 +27,7 @@ export async function init_ssr_render_middleware(app, config, devRender= undefin
         //  config: socketConfig?.config?.cli || {}
         //}
       }
+      ctx.miolo.logger.debug(`[render-ssr] rendering an ${ctx?.session?.authenticated === true ? 'authenticated' : 'unauthenticated'} context...`)
 
       const ssr_data = await ssr_loader(ctx)
       const context = ssr_build_context(ctx, config, ssr_data)

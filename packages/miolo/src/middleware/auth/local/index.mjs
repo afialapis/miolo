@@ -96,8 +96,10 @@ const init_local_auth_middleware = ( app, options, sessionConfig, cacheConfig) =
 
   // handle auth routes
   const handleLogIn = (ctx, next) => {
+    ctx.miolo.logger.debug(`[auth][local] handleLogIn() - authenticating...`)
     return passport.authenticate('local', async function(err, user, info, _status) {
       if (user === false) {
+        ctx.miolo.logger.debug(`[auth][local] handleLogIn() - user not authenticated`)
         ctx.session.user = undefined
         ctx.session.authenticated = false
         ctx.sessionId = undefined
@@ -117,6 +119,7 @@ const init_local_auth_middleware = ( app, options, sessionConfig, cacheConfig) =
           error: err
         }
       } else {
+        ctx.miolo.logger.debug(`[auth][local] handleLogIn() - user authenticated`)
         await ctx.login(user)
         ctx.session.user = user // ctx.state.user
         ctx.session.authenticated = true
@@ -138,6 +141,8 @@ const init_local_auth_middleware = ( app, options, sessionConfig, cacheConfig) =
 
   const handleLogOut = async (ctx, next) => {
     if (ctx.session.authenticated) {
+      ctx.miolo.logger.debug(`[auth][local] handleLogOut() - logging out...`)
+
       ctx.session.user = undefined
       ctx.session.authenticated = false
       ctx.sessionId = undefined
@@ -156,6 +161,8 @@ const init_local_auth_middleware = ( app, options, sessionConfig, cacheConfig) =
         await ctx.logout()
       }  
     } else {
+      ctx.miolo.logger.debug(`[auth][local] handleLogOut() - logging out (unauthed)...`)
+
       // This will show error logs on the catcher middleware
       // ctx.throw(401)
       

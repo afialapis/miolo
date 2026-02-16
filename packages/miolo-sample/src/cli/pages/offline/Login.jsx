@@ -1,10 +1,8 @@
 import React from 'react'
 
-import useSessionContext from '#cli/context/session/useSessionContext.mjs'
 import { LoginForm } from "./LoginForm.jsx"
 
 const Login = () => {
-  const {login} = useSessionContext()
   
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
@@ -29,7 +27,6 @@ const Login = () => {
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
             <LoginForm
-               onLogin = {login}
               /* TODO orgotLink*/
               />
           </div>

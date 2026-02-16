@@ -1,5 +1,6 @@
 import http from './http.mjs'
-import auth from './auth/local.mjs'
+import local from './auth/local.mjs'
+import google from './auth/google.mjs'
 import db from './db.mjs'
 import routes from './routes/index.mjs'
 import cache from './cache.mjs'
@@ -10,7 +11,10 @@ export default () => {
   return {
     name: 'miolo-sample',
     http,
-    auth,
+    auth: {
+      //local,
+      google
+    },
     db,
     routes,
     cache,

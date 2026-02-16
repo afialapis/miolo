@@ -27,6 +27,6 @@ export function init_config(makeConfig) {
       all_config.auth[auth_type].enabled = true
     }
   }
-
+  
   return all_config
 }

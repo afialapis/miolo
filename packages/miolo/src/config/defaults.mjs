@@ -113,6 +113,7 @@ export default function make_config_defaults() {
         secure: process.env?.MIOLO_SESSION_SECURE === 'true',
         
         /** (string) session cookie sameSite options (default null, don't set it) */
+        /** NOTE: Google Auth requires 'lax'  */
         sameSite: process.env.MIOLO_SESSION_SAME_SITE || 'lax', // 'strict', 
       }
     },

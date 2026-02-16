@@ -98,7 +98,7 @@ export async function db_user_find_or_create_from_google(miolo, email, name, goo
   const options= {transaction: undefined}
 
   const query = `
-    SELECT id
+    SELECT *
       FROM u_user
      WHERE google_id = $1`
   
@@ -106,20 +106,21 @@ export async function db_user_find_or_create_from_google(miolo, email, name, goo
 
   if (ruser?.id == undefined) {
     miolo.logger.debug(`[db_user_find_or_create_from_google] user ${email} not found, creating`)
+    const UUser= await conn.get_model('u_user')
 
     let data = {
       name,
       email,
       google_id,
       google_picture,
-      active: true
+      active: 1
     }
-    const uid = await conn.insert('u_user', data, options)
+    const uid = await UUser.insert(data, options)
     data.id = uid
-    return data
+    return [data, undefined]
   } else {
     miolo.logger.debug(`[db_user_find_or_create_from_google] user ${email} found, returning`)
-    return ruser
+    return [ruser, undefined]
   }
 }
 
