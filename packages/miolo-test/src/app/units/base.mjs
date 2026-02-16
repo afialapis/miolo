@@ -25,7 +25,7 @@ function test_app_base (authMode, callback) {
 
     it(`[miolo-test-app][${authMode}] should start app`, async function() {
       app = await test_server(authMode)
-      assert.strictEqual(app.context.miolo.config[authMode].enabled, true)
+      assert.strictEqual(app.context.miolo.config.auth[authMode].enabled, true)
     })
 
     it(`[miolo-test-app][${authMode}] should prepare database`, async function() {

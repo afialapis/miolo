@@ -98,24 +98,30 @@ const init_passport_auth_middleware = ( app, options, sessionConfig, cacheConfig
       return local_auth_user_f(username, password, done, ctx)
   })
 
-  const google_strategy = (ctx) => new GoogleStrategy(
-    {
-      clientID: google_client_id,
-      clientSecret: google_client_secret,
-      callbackURL: google_url_callback_f,
-      passReqToCallback: true
-    },
-    (_req, accessToken, refreshToken, profile, done) => {
-      ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
-      return google_auth_user_f(accessToken, refreshToken, profile, done, ctx)
-    }
-  )  
+  let google_strategy 
+  
+  if (google_client_id) {
+      google_strategy = (ctx) => new GoogleStrategy(
+      {
+        clientID: google_client_id,
+        clientSecret: google_client_secret,
+        callbackURL: google_url_callback_f,
+        passReqToCallback: true
+      },
+      (_req, accessToken, refreshToken, profile, done) => {
+        ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
+        return google_auth_user_f(accessToken, refreshToken, profile, done, ctx)
+      }
+    )  
+  }
 
   app.use((ctx, next) => {
     passport.serializeUser(serialize_user(ctx))
     passport.deserializeUser(deserialize_user(ctx))
     passport.use(local_strategy(ctx))
-    passport.use('google', google_strategy(ctx))
+    if (google_client_id) {
+      passport.use('google', google_strategy(ctx))
+    }
     return next()
   })
   

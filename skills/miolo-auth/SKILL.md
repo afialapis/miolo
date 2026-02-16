@@ -1,6 +1,6 @@
 ---
 name: miolo-auth
-description: Authentication configuration and strategies for miolo applications. Use when implementing, modifying, or troubleshooting authentication, configuring auth strategies (local, basic, guest, google), or setting up user sessions.
+description: Authentication configuration and strategies for miolo applications. Use when implementing, modifying, or troubleshooting authentication, configuring auth strategies (passport, basic, guest), or setting up user sessions.
 ---
 
 # Miolo Authentication
@@ -9,15 +9,13 @@ Authentication configuration and strategies for miolo applications.
 
 ## Authentication Strategies
 
-Miolo supports multiple built-in authentication strategies in `src/server/miolo/auth/`:
+Miolo supports multiple built-in authentication strategies:
 
 ```
 src/server/miolo/auth/
-├── local.mjs          # Username/password authentication
+├── passport.mjs       # Passport-based auth (local + OAuth2)
 ├── basic.mjs          # HTTP Basic authentication
-├── guest.mjs          # Guest/anonymous access
-├── google.mjs         # Google OAuth2 authentication
-└── custom.mjs         # Custom authentication logic
+└── guest.mjs          # Guest/anonymous access
 ```
 
 ## Configuring Authentication
@@ -25,56 +23,189 @@ src/server/miolo/auth/
 Authentication is configured in `src/server/miolo/index.mjs`:
 
 ```javascript
-import auth from './auth/local.mjs'
+import passport from './auth/passport.mjs'
 // or: import auth from './auth/basic.mjs'
 // or: import auth from './auth/guest.mjs'
 
 export default {
-  auth,
+  auth: {
+    passport  // Enables Passport.js with local + Google OAuth2
+  },
   // ... other config
 }
 ```
 
-## Local Strategy (Default)
+## Passport Strategy (Recommended)
 
-Username/password authentication with database-backed users.
+Unified authentication using Passport.js supporting both **local (username/password)** and **Google OAuth2**.
 
-**File:** `src/server/miolo/auth/local.mjs`
+**File:** `src/server/miolo/auth/passport.mjs`
 
 ```javascript
-import { db_user_auth } from '#server/db/io/users/auth.mjs'
+import { db_find_user_by_id, db_auth_user, 
+         db_user_find_or_create_from_google } from '#server/db/io/users/auth.mjs'
+
+const get_user_id = (user, done, ctx) => {
+  const uid = user?.id
+  if (uid != undefined) {
+    return done(null, uid)
+  } else {
+    const err = new Error('User id is undefined')
+    return done(err, null)
+  }
+}
+
+const find_user_by_id = (id, done, ctx) => {
+  ctx.miolo.logger.debug(`[auth] find_user_by_id() - Searching user id ${id}`)
+  db_find_user_by_id(ctx.miolo, id).then(user => {
+    if (user == undefined) {
+      const err = new Error('User not found')
+      return done(err, null)
+    } else {
+      return done(null, user)
+    }
+  })
+}
+
+const local_auth_user = (username, password, done, ctx) => {
+  ctx.miolo.logger.debug(`[auth][local] Checking credentials for ${username}`)
+  
+  db_auth_user(ctx.miolo, username, password).then(([user, msg]) => {
+    if (user == undefined) {
+      const err = new Error(msg)
+      return done(err, null)
+    } else {
+      return done(null, user)
+    }
+  })
+}
+
+const google_auth_user = async (accessToken, refreshToken, profile, done, ctx) => {
+  try {
+    const google_id = profile.id
+    const email = profile.emails?.[0]?.value
+    const name = profile.displayName
+    const google_picture = profile.photos?.[0]?.value
+
+    ctx.miolo.logger.info(`[auth][google] Authenticated user: ${email}`)
+
+    return db_user_find_or_create_from_google(
+      ctx.miolo, email, name, google_id, google_picture
+    ).then(([user, msg]) => {
+      if (user == undefined) {
+        const err = new Error(msg)
+        return done(err, null)
+      } else {
+        return done(null, user)
+      }
+    })
+  } catch (error) {
+    ctx.miolo.logger.error(`[auth][google] Error: ${error}`)
+    return done(error, null)
+  }
+}
 
 export default {
-  urls: {
-    login: '/page/login',
-    logout: '/page/logout',
-    home: '/'
-  },
-
-  async login(ctx, credentials) {
-    const { username, password } = credentials
-    
-    const user = await db_user_auth(ctx, { username, password })
-    
-    if (!user) {
-      return { ok: false, error: 'Invalid credentials' }
-    }
-    
-    return { ok: true, user }
-  },
-
-  async logout(ctx) {
-    // Cleanup if needed
-    return { ok: true }
-  }
+  get_user_id,
+  find_user_by_id,
+  local_auth_user,
+  local_url_login: '/login',
+  local_url_logout: '/logout',
+  local_url_login_redirect: undefined,
+  local_url_logout_redirect: '/',
+  google_auth_user,
+  google_client_id: process.env.MIOLO_AUTH_GOOGLE_CLIENT_ID,
+  google_client_secret: process.env.MIOLO_AUTH_GOOGLE_CLIENT_SECRET,
+  google_url_login: '/auth/google',
+  google_url_callback: process.env.MIOLO_AUTH_GOOGLE_CALLBACK_URL || '/auth/google/callback',
+  google_url_logout: '/logout',
+  google_url_logout_redirect: '/'
 }
 ```
 
-**Key elements:**
-- `urls` - Define login, logout, home page paths
-- `login(ctx, credentials)` - Validates credentials, returns user or error
-- `logout(ctx)` - Optional cleanup on logout
-- Uses database function from `db/io/users/auth.mjs`
+### Passport Configuration Elements
+
+#### Common Functions
+- `get_user_id(user, done, ctx)` - Extracts user ID for session storage
+- `find_user_by_id(id, done, ctx)` - Retrieves user by ID (session deserialization)
+
+#### Local Authentication (Username/Password)
+- `local_auth_user(username, password, done, ctx)` - Validates credentials
+- `local_url_login` - Login endpoint (default: `/login`)
+- `local_url_logout` - Logout endpoint (default: `/logout`)
+- `local_url_login_redirect` - Redirect after login (optional)
+- `local_url_logout_redirect` - Redirect after logout (default: `/`)
+
+#### Google OAuth2 Authentication
+- `google_auth_user(accessToken, refreshToken, profile, done, ctx)` - Handles Google profile
+- `google_client_id` - Google OAuth2 client ID (from env)
+- `google_client_secret` - Google OAuth2 client secret (from env)
+- `google_url_login` - OAuth initiation endpoint (default: `/auth/google`)
+- `google_url_callback` - OAuth callback endpoint (from env or `/auth/google/callback`)
+- `google_url_logout` - Logout endpoint (default: `/logout`)
+- `google_url_logout_redirect` - Redirect after logout (default: `/`)
+
+### Environment Variables
+
+**Required for Google OAuth2 (.env):**
+```
+MIOLO_AUTH_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+MIOLO_AUTH_GOOGLE_CLIENT_SECRET=your-client-secret
+MIOLO_AUTH_GOOGLE_CALLBACK_URL=http://localhost:8001/auth/google/callback
+```
+
+**Session configuration:**
+```
+MIOLO_SESSION_SALT=your-random-salt-here
+MIOLO_SESSION_SECRET=your-session-secret
+MIOLO_SESSION_SAME_SITE=lax  # Required for Google OAuth2
+```
+
+### Google Cloud Console Setup
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a project or select existing one
+3. Enable Google+ API
+4. Create OAuth 2.0 credentials:
+   - Application type: Web application
+   - Authorized JavaScript origins: `http://localhost:8001`
+   - Authorized redirect URIs: `http://localhost:8001/auth/google/callback`
+5. Copy Client ID and Client Secret to your `.env`
+
+### OAuth2 Flow
+
+1. User clicks "Login with Google" → `window.location.href = '/auth/google'`
+2. Server redirects to Google authentication page
+3. User authenticates with Google
+4. Google redirects back to `/auth/google/callback`
+5. `google_auth_user` processes Google profile
+6. User found/created in database
+7. User logged in and redirected to home
+
+### Frontend Login Button
+
+```jsx
+// For local login (POST form)
+<form onSubmit={handleLocalLogin}>
+  <input name="username" />
+  <input name="password" type="password" />
+  <button type="submit">Login</button>
+</form>
+
+// For Google OAuth2 (Navigate to endpoint)
+<button onClick={() => window.location.href = '/auth/google'}>
+  Login with Google
+</button>
+```
+
+**IMPORTANT:** Google OAuth2 requires **navigation**, not fetch/AJAX:
+```javascript
+// ✅ CORRECT
+window.location.href = '/auth/google'
+
+// ❌ WRONG - Causes CORS errors
+fetch('/auth/google')
+```
 
 ## Basic Authentication
 
@@ -87,7 +218,6 @@ export default {
   async login(ctx, credentials) {
     const { username, password } = credentials
     
-    // Validate against environment or database
     if (username === process.env.API_USER && 
         password === process.env.API_PASSWORD) {
       return {
@@ -101,102 +231,36 @@ export default {
 }
 ```
 
-## Google OAuth2 Authentication
+## Guest Authentication
 
-OAuth2 authentication using Google accounts.
+Anonymous access without credentials.
 
-**File:** `src/server/miolo/auth/google.mjs`
+**File:** `src/server/miolo/auth/guest.mjs`
 
 ```javascript
-import { db_find_user_by_id } from '#server/db/io/users/auth.mjs'
-
 export default {
-  google: {
-    get_user_id: (user, done, _ctx) => {
-      const uid = user?.id
-      if (uid != undefined) {
-        done(null, uid)
-      } else {
-        done(false, null)
-      }
-    },
-    
-    find_user_by_id: (id, done, ctx) => {
-      db_find_user_by_id(ctx.miolo, id).then(user => {
-        if (user == undefined) {
-          done('User not found', null)
-        } else {
-          done(null, user)
-        }
-      })
-    },
-    
-    google_auth_user: (accessToken, refreshToken, profile, done, ctx) => {
-      // Extract Google profile info
-      const googleId = profile.id
-      const email = profile.emails?.[0]?.value
-      const name = profile.displayName
-      const picture = profile.photos?.[0]?.value
-      
-      // Find or create user from Google profile
-      // TODO: Implement db_user_find_or_create_from_google
-      const user = {
-        id: 1,
-        email,
-        name,
-        google_id: googleId,
-        picture
-      }
-      
-      done(null, user)
-    },
-    
-    client_id: process.env.MIOLO_AUTH_GOOGLE_CLIENT_ID,
-    client_secret: process.env.MIOLO_AUTH_GOOGLE_CLIENT_SECRET,
-    callback_url: process.env.MIOLO_AUTH_GOOGLE_CALLBACK_URL || 'http://localhost:8001/auth/google/callback',
-    url_login: '/auth/google',
-    url_callback: '/auth/google/callback',
-    url_logout: '/user/logout',
-    url_logout_redirect: '/'
+  make_guest_token: (session) => {
+    return `guest-${Date.now()}-${Math.random()}`
   }
 }
 ```
 
-**Key elements:**
-- `google_auth_user(accessToken, refreshToken, profile, done, ctx)` - Validates Google profile, returns user or error
-- `client_id` / `client_secret` - Google OAuth2 credentials from environment
-- `callback_url` - Where Google redirects after authentication
-- OAuth2 flow routes: `/auth/google` (start) and `/auth/google/callback` (return)
-
-**Environment variables (.env):**
-```
-MIOLO_AUTH_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
-MIOLO_AUTH_GOOGLE_CLIENT_SECRET=your-google-client-secret
-MIOLO_AUTH_GOOGLE_CALLBACK_URL=http://localhost:8001/auth/google/callback
-```
-
-**OAuth2 Flow:**
-1. User clicks "Login with Google" → redirects to `/auth/google`
-2. Google authentication page opens
-3. User authenticates with Google
-4. Google redirects back to `/auth/google/callback`
-5. `google_auth_user` processes Google profile
-6. User is logged in and redirected to home
-
 ## User Session
-
 
 After successful login, user is available in routes:
 
 ```javascript
 export async function r_protected_route(ctx, params) {
   const user = ctx.state.user
+  const isAuthenticated = ctx.session.authenticated
   
   // User object contains:
   // - id
-  // - username
+  // - username (for local auth)
   // - email
-  // - any other fields returned from login
+  // - name
+  // - google_id (for Google auth)
+  // - google_picture (for Google auth)
   
   ctx.miolo.logger.info(`User ${user.id} accessing route`)
   
@@ -227,36 +291,91 @@ export default [{
 }]
 ```
 
-## Database User Authentication
+## Database Functions
 
-User authentication typically queries the database:
+### User Authentication (Local)
 
 **File:** `src/server/db/io/users/auth.mjs`
 
 ```javascript
 import { sha512 } from '#server/utils/crypt.mjs'
 
-export async function db_user_auth(ctx, params) {
-  const { username, password } = params
+export async function db_auth_user(miolo, username, password) {
+  const conn = miolo.db
+  const options = { transaction: undefined }
   
   const salt = process.env.MIOLO_SESSION_SALT
   const hashedPassword = sha512(password, salt)
   
-  const user = await ctx.miolo.db.query(`
-    SELECT id, username, email, name
+  const query = `
+    SELECT id, username, name, email, active, admin
     FROM u_user
-    WHERE username = $1 AND password = $2
-  `, [username, hashedPassword])
+    WHERE username = $1 AND password = $2 AND active = 1`
   
-  return user.rows[0] || null
+  const ruser = await conn.selectOne(query, [username, hashedPassword], options)
+  
+  if (ruser?.id == undefined) {
+    return [undefined, 'Invalid credentials']
+  } else {
+    return [ruser, undefined]
+  }
 }
 ```
 
-**Key elements:**
-- Hash password with session salt
-- Query user by username and hashed password
-- Return user object or null
-- Don't return password in user object
+### User by ID
+
+```javascript
+export async function db_find_user_by_id(miolo, id) {
+  const conn = miolo.db
+  const options = { transaction: undefined }
+  
+  const query = `
+    SELECT id, username, name, email, active, admin, 
+           google_id, google_picture
+    FROM u_user
+    WHERE id = $1`
+  
+  const ruser = await conn.selectOne(query, [id], options)
+  return ruser
+}
+```
+
+### Google OAuth2 User
+
+```javascript
+export async function db_user_find_or_create_from_google(
+  miolo, email, name, google_id, google_picture
+) {
+  const conn = miolo.db
+  const options = { transaction: undefined }
+  
+  // Try to find existing user by google_id
+  const query = `
+    SELECT id, username, name, email, active, admin, 
+           google_id, google_picture
+    FROM u_user
+    WHERE google_id = $1`
+  
+  const ruser = await conn.selectOne(query, [google_id], options)
+  
+  if (ruser?.id == undefined) {
+    // Create new user
+    const UUser = await conn.get_model('u_user')
+    const data = {
+      name,
+      email,
+      google_id,
+      google_picture,
+      active: 1
+    }
+    const uid = await UUser.insert(data, options)
+    data.id = uid
+    return [data, undefined]
+  } else {
+    return [ruser, undefined]
+  }
+}
+```
 
 ## Password Hashing
 
@@ -274,71 +393,38 @@ const hashedPassword = sha512(plainPassword, salt)
 MIOLO_SESSION_SALT=your-random-salt-here
 ```
 
-## Changing Password
+## Database Trigger for Password Hashing
 
-Pattern for password change:
-
-**File:** `src/server/db/io/users/pwd.mjs`
+**File:** `src/server/db/triggers/user.mjs`
 
 ```javascript
 import { sha512 } from '#server/utils/crypt.mjs'
 
-export async function db_user_change_password(ctx, params) {
-  const { user_id, old_password, new_password } = params
-  
-  const salt = process.env.MIOLO_SESSION_SALT
-  
-  // Verify old password
-  const user = await ctx.miolo.db.query(`
-    SELECT id FROM u_user
-    WHERE id = $1 AND password = $2
-  `, [user_id, sha512(old_password, salt)])
-  
-  if (user.rows.length === 0) {
-    throw new Error('Invalid current password')
+async function beforeInsertUser(conn, params, options) {
+  const raw_pwd = params?.password
+  if (raw_pwd) {
+    const cry_pwd = sha512(raw_pwd, process.env.MIOLO_SESSION_SALT)
+    params.password = cry_pwd
   }
-  
-  // Update to new password
-  const newHash = sha512(new_password, salt)
-  await ctx.miolo.db.query(`
-    UPDATE u_user
-    SET password = $1
-    WHERE id = $2
-  `, [newHash, user_id])
+  return [params, options, true]
+}
 
-  return { changed: true }
+export default {
+  before_insert: beforeInsertUser
 }
 ```
 
-## Custom Authentication
+## Session Configuration
 
-For complex scenarios, implement custom logic:
+**Important for OAuth2:** The session must use `sameSite: 'lax'` to work with Google redirects.
 
-**File:** `src/server/miolo/auth/custom.mjs`
-
+**In** `packages/miolo/src/config/defaults.mjs`:
 ```javascript
-export default {
-  urls: {
-    login: '/auth/custom',
-    logout: '/auth/logout',
-    home: '/'
-  },
-
-  async login(ctx, credentials) {
-    // Custom logic: OAuth, LDAP, etc.
-    const user = await yourCustomAuthLogic(credentials)
-    
-    if (!user) {
-      return { ok: false, error: 'Authentication failed' }
-    }
-    
-    return { ok: true, user }
-  },
-
-  async logout(ctx) {
-    // Custom cleanup
-    await yourCustomLogoutLogic(ctx)
-    return { ok: true }
+session: {
+  options: {
+    sameSite: 'lax',  // Required for OAuth2
+    secure: false,     // Set true in production with HTTPS
+    maxAge: 86400000,  // 24 hours
   }
 }
 ```
@@ -347,16 +433,18 @@ export default {
 
 1. **Never store plain passwords** - Always hash with salt
 2. **Use strong session salt** - Set `MIOLO_SESSION_SALT` in `.env`
-3. **Don't return passwords** - User object should never include password
+3. **Don't return passwords** - User object should never include password field
 4. **Validate on server** - Never trust client-side authentication
 5. **Use HTTPS in production** - Protect credentials in transit
-6. **Rate limit login attempts** - Prevent brute force attacks
-7. **Log authentication events** - Track successful and failed logins
+6. **Set secure cookies in production** - `MIOLO_SESSION_SECURE=true`
+7. **Use sameSite=lax for OAuth2** - Required for external OAuth redirects
+8. **Rate limit login attempts** - Prevent brute force attacks
+9. **Log authentication events** - Track successful and failed logins
 
 ## Examples from miolo-sample
 
 See actual implementations:
-- `src/server/miolo/auth/local.mjs` - Default auth strategy
-- `src/server/db/io/users/auth.mjs` - User authentication query
-- `src/server/db/io/users/pwd.mjs` - Password change logic
+- `src/server/miolo/auth/passport.mjs` - Passport authentication config
+- `src/server/db/io/users/auth.mjs` - User authentication queries
+- `src/server/db/triggers/user.mjs` - Password hashing trigger
 - `src/server/utils/crypt.mjs` - Hashing utilities
