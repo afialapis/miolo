@@ -14,6 +14,7 @@ const AUTH= {
   password: 'todoer'
 }
 
+const expect = global.expect
 function test_app_basic() {
 
   let fake_tids
@@ -27,7 +28,8 @@ function test_app_basic() {
     })
 
     it(`[miolo-test-app][basic] should clean todos`, async function() {
-      await clean_todos(fetcher)
+      const ok = await clean_todos(fetcher)
+      expect(ok).to.be.equal(true)
     })
 
     it(`[miolo-test-app][basic] should insert fake todos`, async function() {

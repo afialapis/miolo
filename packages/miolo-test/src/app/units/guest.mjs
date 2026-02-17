@@ -8,6 +8,8 @@ import {
 } from '../cli/api.mjs'
 import { TODOS } from '../data.mjs'
 
+const expect = global.expect
+
 function test_app_guest() {
 
   let fake_tids
@@ -15,7 +17,8 @@ function test_app_guest() {
   let last_tid
   test_app_base('guest', (fetcher) => {
     it(`[miolo-test-app][guest] should clean todos`, async function() {
-      await clean_todos(fetcher)
+      const ok = await clean_todos(fetcher)
+      expect(ok).to.be.equal(true)
     })
 
     it(`[miolo-test-app][guest] should insert fake todos`, async function() {

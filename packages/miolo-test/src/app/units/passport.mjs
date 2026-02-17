@@ -28,9 +28,41 @@ function test_app_passport() {
     it(`[miolo-test-app][passport] should login`, async function() {
       const resp = await login(fetcher, AUTH)
        
-      cookie = resp.response.headers.get('set-cookie')
+      // IMPORTANT: node-fetch requires special handling for multiple Set-Cookie headers
+      // koa-session sends TWO cookies: session + signature
+      // headers.get() only returns the first one, we need ALL of them
+      
+      let cookies = []
+      
+      // node-fetch v2 uses headers.raw()
+      if (resp.response.headers.raw) {
+        const setCookies = resp.response.headers.raw()['set-cookie'] || []
+        cookies = setCookies.map(c => c.split(';')[0]) // Extract just the name=value part
+      } 
+      // node-fetch v3+ and other implementations
+      else {
+        // Some implementations allow iteration
+        resp.response.headers.forEach((value, key) => {
+          if (key.toLowerCase() === 'set-cookie') {
+            cookies.push(value.split(';')[0])
+          }
+        })
+      }
+      
+      // Join all cookies with '; ' as required by Cookie header format
+      cookie = cookies.join('; ')
+      
+      // console.log('[passport test] Captured cookies:', cookie)
+      
+      // Save original get_headers to preserve http_auth logic
+      const originalGetHeaders = fetcher.get_headers.bind(fetcher)
+      
+      // Extend get_headers to include cookies
       fetcher.get_headers = () => {
-        return {'Cookie': cookie}
+        return {
+          ...originalGetHeaders(),
+          'Cookie': cookie
+        }
       }
 
       const {user, authenticated} = resp.data

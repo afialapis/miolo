@@ -18,7 +18,7 @@ export default [{
     {
       url: '/todos/last_hour',
       method: 'GET',
-      callback_fn: todos_count_last_hour
+      callback: todos_count_last_hour
     },
     {
       url: '/todos/fake',
@@ -28,7 +28,7 @@ export default [{
         require: true,
         action: 'redirect',
         redirect_url: '/'
-      },         
+      },
     },
     {
       url: '/todos/clean',
@@ -38,7 +38,7 @@ export default [{
         require: true,
         action: 'redirect',
         redirect_url: '/'
-      },         
+      },
     }
   ]
 }]

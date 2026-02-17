@@ -70,8 +70,4 @@ export const clean_todos = async (fetcher) => {
   const res= await fetcher.post('/queries/todos/clean', {})
   const ok= res?.response?.redirected !== true
   return ok
-  //return true
 }
-
-
-

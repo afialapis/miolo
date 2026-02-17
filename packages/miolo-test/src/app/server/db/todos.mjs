@@ -23,8 +23,8 @@ export async function todos_make_table(ctx) {
   return todos_make_table_from_conn(conn)
 }
 
-export async function todos_read(miolo, params) {
-  const conn = await miolo.db.get_connection()
+export async function todos_read(ctx, params) {
+  const conn = await ctx.miolo.db.get_connection()
   // TODO : handle transactions
   const options= {transaction: undefined}
 
