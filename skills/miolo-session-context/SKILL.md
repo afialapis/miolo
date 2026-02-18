@@ -59,6 +59,7 @@ export async function r_get_profile(ctx, params) {
 **Available properties:**
 - `ctx.session.user` - User object (or `null`)
 - `ctx.session.authenticated` - Boolean authentication status
+- `ctx.session.auth_method` - Authentication method (local, google, etc.)
 - `ctx.session.token` - Auth token (guest auth only)
 
 ### Credentials Auth Methods

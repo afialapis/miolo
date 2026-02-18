@@ -7,24 +7,17 @@ import { Label } from "#cli/components/ui/label.jsx"
 import useSessionContext from '#cli/context/session/useSessionContext.mjs'
 
 export function LoginForm({className, forgotLink}) {
-  const {login, fetcher} = useSessionContext()
+  const {localLogin, googleLogin} = useSessionContext()
   const [email, setEmail] = useState('')
   const [pwd, setPwd] = useState('')
   const [valid, setValid] = useState(true)
 
   const handleLocalLogin = useCallback(async (ev) => {
     ev.preventDefault()
-    const {authenticated} = await login({username: email, password: pwd})
+    const {authenticated} = await localLogin({username: email, password: pwd})
     setValid(authenticated === true)
-  }, [email, pwd, login])
-    
-
-  const handleGoogleLogin = useCallback(async (ev) => {
-    ev.preventDefault()
-    const {authenticated} = await fetcher.get('/auth/google')
-    setValid(authenticated === true)
-  }, [fetcher])
-    
+  }, [email, pwd, localLogin])
+  
 
   return (
     <>
@@ -95,12 +88,12 @@ export function LoginForm({className, forgotLink}) {
       </form>
       
       <div
-        className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+        className="mt-8 after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
         <span className="bg-background text-muted-foreground relative z-10 px-2">
           Or
         </span>
       </div>
-      <Button variant="outline" className="w-full" onClick={() => window.location.href = '/auth/google'}>
+      <Button variant="outline" className="w-full mt-8" onClick={googleLogin}>
 
         <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
           <path d="M23.75,16A7.7446,7.7446,0,0,1,8.7177,18.6259L4.2849,22.1721A13.244,13.244,0,0,0,29.25,16" fill="#00ac47"/>

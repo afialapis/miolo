@@ -20,8 +20,9 @@ export async function init_ssr_render_middleware(app, config, devRender= undefin
         hostname: httpConfig?.hostname,
         port: httpConfig?.port,
         catcher_url: httpConfig?.catcher_url,
-        login_url: authConfig?.local?.url_login,
-        logout_url: authConfig?.local?.url_logout,
+        auth_method: ctx.session?.auth_method,
+        login_url: ctx.session?.auth_method === 'google' ? authConfig?.passport?.google_url_login : authConfig?.passport?.local_url_login,
+        logout_url: ctx.session?.auth_method === 'google' ? authConfig?.passport?.google_url_logout : authConfig?.passport?.local_url_logout,
         //socket: {
         //  enabled: socketConfig?.enabled===true,
         //  config: socketConfig?.config?.cli || {}

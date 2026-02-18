@@ -1,5 +1,5 @@
 
-import {auth_user as q_auth_user} from '#server/db/users.mjs'
+import {local_auth_user as q_local_auth_user} from '#server/db/users.mjs'
 
 
 const local_auth_user = async (username, password, miolo) => {
@@ -9,8 +9,7 @@ const local_auth_user = async (username, password, miolo) => {
 
   //console.log('[miolo-demo][basic] local_auth_user()', username, password)
 
-  const conn= await miolo.db.get_connection()
-  const user = await q_auth_user(conn, username, password)
+  const [user, msg] = await q_local_auth_user(miolo, username, password)
   return user
 }
 

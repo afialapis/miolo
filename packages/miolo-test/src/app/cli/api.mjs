@@ -8,12 +8,12 @@ export const set_http_auth = (fetcher, auth) => {
 }
 
 export const login = async (fetcher, {username, password}) => {
-  const res= await fetcher.login('/login', {username, password})
+  const res= await fetcher.post('/login', {username, password})
   return res
 }
 
 export const logout = async (fetcher)  => {
-  const res= await fetcher.logout('/logout')
+  const res= await fetcher.post('/logout')
   return res.data
 }
 

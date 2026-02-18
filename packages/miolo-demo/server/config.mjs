@@ -1,7 +1,6 @@
 import path from 'path'
 import def_routes from '#server/routes/index.mjs'
-import local from '#server/auth/local.mjs'
-import google from '#server/auth/google.mjs'
+import passport from '#server/auth/passport.mjs'
 import basic_auth from '#server/auth/basic.mjs'
 import { miolo_demo_ssr_loader_make } from '#server/ssr/loader.mjs'
 
@@ -13,7 +12,7 @@ export default function makeConfig () {
   const auth = 
       authMode=='guest' ? {guest: {}}
     : authMode=='basic' ? {basic: basic_auth}
-    : {local, google}
+    : {passport}
 
   return{
     http: {
@@ -40,14 +39,6 @@ export default function makeConfig () {
       }
     },    
     db: {
-      config: {
-        dialect:  'postgres',
-        host:     'localhost',
-        port:     5432,
-        database: 'miolo',
-        user:     'postgres',
-        password: 'postgres'
-      },
       options: {
         tables: [{
           name: 'todos',

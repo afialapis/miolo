@@ -62,6 +62,7 @@ const init_guest_auth_middleware = ( app, options, session ) => {
         name: 'guest'
       },
       authenticated: true,
+      auth_method: 'guest',
       token
     }    
     

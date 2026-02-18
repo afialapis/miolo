@@ -48,7 +48,8 @@ const init_basic_auth_middleware = ( app, options ) => {
 
       ctx.session= {
         user: undefined,
-        authenticated: false
+        authenticated: false,
+        auth_method: undefined
       }
 
       ctx.body= {
@@ -74,7 +75,8 @@ const init_basic_auth_middleware = ( app, options ) => {
 
     ctx.session= {
       user,
-      authenticated: true
+      authenticated: true,
+      auth_method: 'basic'
     }
 
     await next()

@@ -23,7 +23,7 @@ function _sys_check_and_log(logger) {
   const perc= Math.round( (used*100)/total, 2)
 
   if (perc>80) {
-    logger.error(`[cron][${cyan('SysCheck')}] RAM ${yellow(used)} MB used of ${green(total)} MB (${yellow(perc)} %)`)
+    logger.warn(`[cron][${cyan('SysCheck')}] RAM ${yellow(used)} MB used of ${green(total)} MB (${yellow(perc)} %)`)
   } else {
     logger.info(`[cron][${cyan('SysCheck')}] RAM ${yellow(used)} MB used of ${green(total)} MB (${yellow(perc)} %)`)
   }
@@ -36,7 +36,7 @@ function _sys_check_and_log(logger) {
     const free = Math.round(_toGB(result.free), 2)
 
     if (free<1) {
-      logger.error(`[cron][${cyan('SysCheck')}] DISK ${yellow(used)} GB used of ${green(total)} GB (${yellow(free)} GB free)`)
+      logger.warn(`[cron][${cyan('SysCheck')}] DISK ${yellow(used)} GB used of ${green(total)} GB (${yellow(free)} GB free)`)
     } else {
       logger.info(`[cron][${cyan('SysCheck')}] DISK ${yellow(used)} GB used of ${green(total)} GB (${yellow(free)} GB free)`)
     }

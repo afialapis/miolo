@@ -144,16 +144,6 @@ class Fetcher {
         status: -1
       }
     }
-  }  
-
-  async login(url, params) {
-    const res= await this._fetch('POST', url || '/login', params)
-    return res
-  }
-
-  async logout(url) {
-    const res= await this._fetch('POST', url || '/logout', {})
-    return res  
   }
 
   async read(url, params, http_auth= undefined) {

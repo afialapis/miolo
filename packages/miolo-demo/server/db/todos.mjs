@@ -7,7 +7,7 @@ async function todos_read(ctx, _params) {
 
   ctx.miolo.logger.debug(`[todos_read] Reading todos...`, {section: 'todos-read'})
 
-  const Todos = await conn.get_model('todos')
+  const Todos = await conn.get_model('todo')
   const todos = await Todos.read(options)
 
   ctx.miolo.logger.debug(`[todos_read] Read ${todos.length} todos!`, {section: 'todos-read'})
@@ -27,7 +27,7 @@ async function todos_count_last_hours(ctx, params) {
 
   const query = `
     SELECT COUNT(1) as cnt
-      FROM todos
+      FROM todo
      WHERE CREATED >= $1`;
 
   const data= await conn.select(query, [one_hour_ago], options) 

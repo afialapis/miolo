@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router'
 import {withMioloContext} from 'miolo-react'
 import {LoginForm} from '#cli/components/login-form.jsx'
 
-const Login = ({login}) => {
+const Login = ({localLogin}) => {
   const navigate = useNavigate()
  
   const doTheLogin = useCallback(async (username, password) => {
-    const resp = await login({username, password})
+    const resp = await localLogin({username, password})
 
     if (resp.authenticated) {
       navigate("/")
@@ -15,7 +15,7 @@ const Login = ({login}) => {
 
     return resp
     
-  }, [login, navigate]) 
+  }, [localLogin, navigate]) 
 
   return (
 

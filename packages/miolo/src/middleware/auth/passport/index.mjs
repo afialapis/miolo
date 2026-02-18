@@ -69,11 +69,11 @@ const init_passport_auth_middleware = ( app, options, sessionConfig, cacheConfig
   const serialize_user = (ctx) => (user, done) => {
     process.nextTick(function() {
       try {
-        ctx.miolo.logger.debug(`[auth][local] serializing user...`)
+        ctx.miolo.logger.debug(`[auth][passport] serializing user...`)
         ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
         return get_user_id_f(user, done, ctx)
       } catch(error) {
-        ctx.miolo.logger.error(`[auth][local] Error serializing user: ${error}`)
+        ctx.miolo.logger.error(`[auth][passport] Error serializing user: ${error}`)
         return done(error, null)
       }
     })
@@ -82,11 +82,11 @@ const init_passport_auth_middleware = ( app, options, sessionConfig, cacheConfig
   const deserialize_user = (ctx) => (id, done) => {
     process.nextTick(function() {
       try {
-        ctx.miolo.logger.debug(`[auth][local] deserializing user...`)
+        ctx.miolo.logger.debug(`[auth][passport] deserializing user...`)
         ctx.sessionId = ctx.session?.externalKey ? ctx.getSessionStoreKey(ctx.session?.externalKey) : undefined
         return find_user_by_id_f(id, done, ctx)
       } catch(error) {
-        ctx.miolo.logger.error(`[auth][local] Error deserializing user: ${error}`)
+        ctx.miolo.logger.error(`[auth][passport] Error deserializing user: ${error}`)
         return done(error, null)
       }
     })
@@ -145,10 +145,12 @@ const init_passport_auth_middleware = ( app, options, sessionConfig, cacheConfig
   const handleLocalLogIn = (ctx, next) => {
     ctx.miolo.logger.debug(`[auth][local] handleLocalLogIn() - authenticating...`)
     return passport.authenticate('local', async function(err, user, info, _status) {
-      if (user === false) {
+      
+      if ((user === false) || (user == undefined) || (err != undefined)) {
         ctx.miolo.logger.debug(`[auth][local] handleLocalLogIn() - user not authenticated`)
         ctx.session.user = undefined
         ctx.session.authenticated = false
+        ctx.session.auth_method = undefined
         ctx.sessionId = undefined
 
         // This will show error logs on the catcher middleware
@@ -157,19 +159,20 @@ const init_passport_auth_middleware = ( app, options, sessionConfig, cacheConfig
         ctx.status= 401
 
         ctx.body = { 
-          ok: err==undefined,
+          ok: false,
           data: {
             user: undefined,
             authenticated: false,
             info: info,
           },
-          error: err
+          error: err?.message || err?.stack || err
         }
       } else {
         ctx.miolo.logger.debug(`[auth][local] handleLocalLogIn() - user authenticated`)
         await ctx.login(user)
         ctx.session.user = user // ctx.state.user
         ctx.session.authenticated = true
+        ctx.session.auth_method = 'local'
         
         ctx.body = { 
           ok: true,
@@ -199,6 +202,7 @@ const init_passport_auth_middleware = ( app, options, sessionConfig, cacheConfig
         ctx.miolo.logger.debug(`[auth][google] handleGoogleCallback() - user not authenticated`)
         ctx.session.user = undefined
         ctx.session.authenticated = false
+        ctx.session.auth_method = undefined
         ctx.sessionId = undefined
 
         // This will show error logs on the catcher middleware
@@ -223,6 +227,7 @@ const init_passport_auth_middleware = ( app, options, sessionConfig, cacheConfig
         await ctx.login(user)
         ctx.session.user = user // ctx.state.user
         ctx.session.authenticated = true
+        ctx.session.auth_method = 'google'
         
         // ctx.body = { 
         //   ok: true,
@@ -240,10 +245,11 @@ const init_passport_auth_middleware = ( app, options, sessionConfig, cacheConfig
 
   const handleLogOut = async (ctx, next) => {
     if (ctx.session.authenticated) {
-      ctx.miolo.logger.debug(`[auth][local] handleLogOut() - logging out...`)
+      ctx.miolo.logger.debug(`[auth][passport] handleLogOut() - logging out...`)
 
       ctx.session.user = undefined
       ctx.session.authenticated = false
+      ctx.session.auth_method = undefined
       ctx.sessionId = undefined
 
       ctx.body = { 
@@ -260,7 +266,7 @@ const init_passport_auth_middleware = ( app, options, sessionConfig, cacheConfig
         await ctx.logout()
       }  
     } else {
-      ctx.miolo.logger.debug(`[auth][local] handleLogOut() - logging out (unauthed)...`)
+      ctx.miolo.logger.debug(`[auth][passport] handleLogOut() - logging out (unauthed)...`)
 
       // This will show error logs on the catcher middleware
       // ctx.throw(401)

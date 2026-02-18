@@ -13,12 +13,12 @@ const MioloContextProvider = ({context, children}) => {
     setMioloObj(miolo_client(context))
   }, [context])
   
-  const login = useCallback(async (params) => {
+  const localLogin = useCallback(async (params) => {
     const { fetcher } = mioloObj
     const { config } = innerContext
 
     const url = config.login_url || '/login'
-    const resp = await fetcher.login(url, params)
+    const resp = await fetcher.post(url, params)
 
     if (resp?.data) {
       if (resp?.data?.authenticated) {
@@ -36,12 +36,16 @@ const MioloContextProvider = ({context, children}) => {
     return {}
   }, [innerContext, mioloObj])
 
+  const googleLogin = useCallback(() => {
+    window.location.href = '/auth/google'
+  }, [])
+
   const logout = useCallback(async () => {
     const { fetcher } = mioloObj
     const { config } = innerContext
 
     const url = config.logout_url || '/logout'
-    const _resp = await fetcher.logout(url)
+    const _resp = await fetcher.post(url)
     // resp.redirected= true
 
     setInnerContext(current => {
@@ -82,7 +86,8 @@ const MioloContextProvider = ({context, children}) => {
         authenticated: innerContext.authenticated,
         fetcher: mioloObj.fetcher,
         //socket: mioloObj.socket,
-        login,
+        googleLogin,
+        localLogin,
         logout,
         useSsrData
       }}>
