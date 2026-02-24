@@ -1,4 +1,4 @@
-CREATE TABLE u_user (
+CREATE TABLE account (
     --sqlite
     --id INTEGER PRIMARY KEY AUTOINCREMENT, 
     id serial,
@@ -7,9 +7,7 @@ CREATE TABLE u_user (
     name text,
     email text,
     active integer,
-
-    admin boolean,
-
+    
     google_id text,
     google_picture text,
 
@@ -23,7 +21,7 @@ CREATE TABLE u_user (
 );
 
 
-INSERT INTO u_user 
+INSERT INTO account 
   (username, password, name, email) 
 VALUES 
   ('miolo-sample@miolo-sample.com',

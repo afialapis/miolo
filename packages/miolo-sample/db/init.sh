@@ -72,7 +72,7 @@ else
     filename=$(basename "$sql_file")
     echo -ne "  Executing $filename... "
     
-    if psql -d "$DB_NAME" -f "$sql_file" -q 2>&1 | grep -q "ERROR"; then
+    if psql -d "$DB_NAME" -f "$sql_file" -U postgres -h localhost -q 2>&1 | grep -q "ERROR"; then
       echo -e "${RED}✗ Failed${NC}"
       exit 1
     else

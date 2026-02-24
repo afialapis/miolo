@@ -8,7 +8,7 @@ const TEXT_EXTENSIONS = [
   '.json', '.env', '.md', '.html',
   '.css', '.scss', '.sass',
   '.yml', '.yaml', '.toml',
-  '.txt', '.gitignore', '.editorconfig'
+  '.txt', '.gitignore', '.editorconfig', '.sh'
 ]
 
 // Files and directories to exclude from copying
@@ -24,7 +24,7 @@ const EXCLUDE_PATTERNS = [
  */
 export function isTextFile(filePath) {
   const ext = path.extname(filePath).toLowerCase()
-  return TEXT_EXTENSIONS.includes(ext) || path.basename(filePath).startsWith('.')
+  return TEXT_EXTENSIONS.includes(ext) || path.basename(filePath).startsWith('.') || path.basename(filePath) === 'Dockerfile'
 }
 
 /**

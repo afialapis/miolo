@@ -308,8 +308,8 @@ export async function db_auth_user(miolo, username, password) {
   const hashedPassword = sha512(password, salt)
   
   const query = `
-    SELECT id, username, name, email, active, admin
-    FROM u_user
+    SELECT id, username, name, email, active
+    FROM account
     WHERE username = $1 AND password = $2 AND active = 1`
   
   const ruser = await conn.selectOne(query, [username, hashedPassword], options)
@@ -330,9 +330,9 @@ export async function db_find_user_by_id(miolo, id) {
   const options = { transaction: undefined }
   
   const query = `
-    SELECT id, username, name, email, active, admin, 
+    SELECT id, username, name, email, active, 
            google_id, google_picture
-    FROM u_user
+    FROM account
     WHERE id = $1`
   
   const ruser = await conn.selectOne(query, [id], options)
@@ -351,16 +351,16 @@ export async function db_user_find_or_create_from_google(
   
   // Try to find existing user by google_id
   const query = `
-    SELECT id, username, name, email, active, admin, 
+    SELECT id, username, name, email, active, 
            google_id, google_picture
-    FROM u_user
+    FROM account
     WHERE google_id = $1`
   
   const ruser = await conn.selectOne(query, [google_id], options)
   
   if (ruser?.id == undefined) {
     // Create new user
-    const UUser = await conn.get_model('u_user')
+    const UUser = await conn.get_model('account')
     const data = {
       name,
       email,

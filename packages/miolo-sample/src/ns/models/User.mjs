@@ -11,7 +11,6 @@ export default class User extends BaseModel {
   get name() { return this._get('name') }
   get email() { return this._get('email') }
   get active() { return this._get('active') }
-  get admin() { return this._get('admin') }
   get lastLoginDate() { return this._get('last_login_date') }
   get lastLoginIp() { return this._get('last_login_ip') }
   get loginCount() { return this._get('login_count') }

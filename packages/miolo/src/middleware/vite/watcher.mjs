@@ -10,7 +10,7 @@ export async function init_watcher_dev_server_middleware(app, watcherConfig, ssr
   
   if (isEnabled && (!isProduction)){
 
-    // Let's reuse Vite's cholkidar instance to listen to changes in server code
+    // Let's reuse Vite's chokidar instance to listen to changes in server code
     watcher = app.vite.watcher
 
     // Extra dirs to watch

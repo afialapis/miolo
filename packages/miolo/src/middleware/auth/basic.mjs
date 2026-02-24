@@ -29,9 +29,9 @@ const init_basic_auth_middleware = ( app, options ) => {
   }
 
   async function basic_auth_middleware(ctx, next) {
-    let au_user
+    let aaccount
     try {
-      au_user= _get_basic_credentials(ctx.request)
+      aaccount= _get_basic_credentials(ctx.request)
     } catch(_) {}
 
     const unauth_err = () => {
@@ -63,11 +63,11 @@ const init_basic_auth_middleware = ( app, options ) => {
       ctx.response.headers['WWW-Authenticate']= 'Basic realm="' + realm.replace(/"/g, '\\"') + '"'
     }
 
-    if (! au_user) {
+    if (! aaccount) {
       return unauth_err()
     }
     
-    const user = await auth_user(au_user.username, au_user.password, app.context.miolo)
+    const user = await auth_user(aaccount.username, aaccount.password, app.context.miolo)
 
     if (user === false || user == undefined) {
       return unauth_err()

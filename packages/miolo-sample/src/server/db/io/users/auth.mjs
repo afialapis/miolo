@@ -20,9 +20,9 @@ export async function db_find_user_by_id(miolo, uid) {
   const options= {transaction: undefined}
 
   const query = `
-    SELECT id, username, name, email, active, admin, google_id, google_picture, 
+    SELECT id, username, name, email, active, google_id, google_picture, 
            last_login_date, last_login_ip, login_count, last_conn_at, created_at, last_update_at
-      FROM u_user
+      FROM account
      WHERE id = $1`    
 
   const data= await conn.select(query, [uid], options) 
@@ -38,7 +38,7 @@ export async function db_find_user_by_id(miolo, uid) {
     
     if (_should_update_user_last_conn()) {
       miolo.logger.silly(`[db_find_user_by_id] Updating ${user.name} last conn`)
-      const qupd= 'UPDATE u_user SET last_conn_at = $1 WHERE id = $2'
+      const qupd= 'UPDATE account SET last_conn_at = $1 WHERE id = $2'
       conn.execute(qupd, [intre_now(), uid])
     }
       
@@ -63,7 +63,7 @@ export async function db_auth_user(miolo, username, password) {
 
   const query = `
     SELECT id, password
-      FROM u_user
+      FROM account
      WHERE username = $1`
   
   const ruser= await conn.selectOne(query, [username], options) 
@@ -82,7 +82,7 @@ export async function db_auth_user(miolo, username, password) {
       miolo.logger.silly(`[db_auth_user] updating ${username} last* fields`)
       const ip = ''
       const log_count = data?.login_count || 0
-      const qupd= 'UPDATE u_user SET last_conn_at = $1, last_login_date = $1, last_login_ip = $2, login_count = $3 WHERE id = $4'
+      const qupd= 'UPDATE account SET last_conn_at = $1, last_login_date = $1, last_login_ip = $2, login_count = $3 WHERE id = $4'
       conn.execute(qupd, [intre_now(), ip, log_count + 1, ruser.id])
     }
   }
@@ -99,16 +99,16 @@ export async function db_user_find_or_create_from_google(miolo, email, name, goo
   const options= {transaction: undefined}
 
   const query = `
-    SELECT id, username, name, email, active, admin, google_id, google_picture, 
+    SELECT id, username, name, email, active, google_id, google_picture, 
            last_login_date, last_login_ip, login_count, last_conn_at, created_at, last_update_at
-      FROM u_user
+      FROM account
      WHERE google_id = $1`
   
   const ruser= await conn.selectOne(query, [google_id], options) 
 
   if (ruser?.id == undefined) {
     miolo.logger.debug(`[db_user_find_or_create_from_google] user ${email} not found, creating`)
-    const UUser= await conn.get_model('u_user')
+    const UUser= await conn.get_model('account')
 
     let data = {
       name,

@@ -9,11 +9,11 @@
   },
   "type": "module",
   "dependencies": {
-    "intre": "^3.0.0-beta.2",
+    "intre": "^3.0.0-beta.3",
     "miolo": "../miolo",
     "miolo-cli": "../miolo-cli",
     "miolo-react": "../miolo-react",
     "node-fetch": "^3.3.2",
-    "xeira": "^2.0.0-beta.8"
+    "xeira": "^2.0.0-beta.10"
   }
 }

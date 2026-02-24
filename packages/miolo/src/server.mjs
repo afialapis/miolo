@@ -2,7 +2,6 @@ import Koa                                from 'koa'
 import { init_config }                    from './config/index.mjs'
 
 import { init_context_middleware }         from './middleware/context/index.mjs'
-// import { init_vite_dev_server_middleware } from './middleware/vite/devserver.mjs'
 import { init_headers_middleware }         from './middleware/http/headers.mjs'
 import { init_body_middleware }            from './middleware/http/body.mjs'
 import { init_catcher_middleware }         from './middleware/http/catcher.mjs'
@@ -37,7 +36,6 @@ async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
   // Vite Dev Server
   if (devInit) {
     await devInit(app, config)
-    // await init_vite_dev_server_middleware(app, config.build.vite)
   }
   
   // CORS and other headers

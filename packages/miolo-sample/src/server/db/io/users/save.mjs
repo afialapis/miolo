@@ -7,7 +7,7 @@ export async function db_user_save(miolo, data) {
   const options= {transaction: undefined}
 
   const uid= data.id
-  const User = await conn.get_model('u_user')
+  const User = await conn.get_model('account')
   
   let nuid= uid
   if (uid==undefined) {

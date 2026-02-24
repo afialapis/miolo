@@ -95,7 +95,7 @@ export default [{
 ```javascript
 import { with_miolo_schema } from 'miolo'
 import Joi from 'joi'
-import { opt_int, bool_null, opt_str_null } from '#server/lib/util/schema.mjs'
+import { opt_int, bool_null, opt_str_null } from '#server/utils/schema.mjs'
 
 // Internal implementation
 async function _db_todo_read(ctx, filter) {
@@ -123,12 +123,12 @@ export const db_todo_read = with_miolo_schema(_db_todo_read, todo_read_schema)
 
 **Pattern:**
 1. Create private implementation function with `_` prefix
-2. Define schema using partial schemas from `lib/util/schema.mjs`
+2. Define schema using partial schemas from `utils/schema.mjs`
 3. Export wrapped function with `with_miolo_schema`
 
 ## Partial Schemas (Reusable Components)
 
-Miolo provides common validation patterns in `src/server/lib/util/schema.mjs`:
+Miolo provides common validation patterns in `src/server/utils/schema.mjs`:
 
 ```javascript
 import Joi from 'joi'
@@ -153,7 +153,7 @@ export const pos_int = Joi.number().integer().min(1).required()
 
 **Usage:**
 ```javascript
-import { opt_int, opt_str_null, email } from '#server/lib/util/schema.mjs'
+import { opt_int, opt_str_null, email } from '#server/utils/schema.mjs'
 
 const userSchema = Joi.object({
   id: opt_int,
@@ -256,8 +256,8 @@ const schema = Joi.object({
 
 1. **Always validate route parameters** - Use schema in route definition or with_miolo_schema
 2. **Strongly recommended for db functions** - Wrap all db_*() functions with schemas
-3. **Use partial schemas** - Reuse common patterns from `lib/util/schema.mjs`
-4. **Add to partial schemas** - Extend `lib/util/schema.mjs` with new reusable patterns
+3. **Use partial schemas** - Reuse common patterns from `utils/schema.mjs`
+4. **Add to partial schemas** - Extend `utils/schema.mjs` with new reusable patterns
 5. **Private + public pattern** - Use `_function_name` for implementation, export wrapped version
 6. **Default values** - Use `.default()` for optional fields with sensible defaults
 7. **Allow null carefully** - Only use `.allow(null)` when null is a valid business value
@@ -265,7 +265,7 @@ const schema = Joi.object({
 
 ## Extending Partial Schemas
 
-Add new reusable patterns to `src/server/lib/util/schema.mjs`:
+Add new reusable patterns to `src/server/utils/schema.mjs`:
 
 ```javascript
 // Add new partial schemas
@@ -282,7 +282,7 @@ export const pagination = Joi.object({
 Then use across your application:
 
 ```javascript
-import { uuid, date_iso, pagination } from '#server/lib/util/schema.mjs'
+import { uuid, date_iso, pagination } from '#server/utils/schema.mjs'
 
 const eventSchema = Joi.object({
   id: uuid,
@@ -294,7 +294,7 @@ const eventSchema = Joi.object({
 ## Examples from miolo-sample
 
 See actual implementations:
-- `src/server/lib/util/schema.mjs` - Partial schema definitions
+- `src/server/utils/schema.mjs` - Partial schema definitions
 - `src/server/db/io/todos/read.mjs` - Database function with schema
 - `src/server/db/io/todos/upsave.mjs` - Insert/update with schema
 - `src/server/routes/index.mjs` - Route schemas (inline and wrapper)

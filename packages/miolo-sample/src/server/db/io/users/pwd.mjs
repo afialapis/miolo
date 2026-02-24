@@ -10,7 +10,7 @@ export async function db_password_change(miolo, email, passwords) {
 
   let query = `
     SELECT id, password
-      FROM u_user
+      FROM account
      WHERE username = $1 OR email = $1`
   
   const data= await conn.selectOne(query, [email], options) 
@@ -23,7 +23,7 @@ export async function db_password_change(miolo, email, passwords) {
       msg= 'Contraseña actual incorrecta'
     } else {
       try {
-        query= 'UPDATE u_user SET password = $1 WHERE id = $2'
+        query= 'UPDATE account SET password = $1 WHERE id = $2'
         const pwd=sha512(passwords.new, process.env.MIOLO_SESSION_SALT)
         await conn.execute(query, [pwd, data.id])   
 

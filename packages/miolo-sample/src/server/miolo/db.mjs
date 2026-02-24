@@ -16,7 +16,7 @@ const useUserFields = {
 
 const TABLES = [  
   {
-    name: 'u_user',
+    name: 'account',
     useDateFields: true,
     triggers: {
       beforeInsert: beforeInsertUser

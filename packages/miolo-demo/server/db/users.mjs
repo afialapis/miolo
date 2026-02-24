@@ -7,7 +7,7 @@ async function find_user_by_id(miolo, uid) {
   const conn= await miolo.db.get_connection()
   const query = `
     SELECT id, username, name, created_at
-      FROM u_user
+      FROM account
      WHERE id = $1`
   
   const data= await conn.select(query, [uid], options) 
@@ -25,7 +25,7 @@ async function local_auth_user(miolo, username, password) {
 
   const query = `
     SELECT id, username, name, created_at
-      FROM u_user
+      FROM account
      WHERE username = $1
        AND password = $2`;
 

@@ -1,7 +1,7 @@
 import {db_todo_upsave} from './upsave.mjs'
 import { with_miolo_schema } from 'miolo'
 import Joi from 'joi'
-import { opt_int, bool_null } from "#server/lib/util/schema.mjs"
+import { opt_int, bool_null } from "#server/utils/schema.mjs"
 import { db_todo_find } from './find.mjs'
 
 async function _db_todo_toggle(ctx, params) {

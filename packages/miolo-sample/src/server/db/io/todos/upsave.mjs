@@ -1,6 +1,6 @@
 import { with_miolo_schema } from 'miolo'
 import Joi from 'joi'
-import { opt_int, bool_null, opt_str_null } from "#server/lib/util/schema.mjs"
+import { opt_int, bool_null, opt_str_null } from "#server/utils/schema.mjs"
 
 async function _db_todo_upsave(ctx, params) { 
   ctx.miolo.logger.verbose(`[db_todo_upsave] id: ${params?.id || 'new'}`)

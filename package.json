@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "3.0.0-beta.154",
+  "version": "3.0.0-beta.156",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -51,6 +51,7 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "lodash": "^4.17.23",
+    "minimatch": "10.2.1",
     "moment": "^2.30.1",
     "node-gyp": "^12.2.0",
     "on-headers": "^1.1.0",
