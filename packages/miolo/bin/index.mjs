@@ -65,6 +65,11 @@ async function main() {
         await buildServerHandler(appName, ssrEntry, ssrDest, srvEntry, srvDest)
         break
 
+      case 'build':
+        const buildHandler = (await import ('./build/build.mjs')).default
+        await buildHandler(appName)
+        break
+
       case 'start':
         
         const destFile =  args.dest || path.join(process.cwd(), `${process.env.MIOLO_BUILD_SERVER_DEST}/${appName}.${serverExt}`)
