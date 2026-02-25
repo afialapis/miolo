@@ -1,4 +1,9 @@
-export function rollupBanner(pkgJson) {
+import path from 'path'
+import {readJsonFile} from '../../util.mjs'
+
+export async function miolo_build_banner(pkgPath) {
+  const pkgJson = await readJsonFile(path.join(pkgPath, 'package.json'))
+
   return `/**
  * ${pkgJson.name} v${pkgJson.version || '0.0.0'}
  *

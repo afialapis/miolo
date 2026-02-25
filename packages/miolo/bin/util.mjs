@@ -1,6 +1,6 @@
 import {readdirSync, rmSync, writeFileSync, readFileSync} from 'node:fs'
+import {readFile} from 'node:fs/promises'
 import path from 'node:path'
-
 
 export function cleanFolder(folder) {
   readdirSync(folder).forEach(file => {
@@ -30,3 +30,29 @@ export function isFileExistingSync(filePath) {
     return false
   }
 } 
+
+export async function readJsonFile(jsonPath) {
+  try {
+    const data = await readFile(jsonPath)
+    const obj = JSON.parse(data)
+    return obj
+  } catch (err){
+    console.error(`readJsonFile${jsonPath}`, err)
+    return {}
+  }
+}
+
+
+export function readJsonFileSync(jsonPath, silent= false) {
+  try {
+    const data = readFileSync(jsonPath, {encoding:'utf8', flag:'r'})
+    const obj = JSON.parse(data)
+    return obj
+  } catch (err){
+    if (!silent) {
+      console.error(`readJsonFileSync${jsonPath}`, err)
+    }
+    return {}
+  }
+}
+

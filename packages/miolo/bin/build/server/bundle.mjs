@@ -61,7 +61,7 @@ async function _rollupGenerateOutputs(bundle, outputOptionsList) {
       
 }
 
-export async function rollupBundle(appName, pkgPath, inputOptions, outputOptionsList, watch= false) {
+export async function miolo_bundle(appName, pkgPath, inputOptions, outputOptionsList, watch= false) {
   let bundle
   let buildFailed = false
   let niceFileName = ''
@@ -101,11 +101,11 @@ export async function rollupBundle(appName, pkgPath, inputOptions, outputOptions
   }
 
   if (buildFailed) {
-    console.error(`[${appName}][prod] Error when bundling ${yellow(niceFileName)}`)
+    console.error(`[${appName}][build] Error when bundling ${yellow(niceFileName)}`)
     process.exit(1)
   } else {
     
-    console.log(`[${appName}][prod] Bundled ${yellow(niceFileName)} ${green('successfully!')}`)
+    console.log(`[${appName}][build] Bundled ${yellow(niceFileName)} ${green('successfully!')}`)
   }
 }
 

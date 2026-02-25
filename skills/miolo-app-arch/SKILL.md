@@ -44,9 +44,7 @@ Standard npm scripts for miolo development and deployment:
     "dev": "npx miolo dev",
     "deb": "npx miolo deb",
     "create-bin": "npx miolo create-bin",
-    "build-client": "npx miolo build-client",
-    "build-server": "npx miolo build-server",
-    "build": "npm run build-client && npm run build-server && npm run create-bin",
+    "build": "npx miolo build && npm run create-bin",
     "start": "node ./build/server/run.mjs start",
     "stop": "node ./build/server/run.mjs stop",
     "restart": "node ./build/server/run.mjs restart"

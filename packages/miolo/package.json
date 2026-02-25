@@ -15,14 +15,15 @@
   },
   "homepage": "https://www.afialapis.com/os/miolo",
   "license": "MIT",
+  "type": "module",
   "bin": {
     "miolo": "./bin/index.mjs"
   },
-  "type": "module",
+  "main": "./src/index.mjs",
   "exports": {
     "node": "./src/index.mjs",
     "import": "./src/index.mjs",
-    "default": "./dist/miolo.node.mjs"
+    "default": "./src/index.mjs"
   },
   "files": [
     "bin",
@@ -36,10 +37,8 @@
   "scripts": {
     "lint": "npx xeira lint ./src",
     "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
-    "clean": "rm -fr ./dist/*",
-    "bundle": "npx xeira bundle --target=node --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo --bundle_extension=node.mjs",
     "prepare-template": "node bin/create/prepare-template.mjs",
-    "dist": "npm run clean && npm run bundle && npm run prepare-template"
+    "dist": "npm run prepare-template"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.29.0",
@@ -48,8 +47,16 @@
     "@koa/cors": "^5.0.0",
     "@koa/router": "^15.3.0",
     "@maxmind/geoip2-node": "^6.3.4",
+    "@rollup/plugin-alias": "^6.0.0",
+    "@rollup/plugin-babel": "^6.1.0",
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-replace": "^6.0.3",
+    "@tailwindcss/postcss": "^4.2.1",
     "@tailwindcss/vite": "^4.2.1",
     "@vitejs/plugin-react": "^5.1.4",
+    "autoprefixer": "^10.4.24",
     "cacheiro": "^0.5.0-beta.5",
     "calustra": "^1.0.0-beta.7",
     "cron": "^4.4.0",
@@ -72,8 +79,11 @@
     "koa-static": "^5.0.0",
     "nanoid": "^5.1.6",
     "nodemailer": "^8.0.1",
-    "passport-local": "^1.0.0",
     "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "rollup": "^4.59.0",
+    "rollup-plugin-node-externals": "^8.1.2",
+    "rollup-plugin-postcss": "^4.0.2",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
     "statuses": "^2.0.2",
@@ -83,9 +93,6 @@
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0",
     "yargs-parser": "^22.0.0"
-  },
-  "devDependencies": {
-    "xeira": "^2.0.0-beta.10"
   },
   "eslintConfig": {
     "extends": [

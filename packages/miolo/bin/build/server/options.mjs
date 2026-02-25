@@ -10,14 +10,16 @@ import scss from 'rollup-plugin-postcss'
 import tailwindcss from '@tailwindcss/postcss'
 import autoprefixer from 'autoprefixer'
 
-import { rollupBanner } from './banner.mjs'
+import { miolo_build_banner } from './banner.mjs'
 import { getRollupPluginForResolvingAliases } from './aliases.mjs'
 import BABEL_CONFIG from './babel.config.js'
 
 const NODE_ENV = process.env?.NODE_ENV || 'production'
 
-export async function rollupOptionsForEsmNode(pkgPath, pkgJson, input, bundleDeps= false) {
-
+export async function miolo_build_options_for_server(appName, pkgPath, srvEntry, srvDest, bundleDeps= true) {
+  const input = path.join(pkgPath, srvEntry)
+  const outputFile = path.join(pkgPath, srvDest, `${appName}.node.bundle.mjs`)
+  
   const inputOptions= {
     input,
     plugins: [
@@ -60,22 +62,17 @@ export async function rollupOptionsForEsmNode(pkgPath, pkgJson, input, bundleDep
       console.warn(warning.message)
     }
   }
-
-  const outputFile = path.join(pkgPath, process.env.MIOLO_BUILD_SERVER_DEST, bundleDeps 
-     ? `${pkgJson.name}.node.bundle.mjs`
-     : `${pkgJson.name}.node.bundle.mjs`
-  )
   
-
+  const banner = await miolo_build_banner(pkgPath)
   const outputs= [
     {
       file: outputFile,
       inlineDynamicImports: true,
       format: 'esm',
       exports: 'named',
-      banner: rollupBanner(pkgJson)
+      banner
     }
   ]
 
-  return[inputOptions, outputs]
+  return [inputOptions, outputs, outputFile]
 }

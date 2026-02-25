@@ -45,29 +45,19 @@ async function main() {
         await debHandler(appName, true)
         break
 
-      case 'build-client':
-        const entry = args.entry || process.env.MIOLO_BUILD_CLIENT_ENTRY
-        const htmlFile = args['html-file'] || process.env.MIOLO_BUILD_HTML_FILE
-        const cliDest = args.dest || process.env.MIOLO_BUILD_CLIENT_DEST 
-
-        const buildClientHandler = (await import ('./prod-build/build-client.mjs')).default
-        await buildClientHandler(appName, entry, htmlFile, cliDest)
-        break
-
-      case 'build-server':
-        // Based on command line params or .env
-        const srvEntry= args['entry'] || process.env.MIOLO_BUILD_SERVER_ENTRY
+      case 'build':
+        const cliEntry = args['cli-entry'] || process.env.MIOLO_BUILD_CLIENT_ENTRY
+        const cliDest = args['cli-dest'] || process.env.MIOLO_BUILD_CLIENT_DEST
+        const cliSuffix = args['cli-suffix'] || process.env.MIOLO_BUILD_CLIENT_SUFFIX || 'iife.bundle.min'
+        const htmlFile = args['html-file'] || process.env.MIOLO_BUILD_HTML_FILE || './src/cli/index.html'
+        const srvEntry= args['server-entry'] || process.env.MIOLO_BUILD_SERVER_ENTRY
+        const configEntry = args['config-entry'] || process.env.MIOLO_BUILD_CONFIG_ENTRY
+        const srvDest= args['server-dest'] || process.env.MIOLO_BUILD_SERVER_DEST
         const ssrEntry= args['ssr-entry'] || process.env.MIOLO_BUILD_SERVER_SSR_ENTRY
         const ssrDest= args['ssr-dest'] || process.env.MIOLO_BUILD_SERVER_DEST
-        const srvDest= args.dest || process.env.MIOLO_BUILD_SERVER_DEST
-      
-        const buildServerHandler = (await import ('./prod-build/build-server.mjs')).default
-        await buildServerHandler(appName, ssrEntry, ssrDest, srvEntry, srvDest)
-        break
 
-      case 'build':
         const buildHandler = (await import ('./build/build.mjs')).default
-        await buildHandler(appName)
+        await buildHandler(appName, cliEntry, cliDest, cliSuffix, htmlFile, srvEntry, configEntry, srvDest, ssrEntry, ssrDest)
         break
 
       case 'start':
@@ -100,7 +90,7 @@ async function main() {
 
       default:
         console.error(`[miolo] Unknown command: ${command}`)
-        console.log('[miolo] Available commands: create, dev, build-client, build-server, start, stop, restart')
+        console.log('[miolo] Available commands: create, dev, deb, build, start, stop, restart, create-bin')
         process.exit(1)
     }
   } catch (error) {

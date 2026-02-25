@@ -1,6 +1,6 @@
 import path from 'path'
 import { existsSync } from 'node:fs';
-import {readJsonFileSync} from './util.mjs'
+import {readJsonFileSync} from '../../util.mjs'
 import alias_plugin from '@rollup/plugin-alias';
 
 
