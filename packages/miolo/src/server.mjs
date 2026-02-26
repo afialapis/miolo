@@ -1,30 +1,25 @@
-import Koa                                from 'koa'
-import { init_config }                    from './config/index.mjs'
-
-import { init_context_middleware }         from './middleware/context/index.mjs'
-import { init_headers_middleware }         from './middleware/http/headers.mjs'
-import { init_body_middleware }            from './middleware/http/body.mjs'
-import { init_catcher_middleware }         from './middleware/http/catcher.mjs'
-import { init_rate_limit_middleware }      from './middleware/http/ratelimit.mjs'
-import { init_static_middleware }          from './middleware/static/index.mjs'
-import { init_request_middleware }         from './middleware/http/request.mjs'
-import { init_route_robots }               from './middleware/routes/robots.mjs'
-import { init_route_catch_js_error }       from './middleware/routes/catch_js_error.mjs'
-
-import { init_guest_auth_middleware }      from './middleware/auth/guest.mjs'
-import { init_basic_auth_middleware }      from './middleware/auth/basic.mjs'
-import { init_passport_auth_middleware }   from './middleware/auth/passport/index.mjs'
-
-import { init_extra_middlewares }          from './middleware/extra.mjs'
-import { init_router }                     from './middleware/routes/router/index.mjs'
-
-import { init_ssr_render_middleware }      from './middleware/ssr/ssr_render.mjs'
-
+import Koa from "koa"
+import { init_config } from "./config/index.mjs"
 //import {init_socket}                      from './engines/socket/index.mjs'
-import { init_cron }                       from './engines/cron/index.mjs'
-import { init_http_server }                from './engines/http/index.mjs'
+import { init_cron } from "./engines/cron/index.mjs"
+import { init_http_server } from "./engines/http/index.mjs"
+import { init_basic_auth_middleware } from "./middleware/auth/basic.mjs"
+import { init_guest_auth_middleware } from "./middleware/auth/guest.mjs"
+import { init_passport_auth_middleware } from "./middleware/auth/passport/index.mjs"
+import { init_context_middleware } from "./middleware/context/index.mjs"
+import { init_extra_middlewares } from "./middleware/extra.mjs"
+import { init_body_middleware } from "./middleware/http/body.mjs"
+import { init_catcher_middleware } from "./middleware/http/catcher.mjs"
+import { init_headers_middleware } from "./middleware/http/headers.mjs"
+import { init_rate_limit_middleware } from "./middleware/http/ratelimit.mjs"
+import { init_request_middleware } from "./middleware/http/request.mjs"
+import { init_route_catch_js_error } from "./middleware/routes/catch_js_error.mjs"
+import { init_route_robots } from "./middleware/routes/robots.mjs"
+import { init_router } from "./middleware/routes/router/index.mjs"
+import { init_ssr_render_middleware } from "./middleware/ssr/ssr_render.mjs"
+import { init_static_middleware } from "./middleware/static/index.mjs"
 
-async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
+async function miolo(makeConfig, devInit = undefined, devRender = undefined) {
   const app = new Koa()
 
   // Init some pieces
@@ -37,10 +32,10 @@ async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
   if (devInit) {
     await devInit(app, config)
   }
-  
+
   // CORS and other headers
-  init_headers_middleware(app, config.http)    
-  
+  init_headers_middleware(app, config.http)
+
   // Compress and body parser
   init_body_middleware(app)
 
@@ -67,7 +62,7 @@ async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
   // auth middleware
   if (config.auth.guest.enabled === true) {
     init_guest_auth_middleware(app, config.auth.guest, config?.session)
-  }  
+  }
 
   if (config.auth.basic.enabled === true) {
     init_basic_auth_middleware(app, config.auth.basic)
@@ -78,7 +73,7 @@ async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
   }
 
   // extra middlewares
-  const extra_middlewares= config?.middlewares
+  const extra_middlewares = config?.middlewares
   if (extra_middlewares) {
     init_extra_middlewares(app, extra_middlewares)
   }
@@ -93,21 +88,22 @@ async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
 
   // Init cron (will not start jobs yet)
   init_cron(app, config?.cron)
-    
+
   // Init http server
-  init_http_server(app, config?.http) 
+  init_http_server(app, config?.http)
 
   // Util callbacks
   app.start = async () => {
     // Init and reset db connection
     await app.context.miolo.db.init_connection()
-    
+
     await app.http.start()
     await app.cron.start()
   }
-  
+
   app.stop = async () => {
     await app.context.miolo.db.drop_connections()
+    await app.context.miolo.cache.drop_caches()
     await app.http.stop()
     await app.cron.stop()
     if (app?.vite) {
@@ -118,7 +114,7 @@ async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
   app.restart = async () => {
     await app.stop()
     await app.start()
-  }  
+  }
 
   // Socket.io
   // init_socket(app, config?.socket)
@@ -126,4 +122,4 @@ async function miolo(makeConfig, devInit= undefined, devRender= undefined) {
   return app
 }
 
-export {miolo}
+export { miolo }

@@ -26,20 +26,22 @@ export function init_context_cache(config, logger) {
     return Object.keys(cache_stores)
   }
 
-  const drop_cache = async (name, clean) => {
+  const drop_cache = async (name, clean = true) => {
     const cache_stores = await _init_cache_stores()
     if (clean) {
       const cache = await get_cache(name)
-      cache.unsetAll()
+      //await cache.unsetAll()
+      await cache.close()
     }
     delete cache_stores[name]
   }
 
-  const drop_caches = async (clean) => {
+  const drop_caches = async (clean = true) => {
     if (clean) {
       const cache_stores = await _init_cache_stores()
       for (const [_name, cache] of Object.entries(cache_stores)) {
-        await cache.unsetAll()
+        //await cache.unsetAll()
+        await cache.close()
       }
     }
 

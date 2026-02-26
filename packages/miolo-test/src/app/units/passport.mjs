@@ -73,7 +73,6 @@ test("passport", async (t) => {
     assert.strictEqual(authenticated, true)
   })
 
-  /*
   await t.test(`[miolo-test-app][passport] should clean todos`, async () => {
     const ok = await clean_todos(fetcher)
     assert.strictEqual(ok, true)
@@ -107,12 +106,11 @@ test("passport", async (t) => {
 
     assert.strictEqual(res.length, 1)
   })
-    
 
   await t.test(`[miolo-test-app][passport] should logout`, async () => {
     const { authenticated } = await logout(fetcher)
     assert.strictEqual(authenticated, false)
-  })*/
+  })
 
   await t.test(`[miolo-test-app][passport] should stop server`, async () => {
     await test_app_stop()
