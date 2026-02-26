@@ -1,64 +1,66 @@
-import React , {useState, useEffect, useCallback} from 'react'
-import Context from './MioloContext.mjs'
-import { miolo_client } from 'miolo-cli'
-import { useSsrDataOrReload } from '../ssr/useSsrDataOrReload.mjs'
+import { miolo_client } from "miolo-cli"
+import { useCallback, useEffect, useState } from "react"
+import { useSsrDataOrReload } from "../ssr/useSsrDataOrReload.mjs"
+import Context from "./MioloContext.mjs"
 
+const MioloContextProvider = ({ context, children }) => {
+  const [innerContext, setInnerContext] = useState(context)
+  const [mioloObj, setMioloObj] = useState(miolo_client(context))
 
-const MioloContextProvider = ({context, children}) => {
-  const [innerContext, setInnerContext]= useState(context)
-  const [mioloObj, setMioloObj]= useState(miolo_client(context))
-    
   useEffect(() => {
     setInnerContext(context)
     setMioloObj(miolo_client(context))
   }, [context])
-  
-  const localLogin = useCallback(async (params) => {
-    const { fetcher } = mioloObj
-    const { config } = innerContext
 
-    const url = config.login_url || '/login'
-    const resp = await fetcher.post(url, params)
+  const localLogin = useCallback(
+    async (params) => {
+      const { fetcher } = mioloObj
+      const { config } = innerContext
 
-    if (resp?.data) {
-      if (resp?.data?.authenticated) {
-        setInnerContext(current => {
-          return {
-            ...current,
-            ...resp?.data,
-          }
-        })
+      const url = config.login_url || "/login"
+      const resp = await fetcher.post(url, params)
+
+      if (resp?.data) {
+        if (resp?.data?.authenticated) {
+          setInnerContext((current) => {
+            return {
+              ...current,
+              ...resp?.data
+            }
+          })
+        }
+
+        return resp?.data
       }
 
-      return resp?.data
-    }
-
-    return {}
-  }, [innerContext, mioloObj])
+      return {}
+    },
+    [innerContext, mioloObj]
+  )
 
   const googleLogin = useCallback(() => {
-    window.location.href = '/auth/google'
+    window.location.href = "/auth/google"
   }, [])
 
   const logout = useCallback(async () => {
     const { fetcher } = mioloObj
     const { config } = innerContext
 
-    const url = config.logout_url || '/logout'
+    const url = config.logout_url || "/logout"
     const _resp = await fetcher.post(url)
     // resp.redirected= true
 
-    setInnerContext(current => {
+    setInnerContext((current) => {
       return {
         ...current,
         user: undefined,
-        authenticated: false,
+        authenticated: false
       }
     })
 
     return {
       user: undefined,
-      authenticated: false,
+      authenticated: false
     }
   }, [innerContext, mioloObj])
 
@@ -66,19 +68,19 @@ const MioloContextProvider = ({context, children}) => {
     setInnerContext((current) => {
       return {
         ...current,
-        user,
+        user
       }
     })
   }, [])
 
   const useSsrData = (name, defval, loader, modifier) => {
     return useSsrDataOrReload(innerContext, mioloObj, name, defval, loader, modifier)
-  }  
-  
+  }
+
   return (
-    <Context.Provider 
+    <Context.Provider
       value={{
-        //context: innerContext, 
+        //context: innerContext,
         //setContext: setInnerContext,
         //miolo: mioloObj,
         user: innerContext.user,
@@ -90,11 +92,11 @@ const MioloContextProvider = ({context, children}) => {
         localLogin,
         logout,
         useSsrData
-      }}>
+      }}
+    >
       {children}
     </Context.Provider>
   )
 }
-
 
 export default MioloContextProvider

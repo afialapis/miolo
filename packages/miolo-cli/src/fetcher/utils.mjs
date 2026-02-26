@@ -1,4 +1,4 @@
-import qs from 'qs'
+import qs from "qs"
 
 /**
  * Transform an JSON object to a query string
@@ -10,7 +10,7 @@ import qs from 'qs'
 //     return value
 //   }
 // }
-// 
+//
 // export function json_to_query_string(obj) {
 //   if (obj && (Object.keys(obj).length>0)) {
 //     const uparams = new URLSearchParams()
@@ -30,17 +30,16 @@ import qs from 'qs'
 // }
 
 export function json_to_query_string(obj) {
-  if (!obj || Object.keys(obj).length === 0) return '';
-  return `?${qs.stringify(obj, { arrayFormat: 'repeat' })}`;
+  if (!obj || Object.keys(obj).length === 0) return ""
+  return `?${qs.stringify(obj, { arrayFormat: "repeat" })}`
 }
 
 export function trim_left(str, what) {
-  return str.replace(new RegExp(`^${what || '\\s'}+`), '')
+  return str.replace(new RegExp(`^${what || "\\s"}+`), "")
 }
 
-
 export function omit_nil(obj) {
-  if (typeof obj !== 'object') return obj
+  if (typeof obj !== "object") return obj
   return Object.keys(obj).reduce((acc, v) => {
     if (obj[v] !== undefined) acc[v] = omit_nil(obj[v])
     return acc
@@ -50,7 +49,7 @@ export function omit_nil(obj) {
 export function null_to_undefined(value) {
   if (Array.isArray(value)) {
     return value.map(null_to_undefined)
-  } else if (value && typeof value === 'object') {
+  } else if (value && typeof value === "object") {
     const data = {}
     for (const [key, val] of Object.entries(value)) {
       data[key] = val === null ? undefined : null_to_undefined(val)

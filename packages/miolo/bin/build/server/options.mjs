@@ -16,9 +16,9 @@ import BABEL_CONFIG from './babel.config.js'
 
 const NODE_ENV = process.env?.NODE_ENV || 'production'
 
-export async function miolo_build_options_for_server(appName, pkgPath, srvEntry, srvDest, bundleDeps= true) {
+export async function miolo_build_options_for_server(appName, pkgPath, srvEntry, srvDest, srvExt, bundleDeps= true) {
   const input = path.join(pkgPath, srvEntry)
-  const outputFile = path.join(pkgPath, srvDest, `${appName}.node.bundle.mjs`)
+  const outputFile = path.join(pkgPath, srvDest, `${appName}.${srvExt}`)
   
   const inputOptions= {
     input,

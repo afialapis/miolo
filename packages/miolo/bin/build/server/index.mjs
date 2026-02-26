@@ -5,19 +5,19 @@ import {miolo_build_options_for_server} from './options.mjs'
 import {miolo_bundle} from './bundle.mjs'
 import {miolo_fix_prod_build} from './fix.mjs'
 
-async function _miolo_build_server(appName, pkgPath, srvEntry, srvDest, watch= false) {
-  const [esmnInputOptions, esmnOutputs, outputFile] = await miolo_build_options_for_server(appName, pkgPath, srvEntry, srvDest)
+async function _miolo_build_server(appName, pkgPath, srvEntry, srvDest, srvExt, watch= false) {
+  const [esmnInputOptions, esmnOutputs, outputFile] = await miolo_build_options_for_server(appName, pkgPath, srvEntry, srvDest, srvExt)
   await miolo_bundle(appName, pkgPath, esmnInputOptions, esmnOutputs, watch)
   await miolo_fix_prod_build(appName, outputFile)
 }
 
 
-export async function miolo_build_server(appName, pkgPath, config, srvEntry, srvDest) {
+export async function miolo_build_server(appName, pkgPath, config, srvEntry, srvDest, srvExt) {
   
   // const watch = config.build.dev.watcher?.enabled === true
   const watch = false
 
-  await _miolo_build_server(appName, pkgPath, srvEntry, srvDest, watch)
+  await _miolo_build_server(appName, pkgPath, srvEntry, srvDest, srvExt, watch)
 
   if (watch) {
     const srcFolder = path.join(pkgPath, 'src')

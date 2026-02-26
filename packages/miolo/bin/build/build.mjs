@@ -5,7 +5,7 @@ import { cleanFolder } from '../util.mjs'
 import { init_config } from '../../src/config/index.mjs'
 
 
-export default async function(appName, cliEntry, cliDest, cliSuffix, htmlFile, srvEntry, configEntry, srvDest, ssrEntry, ssrDest) {
+export default async function(appName, cliEntry, cliDest, cliSuffix, htmlFile, srvEntry, configEntry, srvDest, srvExt, ssrEntry, ssrDest) {
   console.log(`[${appName}][build] Starting full build process...`)
 
   const pkgPath = process.cwd()
@@ -24,7 +24,7 @@ export default async function(appName, cliEntry, cliDest, cliSuffix, htmlFile, s
   await miolo_build_cli(appName, pkgPath, config, cliEntry, cliDest, cliSuffix, htmlFile, ssrEntry, ssrDest )
 
   // 4. Build Backend: Node server
-  await miolo_build_server(appName, pkgPath, config, srvEntry, srvDest)
+  await miolo_build_server(appName, pkgPath, config, srvEntry, srvDest, srvExt)
 
   console.log(`[${appName}][build] Build process completed successfully!`)
   process.exit(0)

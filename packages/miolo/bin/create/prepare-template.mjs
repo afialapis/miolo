@@ -41,7 +41,7 @@ const filesToCopy = [
   { src: 'components.json', dest: 'components.json' },
   { src: 'jsconfig.json', dest: 'jsconfig.json' },
   { src: 'package.json', dest: 'package.json' },
-  { src: 'eslint.config.js', dest: 'eslint.config.js' },
+  { src: 'biome.json', dest: 'biome.json' },
   { src: 'postcss.config.js', dest: 'postcss.config.js' },
   //{ src: 'vite.config.mjs', dest: 'vite.config.mjs' }
 ]

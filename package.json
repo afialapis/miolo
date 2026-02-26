@@ -18,16 +18,18 @@
   "type": "module",
   "private": true,
   "packageManager": "npm@11.9.0",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "clean-root": "rm -fr node_modules package-lock.json .turbo",
-    "clean-pkgs": "rm -fr packages/**/node_modules packages/**/.turbo packages/**/dist/* && mkdir -p packages/miolo-demo/dist/cli && mkdir -p packages/miolo-demo/dist/server && mkdir -p packages/miolo-sample/dist/cli && mkdir -p packages/miolo-sample/dist/server",
+    "clean-pkgs": "rm -fr packages/**/node_modules packages/**/.turbo packages/**/build/* && mkdir -p packages/miolo-demo/build/cli && mkdir -p packages/miolo-demo/build/server && mkdir -p packages/miolo-sample/build/cli && mkdir -p packages/miolo-sample/build/server",
     "reset": "npm run clean-root && npm run clean-pkgs && npm i && turbo telemetry disable",
-    "lint": "turbo run lint",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
     "dist": "turbo run dist",
-    "site": "npx xeira site",
-    "Xtest": "turbo run test --filter=miolo-test",
-    "test": "cd ./packages/miolo-test && npm run test && cd ../..",
+    "site": "turbo run site",
+    "test": "turbo run test --filter=miolo-test",
     "demo": "turbo run dev --filter=miolo-demo",
     "demo-deb": "turbo run deb --filter=miolo-demo",
     "demo-prod": "turbo run prod --filter=miolo-demo",
@@ -40,8 +42,8 @@
     "publish-all": "npm run site && npm run publish-miolo && npm run publish-miolo-cli && npm run publish-miolo-react"
   },
   "devDependencies": {
-    "turbo": "^2.8.3",
-    "xeira": "^2.0.0-beta.10"
+    "@biomejs/biome": "2.4.4",
+    "turbo": "^2.8.3"
   },
   "overrides": {
     "@babel/runtime": "^7.28.6",

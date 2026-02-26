@@ -1,37 +1,37 @@
-import { MioloModel, MioloArray } from '../../src/index.mjs'
+import { MioloArray, MioloModel } from "../src/index.mjs"
 
 export class Flavour extends MioloModel {
-  constructor(data) {
-    super(data)
-  }
-
   get id() {
-    return this._get('id')
+    return this._get("id")
   }
 
   get name() {
-    return this._get('name')
+    return this._get("name")
   }
 
   get texture() {
-    return this._get('texture')
+    return this._get("texture")
   }
 
   get strength() {
-    return this._get('strength')
+    return this._get("strength")
   }
 
   get color() {
-    return this._get('color')
+    return this._get("color")
   }
 
   getStrengthScore() {
-    return this.get_from_cache_or_make('strength_score', () => {
+    return this.get_from_cache_or_make("strength_score", () => {
       // Expensive operation here conceptually
-      const val = this._get('strength', 'W0').replace('W', '')
-      return parseInt(val) * 2
+      const val = this._get("strength", "W0").replace("W", "")
+      return parseInt(val, 10) * 2
     })
-  }  
+  }
+
+  resetStrengthScore() {
+    this.invalidate_cache("strength_score")
+  }
 }
 
 export class FlavourList extends MioloArray {
@@ -40,11 +40,15 @@ export class FlavourList extends MioloArray {
   }
 
   getTotalScore() {
-    return this.get_from_cache_or_make('total_score', () => {
+    return this.get_from_cache_or_make("total_score", () => {
       // simulate expensive reduction
-      return this.reduce((acc, curr) => acc + (curr.getStrengthScore()), 0)
+      return this.reduce((acc, curr) => acc + curr.getStrengthScore(), 0)
     })
-  }  
+  }
+
+  resetTotalScore() {
+    this.invalidate_cache("total_score")
+  }
 }
 
 export class Bread extends MioloModel {
@@ -54,8 +58,8 @@ export class Bread extends MioloModel {
   }
 
   get flavour() {
-    return this.get_from_cache_or_make('flavour_model', () => {
-      const flavourId = this._get('flavour_type')
+    return this.get_from_cache_or_make("flavour_model", () => {
+      const flavourId = this._get("flavour_type")
       const flavourData = this.storeFlavours.find_by_id(flavourId)
       return flavourData ? flavourData : null
     })

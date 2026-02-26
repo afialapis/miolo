@@ -28,7 +28,8 @@
     "src"
   ],
   "scripts": {
-    "lint": "npx xeira lint ./src",
+    "lint": "biome check ./src --reporter=github",
+    "lint:fix": "biome check --write ./src --reporter=github",
     "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
     "clean": "rm -fr ./dist/*",
     "bundle": "npx xeira bundle --target=browser --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo-cli --bundle_extension=umd,mjs",

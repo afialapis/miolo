@@ -1,8 +1,7 @@
-import merge from 'deepmerge'
-import { init_env_config } from './env.mjs'
-import make_config_defaults from './defaults.mjs'
-import {isPlainObject} from 'is-plain-object'
-
+import merge from "deepmerge"
+import { isPlainObject } from "is-plain-object"
+import make_config_defaults from "./defaults.mjs"
+import { init_env_config } from "./env.mjs"
 
 export function init_config(makeConfig) {
   // Init environment vars
@@ -13,20 +12,20 @@ export function init_config(makeConfig) {
   const custom_config = makeConfig()
 
   // isMergeableObject: objects like Joi schemas should be copied not merged
-  const all_config= merge(base_config, custom_config, {isMergeableObject: isPlainObject})
+  const all_config = merge(base_config, custom_config, { isMergeableObject: isPlainObject })
 
   // Some addendum
-  all_config.use_catcher = all_config?.http?.catcher_url ? true : false
+  all_config.use_catcher = all_config?.http?.catcher_url !== undefined
 
-  for (const auth_type of ['guest', 'basic', 'passport']) {
-    if (all_config.auth?.[auth_type] == undefined) {
+  for (const auth_type of ["guest", "basic", "passport"]) {
+    if (all_config.auth?.[auth_type] === undefined) {
       all_config.auth[auth_type] = {
         enabled: false
       }
-    } else if (all_config.auth[auth_type]?.enabled == undefined) {
+    } else if (all_config.auth[auth_type]?.enabled === undefined) {
       all_config.auth[auth_type].enabled = true
     }
   }
-  
+
   return all_config
 }

@@ -8,12 +8,13 @@
       "outputs": [".turbo/**"]
     },
     "lint": {
-      "cache": true,
-      "dependsOn": [],
-      "outputs": []
+      "cache": true
+    },
+    "lint:fix": {
+      "cache": false
     },
     "dist": {
-      "inputs": ["$TURBO_DEFAULT$", "!packages/miolo-demo/**", "!packages/miolo-sample/**", "!packages/miolo-test/**"],
+      "inputs": ["$TURBO_DEFAULT$", "!packages/miolo/**", "!packages/miolo-demo/**", "!packages/miolo-sample/**", "!packages/miolo-test/**"],
       "cache": true,
       "dependsOn": ["^dist"],
       "outputs": ["dist/**"]
@@ -30,7 +31,13 @@
       "dependsOn": [],
       "outputs": []
     },
-    "prod": {
+    "test": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [],
+      "outputs": []
+    },
+    "sample": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["^dist"],

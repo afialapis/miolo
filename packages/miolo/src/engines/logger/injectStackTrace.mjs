@@ -16,7 +16,7 @@ const injectStackTrace = format((info) => {
     let wrapperIndex = stackLines.findIndex(line => line.includes('src/engines/logger/index.mjs'))
     if (wrapperIndex == -1) {
       for (const [lidx, l] of stackLines.entries()) {
-        if (l.includes(`${process.env.MIOLO_NAME || 'miolo'}.node.bundle.mjs`)) {
+        if (l.includes(`${process.env.MIOLO_NAME || 'miolo'}.${process.env.MIOLO_BUILD_SERVER_EXT || 'node.bundle.mjs'}`)) {
           const segs = ['Format.transform', 'DerivedLogger']
           segs.forEach(seg => {
             if (l.includes(seg)) {

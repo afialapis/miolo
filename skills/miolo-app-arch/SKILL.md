@@ -15,10 +15,10 @@ miolo-app/
 ├── .env                  # Development environment variables
 ├── .env.production       # Production environment variables  
 ├── .editorconfig         # Editor configuration
-├── .gitignore           # Git ignore rules
+├── .gitignore            # Git ignore rules
 ├── components.json       # shadcn/ui configuration
 ├── jsconfig.json         # JavaScript/Import path configuration
-├── eslint.config.js      # ESLint configuration
+├── biome.json            # Biome configuration
 ├── postcss.config.js     # PostCSS/Tailwind configuration
 ├── docker/               # Docker deployment configuration
 ├── db/                   # Database initialization (optional)

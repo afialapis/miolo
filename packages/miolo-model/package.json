@@ -15,7 +15,6 @@
   },
   "homepage": "https://www.afialapis.com/os/miolo",
   "license": "MIT",
-
   "type": "module",
   "exports": {
     ".": {
@@ -29,17 +28,16 @@
     "src"
   ],
   "scripts": {
-    "lint": "npx xeira lint ./src",
+    "lint": "biome check ./src --reporter=github",
+    "lint:fix": "biome check --write ./src --reporter=github",
     "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
     "clean": "rm -fr ./dist/*",
     "bundle": "npx xeira bundle --target=browser --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo-model --bundle_extension=umd,mjs",
     "dist": "npm run clean && npm run bundle",
-    "test": "NODE_OPTIONS=\"--conditions=development\" npx xeira test --files=./test/index.mjs"
+    "test": "node --test ./test/index.mjs"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "xeira": "^2.0.0-beta.10"
   }
 }
-

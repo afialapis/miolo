@@ -8,7 +8,7 @@ export function getInfoFromPkg(pkgPath) {
     const packageData = JSON.parse(content)
     const appName = packageData.name
 
-    let srvDest = './dist/server'
+    let srvDest = './build/server'
     try {
       const start = packageData.scripts.start
       if (start) {
@@ -25,7 +25,7 @@ export function getInfoFromPkg(pkgPath) {
     return [appName, srvDest]
   } catch (error) {
     console.error('[miolo] Error reading <name> package.json:', error)
-    return ['miolo', './dist/server']
+    return ['miolo', './build/server']
   }
 }
 

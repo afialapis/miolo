@@ -1,8 +1,8 @@
-import { miolo } from 'miolo'
+import { miolo } from "miolo"
 
-import {makeConfig} from './config.mjs'
+import { makeConfig } from "./config.mjs"
 
-async function test_server (authMode) {  
+async function test_server(authMode) {
   const app = await miolo(makeConfig(authMode))
   await app.start()
 
