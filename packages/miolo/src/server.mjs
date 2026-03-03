@@ -96,6 +96,10 @@ async function miolo(makeConfig, devInit = undefined, devRender = undefined) {
   app.start = async () => {
     // Init and reset db connection
     await app.context.miolo.db.init_connection()
+    await app.context.miolo.cache.init()
+    if (app?.initSessionStore) {
+      await app.initSessionStore()
+    }
 
     await app.http.start()
     await app.cron.start()
@@ -103,7 +107,10 @@ async function miolo(makeConfig, devInit = undefined, devRender = undefined) {
 
   app.stop = async () => {
     await app.context.miolo.db.drop_connections()
-    await app.context.miolo.cache.drop_caches()
+    await app.context.miolo.cache.close()
+    if (app?.closeSessionStore) {
+      await app.closeSessionStore()
+    }
     await app.http.stop()
     await app.cron.stop()
     if (app?.vite) {

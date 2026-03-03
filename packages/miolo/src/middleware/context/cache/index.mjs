@@ -1,45 +1,51 @@
 import { cacheiro } from "cacheiro"
 import { miolo_cacher_options_for_custom } from "./options.mjs"
 
-let _glob_cache_stores
+let _glob_cache_stores = {}
 
 export function init_context_cache(config, logger) {
-  const _init_cache_stores = async () => {
-    if (_glob_cache_stores === undefined) {
-      _glob_cache_stores = {}
-      const custom_options = miolo_cacher_options_for_custom(config, logger)
+  const custom_options = miolo_cacher_options_for_custom(config, logger)
 
-      for (const [name, options] of Object.entries(custom_options)) {
-        const cache_store = await cacheiro(options)
-        _glob_cache_stores[name] = cache_store
-      }
+  const _init_cache = async (name) => {
+    const cache_store = await cacheiro(custom_options?.[name] || {})
+    _glob_cache_stores[name] = cache_store
+    return cache_store
+  }
+
+  const init = async () => {
+    _glob_cache_stores = {}
+
+    for (const name of Object.keys(custom_options)) {
+      _glob_cache_stores[name] = await _init_cache(name)
     }
-    return _glob_cache_stores
   }
 
   const get_cache = async (name) => {
-    const cache_stores = await _init_cache_stores()
-    return cache_stores[name]
+    let cache_store = _glob_cache_stores?.[name]
+    if (!cache_store) {
+      cache_store = await _init_cache(name)
+    }
+    return cache_store
   }
+
   const get_cache_names = async () => {
-    const cache_stores = await _init_cache_stores()
-    return Object.keys(cache_stores)
+    return Object.keys(_glob_cache_stores)
   }
 
   const drop_cache = async (name, clean = true) => {
-    const cache_stores = await _init_cache_stores()
     if (clean) {
       const cache = await get_cache(name)
-      //await cache.unsetAll()
-      await cache.close()
+      if (cache) {
+        //await cache.unsetAll()
+        await cache.close()
+      }
     }
-    delete cache_stores[name]
+    delete _glob_cache_stores[name]
   }
 
-  const drop_caches = async (clean = true) => {
+  const close = async (clean = true) => {
     if (clean) {
-      const cache_stores = await _init_cache_stores()
-      for (const [_name, cache] of Object.entries(cache_stores)) {
+      for (const [_name, cache] of Object.entries(_glob_cache_stores)) {
         //await cache.unsetAll()
         await cache.close()
       }
@@ -49,10 +55,11 @@ export function init_context_cache(config, logger) {
   }
 
   const cache_ctx = {
+    init,
     get_cache,
     get_cache_names,
     drop_cache,
-    drop_caches
+    close
   }
 
   return cache_ctx

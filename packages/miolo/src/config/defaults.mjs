@@ -1,4 +1,4 @@
-import path from "path"
+import path from "node:path"
 
 const SESSION_MAX_AGE = 86400 * 10 * 1000
 const root = (dir) => path.resolve(process.cwd(), dir)

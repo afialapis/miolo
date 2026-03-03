@@ -85,7 +85,7 @@ export const makeConfig = (authMode, logLevel = "error") => {
       auth,
       cache: {
         default: {
-          type: "memory" // Cacheiro+Redis seems to leave some unreesolved promise that fucks up the tests
+          type: "combined"
         }
       }
     }

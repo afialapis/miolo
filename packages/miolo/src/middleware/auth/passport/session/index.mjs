@@ -1,6 +1,6 @@
-import { createSession } from 'koa-session'
+import { createSession } from "koa-session"
 // import store_koa_redis from './store_koa_redis.mjs'
-import {init_session_cache_store} from './store.mjs'
+import { init_session_cache_store } from "./store.mjs"
 
 /**
  * Middleware for session
@@ -10,22 +10,29 @@ import {init_session_cache_store} from './store.mjs'
 function init_session_middleware(app, sessionConfig, cacheConfig) {
   const store = init_session_cache_store(cacheConfig, app.context.miolo.logger)
 
-  app.keys = [sessionConfig.secret || '*secret*']
+  app.keys = [sessionConfig.secret || "*secret*"]
 
-  const options= {
+  const options = {
     // store: store_koa_redis,
     store,
-    ...sessionConfig.options || {}
+    ...(sessionConfig.options || {})
   }
-  
+
   app.use(createSession(options, app))
-  
-  app.use (async (ctx, next) => {
+
+  app.use(async (ctx, next) => {
     ctx.getSessionStoreKey = (externalKey) => {
       return store.getInnerKey(externalKey)
     }
     await next()
   })
+
+  app.initSessionStore = async () => {
+    await store.initCache()
+  }
+  app.closeSessionStore = async () => {
+    await store.closeCache()
+  }
 }
 
-export {init_session_middleware}
+export { init_session_middleware }
