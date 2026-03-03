@@ -78,7 +78,12 @@ test("restarts", async (t) => {
     async () => {
       const cache = await app.context.miolo.cache.get_cache("test")
       const value = await cache.getItem("test-value")
-      assert.strictEqual(value, random_value)
+
+      if (cache.options.type === "memory") {
+        assert.strictEqual(value, undefined)
+      } else {
+        assert.strictEqual(value, random_value)
+      }
     }
   )
 
@@ -111,7 +116,12 @@ test("restarts", async (t) => {
     async () => {
       const cache = await app.context.miolo.cache.get_cache("test")
       const value = await cache.getItem("test-value")
-      assert.strictEqual(value, random_value)
+
+      if (cache.options.type === "memory") {
+        assert.strictEqual(value, undefined)
+      } else {
+        assert.strictEqual(value, random_value)
+      }
     }
   )
 

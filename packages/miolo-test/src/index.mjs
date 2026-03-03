@@ -1,3 +1,3 @@
-//import "./routes/index.mjs"
-//import "./app/index.mjs"
+import "./routes/index.mjs"
+import "./app/index.mjs"
 import "./restarts/index.mjs"

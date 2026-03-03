@@ -108,7 +108,7 @@ export const makeConfig = () => {
     },
     cache: {
       default: {
-        type: "memory"
+        type: "combined" // "memory"
       },
       custom: {
         test: {

@@ -68,6 +68,5 @@ class SessionStore {
 export function init_session_cache_store(cacheConfig, logger) {
   const options = miolo_cacher_options_for_session({ cache: cacheConfig }, logger)
   const store = new SessionStore(options, logger)
-  //store.initCache()
   return store
 }
