@@ -1,4 +1,3 @@
-import React from "react"
 import { Toaster as Sonner } from "sonner"
 import useThemeContext from "#cli/context/theme/useThemeContext.mjs"
 

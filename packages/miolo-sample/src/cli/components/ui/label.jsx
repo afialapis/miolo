@@ -1,6 +1,4 @@
 import { Label as LabelPrimitive } from "radix-ui"
-import * as React from "react"
-
 import { cn } from "#cli/lib/utils.mjs"
 
 function Label({ className, ...props }) {

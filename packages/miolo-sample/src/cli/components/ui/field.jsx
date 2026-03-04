@@ -70,6 +70,7 @@ const fieldVariants = cva("group/field flex w-full gap-3 data-[invalid=true]:tex
 
 function Field({ className, orientation = "vertical", ...props }) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: biome-ignore
     <div
       role="group"
       data-slot="field"
@@ -169,13 +170,19 @@ function FieldError({ className, children, errors, ...props }) {
 
     const uniqueErrors = [...new Map(errors.map((error) => [error?.message, error])).values()]
 
-    if (uniqueErrors?.length == 1) {
+    if (uniqueErrors?.length === 1) {
       return uniqueErrors[0]?.message
     }
 
     return (
       <ul className="ml-4 flex list-disc flex-col gap-1">
-        {uniqueErrors.map((error, index) => error?.message && <li key={index}>{error.message}</li>)}
+        {uniqueErrors.map(
+          (error, index) =>
+            error?.message && (
+              // biome-ignore lint/suspicious/noArrayIndexKey: biome-ignore
+              <li key={index}>{error.message}</li>
+            )
+        )}
       </ul>
     )
   }, [children, errors])

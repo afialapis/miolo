@@ -1,6 +1,4 @@
 import { cva } from "class-variance-authority"
-import * as React from "react"
-
 import { cn } from "#cli/lib/utils.mjs"
 
 const alertVariants = cva(

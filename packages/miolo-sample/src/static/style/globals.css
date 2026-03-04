@@ -4,8 +4,11 @@
 @import "./json-tree.css";
 @import "./skeleton.css";
 
+/* biome-ignore lint/suspicious/noUnknownAtRules: biome-ignore */
 @tailwind base;
+/* biome-ignore lint/suspicious/noUnknownAtRules: biome-ignore */
 @tailwind components;
+/* biome-ignore lint/suspicious/noUnknownAtRules: biome-ignore */
 @tailwind utilities;
 
 @custom-variant dark (&:is(.dark *));

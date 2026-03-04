@@ -1,6 +1,5 @@
 import { Slot } from "@radix-ui/react-slot"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
-import * as React from "react"
 
 import { cn } from "#cli/lib/utils.mjs"
 
@@ -45,6 +44,8 @@ function BreadcrumbLink({ asChild, className, ...props }) {
 
 function BreadcrumbPage({ className, ...props }) {
   return (
+    // biome-ignore lint/a11y/useFocusableInteractive: biome-ignore
+    // biome-ignore lint/a11y/useSemanticElements: biome-ignore
     <span
       data-slot="breadcrumb-page"
       role="link"

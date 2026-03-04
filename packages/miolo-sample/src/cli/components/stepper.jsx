@@ -1,14 +1,14 @@
 import { Slot } from "@radix-ui/react-slot"
 import * as Stepperize from "@stepperize/react"
 import { cva } from "class-variance-authority"
-import * as React from "react"
+import { Children, createContext, isValidElement, useContext, useMemo } from "react"
 import { Button } from "#cli/components/ui/patched/button.jsx"
 import { cn } from "#cli/lib/utils.mjs"
 
-const StepperContext = React.createContext(null)
+const StepperContext = createContext(null)
 
 const useStepperProvider = () => {
-  const context = React.useContext(StepperContext)
+  const context = useContext(StepperContext)
   if (!context) {
     throw new Error("useStepper must be used within a StepperProvider.")
   }
@@ -53,6 +53,7 @@ const defineStepper = (...steps) => {
       Navigation: ({ children, "aria-label": ariaLabel = "Stepper Navigation", ...props }) => {
         const { variant } = useStepperProvider()
         return (
+          /* biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: biome-ignore */
           <nav date-component="stepper-navigation" aria-label={ariaLabel} role="tablist" {...props}>
             <ol
               date-component="stepper-navigation-list"
@@ -247,11 +248,13 @@ const StepperSeparator = ({ orientation, isLast, labelOrientation, state, disabl
     return null
   }
   return (
+    /* biome-ignore lint/a11y/useSemanticElements: biome-ignore */
     <div
       date-component="stepper-separator"
       data-orientation={orientation}
       data-state={state}
       data-disabled={disabled}
+      /* biome-ignore lint/a11y/useAriaPropsForRole: biome-ignore */
       role="separator"
       tabIndex={-1}
       className={classForSeparator({ orientation, labelOrientation })}
@@ -343,15 +346,15 @@ function scrollIntoStepperPanel(node, tracking) {
 }
 
 const useStepChildren = (children) => {
-  return React.useMemo(() => extractChildren(children), [children])
+  return useMemo(() => extractChildren(children), [children])
 }
 
 const extractChildren = (children) => {
-  const childrenArray = React.Children.toArray(children)
+  const childrenArray = Children.toArray(children)
   const map = new Map()
 
   for (const child of childrenArray) {
-    if (React.isValidElement(child)) {
+    if (isValidElement(child)) {
       if (child.type === Title) {
         map.set("title", child)
       } else if (child.type === Description) {

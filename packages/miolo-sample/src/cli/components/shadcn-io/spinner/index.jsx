@@ -1,5 +1,4 @@
 import { LoaderCircleIcon, LoaderIcon, LoaderPinwheelIcon } from "lucide-react"
-import React from "react"
 import { cn } from "#cli/lib/utils.mjs"
 
 const Default = ({ className, ...props }) => (
