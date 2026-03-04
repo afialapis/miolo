@@ -1,34 +1,31 @@
-import React, {useCallback} from 'react'
-import { useNavigate } from 'react-router'
-import {withMioloContext} from 'miolo-react'
-import {LoginForm} from '#cli/components/login-form.jsx'
+import { withMioloContext } from "miolo-react"
+import { useCallback } from "react"
+import { useNavigate } from "react-router"
+import { LoginForm } from "#cli/components/login-form.jsx"
 
-const Login = ({localLogin}) => {
+const Login = ({ localLogin }) => {
   const navigate = useNavigate()
- 
-  const doTheLogin = useCallback(async (username, password) => {
-    const resp = await localLogin({username, password})
 
-    if (resp.authenticated) {
-      navigate("/")
-    }
+  const doTheLogin = useCallback(
+    async (username, password) => {
+      const resp = await localLogin({ username, password })
 
-    return resp
-    
-  }, [localLogin, navigate]) 
+      if (resp.authenticated) {
+        navigate("/")
+      }
+
+      return resp
+    },
+    [localLogin, navigate]
+  )
 
   return (
-
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
-        <LoginForm
-          onLogin = {doTheLogin}
-        />
+        <LoginForm onLogin={doTheLogin} />
       </div>
-    </div>    
+    </div>
   )
 }
 
 export default withMioloContext(Login)
-
-

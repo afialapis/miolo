@@ -7,10 +7,10 @@ export async function db_user_save(miolo, data) {
   const User = await conn.get_model("account")
 
   let nuid = uid
-  if (uid == undefined) {
+  if (uid === undefined) {
     nuid = await User.insert(data, options)
   } else {
-    data["email"] = data.username
+    data.email = data.username
     await User.update(data, { id: uid }, options)
   }
   return nuid

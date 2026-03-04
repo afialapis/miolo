@@ -9,7 +9,7 @@ export async function db_todo_find(ctx, params) {
 
   const todos = await db_todo_read(ctx, filter)
 
-  if (todos.length == 0) {
+  if (todos.length === 0) {
     return null
   }
 

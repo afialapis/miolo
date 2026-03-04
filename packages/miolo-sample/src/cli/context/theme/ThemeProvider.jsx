@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { THEME_STORAGE_KEY } from "#cli/config/store_keys.mjs"
 import ThemeContext from "./ThemeContext.mjs"
 

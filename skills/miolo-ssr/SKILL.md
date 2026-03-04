@@ -187,7 +187,7 @@ function MyComponent() {
 **DataProvider using useSsrData:**
 
 ```javascript
-import React, { useState } from 'react'
+import { useState } from 'react'
 import useSessionContext from '#cli/context/session/useSessionContext.mjs'
 import TodoList from '#ns/models/TodoList.mjs'
 import DataContext from './DataContext.jsx'

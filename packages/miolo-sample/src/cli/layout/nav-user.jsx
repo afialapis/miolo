@@ -1,7 +1,6 @@
 "use client"
 
 import { ChevronsUpDown, LogOut, Moon, Shield, Sun } from "lucide-react"
-import React from "react"
 import { useNavigate } from "react-router"
 import { Avatar, AvatarFallback, AvatarImage } from "#cli/components/ui/avatar.jsx"
 import {

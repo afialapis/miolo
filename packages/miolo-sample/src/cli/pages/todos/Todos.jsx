@@ -1,4 +1,3 @@
-import React from "react"
 import TodoActions from "./TodoActions.jsx"
 import TodoAdd from "./TodoAdd.jsx"
 import TodoList from "./TodoList.jsx"

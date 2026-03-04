@@ -9,7 +9,7 @@ export async function r_todo_count_last_hours(ctx, params) {
   // TODO : handle transactions
   const options = { transaction: undefined }
 
-  const one_hour_ago = intre_now() - 60 * 60 * parseInt(params.hours)
+  const one_hour_ago = intre_now() - 60 * 60 * parseInt(params.hours, 10)
 
   const query = `
     SELECT COUNT(1) as cnt
@@ -17,7 +17,7 @@ export async function r_todo_count_last_hours(ctx, params) {
      WHERE created_at >= $1`
 
   const data = await conn.select(query, [one_hour_ago], options)
-  const res = data[0]["cnt"]
+  const res = data[0].cnt
 
   ctx.miolo.logger.verbose(
     `[r_todo_count_last_hours] Counted last ${params.hours} hours todos: ${res} `

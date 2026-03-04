@@ -1,4 +1,4 @@
-import { readdir } from "fs"
+import { readdir } from "node:fs"
 
 function readDirAsync(path) {
   return new Promise((resolve, reject) => {

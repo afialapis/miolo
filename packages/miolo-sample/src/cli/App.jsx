@@ -1,5 +1,4 @@
 import { intre_locale_init } from "intre"
-import React from "react"
 import DataProvider from "#cli/context/data/DataProvider.jsx"
 import SessionProvider from "#cli/context/session/SessionProvider.jsx"
 import ThemeProvider from "#cli/context/theme/ThemeProvider.jsx"

@@ -1,6 +1,6 @@
 import { Bomb, Bone, CircleQuestionMark, RefreshCw } from "lucide-react"
-import React, { useState } from "react"
-import { Field, FieldContent, FieldDescription, FieldLabel } from "#cli/components/ui/field.jsx"
+import { useState } from "react"
+import { Field, FieldContent, FieldLabel } from "#cli/components/ui/field.jsx"
 import { Button } from "#cli/components/ui/patched/button.jsx"
 import { Switch } from "#cli/components/ui/switch.jsx"
 
@@ -14,7 +14,7 @@ const throwAnError = () => {
 export default function TodoActions() {
   const { refreshTodoList, checkLastHours, insertFakeTodo, canEdit, useCrud, setUseCrud } =
     useTodosContext()
-  const [hours, setHours] = useState(1)
+  const [hours, _setHours] = useState(1)
 
   return (
     <div className="flex flex-col gap-4 p-4">

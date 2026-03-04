@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 
 const JsonTreeViewer = ({ data }) => {
   // Función para ordenar las claves de un objeto

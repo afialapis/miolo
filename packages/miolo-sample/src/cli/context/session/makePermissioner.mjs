@@ -12,7 +12,7 @@ class Permissioner {
     if (!code) {
       return true
     }
-    return this.permissions.filter((p) => p == code).length >= 1
+    return this.permissions.filter((p) => p === code).length >= 1
   }
   can_user_debug() {
     return this.has_permission("debug_data")
@@ -28,7 +28,7 @@ class Permissioner {
   }
 }
 
-export default function makePermissioner(user) {
+export default function makePermissioner(_user) {
   // TODO User logic based on user
   return new Permissioner(_ALL_PERMISSIONS)
 }

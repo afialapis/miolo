@@ -1,4 +1,3 @@
-import React from "react"
 import useBreads from "#cli/context/data/useBreads.mjs"
 
 import TodosProvider from "../todos/context/TodosProvider.jsx"

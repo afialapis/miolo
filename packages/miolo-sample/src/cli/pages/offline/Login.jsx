@@ -1,5 +1,3 @@
-import React from "react"
-
 import { LoginForm } from "./LoginForm.jsx"
 
 const Login = () => {
@@ -9,7 +7,7 @@ const Login = () => {
         <div className="flex justify-center gap-2 md:justify-start">
           <img
             src="/static/img/miolo_name.png"
-            alt="Image"
+            alt="miolo logo"
             className="absolute inset-0 h-40 w-40 object-contain dark:brightness-[0.8] "
           />
 
@@ -34,7 +32,7 @@ const Login = () => {
       <div className="bg-muted relative hidden lg:block">
         <img
           src="/static/img/miolo_logo.png"
-          alt="Image"
+          alt="miolo logo"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.8] dark:grayscale"
         />
       </div>

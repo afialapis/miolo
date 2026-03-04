@@ -1,5 +1,4 @@
 import { Check, CircleQuestionMark, Trash2 } from "lucide-react"
-import React from "react"
 import { Button } from "#cli/components/ui/patched/button.jsx"
 import useTodosContext from "./context/useTodosContext.mjs"
 

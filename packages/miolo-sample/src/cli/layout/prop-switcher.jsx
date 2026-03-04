@@ -1,7 +1,7 @@
 "use client"
 
 import { Cable, ChevronsUpDown, House } from "lucide-react"
-import React from "react"
+import { useState } from "react"
 import { useLocation } from "react-router"
 
 import {
@@ -26,10 +26,10 @@ export function PropSwitcher() {
   const location = useLocation()
 
   const { properties } = useDataContext()
-  const [activeProp, setActiveProp] = React.useState(properties[0])
+  const [activeProp, setActiveProp] = useState(properties[0])
 
   // TODO CHeck w
-  if (location.pathname == "/connect") {
+  if (location.pathname === "/connect") {
     return null
   }
 

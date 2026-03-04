@@ -49,15 +49,15 @@ export const make_query_filter = (filter, modifiers = {}, options = {}) => {
       filter_fields = filter_fields.filter((f) => options.fields.indexOf(f) >= 0)
     }
 
-    filter_fields.map((field_name) => {
+    filter_fields.forEach((field_name) => {
       const raw_value = filter[field_name]
-      if (raw_value == undefined) {
+      if (raw_value === undefined || raw_value === null) {
         return
       }
 
       const mod = modifiers[field_name] || {}
 
-      const prefix = values.length == 0 && startWithWhere ? " WHERE " : " AND "
+      const prefix = values.length === 0 && startWithWhere ? " WHERE " : " AND "
 
       const alias = mod?.alias || field_name
       let filter_name = alias

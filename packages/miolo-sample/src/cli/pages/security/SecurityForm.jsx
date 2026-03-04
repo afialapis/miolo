@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Input } from "#cli/components/ui/input.jsx"
 import { Label } from "#cli/components/ui/label.jsx"
 import { Button } from "#cli/components/ui/patched/button.jsx"

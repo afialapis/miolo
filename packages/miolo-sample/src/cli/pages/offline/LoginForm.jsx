@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import { useCallback, useState } from "react"
 import { Input } from "#cli/components/ui/input.jsx"
 import { Label } from "#cli/components/ui/label.jsx"
 import { Button } from "#cli/components/ui/patched/button.jsx"
@@ -61,7 +61,7 @@ export function LoginForm({ className, forgotLink }) {
           <Button type="submit" className="w-full">
             Login
           </Button>
-          {forgotLink != undefined ? (
+          {forgotLink !== undefined ? (
             <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center">
               <a
                 href={forgotLink}
@@ -87,6 +87,7 @@ export function LoginForm({ className, forgotLink }) {
       </div>
       <Button variant="outline" className="w-full mt-8" onClick={googleLogin}>
         <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <title>Google</title>
           <path
             d="M23.75,16A7.7446,7.7446,0,0,1,8.7177,18.6259L4.2849,22.1721A13.244,13.244,0,0,0,29.25,16"
             fill="#00ac47"

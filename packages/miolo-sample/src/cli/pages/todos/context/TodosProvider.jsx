@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import { useCallback, useState } from "react"
 import useSessionContext from "#cli/context/session/useSessionContext.mjs"
 import TodoList from "#ns/models/TodoList.mjs"
 import TodosContext from "./TodosContext.jsx"
@@ -11,7 +11,7 @@ const TodosProvider = ({ children }) => {
   const [todoList, setTodoList, refreshTodoList] = useSsrData(
     "todos",
     [],
-    async (context, fetcher) => {
+    async (_context, fetcher) => {
       setStatus("loading")
       let data
       if (useCrud) {
@@ -54,7 +54,7 @@ const TodosProvider = ({ children }) => {
     (todoId) => {
       async function toggleIt() {
         const nTodoList = [...todoList]
-        const selectedTodoIndex = nTodoList.findIndex((item) => item.id == todoId)
+        const selectedTodoIndex = nTodoList.findIndex((item) => item.id === todoId)
         nTodoList[selectedTodoIndex].done = !nTodoList[selectedTodoIndex].done
 
         setTodoList(nTodoList)
@@ -78,7 +78,7 @@ const TodosProvider = ({ children }) => {
     async (todoId) => {
       const nTodoList = [...todoList]
       nTodoList.splice(
-        nTodoList.findIndex((item) => item.id == todoId),
+        nTodoList.findIndex((item) => item.id === todoId),
         1
       )
 

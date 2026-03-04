@@ -45,6 +45,7 @@
     "joi": "^18.0.2",
     "lucide-react": "^0.576.0",
     "miolo-cli": "file:../miolo-cli",
+    "miolo-model": "file:../miolo-model",
     "miolo-react": "file:../miolo-react",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.3",

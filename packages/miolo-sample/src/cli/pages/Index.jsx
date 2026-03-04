@@ -1,4 +1,3 @@
-import React from "react"
 import useSessionContext from "#cli/context/session/useSessionContext.mjs"
 import IndexOffline from "#cli/pages/IndexOffline.jsx"
 import IndexOnline from "#cli/pages/IndexOnline.jsx"

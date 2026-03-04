@@ -1,6 +1,6 @@
 "use client"
 import { Cable, ChartSpline, ChevronRight, HousePlug, Route, RouteOff } from "lucide-react"
-import React, { useMemo } from "react"
+import { useMemo } from "react"
 import { Link } from "react-router"
 
 import {
@@ -37,7 +37,7 @@ export function NavLastTodos() {
             <Link to="/">Inicio</Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
-        {lastTodos.length == 0 ? null : (
+        {lastTodos.length === 0 ? null : (
           <Collapsible key={"Conectadas"} asChild defaultOpen={true} className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>

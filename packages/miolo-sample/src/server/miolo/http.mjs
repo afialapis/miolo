@@ -1,4 +1,4 @@
-import path from "path"
+import path from "node:path"
 
 const root = (dir) => path.resolve(process.cwd(), dir)
 

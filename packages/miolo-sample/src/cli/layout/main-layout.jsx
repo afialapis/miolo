@@ -1,4 +1,4 @@
-import React, { Fragment } from "react"
+import { Fragment } from "react"
 import { Outlet } from "react-router"
 import { Spinner } from "#cli/components/shadcn-io/spinner/index.jsx"
 import {
@@ -36,9 +36,9 @@ export default function MainLayout() {
           {hasBreads && (
             <Breadcrumb>
               <BreadcrumbList>
-                {firstBreads.map((bread, index) => {
+                {firstBreads.map((bread) => {
                   return (
-                    <Fragment key={`bread_${index}`}>
+                    <Fragment key={`bread_${bread[1]}`}>
                       <BreadcrumbItem className="hidden md:block">
                         <BreadcrumbLink href={bread[0]}>{bread[1]}</BreadcrumbLink>
                       </BreadcrumbItem>

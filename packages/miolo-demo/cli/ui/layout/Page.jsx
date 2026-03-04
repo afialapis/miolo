@@ -1,16 +1,14 @@
-"use client";
+"use client"
 
-import React, { useState } from "react";
-import { Menu, X, Github, Sun, Moon, LogOut } from "lucide-react";
-import { Outlet } from 'react-router'
-import { useTheme } from "#cli/components/ui/theme-provider.jsx";
+import { Github, LogOut, Menu, Moon, Sun, X } from "lucide-react"
+import { withMioloContext } from "miolo-react"
+import { useState } from "react"
+import { Outlet } from "react-router"
+import { useTheme } from "#cli/components/ui/theme-provider.jsx"
 
-import {withMioloContext} from 'miolo-react'
-
-const Layout= ({logout}) => {
-
-  const {isDark, setTheme} = useTheme()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const Layout = ({ logout }) => {
+  const { isDark, setTheme } = useTheme()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
@@ -31,7 +29,7 @@ const Layout= ({logout}) => {
         <div className="container mx-auto h-full flex flex-col md:items-center p-4">
           {/* Logo/Brand */}
           <div className="flex items-center justify-between h-16">
-          <img src="static/img/miolo_logo.png"/>
+            <img src="static/img/miolo_logo.png" />
           </div>
 
           {/* Navigation Links - Hidden on mobile when menu is closed */}
@@ -55,20 +53,13 @@ const Layout= ({logout}) => {
             {/* Theme Toggle */}
             <button
               onClick={() => {
-                setTheme(isDark ? 'light' : 'dark')
+                setTheme(isDark ? "light" : "dark")
               }}
               className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center"
             >
-              {isDark ? (
-                <Sun size={20} className="text-yellow-400" />
-              ) : (
-                <Moon size={20} />
-              )}
-              <span className="md:hidden ml-2">
-                {isDark ? "Light Mode" : "Dark Mode"}
-              </span>
+              {isDark ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} />}
+              <span className="md:hidden ml-2">{isDark ? "Light Mode" : "Dark Mode"}</span>
             </button>
-
 
             {/* Logout */}
             <button
@@ -78,20 +69,20 @@ const Layout= ({logout}) => {
               className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center"
             >
               <LogOut size={20} />
-              <span className="md:hidden ml-2">
-                {isDark ? "Light Mode" : "Dark Mode"}
-              </span>
-            </button>            
+              <span className="md:hidden ml-2">{isDark ? "Light Mode" : "Dark Mode"}</span>
+            </button>
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
       <main className="pt-16 md:pl-16 min-h-screen">
-        <div className="p-4 md:p-8"><Outlet/></div>
+        <div className="p-4 md:p-8">
+          <Outlet />
+        </div>
       </main>
     </div>
-  );
+  )
 }
 
 export default withMioloContext(Layout)

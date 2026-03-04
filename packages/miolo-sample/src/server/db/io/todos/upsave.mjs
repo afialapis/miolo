@@ -12,7 +12,7 @@ async function _db_todo_upsave(ctx, params) {
   const Todo = await conn.get_model("todo")
 
   let tid = params?.id
-  if (params?.id != undefined) {
+  if (params?.id !== undefined) {
     const nrecs = await Todo.update(params, { id: params.id }, options)
     ctx.miolo.logger.verbose(`[db_todo_upsave] Updated ${nrecs} todos`)
   } else {

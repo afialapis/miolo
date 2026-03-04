@@ -1,4 +1,4 @@
-import React, { useEffect, useState /*useCallback,*/ } from "react"
+import { useEffect, useState /*useCallback,*/ } from "react"
 import { isBrowser } from "#cli/lib/utils.mjs"
 
 const getStorageKey = (key) => {
@@ -14,10 +14,10 @@ const getPersisted = (key, defValue) => {
     const v = localStorage.getItem(k)
     try {
       const p = JSON.parse(v)
-      if (p != undefined && p != null) {
+      if (p !== undefined && p !== null) {
         return p
       }
-    } catch (e) {}
+    } catch (_) {}
   }
   return defValue
 }

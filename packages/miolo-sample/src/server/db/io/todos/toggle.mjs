@@ -16,7 +16,7 @@ async function _db_todo_toggle(ctx, params) {
   const done = !todo.done
 
   const todo_data = {
-    id: parseInt(params.id),
+    id: parseInt(params.id, 10),
     done
   }
 

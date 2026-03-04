@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import { useCallback, useState } from "react"
 import useSessionContext from "#cli/context/session/useSessionContext.mjs"
 import TodoList from "#ns/models/TodoList.mjs"
 import DataContext from "./DataContext.jsx"
@@ -8,7 +8,7 @@ const DataProvider = ({ children }) => {
   const [breads, setBreads] = useState([])
   const { useSsrData } = useSessionContext()
 
-  const [todos, _setTodos, refreshTodos] = useSsrData("todos", [], async (context, fetcher) => {
+  const [todos, _setTodos, refreshTodos] = useSsrData("todos", [], async (_context, fetcher) => {
     setStatus("loading")
     const { data: nTodos } = await fetcher.get("/api/todo/list")
     setStatus("loaded")

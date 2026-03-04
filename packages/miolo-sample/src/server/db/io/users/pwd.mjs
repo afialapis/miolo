@@ -15,10 +15,10 @@ export async function db_password_change(miolo, email, passwords) {
 
   const data = await conn.selectOne(query, [email], options)
 
-  if (isNaN(data?.id)) {
+  if (Number.isNaN(data?.id)) {
     msg = "Usuario inexistente"
   } else {
-    if (data?.password != sha512(passwords.current, process.env.MIOLO_SESSION_SALT)) {
+    if (data?.password !== sha512(passwords.current, process.env.MIOLO_SESSION_SALT)) {
       msg = "Contraseña actual incorrecta"
     } else {
       try {

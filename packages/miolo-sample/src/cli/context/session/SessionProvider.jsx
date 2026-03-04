@@ -1,5 +1,5 @@
 import { useMioloContext } from "miolo-react"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import makePermissioner from "./makePermissioner.mjs"
 import SessionContext from "./SessionContext.mjs"
 

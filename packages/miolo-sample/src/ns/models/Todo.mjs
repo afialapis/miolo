@@ -1,10 +1,6 @@
-import BaseModel from "./base/BaseModel.mjs"
+import { MioloModel } from "miolo-model"
 
-export default class Todo extends BaseModel {
-  constructor(data) {
-    super(data)
-  }
-
+export default class Todo extends MioloModel {
   get id() {
     return this._get("id", null)
   }

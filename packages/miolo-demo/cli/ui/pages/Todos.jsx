@@ -1,82 +1,86 @@
-import React, {useCallback} from 'react'
-import {withMioloContext} from 'miolo-react'
-import TodosList from './TodosList.jsx'
+import { withMioloContext } from "miolo-react"
+import { useCallback } from "react"
+import TodosList from "./TodosList.jsx"
 
-function _showTitle  (title) {
-  if (document!=undefined) {
-      document.title= title
+function _showTitle(title) {
+  if (document != undefined) {
+    document.title = title
   }
 }
 
 async function _todoListLoader(context, fetcher) {
-  _showTitle('loading todos...')
-  const {data: nTodoList} = await fetcher.read('crud/todos')     
-  _showTitle('todos loaded!')
+  _showTitle("loading todos...")
+  const { data: nTodoList } = await fetcher.read("crud/todos")
+  _showTitle("todos loaded!")
   return nTodoList
 }
 
-const Todos = ({authenticated, fetcher, useSsrData}) => {
-  const [authMode] = useSsrData('authMode', 'guest')
-  const [todoList, setTodoList, refreshTodoList] = useSsrData('todoList', [], _todoListLoader)
+const Todos = ({ authenticated, fetcher, useSsrData }) => {
+  const [authMode] = useSsrData("authMode", "guest")
+  const [todoList, setTodoList, refreshTodoList] = useSsrData("todoList", [], _todoListLoader)
 
-  const addTodo = useCallback((text) => {
+  const addTodo = useCallback(
+    (text) => {
+      async function addIt() {
+        const todoObject = {
+          id: undefined,
+          name: text,
+          done: false
+        }
 
-    async function addIt() {
+        const { data: todoId } = await fetcher.upsave("crud/todos", todoObject)
+        todoObject.id = todoId
 
-      const todoObject = {
-        id: undefined,
-        name: text,
-        done: false,
+        setTodoList([todoObject, ...todoList])
       }
 
-      const {data: todoId}= await fetcher.upsave('crud/todos', todoObject)
-      todoObject.id= todoId
+      addIt()
+    },
+    [fetcher, todoList, setTodoList]
+  )
 
-      setTodoList([todoObject, ...todoList])
-    }
+  const toggleTodo = useCallback(
+    (todoId) => {
+      async function toggleIt() {
+        const nTodoList = [...todoList]
+        const selectedTodoIndex = nTodoList.findIndex((item) => item.id == todoId)
+        nTodoList[selectedTodoIndex].done = !nTodoList[selectedTodoIndex].done
 
-    addIt()
+        setTodoList(nTodoList)
 
-  }, [fetcher, todoList, setTodoList])
+        await fetcher.upsave("crud/todos", nTodoList[selectedTodoIndex])
+      }
 
+      toggleIt()
+    },
+    [fetcher, todoList, setTodoList]
+  )
 
-  const toggleTodo = useCallback((todoId) => {
+  const removeTodo = useCallback(
+    (todoId) => {
+      const nTodoList = [...todoList]
+      nTodoList.splice(
+        nTodoList.findIndex((item) => item.id == todoId),
+        1
+      )
 
-    async function toggleIt() {
-
-      const nTodoList= [...todoList]
-      const selectedTodoIndex = nTodoList.findIndex((item) => item.id == todoId)
-      nTodoList[selectedTodoIndex].done = !nTodoList[selectedTodoIndex].done
-  
       setTodoList(nTodoList)
 
-      await fetcher.upsave('crud/todos', nTodoList[selectedTodoIndex])
-    }
+      fetcher.remove("crud/todos", todoId)
+    },
+    [fetcher, todoList, setTodoList]
+  )
 
-    toggleIt()
-
-  }, [fetcher, todoList, setTodoList])
-
-  const removeTodo = useCallback((todoId) => {
-    const nTodoList= [...todoList]
-    nTodoList.splice(
-      nTodoList.findIndex((item) => item.id == todoId),
-      1
-    )
-
-    setTodoList(nTodoList)
-
-    fetcher.remove('crud/todos', todoId)
-  }, [fetcher, todoList, setTodoList])
-
-  
-  const checkLastHours = useCallback(async ({hours}) => {
-    const {data}= await fetcher.get('crud/todos/last_hours', {hours})
-    alert(`You have added ${data} todos in the last ${hours} hours`)
-  }, [fetcher])
+  const checkLastHours = useCallback(
+    async ({ hours }) => {
+      const { data } = await fetcher.get("crud/todos/last_hours", { hours })
+      alert(`You have added ${data} todos in the last ${hours} hours`)
+    },
+    [fetcher]
+  )
 
   const insertFakeTodo = useCallback(async () => {
-    const {ok, error, data} = await fetcher.post('crud/todos/fake', {done: true})
+    const { ok, error, data } = await fetcher.post("crud/todos/fake", { done: true })
     if (!ok) {
       alert(`Error adding fake todo: ${error}`)
     } else {
@@ -85,21 +89,19 @@ const Todos = ({authenticated, fetcher, useSsrData}) => {
     refreshTodoList()
   }, [fetcher, refreshTodoList])
 
-  return (   
-      <TodosList
-        authMode       = {authMode}
-        authenticated  = {authenticated}
-        todoList       = {todoList}
-        addTodo        = {addTodo}
-        toggleTodo     = {toggleTodo}
-        removeTodo     = {removeTodo}
-        checkLastHours  = {checkLastHours}
-        insertFakeTodo = {insertFakeTodo}
-        refreshTodoList = {refreshTodoList}
-      />
+  return (
+    <TodosList
+      authMode={authMode}
+      authenticated={authenticated}
+      todoList={todoList}
+      addTodo={addTodo}
+      toggleTodo={toggleTodo}
+      removeTodo={removeTodo}
+      checkLastHours={checkLastHours}
+      insertFakeTodo={insertFakeTodo}
+      refreshTodoList={refreshTodoList}
+    />
   )
 }
 
 export default withMioloContext(Todos)
-
-

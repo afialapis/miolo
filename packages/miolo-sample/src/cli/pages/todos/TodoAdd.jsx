@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react"
-import React, { useState } from "react"
+import { useState } from "react"
 import { Button } from "#cli/components/ui/patched/button.jsx"
 import useTodosContext from "./context/useTodosContext.mjs"
 

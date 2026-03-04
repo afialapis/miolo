@@ -1,27 +1,24 @@
-import React, {useState, useCallback} from "react"
-import { cn } from "#cli/lib/utils"
+import { useCallback, useState } from "react"
 import { Button } from "#cli/components/ui/button.jsx"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "#cli/components/ui/card.jsx"
+import { Card, CardContent, CardHeader, CardTitle } from "#cli/components/ui/card.jsx"
 import { Input } from "#cli/components/ui/input.jsx"
 import { Label } from "#cli/components/ui/label.jsx"
+import { cn } from "#cli/lib/utils"
 
-export function LoginForm({className, onLogin}) {
-  const [username, setUsername] = useState('')
-  const [pwd, setPwd] = useState('')
+export function LoginForm({ className, onLogin }) {
+  const [username, setUsername] = useState("")
+  const [pwd, setPwd] = useState("")
   const [valid, setValid] = useState(true)
 
-  const handleCallback = useCallback(async (ev) => {
-    ev.preventDefault()
-    const result = await onLogin(username, pwd)
-    setValid(result?.authenticated === true)
-  }, [username, pwd, onLogin])
-    
-  
+  const handleCallback = useCallback(
+    async (ev) => {
+      ev.preventDefault()
+      const result = await onLogin(username, pwd)
+      setValid(result?.authenticated === true)
+    },
+    [username, pwd, onLogin]
+  )
+
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       <Card>
@@ -40,9 +37,8 @@ export function LoginForm({className, onLogin}) {
                   required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className={cn(valid ? 'valid' : 'invalid')}
+                  className={cn(valid ? "valid" : "invalid")}
                 />
-
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
@@ -54,7 +50,7 @@ export function LoginForm({className, onLogin}) {
                   required
                   value={pwd}
                   onChange={(e) => setPwd(e.target.value)}
-                  className={cn(valid ? 'valid' : 'invalid')}
+                  className={cn(valid ? "valid" : "invalid")}
                 />
               </div>
               <div className="flex flex-col gap-3">
@@ -67,5 +63,5 @@ export function LoginForm({className, onLogin}) {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

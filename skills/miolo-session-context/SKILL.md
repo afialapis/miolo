@@ -193,7 +193,7 @@ The application typically wraps `useMioloContext` in a `SessionProvider` for add
 **File:** `src/cli/context/session/SessionProvider.jsx`
 
 ```javascript
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useMioloContext } from 'miolo-react'
 import SessionContext from './SessionContext.mjs'
 import makePermissioner from './makePermissioner.mjs'

@@ -1,4 +1,3 @@
-import React from "react"
 import { Route, Routes } from "react-router"
 import MainLayout from "#cli/layout/main-layout.jsx"
 import Dashboard from "#cli/pages/dash/Dashboard.jsx"

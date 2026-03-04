@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Check, Trash2, Plus, Bone, CircleQuestionMark, Bomb, RefreshCw } from 'lucide-react';
+import { Bomb, Bone, Check, CircleQuestionMark, Plus, RefreshCw, Trash2 } from "lucide-react"
+import { useState } from "react"
 
-const throwAnError = () => { 
-  const obj= {}
+const throwAnError = () => {
+  const obj = {}
   const _foo = obj.foo.bar
 }
 
@@ -17,16 +17,16 @@ const TodosList = ({
   insertFakeTodo,
   refreshTodoList
 }) => {
-  const [inputText, setInputText] = useState('');
-  const [hours, setHours] = useState(1);
+  const [inputText, setInputText] = useState("")
+  const [hours, setHours] = useState(1)
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (inputText.trim()) {
-      addTodo(inputText);
-      setInputText('');
+      addTodo(inputText)
+      setInputText("")
     }
-  };
+  }
 
   return (
     <div className="max-w-2xl w-full mx-auto p-4">
@@ -41,13 +41,17 @@ const TodosList = ({
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder={(authMode!=='creds' || authenticated) ? "Things to be done..." : "LogIn in order to be able to add todos :/"}
-            disabled={!(authMode!=='creds' || authenticated)}
+            placeholder={
+              authMode !== "creds" || authenticated
+                ? "Things to be done..."
+                : "LogIn in order to be able to add todos :/"
+            }
+            disabled={!(authMode !== "creds" || authenticated)}
             className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
           />
           <button
             type="submit"
-            disabled={!(authMode!=='creds' || authenticated)}
+            disabled={!(authMode !== "creds" || authenticated)}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <Plus size={18} />
@@ -64,7 +68,7 @@ const TodosList = ({
           </button>
           <button
             onClick={() => insertFakeTodo()}
-            disabled={!(authMode!=='creds' || authenticated)}
+            disabled={!(authMode !== "creds" || authenticated)}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <Bone size={18} />
@@ -72,19 +76,19 @@ const TodosList = ({
           </button>
 
           <button
-            onClick={() => checkLastHours({hours})}
+            onClick={() => checkLastHours({ hours })}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <CircleQuestionMark size={18} />
-            {`How many todos I have added in the last ${hours} hours?`}  
-          </button>   
+            {`How many todos I have added in the last ${hours} hours?`}
+          </button>
           <button
             onClick={() => throwAnError()}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <Bomb size={18} />
-            {`Throw an JS error`}  
-          </button>          
+            {`Throw an JS error`}
+          </button>
         </div>
       </form>
 
@@ -104,21 +108,21 @@ const TodosList = ({
                 <div className="flex items-center space-x-3">
                   <button
                     onClick={() => toggleTodo(todo.id)}
-                    disabled={!(authMode!=='creds' || authenticated)}
+                    disabled={!(authMode !== "creds" || authenticated)}
                     className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                       todo.done
-                        ? 'bg-green-500 border-green-500 text-white'
-                        : 'border-gray-300 dark:border-gray-500 hover:border-blue-500'
+                        ? "bg-green-500 border-green-500 text-white"
+                        : "border-gray-300 dark:border-gray-500 hover:border-blue-500"
                     }`}
-                    aria-label={todo.done ? 'Mark as not done' : 'Mark as done'}
+                    aria-label={todo.done ? "Mark as not done" : "Mark as done"}
                   >
                     {todo.done && <Check size={16} />}
                   </button>
                   <span
                     className={`text-lg ${
                       todo.done
-                        ? 'line-through text-gray-500 dark:text-gray-400'
-                        : 'text-gray-800 dark:text-gray-200'
+                        ? "line-through text-gray-500 dark:text-gray-400"
+                        : "text-gray-800 dark:text-gray-200"
                     }`}
                   >
                     {todo.name}
@@ -126,7 +130,7 @@ const TodosList = ({
                 </div>
                 <button
                   onClick={() => removeTodo(todo.id)}
-                  disabled={!(authMode!=='creds' || authenticated)}
+                  disabled={!(authMode !== "creds" || authenticated)}
                   className="p-1.5 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 rounded-full hover:bg-red-50 dark:hover:bg-gray-700 transition-colors"
                   aria-label="Delete todo"
                 >
@@ -138,8 +142,7 @@ const TodosList = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TodosList;
-
+export default TodosList

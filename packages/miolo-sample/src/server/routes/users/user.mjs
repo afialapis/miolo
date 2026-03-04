@@ -10,7 +10,7 @@ export async function r_forgot(ctx, params) {
   const new_pwd = generateRandomPassword()
   const msg = await db_password_change(ctx.miolo, email, new_pwd)
 
-  if (msg == undefined) {
+  if (msg === undefined) {
     const emailer = ctx.miolo.emailer
 
     const mail = {
