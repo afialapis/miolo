@@ -1,12 +1,11 @@
-import { rollup } from 'rollup'
-import { green, red, yellow } from 'tinguir'
+import { rollup } from "rollup"
+import { green, red, yellow } from "tinguir"
 
 let cache
 
 async function _rollupGenerateOutputs(bundle, outputOptionsList) {
   for (const outputOptions of outputOptionsList) {
-    
-    const { _output } = await bundle.write(outputOptions);
+    const { _output } = await bundle.write(outputOptions)
 
     /*
     // generate output specific code in-memory
@@ -55,26 +54,29 @@ async function _rollupGenerateOutputs(bundle, outputOptionsList) {
       }
     }
     */
-    
   }
-
-      
 }
 
-export async function miolo_bundle(appName, pkgPath, inputOptions, outputOptionsList, watch= false) {
+export async function miolo_bundle(
+  appName,
+  pkgPath,
+  inputOptions,
+  outputOptionsList,
+  watch = false
+) {
   let bundle
   let buildFailed = false
-  let niceFileName = ''
+  let niceFileName = ""
 
   try {
     try {
-      niceFileName= outputOptionsList[0].file.replace(pkgPath, '.')
-    } catch(_) {
+      niceFileName = outputOptionsList[0].file.replace(pkgPath, ".")
+    } catch (_) {
       try {
-        niceFileName= outputOptionsList[0].dir.replace(pkgPath, '.')
-      } catch(_) {
-        niceFileName= JSON.stringify(outputOptionsList[0])
-      }      
+        niceFileName = outputOptionsList[0].dir.replace(pkgPath, ".")
+      } catch (_) {
+        niceFileName = JSON.stringify(outputOptionsList[0])
+      }
     }
 
     if (watch) {
@@ -88,24 +90,22 @@ export async function miolo_bundle(appName, pkgPath, inputOptions, outputOptions
       cache = bundle.cache
     }
 
-    await _rollupGenerateOutputs(bundle, outputOptionsList);
+    await _rollupGenerateOutputs(bundle, outputOptionsList)
   } catch (error) {
-    buildFailed = true;
+    buildFailed = true
     // do some error reporting
     console.error(red(error))
     console.trace()
   }
   if (bundle) {
     // closes the bundle
-    await bundle.close();
+    await bundle.close()
   }
 
   if (buildFailed) {
     console.error(`[${appName}][build] Error when bundling ${yellow(niceFileName)}`)
     process.exit(1)
   } else {
-    
-    console.log(`[${appName}][build] Bundled ${yellow(niceFileName)} ${green('successfully!')}`)
+    console.log(`[${appName}][build] Bundled ${yellow(niceFileName)} ${green("successfully!")}`)
   }
 }
-

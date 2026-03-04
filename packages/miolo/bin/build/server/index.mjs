@@ -16,7 +16,7 @@ async function _miolo_build_server(appName, pkgPath, srvEntry, srvDest, srvExt, 
   await miolo_fix_prod_build(appName, outputFile)
 }
 
-export async function miolo_build_server(appName, pkgPath, config, srvEntry, srvDest, srvExt) {
+export async function miolo_build_server(appName, pkgPath, _config, srvEntry, srvDest, srvExt) {
   // const watch = config.build.dev.watcher?.enabled === true
   const watch = false
 

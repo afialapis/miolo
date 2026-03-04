@@ -1,10 +1,17 @@
-import path from 'node:path'
-import { build } from 'vite'
-import { copyFileSync, isFileExistingSync } from '../../util.mjs'
-import {miolo_add_css_link_to_head} from './css.mjs'
+import path from "node:path"
+import { build } from "vite"
+import { copyFileSync, isFileExistingSync } from "../../util.mjs"
+import { miolo_add_css_link_to_head } from "./css.mjs"
 
-export async function miolo_build_client(appName, pkgPath, viteConfig, cliEntry, htmlFile, cliDest, cliSuffix ) {
-
+export async function miolo_build_client(
+  appName,
+  pkgPath,
+  viteConfig,
+  cliEntry,
+  htmlFile,
+  cliDest,
+  cliSuffix
+) {
   console.log(`[${appName}][build] Building client entry ${cliEntry} to ${cliDest}`)
 
   await build({
@@ -18,7 +25,7 @@ export async function miolo_build_client(appName, pkgPath, viteConfig, cliEntry,
         output: {
           entryFileNames: `${appName}.${cliSuffix}.js`,
           assetFileNames: `${appName}.${cliSuffix}.[ext]`,
-          format: 'iife' // Generate IIFE to match existing prod html.mjs script injection
+          format: "iife" // Generate IIFE to match existing prod html.mjs script injection
         }
       }
     }
@@ -26,16 +33,20 @@ export async function miolo_build_client(appName, pkgPath, viteConfig, cliEntry,
 
   // Fix CSS
 
-  if (htmlFile && htmlFile !== 'false') {
+  if (htmlFile && htmlFile !== "false") {
     const destCssFile = `${cliDest}/${appName}.${cliSuffix}.css`
     const destCssFileExists = isFileExistingSync(destCssFile)
 
     console.log(`[${appName}][build] Copying HTML file ${htmlFile} to ${cliDest}/index.html`)
-    copyFileSync(path.join(pkgPath, htmlFile), path.join(pkgPath, `${cliDest}/index.html`), (content) => {
-      if (destCssFileExists) {
-        content = miolo_add_css_link_to_head(appName, content, cliDest, cliSuffix)
+    copyFileSync(
+      path.join(pkgPath, htmlFile),
+      path.join(pkgPath, `${cliDest}/index.html`),
+      (content) => {
+        if (destCssFileExists) {
+          content = miolo_add_css_link_to_head(appName, content, cliDest, cliSuffix)
+        }
+        return content
       }
-      return content
-    })
+    )
   }
 }

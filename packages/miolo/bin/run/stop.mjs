@@ -8,10 +8,10 @@ export default async function stop(appName) {
     const pid = pidFileRead(appName)
     console.log(`[${appName}][stop] Killing current process with PID ${pid}`)
 
-    process.kill(pid, 'SIGKILL')
+    process.kill(pid, "SIGKILL")
 
     return 1
-  } catch(_) {
+  } catch (_) {
     console.log(`[${appName}][stop] No current process to kill`)
     console.error(_)
 

@@ -36,8 +36,8 @@
     "package.json"
   ],
   "scripts": {
-    "lint": "biome check ./src --reporter=github",
-    "lint:fix": "biome check --write ./src --reporter=github",
+    "lint": "biome check ./src ./bin --reporter=github",
+    "lint:fix": "biome check --write ./src ./bin --reporter=github",
     "reset": "rm -fr package-lock.json npm-lock.yaml && npm i",
     "prepare-template": "node bin/create/prepare-template.mjs",
     "dist": "npm run prepare-template",
