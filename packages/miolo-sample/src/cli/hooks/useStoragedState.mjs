@@ -1,39 +1,37 @@
-import React, { useState, /*useCallback,*/ useEffect} from 'react'
-import { isBrowser } from '#cli/lib/utils.mjs'
+import React, { useEffect, useState /*useCallback,*/ } from "react"
+import { isBrowser } from "#cli/lib/utils.mjs"
 
 const getStorageKey = (key) => {
   if (isBrowser()) {
-    return `${encodeURIComponent(window.location.pathname)}_${key || ''}`
+    return `${encodeURIComponent(window.location.pathname)}_${key || ""}`
   }
   return undefined
 }
 
 const getPersisted = (key, defValue) => {
   if (isBrowser()) {
-    const k= getStorageKey(key)
-    const v= localStorage.getItem(k)
+    const k = getStorageKey(key)
+    const v = localStorage.getItem(k)
     try {
-      const p= JSON.parse(v)
-      if (p!=undefined && p!=null) {
+      const p = JSON.parse(v)
+      if (p != undefined && p != null) {
         return p
       }
-    } catch(e) {}
+    } catch (e) {}
   }
   return defValue
 }
 
 const setPersisted = (key, value) => {
   if (isBrowser()) {
-    const k= getStorageKey(key)
+    const k = getStorageKey(key)
 
     localStorage.setItem(k, JSON.stringify(value))
-  }  
+  }
 }
 
-
 const useStoragedState = (defValue, key) => {
-
-  const [value, setValue]= useState(getPersisted(key, defValue))
+  const [value, setValue] = useState(getPersisted(key, defValue))
 
   /*
     const setStoragedValue = useCallback((newValue) => {
@@ -62,4 +60,4 @@ const useStoragedState = (defValue, key) => {
   return [value, setValue]
 }
 
-export {useStoragedState}
+export { useStoragedState }

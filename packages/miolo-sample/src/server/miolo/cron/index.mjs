@@ -1,17 +1,15 @@
-
-import {onTickFoo} from './foo.mjs'
+import { onTickFoo } from "./foo.mjs"
 
 // check https://github.com/kelektiv/node-cron#readme
 //
 // https://crontab.guru/
 
 export default function init_cron() {
-
-  let cronList = []
+  const cronList = []
 
   cronList.push({
-    name: 'miolo-sample-foo',
-    cronTime: '*/30 * * * *',
+    name: "miolo-sample-foo",
+    cronTime: "*/30 * * * *",
     onTick: onTickFoo,
     start: true
   })

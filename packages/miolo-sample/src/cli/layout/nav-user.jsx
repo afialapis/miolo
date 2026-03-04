@@ -1,45 +1,32 @@
 "use client"
 
+import { ChevronsUpDown, LogOut, Moon, Shield, Sun } from "lucide-react"
 import React from "react"
-import useSessionContext from '#cli/context/session/useSessionContext.mjs'
-import useThemeContext from '#cli/context/theme/useThemeContext.mjs'
-import { useNavigate } from 'react-router'
-
-import {
-  ChevronsUpDown,
-  Sun,
-  Moon,
-  Shield,
-  LogOut,
-} from "lucide-react"
-
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "#cli/components/ui/avatar.jsx"
+import { useNavigate } from "react-router"
+import { Avatar, AvatarFallback, AvatarImage } from "#cli/components/ui/avatar.jsx"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "#cli/components/ui/dropdown-menu.jsx"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
+  useSidebar
 } from "#cli/components/ui/patched/sidebar.jsx"
-
+import useSessionContext from "#cli/context/session/useSessionContext.mjs"
+import useThemeContext from "#cli/context/theme/useThemeContext.mjs"
 
 export function NavUser() {
   const { isMobile } = useSidebar()
 
-  const {session, logout} = useSessionContext()
+  const { session, logout } = useSessionContext()
   const navigate = useNavigate()
-  const {isDark, setTheme} = useThemeContext()  
+  const { isDark, setTheme } = useThemeContext()
 
   const twoLetters = session.name.slice(0, 2).toUpperCase()
   const avatarSrc = `/static/img/default/profile.png`
@@ -83,18 +70,17 @@ export function NavUser() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {isDark
-              ?
-              <DropdownMenuItem onSelect={() => setTheme('light')}>
-                <Sun/>
+            {isDark ? (
+              <DropdownMenuItem onSelect={() => setTheme("light")}>
+                <Sun />
                 Modo día
               </DropdownMenuItem>
-              :
-              <DropdownMenuItem onSelect={() => setTheme('dark')}>
-                <Moon/>
+            ) : (
+              <DropdownMenuItem onSelect={() => setTheme("dark")}>
+                <Moon />
                 Modo noche
               </DropdownMenuItem>
-            }
+            )}
             <DropdownMenuSeparator />
             {/*
             <DropdownMenuItem onSelect={() => navigate('/profile')}>
@@ -102,18 +88,14 @@ export function NavUser() {
               Perfil
             </DropdownMenuItem>
             */}
-            <DropdownMenuItem onSelect={() => navigate('/security')}>
-              <Shield/>
+            <DropdownMenuItem onSelect={() => navigate("/security")}>
+              <Shield />
               Seguridad
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => logout()}>
-              <LogOut/>
+              <LogOut />
               Cerrar sesión
             </DropdownMenuItem>
-
-       
-
-
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

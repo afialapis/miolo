@@ -17,7 +17,7 @@ export async function email_queue_an_email(email, logger = undefined) {
   }
 }
 
-export function email_queue_pop_pendings(logger = undefined) {
+export function email_queue_pop_pendings(_logger = undefined) {
   const grouped = {}
 
   Object.values(EMAIL_QUEUE)
@@ -41,7 +41,7 @@ export function email_queue_pop_pendings(logger = undefined) {
   return Object.values(grouped)
 }
 
-export function email_queue_remove_ids(eids, logger = undefined) {
+export function email_queue_remove_ids(eids, _logger = undefined) {
   eids.forEach((eid) => {
     delete EMAIL_QUEUE[eid]
   })

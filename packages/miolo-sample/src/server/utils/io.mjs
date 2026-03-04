@@ -1,15 +1,15 @@
-import { readdir } from 'fs';
+import { readdir } from "fs"
 
 function readDirAsync(path) {
-  return new Promise(function (resolve, reject) {
-    readdir(path, function (error, result) {
+  return new Promise((resolve, reject) => {
+    readdir(path, (error, result) => {
       if (error) {
-        reject(error);
+        reject(error)
       } else {
-        resolve(result);
+        resolve(result)
       }
-    });
-  });
+    })
+  })
 }
 
-export {readDirAsync}
+export { readDirAsync }

@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react'
-import {useMioloContext} from 'miolo-react'
-import SessionContext from './SessionContext.mjs'
-import makePermissioner from './makePermissioner.mjs'
+import { useMioloContext } from "miolo-react"
+import React, { useEffect, useState } from "react"
+import makePermissioner from "./makePermissioner.mjs"
+import SessionContext from "./SessionContext.mjs"
 
 const SessionProvider = ({ children }) => {
-  const {user, ...props } = useMioloContext()
+  const { user, ...props } = useMioloContext()
   //const [session, setSession] = useState(new Session(user))
   const [permiss, setPermiss] = useState(makePermissioner(user))
 
@@ -14,11 +14,15 @@ const SessionProvider = ({ children }) => {
     //setPermiss(makePermissioner(nSession))
     setPermiss(makePermissioner(user))
   }, [user])
-  
+
   return (
-    <SessionContext.Provider value={{
-      session: user, permiss, ...props
-    }}>
+    <SessionContext.Provider
+      value={{
+        session: user,
+        permiss,
+        ...props
+      }}
+    >
       {children}
     </SessionContext.Provider>
   )

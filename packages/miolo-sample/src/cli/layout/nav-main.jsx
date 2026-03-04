@@ -1,7 +1,7 @@
 "use client"
-import React from 'react'
-import { Link } from 'react-router'
 import { ArrowDownUp, Braces } from "lucide-react"
+import React from "react"
+import { Link } from "react-router"
 
 import {
   SidebarGroup,
@@ -12,32 +12,28 @@ import {
 } from "#cli/components/ui/patched/sidebar.jsx"
 // import useSessionContext from '#cli/context/session/useSessionContext.mjs'
 
-
 export function NavMain() {
-
   // const {permiss} = useSessionContext()
-  
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Configuración</SidebarGroupLabel>
       <SidebarMenu>
-      
         <SidebarMenuItem>
-          <SidebarMenuButton tooltip={'Red'}>
-            <ArrowDownUp/>
+          <SidebarMenuButton tooltip={"Red"}>
+            <ArrowDownUp />
             <Link to="/">Foo</Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
 
         {/*permiss.can_user_debug() && (*/}
-          <SidebarMenuItem>
-            <SidebarMenuButton tooltip={'Dev'}>
-              <Braces/>
-              <Link to="/dev">Bar</Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-       {/*)*/}
-
+        <SidebarMenuItem>
+          <SidebarMenuButton tooltip={"Dev"}>
+            <Braces />
+            <Link to="/dev">Bar</Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        {/*)*/}
       </SidebarMenu>
     </SidebarGroup>
   )

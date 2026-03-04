@@ -1,10 +1,8 @@
-import { ssr_context_builder_make } from './context.mjs'
-import { ssr_loader_make } from './loader.mjs'
-import { ssr_html_renderer_make } from './html.mjs'
+import { ssr_context_builder_make } from "./context.mjs"
+import { ssr_html_renderer_make } from "./html.mjs"
+import { ssr_loader_make } from "./loader.mjs"
 
-
-export async function init_ssr_render_middleware(app, config, devRender= undefined) {
-
+export async function init_ssr_render_middleware(app, config, devRender = undefined) {
   const ssrConfig = config.build.ssr
   const httpConfig = config.http
   const authConfig = config?.auth || {}
@@ -12,37 +10,52 @@ export async function init_ssr_render_middleware(app, config, devRender= undefin
 
   const ssr_build_context = ssr_context_builder_make(app, ssrConfig)
   const ssr_loader = ssr_loader_make(app, ssrConfig)
-  const ssr_html_renderer = await ssr_html_renderer_make(app, ssrConfig, config.build.html, config.build.client, devRender)
+  const ssr_html_renderer = await ssr_html_renderer_make(
+    app,
+    ssrConfig,
+    config.build.html,
+    config.build.client,
+    devRender
+  )
 
   async function render_ssr_middleware(ctx) {
     try {
-      const config= {
+      const config = {
         hostname: httpConfig?.hostname,
         port: httpConfig?.port,
         catcher_url: httpConfig?.catcher_url,
         auth_method: ctx.session?.auth_method,
-        login_url: ctx.session?.auth_method === 'google' ? authConfig?.passport?.google_url_login : authConfig?.passport?.local_url_login,
-        logout_url: ctx.session?.auth_method === 'google' ? authConfig?.passport?.google_url_logout : authConfig?.passport?.local_url_logout,
+        login_url:
+          ctx.session?.auth_method === "google"
+            ? authConfig?.passport?.google_url_login
+            : authConfig?.passport?.local_url_login,
+        logout_url:
+          ctx.session?.auth_method === "google"
+            ? authConfig?.passport?.google_url_logout
+            : authConfig?.passport?.local_url_logout
         //socket: {
         //  enabled: socketConfig?.enabled===true,
         //  config: socketConfig?.config?.cli || {}
         //}
       }
-      ctx.miolo.logger.debug(`[render-ssr] rendering an ${ctx?.session?.authenticated === true ? 'authenticated' : 'unauthenticated'} context...`)
+      ctx.miolo.logger.debug(
+        `[render-ssr] rendering an ${ctx?.session?.authenticated === true ? "authenticated" : "unauthenticated"} context...`
+      )
 
       const ssr_data = await ssr_loader(ctx)
       const context = ssr_build_context(ctx, config, ssr_data)
       const rendered_html = await ssr_html_renderer(ctx, context)
-      
-      ctx.miolo.logger.debug(`[render-ssr] Returned body is ${Buffer.byteLength(rendered_html, 'utf8')} bytes`)
 
-      ctx.type = 'text/html'
-      ctx.body= rendered_html
+      ctx.miolo.logger.debug(
+        `[render-ssr] Returned body is ${Buffer.byteLength(rendered_html, "utf8")} bytes`
+      )
+
+      ctx.type = "text/html"
+      ctx.body = rendered_html
       ctx.status = 200
-    } catch(e) {
-
+    } catch (e) {
       ctx.body = e.stack
-      ctx.type = 'text/html'
+      ctx.type = "text/html"
       ctx.status = 500
     }
   }

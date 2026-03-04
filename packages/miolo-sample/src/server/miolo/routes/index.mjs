@@ -1,5 +1,5 @@
-import crud from './crud.mjs'
-import queries from '#server/routes/index.mjs'
+import queries from "#server/routes/index.mjs"
+import crud from "./crud.mjs"
 
 export default {
   bodyField: undefined,

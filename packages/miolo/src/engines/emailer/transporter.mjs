@@ -1,38 +1,35 @@
-import nodemailer from 'nodemailer'
-import { email_queue_an_email, email_queue_pop_pendings, email_queue_remove_ids } from './queue.mjs'
+import nodemailer from "nodemailer"
+import { email_queue_an_email, email_queue_pop_pendings, email_queue_remove_ids } from "./queue.mjs"
 
+const _logi = (logger, msg) => (logger?.info ? logger.info(msg) : console.log(msg))
+const _logs = (logger, msg) => (logger?.silly ? logger.silly(msg) : console.log(msg))
+const _loge = (logger, msg) => (logger?.error ? logger.error(msg) : console.error(msg))
 
-const _logi = (logger, msg) => logger?.info ? logger.info(msg) : console.log(msg)
-const _logs = (logger, msg) => logger?.silly ? logger.silly(msg) : console.log(msg)
-const _loge = (logger, msg) => logger?.error ? logger.error(msg) : console.error(msg)
-
-
-export function _init_emailer_transporter({options, defaults, silent}) {
-
+export function _init_emailer_transporter({ options, defaults, silent }) {
   const nmailer = nodemailer.createTransport(options, defaults)
 
-  function verify_emailer(logger= undefined) {
-    _logs(logger, '[emailer] Verifying...')
-    nmailer.verify(function(error, _success) {
+  function verify_emailer(logger = undefined) {
+    _logs(logger, "[emailer] Verifying...")
+    nmailer.verify((error, _success) => {
       if (error) {
-        _loge(logger, '[emailer] Verifying ERROR')
-        _loge(logger, error?.message || error?.stack || error || 'Unknown error')
+        _loge(logger, "[emailer] Verifying ERROR")
+        _loge(logger, error?.message || error?.stack || error || "Unknown error")
       } else {
-        _logs(logger, '[emailer] Verifyed OK: Server is ready to take our messages')
+        _logs(logger, "[emailer] Verifyed OK: Server is ready to take our messages")
       }
     })
   }
 
-  async function send_email(mail, logger= undefined) {
+  async function send_email(mail, logger = undefined) {
     if (silent === true) {
-      _logi(logger, '[emailer] *********************************')
-      _logi(logger, '[emailer] This mail will not be send (emailing is disabled):')
-      _logi(logger, `[emailer] From: ${mail?.from || '?'}`)
-      _logi(logger, `[emailer] To: ${mail?.to || '?'}`)
-      _logi(logger, `[emailer] Subject: ${mail?.subject || '?'}`)
-      _logi(logger, '[emailer] Mail body:')
-      _logi(logger, mail?.text || mail?.html || '--empty--')
-      _logi(logger, '[emailer] *********************************')
+      _logi(logger, "[emailer] *********************************")
+      _logi(logger, "[emailer] This mail will not be send (emailing is disabled):")
+      _logi(logger, `[emailer] From: ${mail?.from || "?"}`)
+      _logi(logger, `[emailer] To: ${mail?.to || "?"}`)
+      _logi(logger, `[emailer] Subject: ${mail?.subject || "?"}`)
+      _logi(logger, "[emailer] Mail body:")
+      _logi(logger, mail?.text || mail?.html || "--empty--")
+      _logi(logger, "[emailer] *********************************")
 
       return {
         ok: true,
@@ -42,12 +39,15 @@ export function _init_emailer_transporter({options, defaults, silent}) {
       }
     } else {
       try {
-        let info = await nmailer.sendMail(mail)
-        info.ok = info?.messageId ? true : false
+        const info = await nmailer.sendMail(mail)
+        info.ok = info?.messageId !== undefined
 
         return info
-      } catch(error) {
-        _loge(logger, `[emailer] Error sending email: ${mail?.from || ''} => ${mail?.to || ''} (${mail?.subject || ''})`)
+      } catch (error) {
+        _loge(
+          logger,
+          `[emailer] Error sending email: ${mail?.from || ""} => ${mail?.to || ""} (${mail?.subject || ""})`
+        )
 
         return {
           ok: false,
@@ -59,16 +59,16 @@ export function _init_emailer_transporter({options, defaults, silent}) {
     }
   }
 
-  function queue_email(mail, logger= undefined) {
+  function queue_email(mail, logger = undefined) {
     if (silent === true) {
-      _logi(logger, '[emailer] *********************************')
-      _logi(logger, '[emailer] This mail will not be queued (emailing is disabled):')
-      _logi(logger, `[emailer] From: ${mail?.from || '?'}`)
-      _logi(logger, `[emailer] To: ${mail?.to || '?'}`)
-      _logi(logger, `[emailer] Subject: ${mail?.subject || '?'}`)
-      _logi(logger, '[emailer] Mail body:')
-      _logi(logger, mail?.text || mail?.html || '--empty--')
-      _logi(logger, '[emailer] *********************************')
+      _logi(logger, "[emailer] *********************************")
+      _logi(logger, "[emailer] This mail will not be queued (emailing is disabled):")
+      _logi(logger, `[emailer] From: ${mail?.from || "?"}`)
+      _logi(logger, `[emailer] To: ${mail?.to || "?"}`)
+      _logi(logger, `[emailer] Subject: ${mail?.subject || "?"}`)
+      _logi(logger, "[emailer] Mail body:")
+      _logi(logger, mail?.text || mail?.html || "--empty--")
+      _logi(logger, "[emailer] *********************************")
 
       return {
         ok: true,
@@ -79,7 +79,10 @@ export function _init_emailer_transporter({options, defaults, silent}) {
     } else {
       try {
         const q = email_queue_an_email(mail, logger)
-        _logs(logger, `[emailer] Queued email: ${mail?.from || ''} => ${mail?.to || ''} (${mail?.subject || ''})`)
+        _logs(
+          logger,
+          `[emailer] Queued email: ${mail?.from || ""} => ${mail?.to || ""} (${mail?.subject || ""})`
+        )
 
         return {
           ok: q.ok,
@@ -87,8 +90,11 @@ export function _init_emailer_transporter({options, defaults, silent}) {
           error: q.error,
           messageId: q.id
         }
-      } catch(error) {
-        _loge(logger, `[emailer] Error queueing email: ${mail?.from || ''} => ${mail?.to || ''} (${mail?.subject || ''})`)
+      } catch (error) {
+        _loge(
+          logger,
+          `[emailer] Error queueing email: ${mail?.from || ""} => ${mail?.to || ""} (${mail?.subject || ""})`
+        )
 
         return {
           ok: false,
@@ -100,28 +106,31 @@ export function _init_emailer_transporter({options, defaults, silent}) {
     }
   }
 
-  async function queue_send_emails(logger= undefined) {
+  async function queue_send_emails(logger = undefined) {
     const pending = email_queue_pop_pendings(logger)
     if (pending.length <= 0) {
       return 0
     }
     try {
       _logi(logger, `[emailer] Sending emails queue (${pending.length} emails)`)
-    
+
       // const emailString = await client.lPop('email_queue')
       // if (!emailString) break
       // const email = JSON.parse(emailString)
-    
+
       for (const email of pending) {
         if (email.count > 1) {
-          _logs(logger, `[emailer] Sending queued and stacked email [${email.subject}](x${email.count})...`)
+          _logs(
+            logger,
+            `[emailer] Sending queued and stacked email [${email.subject}](x${email.count})...`
+          )
           email.subject = `${email.subject} (x${email.count})`
         } else {
           _logs(logger, `[emailer] Sending queued email [${email.subject}]...`)
         }
 
         send_email(email).then((res) => {
-          _logs(logger, `[emailer] Queued email [${email.subject}]sent ${res.ok ? 'OK' : 'NOT OK'}`)
+          _logs(logger, `[emailer] Queued email [${email.subject}]sent ${res.ok ? "OK" : "NOT OK"}`)
           if (res.ok) {
             delete email_queue_remove_ids(email.ids, logger)
           }
@@ -129,36 +138,32 @@ export function _init_emailer_transporter({options, defaults, silent}) {
       }
       _logs(logger, `[emailer] Sent emails ${pending.length} from queue`)
       return pending.length
-    } catch(error) {
+    } catch (error) {
       _loge(logger, `[emailer] Error sending emails queue: ${error}`)
       return -1
     }
   }
-  
-  const emailer= {
-    send: send_email, 
+
+  const emailer = {
+    send: send_email,
     verify: verify_emailer,
     queue_email,
     queue_send_emails,
-    options, 
-    defaults, 
+    options,
+    defaults,
     silent
   }
   return emailer
 }
 
+const _cache = {}
 
-
-let _cache = {}
-
-export function init_emailer_transporter({options, defaults, silent}, logger= undefined) {
-
-  const ckey = JSON.stringify({options, defaults, silent})
+export function init_emailer_transporter({ options, defaults, silent }, logger = undefined) {
+  const ckey = JSON.stringify({ options, defaults, silent })
   if (ckey in _cache) {
     return _cache[ckey]
   }
 
-  _cache[ckey] = _init_emailer_transporter({options, defaults, silent}, logger) 
+  _cache[ckey] = _init_emailer_transporter({ options, defaults, silent }, logger)
   return _cache[ckey]
-
 }

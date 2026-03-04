@@ -1,5 +1,5 @@
 //import IO from 'koa-socket-2'
-import { Server } from 'socket.io'
+import { Server } from "socket.io"
 
 function init_socket(app, config) {
   if (config?.enabled !== true) {
@@ -8,26 +8,25 @@ function init_socket(app, config) {
 
   const logger = app.context.miolo.logger
 
-  logger.info('[socket] Attaching Socket server')
+  logger.info("[socket] Attaching Socket server")
 
   const io = new Server(app.http.server)
 
-  io.on('connection', function (socket) {
+  io.on("connection", (socket) => {
     logger.debug(`[socket] Connection from ... `) // ${i.ip} ${i.id}`)
-    
+
     if (config?.connection) {
       config.connection(socket)
     }
-    
+
     for (const ns of config?.namespaces || []) {
       socket.on(ns.name, ns.listener)
     }
   })
-  
 
   //  const getInfo = (ctx) => {
   //    let i= {id: '', ip: ''}
-  //    try { 
+  //    try {
   //      i.id = ctx.socket.id
   //    } catch (e) {}
   //    try {
@@ -60,8 +59,7 @@ function init_socket(app, config) {
   //  })
   //
   //
-  //  io.attach(app)  
-
+  //  io.attach(app)
 }
 
-export {init_socket}
+export { init_socket }

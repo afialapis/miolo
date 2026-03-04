@@ -1,4 +1,4 @@
-import { performance } from "perf_hooks"
+import { performance } from "node:perf_hooks"
 import { cyan, cyan_light, green, magenta, red, yellow } from "tinguir"
 
 import { geoip_localize_ip } from "../../engines/geoip/index.mjs"
@@ -32,10 +32,10 @@ const _get_ip = (ctx) => {
  */
 
 function init_request_middleware(app, config) {
-  const _def_on_begin = async (ctx, times) => {
+  const _def_on_begin = async (_ctx, _times) => {
     return {}
   }
-  const _def_on_done = async (ctx, begin_result, times) => {}
+  const _def_on_done = async (_ctx, _begin_result, _times) => {}
 
   const reqConfig = {
     lazy: config?.lazy || 1,
@@ -83,7 +83,7 @@ function init_request_middleware(app, config) {
           : ""
       : ""
     const sreq = `${magenta(ip)}${geo_string} ${cyan(ctx.request.method)} ${cyan(clurl)} [${cyan_light(REQUEST_COUNTER[ip])}/${cyan_light(ctx.requestId)}]`
-    const sbody = ctx.request.body != undefined ? JSON.stringify(ctx.request.body) : ""
+    const sbody = ctx.request.body !== undefined ? JSON.stringify(ctx.request.body) : ""
 
     logger.info(`${sreq} - START`)
     logger.debug(`${sreq} - Body: ${sbody}`)
@@ -94,7 +94,7 @@ function init_request_middleware(app, config) {
 
     const user = ctx?.session?.user
     let uid_desc = ""
-    if (user != undefined) {
+    if (user !== undefined && user !== null) {
       if (user?.id) {
         uid_desc = ` - uid ${user?.id}`
       } else if (user?.token) {
@@ -104,7 +104,7 @@ function init_request_middleware(app, config) {
     const status = ctx.response.status
     let ststr = status
     let stcolor
-    if (status == 200) {
+    if (status === 200) {
       stcolor = green
     } else if (status > 200 && status <= 299) {
       stcolor = yellow
@@ -122,11 +122,11 @@ function init_request_middleware(app, config) {
 
     const tname = elapsed < reqConfig.lazy ? "Ok" : elapsed < reqConfig.slow ? "lazy" : "slow"
 
-    const ssession = ctx.session != undefined ? JSON.stringify(ctx.session) : ""
+    const ssession = ctx.session !== undefined ? JSON.stringify(ctx.session) : ""
     logger.debug(`${sreq} - Session: ${ssession.slice(0, 150)}...`)
     logger.silly(`${sreq} - Session: ${ssession}`)
 
-    const rbody = ctx.body != undefined ? JSON.stringify(ctx.body) : ""
+    const rbody = ctx.body !== undefined ? JSON.stringify(ctx.body) : ""
     logger.debug(`${sreq} - Response: ${rbody.slice(0, 150)}...`)
     logger.silly(`${sreq} - Response: ${rbody}`)
 

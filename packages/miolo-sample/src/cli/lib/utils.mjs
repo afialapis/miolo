@@ -5,6 +5,6 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs))
 }
 
-export function isBrowser () {
-  return typeof window !== 'undefined'
+export function isBrowser() {
+  return typeof window !== "undefined"
 }

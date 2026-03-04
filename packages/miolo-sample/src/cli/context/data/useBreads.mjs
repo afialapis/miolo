@@ -1,10 +1,8 @@
 import React, { useEffect } from "react"
 import useDataContext from "./useDataContext.mjs"
 
-
 const useBreads = (breadsCallback, dependencies = []) => {
-
-  const {setTitle, setBreads} = useDataContext()
+  const { setTitle, setBreads } = useDataContext()
 
   useEffect(() => {
     const nBreads = breadsCallback()

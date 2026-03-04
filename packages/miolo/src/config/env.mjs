@@ -1,13 +1,14 @@
-import { config } from '@dotenvx/dotenvx'
-import path from 'node:path'
-import { existsSync } from 'node:fs'
-import { intre_locale_init } from 'intre'
-import { getInfoFromPkg, findClosestPackageJson } from './util.mjs'
+import { existsSync } from "node:fs"
+import path from "node:path"
+import { config } from "@dotenvx/dotenvx"
+import { intre_locale_init } from "intre"
+import { findClosestPackageJson, getInfoFromPkg } from "./util.mjs"
 
 function _get_miolo_config_path(proyEnvPath, appName) {
-  const mioloEnv = (appName=='miolo-demo' || appName=='miolo-sample')
-    ? '../miolo/src/config/.env'
-    : 'node_modules/miolo/src/config/.env'
+  const mioloEnv =
+    appName === "miolo-demo" || appName === "miolo-sample"
+      ? "../miolo/src/config/.env"
+      : "node_modules/miolo/src/config/.env"
 
   const mioloPath = path.join(proyEnvPath, mioloEnv)
   if (existsSync(mioloPath)) {
@@ -17,21 +18,19 @@ function _get_miolo_config_path(proyEnvPath, appName) {
 }
 
 function _get_miolo_config_path_on_build(proyEnvPath, srvDest) {
-  
-  const mioloPath = path.join(proyEnvPath, srvDest, '.env')
+  const mioloPath = path.join(proyEnvPath, srvDest, ".env")
   if (existsSync(mioloPath)) {
     return mioloPath
   }
   return null
 }
 
-
 export function init_env_config() {
-  intre_locale_init(process.env.MIOLO_INTRE_LOCALE)  
+  intre_locale_init(process.env.MIOLO_INTRE_LOCALE)
 
   const proyEnvPath = findClosestPackageJson(process.cwd())
   const [appName, srvDest] = getInfoFromPkg(proyEnvPath)
-  const debug = process.env.DOTENVX_DEBUG === 'true'
+  const debug = process.env.DOTENVX_DEBUG === "true"
 
   // miolo defaults
   const libEnvPath = _get_miolo_config_path(proyEnvPath, appName)
@@ -44,9 +43,9 @@ export function init_env_config() {
   if (buildEnvPath) {
     config({ path: buildEnvPath, debug })
   }
-  
+
   // proyect root config
   if (proyEnvPath) {
-    config({ path: path.join(proyEnvPath, '.env'), override: true, debug })
+    config({ path: path.join(proyEnvPath, ".env"), override: true, debug })
   }
 }

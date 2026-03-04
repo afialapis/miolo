@@ -1,4 +1,4 @@
-import { existsSync } from "fs"
+import { existsSync } from "node:fs"
 import koa_favicon from "koa-favicon"
 import koa_mount from "koa-mount"
 import koa_serve from "koa-static"

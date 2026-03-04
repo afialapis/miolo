@@ -1,18 +1,18 @@
 /**
  * https://gist.github.com/suprememoocow/5133080
- * 
+ *
  * https://github.com/winstonjs/winston/issues/943
- * 
+ *
  * A function for reopening a winston File logging transport post logrotation on a HUP signal.
- * To send a HUP to your node service, use the postrotate configuration option from logrotate. 
+ * To send a HUP to your node service, use the postrotate configuration option from logrotate.
  *   `postrotate kill -HUP ‘cat /var/run/mynodeservice.pid‘`
  */
-import path from 'path'
-import fs from 'fs'
+
+import fs from "node:fs"
+import path from "node:path"
 
 export function reopenTransportOnHupSignal(fileTransport) {
-  process.on('SIGHUP', function() {    
-
+  process.on("SIGHUP", () => {
     const fullname = path.join(fileTransport.dirname, fileTransport._getFile(false))
 
     //console.log(`[miolo][file-logger] SIGHUP received. Check if we need to re-open log file ${fullname}...`)
@@ -25,21 +25,21 @@ export function reopenTransportOnHupSignal(fileTransport) {
           fileTransport._stream.destroy() // Soon()
         }
 
-        let stream = fs.createWriteStream(fullname, fileTransport.options)
+        const stream = fs.createWriteStream(fullname, fileTransport.options)
         stream.setMaxListeners(Infinity)
 
         fileTransport._size = 0
         fileTransport._stream = stream
 
         //fileTransport.once('flush', function () {
-          fileTransport.opening = false
-          fileTransport.emit('open', fullname)
+        fileTransport.opening = false
+        fileTransport.emit("open", fullname)
         //})
 
         //fileTransport.flush()
 
         console.log(`[miolo][file-logger] Reopened ${fullname} successfully`)
-      } catch(error) {
+      } catch (error) {
         console.error(`[miolo][file-logger] Error reopening ${fullname}: ${error.toString()}`)
       }
     }
@@ -52,6 +52,5 @@ export function reopenTransportOnHupSignal(fileTransport) {
     })
     */
     return reopen()
-
   })
 }

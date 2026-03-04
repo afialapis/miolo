@@ -1,12 +1,11 @@
-import path from 'path'
-import fs from 'fs'
-import https from 'https'
-//import fetch from 'node-fetch'
-import { cyan, green, yellow } from 'tinguir'
+import fs from "node:fs"
+import https from "node:https"
+import path from "node:path"
+import { cyan, green, yellow } from "tinguir"
 
-const _IPSUM_DEF_FOLDER = '/var/ipsum'
-const _IPSUM_FILE_NAME = 'ipsum.txt'
-const _IPSUM_REMOTE_FILE = 'https://raw.githubusercontent.com/stamparm/ipsum/master/ipsum.txt'
+const _IPSUM_DEF_FOLDER = "/var/ipsum"
+const _IPSUM_FILE_NAME = "ipsum.txt"
+const _IPSUM_REMOTE_FILE = "https://raw.githubusercontent.com/stamparm/ipsum/master/ipsum.txt"
 const _IPSUM_NLISTS = 1
 
 /*function ipsum_download_file(callback, remote_file = _IPSUM_REMOTE_FILE) {
@@ -17,118 +16,124 @@ const _IPSUM_NLISTS = 1
   })
 }*/
 
-
 export function ipsum_download_file(callback, remote_file = _IPSUM_REMOTE_FILE, logger) {
   const lerr = logger ? logger.error : console.error
 
-  https.get(remote_file, (res) => {
-    const data = []
-    res.on('data', (chunk) => {
-      data.push(chunk)
-    }).on('end', () => {
-      let content = Buffer.concat(data).toString()
-      callback(content)
+  https
+    .get(remote_file, (res) => {
+      const data = []
+      res
+        .on("data", (chunk) => {
+          data.push(chunk)
+        })
+        .on("end", () => {
+          const content = Buffer.concat(data).toString()
+          callback(content)
+        })
     })
-  }).on('error', (err) => {
-    lerr(`[cron][${cyan('IPsum')}] Error downloading remote file (${err.toString()})`)
-    callback('')
-  })
-
+    .on("error", (err) => {
+      lerr(`[cron][${cyan("IPsum")}] Error downloading remote file (${err.toString()})`)
+      callback("")
+    })
 }
 
 function _ipsum_ips_from_content(content, logger) {
   const lerr = logger ? logger.error : console.error
 
-  if (! content) {
+  if (!content) {
     return []
   }
 
   try {
-    let ips = []
+    const ips = []
     content
-      .split('\n')
-      .filter(line => line.indexOf('#') < 0)
-      .map(line => {
-        const [ip, nlists] = line.split('\t')
-        if (parseInt(nlists) >= _IPSUM_NLISTS) {
+      .split("\n")
+      .filter((line) => line.indexOf("#") < 0)
+      .forEach((line) => {
+        const [ip, nlists] = line.split("\t")
+        if (parseInt(nlists, 10) >= _IPSUM_NLISTS) {
           ips.push(ip)
         }
       })
     return ips
-  } catch(error) {
-    lerr(`[cron][${cyan('IPsum')}] Error getting IPs from content`)
+  } catch (_) {
+    lerr(`[cron][${cyan("IPsum")}] Error getting IPs from content`)
     return []
   }
 }
 
-function _ipsum_ips_from_file(folder= _IPSUM_DEF_FOLDER, logger) {
+function _ipsum_ips_from_file(folder = _IPSUM_DEF_FOLDER, logger) {
   const lerr = logger ? logger.error : console.error
 
-  if (! fs.existsSync(folder)) {
+  if (!fs.existsSync(folder)) {
     if (logger) {
-      lerr(`[cron][${cyan('IPsum')}] Folder ${folder} does not exist`)
+      lerr(`[cron][${cyan("IPsum")}] Folder ${folder} does not exist`)
     }
     return []
   }
 
   const local_path = path.join(folder, _IPSUM_FILE_NAME)
 
-  if (! fs.existsSync(local_path)) {
+  if (!fs.existsSync(local_path)) {
     if (logger) {
-      lerr(`[cron][${cyan('IPsum')}] File ${local_path} does not exist`)
+      lerr(`[cron][${cyan("IPsum")}] File ${local_path} does not exist`)
     }
     return []
   }
 
-  const content = fs.readFileSync(local_path, {encoding:'utf8'})  
+  const content = fs.readFileSync(local_path, { encoding: "utf8" })
   return _ipsum_ips_from_content(content, logger)
 }
 
-
-function ipsum_update(folder= _IPSUM_DEF_FOLDER, callback, logger) {
+function ipsum_update(folder = _IPSUM_DEF_FOLDER, callback, logger) {
   const lerr = logger ? logger.error : console.error
   const linf = logger ? logger.info : console.log
 
-  if (! fs.existsSync(folder)) {
-    lerr(`[cron][${cyan('IPsum')}] Folder ${folder} does not exist`)
+  if (!fs.existsSync(folder)) {
+    lerr(`[cron][${cyan("IPsum")}] Folder ${folder} does not exist`)
     return
   }
 
   try {
-    linf(`[cron][${cyan('IPsum')}] Updating file...`)
+    linf(`[cron][${cyan("IPsum")}] Updating file...`)
 
     ipsum_download_file((content) => {
-      
       const local_path = path.join(folder, _IPSUM_FILE_NAME)
-      fs.writeFileSync(local_path, content, {encoding:'utf8', flag:'w'})
+      fs.writeFileSync(local_path, content, { encoding: "utf8", flag: "w" })
 
-      const ntot = content.split('\n').length
+      const ntot = content.split("\n").length
       const ips = _ipsum_ips_from_content(content, logger)
       const nfilt = ips.length
-      linf(`[cron][${cyan('IPsum')}] File downloaded. ${ntot} ips on the list (${nfilt} appearing in ${_IPSUM_NLISTS} or more lists)`)
-      
+      linf(
+        `[cron][${cyan("IPsum")}] File downloaded. ${ntot} ips on the list (${nfilt} appearing in ${_IPSUM_NLISTS} or more lists)`
+      )
+
       if (callback) {
         callback(ips)
       }
     })
-  
-  } catch(error) {
-    lerr(`[cron][${cyan('IPsum')}] Error ${error} updating the file`)
+  } catch (error) {
+    lerr(`[cron][${cyan("IPsum")}] Error ${error} updating the file`)
   }
 }
 
-
 export function ipsum_config() {
   return {
-    name: 'IPsum',
-    cronTime: '0 0 * * *',
+    name: "IPsum",
+    cronTime: "0 0 * * *",
     onTick: async (miolo, _onCompleted) => {
       const folder = miolo.config.http.ratelimit.ipsum_folder || _IPSUM_DEF_FOLDER
-      ipsum_update(folder, (ips) => {
-        miolo.logger.debug(`[cron][${cyan('IPsum')}] File downloaded. ${green(ips.length)} ips will be ${yellow('blacklisted')}!`)
-      }, miolo.logger)
+      ipsum_update(
+        folder,
+        (ips) => {
+          miolo.logger.debug(
+            `[cron][${cyan("IPsum")}] File downloaded. ${green(ips.length)} ips will be ${yellow("blacklisted")}!`
+          )
+        },
+        miolo.logger
+      )
     },
-    start: true   
+    start: true
   }
 }
 
@@ -141,10 +146,10 @@ export function ipsum_read_ips(folder = _IPSUM_DEF_FOLDER, callback, logger) {
     if (callback) {
       callback(ips)
     }
-    ldbg(`[cron][${cyan('IPsum')}] File contains ${ips.length} ips`)
+    ldbg(`[cron][${cyan("IPsum")}] File contains ${ips.length} ips`)
     return ips
   } else {
-    lwarn(`[cron][${cyan('IPsum')}] File is empty. Launching update...`)
+    lwarn(`[cron][${cyan("IPsum")}] File is empty. Launching update...`)
     ipsum_update(folder, callback, logger)
     return []
   }

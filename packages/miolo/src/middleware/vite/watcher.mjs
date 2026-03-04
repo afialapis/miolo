@@ -1,29 +1,27 @@
-import path from 'path'
-
+import path from "node:path"
 
 // Resuse Vite Watcher
-export async function init_watcher_dev_server_middleware(app, watcherConfig, ssrConfig) {
+export async function init_watcher_dev_server_middleware(app, watcherConfig, _ssrConfig) {
   let watcher
 
   const isEnabled = watcherConfig?.enabled === true
-  const isProduction = process.env.NODE_ENV === 'production'
-  
-  if (isEnabled && (!isProduction)){
+  const isProduction = process.env.NODE_ENV === "production"
 
+  if (isEnabled && !isProduction) {
     // Let's reuse Vite's chokidar instance to listen to changes in server code
     watcher = app.vite.watcher
 
     // Extra dirs to watch
-    const serverDirsToWatch = watcherConfig?.dirs || ['server', 'src/server']
+    const serverDirsToWatch = watcherConfig?.dirs || ["server", "src/server"]
 
     // Listen to changes in the extra dirs
     serverDirsToWatch.forEach((dir) => {
       watcher.add(path.resolve(process.cwd(), dir))
       app.context.miolo.logger.info(`[watcher] Vite is now watching for changes also in: ${dir}`)
     })
-   
+
     // Listen to changes in the extra dirs
-    watcher.on('change', async (filePath) => {
+    watcher.on("change", async (filePath) => {
       let isCustom = false
       serverDirsToWatch.forEach((dir) => {
         if (filePath.startsWith(path.resolve(process.cwd(), dir))) {
@@ -34,9 +32,9 @@ export async function init_watcher_dev_server_middleware(app, watcherConfig, ssr
       app.context.miolo.logger.info(`[watcher] File changed: ${filePath}. Reloading server...`)
 
       await app.stop()
-      process.send('miolo_restart') // Envía un mensaje al proceso padre para reiniciar
+      process.send("miolo_restart") // Envía un mensaje al proceso padre para reiniciar
     })
-  } 
+  }
 
-  app.watcher= watcher
+  app.watcher = watcher
 }

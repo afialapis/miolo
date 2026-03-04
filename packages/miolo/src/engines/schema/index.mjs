@@ -1,21 +1,21 @@
 import Joi from "joi"
 
 export function with_miolo_schema(fn, schema) {
-  return async function (ctx, params) {
+  return async (ctx, params) => {
     let error
 
     // Check schema is actually a schema
-    if ((!schema) || (! Joi.isSchema(schema))) {
+    if (!schema || !Joi.isSchema(schema)) {
       error = `Expecting schema for ${fn.name} but something else was found (${typeof schema})`
       ctx.miolo.logger.silly(`[validation][${fn.name}] ${error}`)
       throw new Error(error)
     }
-    
+
     // perform validation
     let v
     try {
       v = schema.validate(params)
-    } catch(uerror) {
+    } catch (uerror) {
       error = `Unexpected error validating data for ${fn.name}: ${uerror?.message || uerror}`
       ctx.miolo.logger.silly(`[validation][${fn.name}] ${error}`)
       throw new Error(error)
@@ -34,7 +34,7 @@ export function with_miolo_schema(fn, schema) {
       ctx.miolo.logger.silly(`[validation][${fn.name}] ${error}`)
       throw new Error(error)
     }
-    
+
     return await fn(ctx, v.value)
   }
 }

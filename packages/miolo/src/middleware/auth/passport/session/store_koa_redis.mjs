@@ -1,3 +1,3 @@
-import RedisStore from 'koa-redis'
+import RedisStore from "koa-redis"
 
 export default new RedisStore()

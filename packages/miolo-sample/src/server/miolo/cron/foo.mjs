@@ -1,7 +1,7 @@
-import { blue } from 'tinguir'
+import { blue } from "tinguir"
 
 export const onTickFoo = async (miolo) => {
-  miolo.logger.info(`${blue('[cron][foo]')} Fooing...`)
-  
-  miolo.logger.info(`${blue('[cron][foo]')} Foo done!`)
+  miolo.logger.info(`${blue("[cron][foo]")} Fooing...`)
+
+  miolo.logger.info(`${blue("[cron][foo]")} Foo done!`)
 }

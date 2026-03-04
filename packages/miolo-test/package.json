@@ -18,7 +18,6 @@
     "intre": "^3.0.0-beta.4",
     "miolo": "../miolo",
     "miolo-cli": "../miolo-cli",
-    "miolo-react": "../miolo-react",
-    "node-fetch": "^3.3.2"
+    "miolo-react": "../miolo-react"
   }
 }

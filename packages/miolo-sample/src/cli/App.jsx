@@ -1,14 +1,13 @@
-import React from 'react'
-import { intre_locale_init } from 'intre'
+import { intre_locale_init } from "intre"
+import React from "react"
+import DataProvider from "#cli/context/data/DataProvider.jsx"
+import SessionProvider from "#cli/context/session/SessionProvider.jsx"
+import ThemeProvider from "#cli/context/theme/ThemeProvider.jsx"
+import UIProvider from "#cli/context/ui/UIProvider.jsx"
 
-import ThemeProvider from '#cli/context/theme/ThemeProvider.jsx'
-import SessionProvider from '#cli/context/session/SessionProvider.jsx'
-import UIProvider from '#cli/context/ui/UIProvider.jsx'
-import DataProvider from '#cli/context/data/DataProvider.jsx'
+import Index from "#cli/pages/Index.jsx"
 
-import Index from '#cli/pages/Index.jsx'
-
-intre_locale_init('es')
+intre_locale_init("es")
 
 const App = () => {
   return (
@@ -16,7 +15,7 @@ const App = () => {
       <UIProvider>
         <SessionProvider>
           <DataProvider>
-            <Index/>
+            <Index />
           </DataProvider>
         </SessionProvider>
       </UIProvider>
@@ -25,4 +24,3 @@ const App = () => {
 }
 
 export default App
-

@@ -1,12 +1,12 @@
-export function isBrowser () {
-  return typeof window !== 'undefined'
+export function isBrowser() {
+  return typeof window !== "undefined"
 }
 
 export function isDEVAndVite() {
   if (isBrowser()) {
     return window.__CONTEXT?.development === true
   }
-  return process.env.NODE_ENV == 'development'
+  return process.env.NODE_ENV == "development"
 }
 
 export function imgSrc(url) {

@@ -1,20 +1,19 @@
 export default class Parser {
-  
-  parse_value_str(v, required= false, def= undefined) {
-    if ((v==null) || (v==undefined)) {
+  parse_value_str(v, required = false, def = undefined) {
+    if (v === null || v === undefined) {
       if (required) {
-       throw `Wrong str value passed: ${v}`
+        throw `Wrong str value passed: ${v}`
       }
       return def
     }
-  
+
     return v.toString()
   }
-  
-  parse_field_str(fields, name, required= false, def= undefined) {
-    if ( ! (name in fields)) {
+
+  parse_field_str(fields, name, required = false, def = undefined) {
+    if (!(name in fields)) {
       if (required) {
-       throw `Expected str value not passed for ${name}`
+        throw `Expected str value not passed for ${name}`
       }
       return def
     }
@@ -24,23 +23,23 @@ export default class Parser {
       throw `parse_field_str() Error for ${name}: ${e}`
     }
   }
-  
-  parse_value_int(v, required= false, def= undefined) {
-    let vi= parseInt(v)
-    if ((vi==null) || (isNaN(vi))) {
+
+  parse_value_int(v, required = false, def = undefined) {
+    const vi = parseInt(v, 10)
+    if (vi === null || Number.isNaN(Number(vi))) {
       if (required) {
-       throw `Wrong int value passed: ${v}`
+        throw `Wrong int value passed: ${v}`
       }
       return def
     }
-  
+
     return vi
   }
-  
-  parse_field_int(fields, name, required= false, def= undefined) {
-    if ( ! (name in fields)) {
+
+  parse_field_int(fields, name, required = false, def = undefined) {
+    if (!(name in fields)) {
       if (required) {
-       throw `Expected int value not passed for ${name}`
+        throw `Expected int value not passed for ${name}`
       }
       return def
     }
@@ -50,88 +49,88 @@ export default class Parser {
       throw `parse_field_int() Error for ${name}: ${e}`
     }
   }
-  
-  parse_value_float(v, required= false, def= undefined) {
-    const vf= parseFloat(v)
-    if ((vf==null) || (isNaN(vf))) {
+
+  parse_value_float(v, required = false, def = undefined) {
+    const vf = parseFloat(v)
+    if (vf === null || Number.isNaN(Number(vf))) {
       if (required) {
-       throw `Wrong float value passed: ${v}`
+        throw `Wrong float value passed: ${v}`
       }
       return def
     }
-  
+
     return v
   }
-  
-  parse_field_float(fields, name, required= false, def= undefined) {
-    if ( ! (name in fields)) {
+
+  parse_field_float(fields, name, required = false, def = undefined) {
+    if (!(name in fields)) {
       if (required) {
-       throw `Expected float value not passed for ${name}`
+        throw `Expected float value not passed for ${name}`
       }
       return def
     }
     try {
-      return this.parse_value_float(fields[name], required, def) 
+      return this.parse_value_float(fields[name], required, def)
     } catch (e) {
       throw `parse_field_float() Error for ${name}: ${e}`
     }
   }
-  
-  parse_value_bool(v, required= false, def= undefined) {
-    if ((v==null) || (v==undefined)) {
+
+  parse_value_bool(v, required = false, def = undefined) {
+    if (v === null || v === undefined) {
       if (required) {
-       throw `Wrong bool value passed for ${name}`
+        throw `Wrong bool value passed for ${name}`
       }
       return undefined
     }
-    if ( (v===true) || (v==='true') ||(v==='True') ||(v===1) ||(v==='1')) {
+    if (v === true || v === "true" || v === "True" || v === 1 || v === "1") {
       return true
     }
-    if ( (v===false) || (v==='false') ||(v==='False') ||(v===0) ||(v==='0')) {
+    if (v === false || v === "false" || v === "False" || v === 0 || v === "0") {
       return false
     }
-  
+
     return def
   }
-  
-  parse_field_bool(fields, name, required= false, def= undefined) {
-    if ( ! (name in fields)) {
+
+  parse_field_bool(fields, name, required = false, def = undefined) {
+    if (!(name in fields)) {
       if (required) {
-       throw `Expected bool value not passed for ${name}`
+        throw `Expected bool value not passed for ${name}`
       }
       return def
     }
     try {
-      return this.parse_value_bool(fields[name], required, def) 
+      return this.parse_value_bool(fields[name], required, def)
     } catch (e) {
       throw `parse_field_bool() Error for ${name}: ${e}`
     }
   }
-  
-  parse_value_obj(v, required= false, def= undefined) {
-    if ((v==null) || (v==undefined)) {
+
+  parse_value_obj(v, required = false, def = undefined) {
+    if (v === null || v === undefined) {
       if (required) {
-       throw `Wrong obj value passed: ${v}`
+        throw `Wrong obj value passed: ${v}`
       }
       return def
     }
-    if (Object.keys(v).length==0) {
+    if (Object.keys(v).length === 0) {
       if (required) {
         throw `Empty obj value passed: ${v}`
       }
       return def
-    }  
-    if (typeof v != 'object') {
+    }
+    if (typeof v !== "object") {
       throw `Wrong obj value passed: ${v}`
-    }  
-  
+    }
+
     return v
   }
-  
-  parse_field_obj(fields, name, required= false, def= undefined) {
-    if ( ! (name in fields)) {
+
+  parse_field_obj(fields, name, required = false, def = undefined) {
+    if (!(name in fields)) {
       if (required) {
-       throw `Expected obj value not passed for ${name}`
+        throw `Expected obj value not passed for ${name}`
       }
       return def
     }

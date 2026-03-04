@@ -1,36 +1,35 @@
-import BaseCache from './BaseCache.mjs'
+import BaseCache from "./BaseCache.mjs"
 
 export default class BaseModel extends BaseCache {
-
   constructor(data) {
     super()
-    this.data = data 
+    this.data = data
   }
 
-  _get (field, def) {
+  _get(field, def) {
     if (this.data !== undefined) {
-      if ((this.data[field] !== undefined) && (this.data[field] !== null) ) {
+      if (this.data[field] !== undefined && this.data[field] !== null) {
         return this.data[field]
       }
     }
     return def
   }
 
-  _set (field, val) {
+  _set(field, val) {
     if (this.data === undefined) {
       this.data = {}
     }
     this.data[field] = val
-  }  
+  }
 
   get_extra_data() {
     const data = {}
     for (const [key, value] of Object.entries(this)) {
-      if (value instanceof BaseModel ) {
+      if (value instanceof BaseModel) {
         data[key] = value.get_data()
-      } else if (Array.isArray(value) && value.every(v => v instanceof BaseModel)) {
-        data[key] = value.map(v => v.get_data())
-      }      
+      } else if (Array.isArray(value) && value.every((v) => v instanceof BaseModel)) {
+        data[key] = value.map((v) => v.get_data())
+      }
     }
     return data
   }
@@ -53,5 +52,3 @@ export default class BaseModel extends BaseCache {
     }
   }
 }
-
-

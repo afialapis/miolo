@@ -1,5 +1,5 @@
-import {useContext} from 'react'
-import SessionContext from './SessionContext.mjs'
+import { useContext } from "react"
+import SessionContext from "./SessionContext.mjs"
 
 const useSessionContext = () => useContext(SessionContext)
 

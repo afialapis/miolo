@@ -1,3 +1,4 @@
-import React from 'react'
+import React from "react"
+
 const SessionContext = React.createContext()
 export default SessionContext

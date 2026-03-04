@@ -1,7 +1,5 @@
-import merge from 'deepmerge'
-import {
-  DEFAULT_AUTH_USER
-} from "../defaults.mjs"
+import merge from "deepmerge"
+import { DEFAULT_AUTH_USER } from "../defaults.mjs"
 
 /**
   {
@@ -37,60 +35,49 @@ import {
 */
 
 const getQueriesConfig = (config) => {
+  const instances = config?.queries || []
 
-
-  const instances= config?.queries || []
-
-  if (! instances) {
+  if (!instances) {
     return []
   }
 
-
-  if (! Array.isArray(instances)) {
+  if (!Array.isArray(instances)) {
     return []
   }
 
-  let output= []
-  
-  instances.map((instance) => {  
+  const output = []
 
-    const routes= instance?.routes
+  instances.forEach((instance) => {
+    const routes = instance?.routes
 
-    if (! routes) {
+    if (!routes) {
       return
     }
 
-    if (! Array.isArray(routes)) {
+    if (!Array.isArray(routes)) {
       return
     }
-    
+
     const comm_before = instance?.before || config?.before
     const comm_after = instance?.after || config?.after
 
-    const comm_auth= merge.all([
-      DEFAULT_AUTH_USER,
-      instance?.auth || {},
-      config?.auth || {}
-    ])
-    
-    let parsed_routes= []
+    const comm_auth = merge.all([DEFAULT_AUTH_USER, instance?.auth || {}, config?.auth || {}])
+
+    const parsed_routes = []
 
     for (const route of routes) {
-      if (! route.url) {
+      if (!route.url) {
         continue
       }
-      
-      let cb=route?.callback 
 
-      const parsed_route= {
+      const cb = route?.callback
+
+      const parsed_route = {
         url: route.url,
-        method: route?.method || 'GET', 
+        method: route?.method || "GET",
         callback: cb,
 
-        auth: merge.all([
-          comm_auth,
-          route?.auth  || {}
-        ]),
+        auth: merge.all([comm_auth, route?.auth || {}]),
 
         before: route?.before || comm_before,
         after: route?.after || comm_after,
@@ -102,7 +89,7 @@ const getQueriesConfig = (config) => {
     }
 
     output.push({
-      prefix: instance?.prefix || '',
+      prefix: instance?.prefix || "",
       routes: parsed_routes
     })
   })

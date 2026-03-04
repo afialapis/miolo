@@ -1,15 +1,13 @@
-import { 
-  db_todo_read
-} from "#server/db/io/todos/read.mjs"
+import { db_todo_read } from "#server/db/io/todos/read.mjs"
 
 const loader = async (ctx) => {
-  let todos= []
-  
+  let todos = []
+
   try {
     todos = await db_todo_read(ctx, {})
     todos = todos.sort((a, b) => b.created_at - a.created_at)
-  } catch(_) {}
-    
+  } catch (_) {}
+
   const data = {
     todos
   }
@@ -17,7 +15,4 @@ const loader = async (ctx) => {
   return data
 }
 
-
-export {loader}
-
-
+export { loader }

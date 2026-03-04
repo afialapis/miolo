@@ -1,6 +1,6 @@
 // import path from 'path'
 // import {fileURLToPath} from 'url'
-import {beforeInsertUser} from '#server/db/triggers/user.mjs'
+import { beforeInsertUser } from "#server/db/triggers/user.mjs"
 
 // const __filename = fileURLToPath(import.meta.url)
 // const __dirname = path.dirname(__filename)
@@ -9,24 +9,24 @@ import {beforeInsertUser} from '#server/db/triggers/user.mjs'
 const useUserFields = {
   use: true,
   fieldNames: {
-    created_by: 'created_by', 
-    last_update_by: 'last_update_by'
+    created_by: "created_by",
+    last_update_by: "last_update_by"
   }
 }
 
-const TABLES = [  
+const TABLES = [
   {
-    name: 'account',
+    name: "account",
     useDateFields: true,
     triggers: {
       beforeInsert: beforeInsertUser
     }
   },
   {
-    name: 'todo',
+    name: "todo",
     useDateFields: true,
-    useUserFields,
-  },
+    useUserFields
+  }
 ]
 
 export default {

@@ -1,7 +1,6 @@
-import http                         from 'http'
+import http from "node:http"
 //import util                       from 'util'
-import { createHttpTerminator }     from 'http-terminator'
-
+import { createHttpTerminator } from "http-terminator"
 
 // promisify the server.listen()
 
@@ -25,13 +24,15 @@ const _listenAsync = (server, port, hostname) => {
 
 export function init_http_server(app, config) {
   const miolo = app.context.miolo
-  const logger= miolo.logger
+  const logger = miolo.logger
 
   const _http_start = async () => {
     try {
       // If previous server already created, lets avoid
-      if (app.http?.server != undefined) {
-        logger.warn(`[http][start] Server already running on ${app?.http?.hostname}:${app?.http?.port}`)
+      if (app.http?.server !== undefined) {
+        logger.warn(
+          `[http][start] Server already running on ${app?.http?.hostname}:${app?.http?.port}`
+        )
         return
       }
 
@@ -40,15 +41,17 @@ export function init_http_server(app, config) {
 
       // Init terminator
       const httpTerminator = createHttpTerminator({
-        server,
+        server
       })
 
       const http_stop = async () => {
         try {
           await httpTerminator.terminate()
           delete app.http.server
-          logger.info(`[http][stop] miolo has been shutdowned from ${config.hostname}:${config.port}`)
-        } catch(error) {
+          logger.info(
+            `[http][stop] miolo has been shutdowned from ${config.hostname}:${config.port}`
+          )
+        } catch (error) {
           logger.error(`[http][stop] error: ${error}`)
         }
       }
@@ -59,10 +62,10 @@ export function init_http_server(app, config) {
       // Finally start the server
       await _listenAsync(server, config.port, config.hostname)
       logger.info(`[http][start] miolo is listening on ${config.hostname}:${config.port}`)
-    } catch(error) {
+    } catch (error) {
       logger.error(`[http][start] error: ${error}`)
     }
-  }  
+  }
 
   // Attach objects to app
   app.http = {
@@ -73,7 +76,7 @@ export function init_http_server(app, config) {
     },
     hostname: config.hostname,
     port: config.port
-  }  
+  }
 
   return app
 }

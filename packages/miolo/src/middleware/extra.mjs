@@ -1,10 +1,9 @@
-
-const init_extra_middlewares = ( app, middlewares  ) => {
-  if (middlewares==undefined || middlewares.length==0) {
+const init_extra_middlewares = (app, middlewares) => {
+  if (middlewares === undefined || middlewares.length === 0) {
     return
   }
 
-  middlewares.map(midw => { 
+  middlewares.forEach((midw) => {
     app.use(midw)
   })
 }

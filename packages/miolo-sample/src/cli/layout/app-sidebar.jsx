@@ -4,23 +4,21 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarRail,
+  SidebarRail
 } from "#cli/components/ui/patched/sidebar.jsx"
-
-import { NavMain } from "./nav-main.jsx"
 import { NavLastTodos } from "./nav-last-todos.jsx"
+import { NavMain } from "./nav-main.jsx"
 import { NavUser } from "./nav-user.jsx"
-
 
 export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-        <NavLastTodos/>
-        <NavMain/>
+        <NavLastTodos />
+        <NavMain />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser/>
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

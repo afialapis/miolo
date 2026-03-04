@@ -27,6 +27,7 @@ class SessionStore {
     }
   }
 
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: keep definition for koa-session store
   async get(key, maxAge, { rolling, ctx }) {
     const cache = await this.initCache()
     const jvalue = await cache.getItem(key)
@@ -42,6 +43,7 @@ class SessionStore {
     }
   }
 
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: keep definition for koa-session store
   async set(key, sess, maxAge, { rolling, changed, ctx }) {
     this.logger.silly(`[session-store] Set session for ${key}`)
     const cache = await this.initCache()
@@ -54,6 +56,7 @@ class SessionStore {
     await cache.setItem(key, svalue /*, maxAge*/)
   }
 
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: keep definition for koa-session store
   async destroy(key, { ctx }) {
     this.logger.silly(`[session-store] Destroy session for ${key}`)
     const cache = await this.initCache()

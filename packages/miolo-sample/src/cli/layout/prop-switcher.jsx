@@ -1,8 +1,8 @@
 "use client"
 
-import React from 'react'
-import { useLocation } from 'react-router'
-import { ChevronsUpDown, Cable, House } from 'lucide-react'
+import { Cable, ChevronsUpDown, House } from "lucide-react"
+import React from "react"
+import { useLocation } from "react-router"
 
 import {
   DropdownMenu,
@@ -11,25 +11,25 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   //DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from '#cli/components/ui/dropdown-menu.jsx'
+  DropdownMenuTrigger
+} from "#cli/components/ui/dropdown-menu.jsx"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
-} from '#cli/components/ui/patched/sidebar.jsx'
-import useDataContext from '#cli/context/data/useDataContext.mjs'
+  useSidebar
+} from "#cli/components/ui/patched/sidebar.jsx"
+import useDataContext from "#cli/context/data/useDataContext.mjs"
 
 export function PropSwitcher() {
   const { isMobile } = useSidebar()
   const location = useLocation()
 
-  const {properties} = useDataContext()
+  const { properties } = useDataContext()
   const [activeProp, setActiveProp] = React.useState(properties[0])
 
   // TODO CHeck w
-  if (location.pathname == '/connect') {
+  if (location.pathname == "/connect") {
     return null
   }
 

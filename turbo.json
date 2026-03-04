@@ -12,9 +12,17 @@
       ]
     },
     "lint": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!packages/miolo-demo/**"
+      ],
       "cache": true
     },
     "lint:fix": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!packages/miolo-demo/**"
+      ],
       "cache": false
     },
     "dist": {

@@ -1,6 +1,6 @@
 import React from "react"
-import useThemeContext from "#cli/context/theme/useThemeContext.mjs"
 import { Toaster as Sonner } from "sonner"
+import useThemeContext from "#cli/context/theme/useThemeContext.mjs"
 
 const Toaster = () => {
   const { theme } = useThemeContext()
@@ -11,14 +11,13 @@ const Toaster = () => {
       className="toaster group"
       position="top-right"
       richColors={true}
-      style={
-        {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)"
-        }
-      }/>
-  );
+      style={{
+        "--normal-bg": "var(--popover)",
+        "--normal-text": "var(--popover-foreground)",
+        "--normal-border": "var(--border)"
+      }}
+    />
+  )
 }
 
 export { Toaster }

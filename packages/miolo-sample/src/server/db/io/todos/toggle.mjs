@@ -1,11 +1,11 @@
-import {db_todo_upsave} from './upsave.mjs'
-import { with_miolo_schema } from 'miolo'
-import Joi from 'joi'
-import { opt_int, bool_null } from "#server/utils/schema.mjs"
-import { db_todo_find } from './find.mjs'
+import Joi from "joi"
+import { with_miolo_schema } from "miolo"
+import { bool_null, opt_int } from "#server/utils/schema.mjs"
+import { db_todo_find } from "./find.mjs"
+import { db_todo_upsave } from "./upsave.mjs"
 
 async function _db_todo_toggle(ctx, params) {
-  ctx.miolo.logger.verbose(`[db_todo_toggle] Toggling todo with tid ${params?.id }`)
+  ctx.miolo.logger.verbose(`[db_todo_toggle] Toggling todo with tid ${params?.id}`)
 
   const todo = await db_todo_find(ctx, params)
 
@@ -17,19 +17,21 @@ async function _db_todo_toggle(ctx, params) {
 
   const todo_data = {
     id: parseInt(params.id),
-    done 
+    done
   }
 
   const nrecs = await db_todo_upsave(ctx, todo_data)
-  
-  ctx.miolo.logger.verbose(`[db_todo_toggle] Toggled todo with tid ${params?.id} (${nrecs} records updated)`)
+
+  ctx.miolo.logger.verbose(
+    `[db_todo_toggle] Toggled todo with tid ${params?.id} (${nrecs} records updated)`
+  )
 
   return done
 }
 
-const todo_toggle_schema= Joi.object({
+const todo_toggle_schema = Joi.object({
   id: opt_int,
-  done: bool_null,
+  done: bool_null
 })
 
 export const db_todo_toggle = with_miolo_schema(_db_todo_toggle, todo_toggle_schema)

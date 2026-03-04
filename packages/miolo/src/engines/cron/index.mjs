@@ -1,48 +1,41 @@
-import {
-  init_cron_job
-} from './init.mjs'
-import {
-  sys_check_config
-} from './syscheck.mjs'
-import {
-  ipsum_config
-} from './ipsum.mjs'
-import { cyan, green_bold, yellow_bold } from 'tinguir'
-import { sys_email_queue_config } from './emails.mjs'
-
+import { cyan, green_bold, yellow_bold } from "tinguir"
+import { sys_email_queue_config } from "./emails.mjs"
+import { init_cron_job } from "./init.mjs"
+import { ipsum_config } from "./ipsum.mjs"
+import { sys_check_config } from "./syscheck.mjs"
 
 export function init_cron(app, custom) {
   const miolo = app.context.miolo
-  const logger= miolo.logger
-  
-  const jobConfigs= [
+  const logger = miolo.logger
+
+  const jobConfigs = [
     sys_check_config(),
     ipsum_config(),
     sys_email_queue_config(),
-    ...custom || []
+    ...(custom || [])
   ]
-  
+
   // Keep trace of conr jobs to be accessible later
-  const jobInfos= [
-    // {name: 'name', job: <job>, isActive: true/false} 
+  const jobInfos = [
+    // {name: 'name', job: <job>, isActive: true/false}
   ]
-  
-  jobConfigs.map(config => {
+
+  jobConfigs.forEach((config) => {
     const name = config.name
-    const job= init_cron_job(miolo, config)
+    const job = init_cron_job(miolo, config)
     jobInfos.push({
-      name, 
+      name,
       job,
       isActive: false
-    })  
+    })
   })
-  
+
   const _find_job_by_idx_or_name = (idxOrName) => {
     let jobInfo
-    if (typeof idxOrName == 'number') {
-      jobInfo= jobInfos[idxOrName]
+    if (typeof idxOrName === "number") {
+      jobInfo = jobInfos[idxOrName]
     } else {
-      jobInfo= jobInfos.filter(j => j.name == idxOrName)[0]
+      jobInfo = jobInfos.filter((j) => j.name === idxOrName)[0]
     }
 
     if (!jobInfo) {
@@ -55,15 +48,15 @@ export function init_cron(app, custom) {
   const _start_job = async (jobInfo) => {
     try {
       await jobInfo.job.start()
-      jobInfo.isActive= true
-      logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${green_bold('started!')}`)
+      jobInfo.isActive = true
+      logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${green_bold("started!")}`)
       return 1
-    } catch(e) {
+    } catch (e) {
       logger.error(`[cron][Job ${cyan(jobInfo.name)}] Error starting it`)
       logger.error(e)
       return 0
     }
-  }  
+  }
 
   const _start_job_by_idx_or_name = async (idxOrName) => {
     const jobInfo = _find_job_by_idx_or_name(idxOrName)
@@ -71,15 +64,16 @@ export function init_cron(app, custom) {
       const done = await _start_job(jobInfo)
       return [done, jobInfo.name]
     }
-    return [0, '']
+    return [0, ""]
   }
 
   const _start_all_jobs = async () => {
     try {
-      let started= [], errors= []
+      const started = [],
+        errors = []
       for (const jobInfo of jobInfos) {
-        const done= await _start_job(jobInfo)
-        if (done == 1) {
+        const done = await _start_job(jobInfo)
+        if (done === 1) {
           started.push(jobInfo.name)
         } else {
           errors.push(jobInfo.name)
@@ -91,19 +85,18 @@ export function init_cron(app, custom) {
       if (errors.length > 0) {
         logger.warn(`[cron] Could not start ${errors.length} jobs: ${errors}`)
       }
-    } catch(error) {
+    } catch (error) {
       logger.error(`[cron] start() error: ${error}`)
     }
-  
   }
 
   const _stop_job = async (jobInfo) => {
     try {
       await jobInfo.job.stop()
-      jobInfo.isActive= false
-      logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${yellow_bold('stopped!')}`) 
+      jobInfo.isActive = false
+      logger.debug(`[cron][Job ${cyan(jobInfo.name)}] ${yellow_bold("stopped!")}`)
       return 1
-    } catch(e) {
+    } catch (e) {
       logger.error(`[cron][Job ${cyan(jobInfo.name)}] Error stopping it`)
       logger.error(e)
       return 0
@@ -116,15 +109,16 @@ export function init_cron(app, custom) {
       const done = await _stop_job(jobInfo)
       return [done, jobInfo.name]
     }
-    return [0, '']
+    return [0, ""]
   }
 
   const _stop_all_jobs = async () => {
     try {
-      let stopped= [], errors= []
+      const stopped = [],
+        errors = []
       for (const jobInfo of jobInfos) {
-        const done= await _stop_job(jobInfo)
-        if (done == 1) {
+        const done = await _stop_job(jobInfo)
+        if (done === 1) {
           stopped.push(jobInfo.name)
         } else {
           errors.push(jobInfo.name)
@@ -136,17 +130,17 @@ export function init_cron(app, custom) {
       if (errors.length > 0) {
         logger.warn(`[cron] Could not stop ${errors.length} jobs: ${errors}`)
       }
-    } catch(error) {
+    } catch (error) {
       logger.error(`[cron] stop() error: ${error}`)
     }
   }
 
-  app.cron= {
-    jobs:      jobInfos,
+  app.cron = {
+    jobs: jobInfos,
     start_one: _start_job_by_idx_or_name,
-    start:     _start_all_jobs,
-    stop_one : _stop_job_by_idx_or_name,
-    stop:      _stop_all_jobs
+    start: _start_all_jobs,
+    stop_one: _stop_job_by_idx_or_name,
+    stop: _stop_all_jobs
   }
 
   return app
