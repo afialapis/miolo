@@ -45,6 +45,8 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.29.0",
+    "@babel/preset-env": "^7.29.0",
+    "@babel/preset-react": "^7.28.5",
     "@dotenvx/dotenvx": "^1.52.0",
     "@koa/bodyparser": "^6.1.0",
     "@koa/cors": "^5.0.0",

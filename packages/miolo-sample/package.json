@@ -12,7 +12,7 @@
     "dev": "npx miolo dev",
     "deb": "npx miolo deb",
     "create-bin": "npx miolo create-bin",
-    "build": "npx miolo build && npm run create-bin",
+    "build": "rm -fr build/cli/* build/server/* &&npx miolo build && npm run create-bin",
     "start": "node ./build/server/run.mjs start 1>> /var/log/miolo-sample.log 2>&1",
     "stop": "node ./build/server/run.mjs stop 1>> /var/log/miolo-sample.log 2>&1",
     "restart": "node ./build/server/run.mjs restart 1>> /var/log/miolo-sample.log 2>&1"
