@@ -91,7 +91,8 @@ const MioloContextProvider = ({ context, children }) => {
         googleLogin,
         localLogin,
         logout,
-        useSsrData
+        useSsrData,
+        authMethod: innerContext?.config?.auth_method
       }}
     >
       {children}

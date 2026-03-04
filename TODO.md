@@ -1,40 +1,38 @@
-# demo
+# Auth
 
-==> error en modo prod
-==> no pasar opciones en los scripts del pkg.json Y en server/config.
-    simplificar eso.
+## Basic auth
 
+Check from `demo`. Is actually posible?
+Como hacer la primera load con "/".
+omitir directamente en auth.basic.paths??
+no parece muy bueno tener que pasar toooodas las rutas ahi
 
+## Guest auth
 
+### koa-session?
 
-
-
-
-
-
-
-
-
+Wouldn't be enough to use koa-session? Token could be taken from cookie.
+And we would get rid of JWT.
 
 
+# Router
 
-1 - cli y clireact en otro pkg
-2 - ver si asi persisten problemas de doble react en demo con dependencia local
+## auth.action
 
+Current: 'redirect', 'error'
+Add these? 'empty' / 'none'
 
-En /bin, los wrappers miolo-prod.mjs y miolo-dev.mjs
-podrian ser innecesarios. Que el entry sea el fichero de options y ya.
+# Ratelimit
 
-
-
-
-
+Use Redis store
 
 
 # ipsum
 
+## custom dir
 Añadir un directorio custom que se pueda actualizar sin upgradear miolo
 
+## blacklist based on URL
 Añadir tambien blacklist segun target:
 /__phpmyadmin/index.php
 /_phpmyadmin/index.php
@@ -202,51 +200,8 @@ Añadir tambien blacklist segun target:
 /wp-content/plugins/portable-phpmyadmin/wp-pma-mod/index.php
 /wp-content/plugins/portable-phpmyadmin/wp-pma-mod/index.php
 
-//
-//  4)
-//  Volver a intentar con que el 'ssr.renderer' no necesite de AppServer. 
-//  Daba problemas con el Context. Pero quiza se pueda resolver.
-//
-//  0000)
-//  RECORDAR OBJETIVO FINAL:
-//    la config de auth no va a nivel global del Server, sino
-//    en cada grupo de routes (o ambos, global y routes)
-//
-
-https://stackoverflow.com/a/60985636
-
-
-hostname cli vs server?
-añadir chpwsd endpoint
-
-# Auth
-
-## Basic auth
-
-### How to route?
-
-Como hacer la primera load con "/".
-omitir directamente en auth.basic.paths??
-no parece muy bueno tener que pasar toooodas las rutas ahi
-
-## Guest auth
-
-### koa-session?
-
-Wouldn't be enough to use koa-session? Token could be taken from cookie.
-And we would get rid of JWT.
 
 
 
-# Router
-
-## auth.action
-
-Current: 'redirect', 'error'
-Add these? 'empty' / 'none'
-
-# Ratelimit
-
-Use Redis store
 
 

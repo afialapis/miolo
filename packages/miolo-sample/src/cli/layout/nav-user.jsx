@@ -23,7 +23,7 @@ import useThemeContext from "#cli/context/theme/useThemeContext.mjs"
 export function NavUser() {
   const { isMobile } = useSidebar()
 
-  const { session, logout } = useSessionContext()
+  const { session, logout, authMethod } = useSessionContext()
   const navigate = useNavigate()
   const { isDark, setTheme } = useThemeContext()
 
@@ -91,10 +91,12 @@ export function NavUser() {
               <Shield />
               Seguridad
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => logout()}>
-              <LogOut />
-              Cerrar sesión
-            </DropdownMenuItem>
+            {authMethod === "passport" && (
+              <DropdownMenuItem onSelect={() => logout()}>
+                <LogOut />
+                Cerrar sesión
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
