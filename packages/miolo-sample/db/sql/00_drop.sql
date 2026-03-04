@@ -1,2 +1,2 @@
-DROP TABLE todo;
-DROP TABLE account;
+DROP TABLE IF EXISTS todo;
+DROP TABLE IF EXISTS account;
