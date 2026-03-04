@@ -40,7 +40,8 @@ Standard npm scripts for miolo development and deployment:
 {
   "scripts": {
     "reset": "rm -fr node_modules package-lock.json && npm i",
-    "lint": "npx xeira lint src",
+    "lint": "biome check ./src --reporter=github",
+    "lint:fix": "biome check --write ./src --reporter=github",
     "dev": "npx miolo dev",
     "deb": "npx miolo deb",
     "create-bin": "npx miolo create-bin",

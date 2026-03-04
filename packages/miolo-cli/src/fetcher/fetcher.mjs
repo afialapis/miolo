@@ -110,7 +110,6 @@ class Fetcher {
   }
 
   async get(url, params, http_auth = undefined) {
-    /* eslint no-unused-vars:0 */
     try {
       const resp = await this._fetch("GET", url, omit_nil(params), http_auth)
       return resp

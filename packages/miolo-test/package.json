@@ -2,15 +2,20 @@
   "name": "miolo-test",
   "version": "0.0.1",
   "private": true,
+  "imports": {
+    "#cli/*": "./src/cli/*",
+    "#data/*": "./src/data/*",
+    "#server/*": "./src/server/*"
+  },
   "scripts": {
-    "lint": "biome check ./src --reporter=github",
-    "lint:fix": "biome check --write ./src --reporter=github",
+    "lint": "biome check ./src ./test --reporter=github",
+    "lint:fix": "biome check --write ./src ./test --reporter=github",
     "reset": "rm -fr package-lock.json npm-lock.yaml build/* && npm i",
-    "test": "node --test ./src/index.mjs"
+    "test": "node --test ./test/index.mjs"
   },
   "type": "module",
   "dependencies": {
-    "intre": "^3.0.0-beta.3",
+    "intre": "^3.0.0-beta.4",
     "miolo": "../miolo",
     "miolo-cli": "../miolo-cli",
     "miolo-react": "../miolo-react",

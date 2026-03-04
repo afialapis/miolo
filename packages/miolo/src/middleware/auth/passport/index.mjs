@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars*/
-
 import Router from "@koa/router"
 import passport from "koa-passport"
 import { Strategy as GoogleStrategy } from "passport-google-oauth20"
@@ -26,19 +24,19 @@ import { init_session_middleware } from "./session/index.mjs"
 //   google_url_logout_redirect: '/'
 // }
 
-const def_get_user_id = (user, done, ctx) => done(null, user.id)
+const def_get_user_id = (user, done, _ctx) => done(null, user.id)
 
-const def_find_user_by_id = (id, done, ctx) => {
+const def_find_user_by_id = (_id, done, _ctx) => {
   const err = Error("You need to define auth.passport.find_user_by_id")
   done(err, null)
 }
 
-const def_local_auth_user = (username, password, done, ctx) => {
+const def_local_auth_user = (_username, _password, done, _ctx) => {
   const err = Error("You need to define auth.passport.local_auth_user")
   done(err, null)
 }
 
-const def_google_auth_user = (accessToken, refreshToken, profile, done, ctx) => {
+const def_google_auth_user = (_accessToken, _refreshToken, _profile, done, _ctx) => {
   const err = Error("You need to define auth.passport.google_auth_user")
   done(err, null)
 }
@@ -87,7 +85,7 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         return get_user_id_f(user, done, ctx)
       } catch (error) {
         ctx.miolo.logger.error(`[auth][passport] Error serializing user: ${error}`)
-        return done(error, null)
+        return done(error, undefined)
       }
     })
   }
@@ -102,7 +100,7 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         return find_user_by_id_f(id, done, ctx)
       } catch (error) {
         ctx.miolo.logger.error(`[auth][passport] Error deserializing user: ${error}`)
-        return done(error, null)
+        return done(error, undefined)
       }
     })
   }
@@ -161,10 +159,12 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
   app.use(_ensure_ctx_user)
 
   // handle auth routes
-  const handleLocalLogIn = (ctx, next) => {
+  const handleLocalLogIn = (ctx, _next) => {
     ctx.miolo.logger.debug(`[auth][local] handleLocalLogIn() - authenticating...`)
     return passport.authenticate("local", async (err, user, info, _status) => {
-      if (user === false || user == undefined || err != undefined) {
+      const noUser = user === false || user === undefined || user === null
+      const hasErr = err !== undefined && err !== null
+      if (noUser || hasErr) {
         ctx.miolo.logger.debug(`[auth][local] handleLocalLogIn() - user not authenticated`)
         ctx.session.user = undefined
         ctx.session.authenticated = false
@@ -200,7 +200,7 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
           }
         }
 
-        if (local_url_login_redirect != undefined) {
+        if (local_url_login_redirect !== undefined) {
           ctx.redirect(local_url_login_redirect)
         }
       }
@@ -228,7 +228,7 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         ctx.status = 401
 
         ctx.body = {
-          ok: err == undefined,
+          ok: err === undefined,
           data: {
             user: undefined,
             authenticated: false,
@@ -258,7 +258,7 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
     })(ctx, next)
   }
 
-  const handleLogOut = async (ctx, next) => {
+  const handleLogOut = async (ctx, _next) => {
     if (ctx.session.authenticated) {
       ctx.miolo.logger.debug(`[auth][passport] handleLogOut() - logging out...`)
 
@@ -275,7 +275,7 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         }
       }
 
-      if (local_url_logout_redirect != undefined) {
+      if (local_url_logout_redirect !== undefined) {
         ctx.redirect(local_url_logout_redirect)
       } else {
         await ctx.logout()

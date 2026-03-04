@@ -7,7 +7,8 @@
   "scripts": {
     "postinstall": "patch-package",
     "reset": "rm -fr node_modules package-lock.json npm-lock.yaml && npm i",
-    "lint": "npx xeira lint src",
+    "lint": "biome check ./src --reporter=github",
+    "lint:fix": "biome check --write ./src --reporter=github",
     "dev": "npx miolo dev",
     "deb": "npx miolo deb",
     "create-bin": "npx miolo create-bin",
@@ -39,8 +40,8 @@
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "farrapa": "^3.0.0-beta.3",
-    "intre": "^3.0.0-beta.3",
+    "farrapa": "^3.0.0-beta.10",
+    "intre": "^3.0.0-beta.4",
     "joi": "^18.0.2",
     "lucide-react": "^0.576.0",
     "miolo-cli": "file:../miolo-cli",
@@ -59,12 +60,11 @@
   },
   "devDependencies": {
     "miolo": "file:../miolo",
-    "sass-embedded": "^1.97.3",
-    "xeira": "^2.0.0-beta.10"
+    "sass-embedded": "^1.97.3"
   },
   "overrides": {
     "@babel/runtime": "^7.28.6",
-    "ajv": "6.12.6",
+    "ajv": "6.14.0",
     "body-parser": "^2.2.2",
     "cookie": "^1.1.1",
     "express": "^5.2.1",
@@ -78,5 +78,8 @@
     "serve-static": "^2.2.1",
     "tar": "^7.5.7",
     "ws": "^8.19.0"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

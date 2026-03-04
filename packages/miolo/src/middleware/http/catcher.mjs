@@ -3,33 +3,31 @@
  * @param ctx
  */
 
+import util from "node:util"
 // import http from 'http'
-import statuses from 'statuses'
-import util from 'node:util'
+import statuses from "statuses"
 
-const _ONLY_WARN= [401, 403]
+const _ONLY_WARN = [401, 403]
 
 function init_catcher_middleware(app) {
-  const logger= app.context.miolo.logger
-  
+  const logger = app.context.miolo.logger
+
   async function catcher_middleware(err) {
     // don't do anything if there is no error.
     // this allows you to pass `this.onerror`
     // to node-style callbacks.
     if (err == null) return
-    
-    // Ignore this error 
-    // Appearing since Koa 3.1 + koa-static 6.x + koa-send 7.x
-    if (err.code === 'ERR_STREAM_PREMATURE_CLOSE') return
 
+    // Ignore this error
+    // Appearing since Koa 3.1 + koa-static 6.x + koa-send 7.x
+    if (err.code === "ERR_STREAM_PREMATURE_CLOSE") return
 
     // When dealing with cross-globals a normal `instanceof` check doesn't work properly.
     // See https://github.com/koajs/koa/issues/1466
     // We can probably remove it once jest fixes https://github.com/facebook/jest/issues/2549.
     const isNativeError =
-      Object.prototype.toString.call(err) === '[object Error]' ||
-      err instanceof Error
-    if (!isNativeError) err = new Error(util.format('non-error thrown: %j', err))
+      Object.prototype.toString.call(err) === "[object Error]" || err instanceof Error
+    if (!isNativeError) err = new Error(util.format("non-error thrown: %j", err))
 
     let headerSent = false
     if (this.headerSent || !this.writable) {
@@ -37,16 +35,15 @@ function init_catcher_middleware(app) {
     }
 
     // delegate
-    this.app.emit('error', err, this)
+    this.app.emit("error", err, this)
 
-    
     let statusCode = err.status || err.statusCode
     // default to 500
-    if (typeof statusCode !== 'number' || !statuses.message[statusCode]) statusCode = 500    
+    if (typeof statusCode !== "number" || !statuses.message[statusCode]) statusCode = 500
 
     // Log the error depending on the status
-    const ip = this.headers["x-real-ip"] || this.headers["x-orig-ip"] || this.ip || '127.0.0.1'
-    if ((_ONLY_WARN.indexOf(statusCode)>=0) || (err.message.indexOf('Premature close')>=0)) {
+    const ip = this.headers["x-real-ip"] || this.headers["x-orig-ip"] || this.ip || "127.0.0.1"
+    if (_ONLY_WARN.indexOf(statusCode) >= 0 || err.message.indexOf("Premature close") >= 0) {
       logger.warn(`[${ip}] ${this.method} ${this.url} - ${statusCode}: ${err.message}`)
     } else {
       logger.error(`[${ip}] ${this.method} ${this.url} - ${statusCode}: ${err.message}`)
@@ -63,8 +60,10 @@ function init_catcher_middleware(app) {
 
     // first unset all headers
     /* istanbul ignore else */
-    if (typeof res.getHeaderNames === 'function') {
-      res.getHeaderNames().forEach(name => res.removeHeader(name))
+    if (typeof res.getHeaderNames === "function") {
+      res.getHeaderNames().forEach((name) => {
+        res.removeHeader(name)
+      })
     } else {
       res._headers = {} // Node < 7.7
     }
@@ -73,8 +72,7 @@ function init_catcher_middleware(app) {
     this.set(err.headers)
 
     // force text/plain
-    this.type = 'text'
-
+    this.type = "text"
 
     // respond
     const code = statuses.message[statusCode]
@@ -82,7 +80,7 @@ function init_catcher_middleware(app) {
     this.status = err.status = statusCode
     this.length = Buffer.byteLength(msg)
     res.end(msg)
-    
+
     /*
     if (!err) return
 
@@ -93,8 +91,7 @@ function init_catcher_middleware(app) {
       if (typeof err === 'object') {
         try {
           errMsg = JSON.stringify(err);
-          // eslint-disable-next-line no-empty
-        } catch (e) {}
+        } catch (_) {}
       }
       const newError = new Error('non-error thrown: ' + errMsg);
       // err maybe an object, try to copy the name, message and stack to the new error instance
@@ -154,4 +151,4 @@ function init_catcher_middleware(app) {
   app.context.onerror = catcher_middleware
 }
 
-export {init_catcher_middleware}
+export { init_catcher_middleware }

@@ -1,6 +1,6 @@
 {
   "name": "miolo-cli",
-  "version": "3.0.0-beta.156",
+  "version": "3.0.0-beta.158",
   "description": "cli utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -17,29 +17,23 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "development": "./src/index.mjs",
-      "import": "./dist/miolo-cli.mjs",
-      "default": "./dist/miolo-cli.umd.js"
-    }
+    ".": "./src/index.mjs"
   },
   "files": [
-    "dist",
-    "src"
+    "src",
+    "package.json"
   ],
   "scripts": {
+    "reset": "rm -fr package-lock.json npm-lock.yaml node_modules && npm i",
     "lint": "biome check ./src --reporter=github",
     "lint:fix": "biome check --write ./src --reporter=github",
-    "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
-    "clean": "rm -fr ./dist/*",
-    "bundle": "npx xeira bundle --target=browser --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo-cli --bundle_extension=umd,mjs",
-    "dist": "npm run clean && npm run bundle"
+    "prepublishOnly": "npm run lint"
   },
   "dependencies": {
     "qs": "^6.15.0",
     "socket.io-client": "^4.8.3"
   },
-  "devDependencies": {
-    "xeira": "^2.0.0-beta.10"
+  "engines": {
+    "node": ">=24"
   }
 }

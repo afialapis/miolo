@@ -19,7 +19,11 @@ class SessionStore {
   async closeCache() {
     if (this._cache !== undefined) {
       this.logger.silly(`[session-store] Closing store`)
-      await this._cache.close()
+      try {
+        await this._cache.close()
+      } catch (error) {
+        this.logger.warn(error)
+      }
     }
   }
 

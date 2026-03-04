@@ -1,11 +1,15 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env*"],
+  "globalDependencies": [
+    "**/.env*"
+  ],
   "tasks": {
     "reset": {
       "cache": false,
       "dependsOn": [],
-      "outputs": [".turbo/**"]
+      "outputs": [
+        ".turbo/**"
+      ]
     },
     "lint": {
       "cache": true
@@ -14,10 +18,17 @@
       "cache": false
     },
     "dist": {
-      "inputs": ["$TURBO_DEFAULT$", "!packages/miolo/**", "!packages/miolo-demo/**", "!packages/miolo-sample/**", "!packages/miolo-test/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!packages/miolo-**/**"
+      ],
       "cache": true,
-      "dependsOn": ["^dist"],
-      "outputs": ["dist/**"]
+      "dependsOn": [
+        "^dist"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "dev": {
       "cache": false,
@@ -40,12 +51,16 @@
     "sample": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^dist"],
+      "dependsOn": [
+        "^dist"
+      ],
       "outputs": []
     },
     "publish": {
       "cache": false,
-      "dependsOn": ["^dist"],
+      "dependsOn": [
+        "^dist"
+      ],
       "outputs": []
     }
   }

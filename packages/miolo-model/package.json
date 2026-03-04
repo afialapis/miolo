@@ -1,6 +1,6 @@
 {
   "name": "miolo-model",
-  "version": "3.0.0-beta.156",
+  "version": "3.0.0-beta.158",
   "description": "Data models for miolo world",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -17,27 +17,20 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "development": "./src/index.mjs",
-      "import": "./dist/miolo-model.mjs",
-      "default": "./dist/miolo-model.umd.js"
-    }
+    ".": "./src/index.mjs"
   },
   "files": [
-    "dist",
-    "src"
+    "src",
+    "package.json"
   ],
   "scripts": {
+    "reset": "rm -fr package-lock.json npm-lock.yaml node_modules && npm i",
     "lint": "biome check ./src --reporter=github",
     "lint:fix": "biome check --write ./src --reporter=github",
-    "reset": "rm -fr package-lock.json npm-lock.yaml dist/* && npm i",
-    "clean": "rm -fr ./dist/*",
-    "bundle": "npx xeira bundle --target=browser --source_index=./src/index.mjs --bundle_folder=./dist --bundle_name=miolo-model --bundle_extension=umd,mjs",
-    "dist": "npm run clean && npm run bundle",
-    "test": "node --test ./test/index.mjs"
+    "test": "node --test ./test/index.mjs",
+    "prepublishOnly": "npm run lint && npm run test"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "xeira": "^2.0.0-beta.10"
+  "engines": {
+    "node": ">=24"
   }
 }

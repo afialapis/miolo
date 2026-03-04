@@ -36,7 +36,11 @@ export function init_context_cache(config, logger) {
     if (clean) {
       const cache = await get_cache(name)
       if (cache) {
-        await cache.close()
+        try {
+          await cache.close()
+        } catch (error) {
+          logger.warn(error)
+        }
       }
     }
     delete _glob_cache_stores[name]
@@ -45,7 +49,11 @@ export function init_context_cache(config, logger) {
   const close = async (clean = true) => {
     if (clean) {
       for (const [_name, cache] of Object.entries(_glob_cache_stores)) {
-        await cache.close()
+        try {
+          await cache.close()
+        } catch (error) {
+          logger.warn(error)
+        }
       }
     }
 

@@ -1,0 +1,67 @@
+import { auth_user as q_auth_user, find_user_by_id as q_find_user_by_id } from "../db/users.mjs"
+
+const get_user_id = (user, done, _ctx) => {
+  // console.log(`[miolo-test-app][credentials] get_user_id() - name ${user?.name} - sessionId ${ctx.sessionId}`)
+  const uid = user?.id
+  if (uid !== undefined) {
+    return done(null, uid)
+  } else {
+    const err = new Error("User object is missing an ID for serialization")
+    return done(err, null)
+  }
+}
+
+const find_user_by_id = (id, done, ctx) => {
+  // console.log('[miolo-test-app][credentials] find_user_by_id()', id)
+  ctx.miolo.db.get_connection().then((conn) => {
+    q_find_user_by_id(conn, id).then((user) => {
+      //console.log('[miolo-test-app][credentials] find_user_by_id()', JSON.stringify(user))
+      if (user === undefined) {
+        const err = new Error("User not found")
+        return done(err, null)
+      } else {
+        return done(null, user)
+      }
+    })
+  })
+}
+
+const local_auth_user = (username, password, done, ctx) => {
+  // auth=> done(null, user)
+  // noauth=> done(null, false, {message: ''})
+  // err=> done(error, null)
+
+  // console.log('[miolo-test-app][credentials] local_auth_user() - checking credentials for ', username)
+
+  ctx.miolo.db.get_connection().then((conn) => {
+    q_auth_user(conn, username, password).then((user) => {
+      // console.log('[miolo-test-app][credentials] local_auth_user() - User logged in', user)
+
+      if (user === undefined) {
+        const msg = "Invalid credentials"
+        ctx.miolo.logger.debug(
+          `[miolo-test-app][credentials] local_auth_user() - User not logged in: ${msg}`
+        )
+
+        const err = new Error(msg)
+        //done(null, false, msg)
+        return done(err, null)
+      } else {
+        ctx.miolo.logger.debug(
+          `[miolo-test-app][credentials] local_auth_user() - User logged in! Id: ${user?.id} Email ${user?.email}`
+        )
+        return done(null, user)
+      }
+    })
+  })
+}
+
+export default {
+  get_user_id,
+  find_user_by_id,
+  local_auth_user,
+  local_url_login: "/login",
+  local_url_logout: "/logout",
+  local_url_login_redirect: undefined,
+  local_url_logout_redirect: undefined
+}
