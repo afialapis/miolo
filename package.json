@@ -40,7 +40,8 @@
     "publish-miolo": "cd ./packages/miolo && npm run dist && npm publish && cd ../..",
     "publish-miolo-cli": "cd ./packages/miolo-cli && npm publish && cd ../..",
     "publish-miolo-react": "cd ./packages/miolo-react && npm publish && cd ../..",
-    "publish-all": "npm run site && npm run publish-miolo && npm run publish-miolo-cli && npm run publish-miolo-react"
+    "publish-miolo-model": "cd ./packages/miolo-model && npm publish && cd ../..",
+    "publish-all": "npm run site && npm run publish-miolo && npm run publish-miolo-cli && npm run publish-miolo-react && npm run publish-miolo-model"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.5",

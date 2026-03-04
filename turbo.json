@@ -55,13 +55,6 @@
         "^dist"
       ],
       "outputs": []
-    },
-    "publish": {
-      "cache": false,
-      "dependsOn": [
-        "^dist"
-      ],
-      "outputs": []
     }
   }
 }
