@@ -1,45 +1,78 @@
 import { useCallback, useEffect, useState } from "react"
 import getSsrDataFromContext from "./getSsrDataFromContext.mjs"
 
-const useSsrDataOrReload = (context, miolo, name, defval, loader, modifier) => {
-  const _maybeModify = useCallback(
+const useSsrDataOrReload = (context, miolo, name, options) => {
+  const { fetcher } = miolo
+  const {
+    defval = [],
+    loader = undefined,
+    url = undefined,
+    params = undefined,
+    modifier = undefined,
+    effect = undefined,
+    model = undefined
+  } = options
+
+  const _parseData = useCallback(
     (value) => {
-      return modifier === undefined ? value : modifier(value)
+      let parsed = value
+      if (modifier !== undefined) {
+        parsed = modifier(parsed)
+      }
+      if (model !== undefined) {
+        parsed = new model(parsed)
+      }
+      return parsed
     },
-    [modifier]
+    [modifier, model]
   )
 
   const ssrDataFromContext = getSsrDataFromContext(context, name)
   const [ssrData, setSsrData] = useState(
-    _maybeModify(ssrDataFromContext !== undefined ? ssrDataFromContext : defval)
+    _parseData(ssrDataFromContext !== undefined ? ssrDataFromContext : defval)
   )
+
   const [needToRefresh, setNeedToRefresh] = useState(ssrDataFromContext === undefined)
+  const [status, setStatus] = useState(needToRefresh ? "idle" : "loaded")
 
-  const refreshSsrData = useCallback(() => {
-    if (loader === undefined) {
-      return
-    }
-
-    const { fetcher } = miolo
-
-    async function fetchData() {
+  const refreshSsrData = useCallback(async () => {
+    if (loader !== undefined) {
       const nSsrData = await loader(context, fetcher)
-      setSsrData(_maybeModify(nSsrData))
+      setSsrData(_parseData(nSsrData))
+      setStatus("loaded")
+    } else {
+      if (!url) {
+        throw new Error(`[miolo][useSsrDataOrReload] No url provided for ${name}`)
+      }
+      const resp = await fetcher.get(url, params)
+      if (resp.ok) {
+        setSsrData(_parseData(resp?.data))
+        setStatus("loaded")
+      } else {
+        setStatus("error")
+      }
     }
-
-    fetchData()
-  }, [context, miolo, loader, _maybeModify])
+  }, [context, fetcher, loader, url, params, _parseData, name])
 
   useEffect(() => {
     try {
       if (needToRefresh) {
-        setNeedToRefresh(false)
-        refreshSsrData()
+        const changed = effect === undefined || effect.check()
+        if (changed) {
+          setNeedToRefresh(false)
+          refreshSsrData()
+        }
       }
     } catch (_) {}
-  }, [needToRefresh, refreshSsrData])
+  }, [needToRefresh, refreshSsrData, effect, ...(effect?.deps || [])])
 
-  return [ssrData, (data) => setSsrData(_maybeModify(data)), refreshSsrData]
+  return {
+    data: ssrData,
+    setData: (data) => setSsrData(_parseData(data)),
+    refresh: refreshSsrData,
+    ok: status !== "error",
+    ready: status === "loaded" || status === "error"
+  }
 }
 
 export { useSsrDataOrReload }

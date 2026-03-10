@@ -2,7 +2,7 @@ import Joi from "joi"
 import { with_miolo_schema } from "miolo"
 import { r_todo_delete, r_todo_toggle_done, r_todo_upsave } from "./todos/mod.mjs"
 
-import { r_todo_find, r_todo_list } from "./todos/read.mjs"
+import { r_todo_find, r_todo_last, r_todo_list } from "./todos/read.mjs"
 import { r_todo_count_last_hours, r_todo_insert_fake } from "./todos/special.mjs"
 import { r_change_password, r_forgot, r_user_save } from "./users/user.mjs"
 
@@ -21,6 +21,7 @@ export default [
       { method: "POST", url: "/user/save", auth, callback: r_user_save },
 
       { method: "GET", url: "/todo/list", auth, callback: r_todo_list },
+      { method: "GET", url: "/todo/last", auth, callback: r_todo_last },
       { method: "GET", url: "/todo/findone", auth, callback: r_todo_find },
       { method: "POST", url: "/todo/upsave", auth, callback: r_todo_upsave },
       { method: "POST", url: "/todo/delete", auth, callback: r_todo_delete },

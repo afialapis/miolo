@@ -34,6 +34,8 @@ export default class MioloModel extends CacheMixin() {
     return data
   }
 
+  getExtraData = this.get_extra_data
+
   get_data() {
     const extra = this.get_extra_data() || {}
     return {
@@ -41,6 +43,8 @@ export default class MioloModel extends CacheMixin() {
       ...extra
     }
   }
+
+  getData = this.get_data
 
   update(changes) {
     if (this.data === undefined) {

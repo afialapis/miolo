@@ -4,15 +4,18 @@ import TodoList from "#ns/models/TodoList.mjs"
 import DataContext from "./DataContext.jsx"
 
 const DataProvider = ({ children }) => {
-  const [status, setStatus] = useState("loaded")
   const [breads, setBreads] = useState([])
   const { useSsrData } = useSessionContext()
 
-  const [todos, _setTodos, refreshTodos] = useSsrData("todos", [], async (_context, fetcher) => {
-    setStatus("loading")
-    const { data: nTodos } = await fetcher.get("/api/todo/list")
-    setStatus("loaded")
-    return new TodoList(nTodos)
+  const {
+    data: lastTodos,
+    refresh: refreshLastTodos,
+    ready
+  } = useSsrData("lastTodos", {
+    url: "/api/todo/list",
+    params: { options: { limit: 4 } },
+    model: TodoList,
+    modifier: (data) => data.sort((a, b) => b.created_at - a.created_at)
   })
 
   const setTitle = useCallback((title) => {
@@ -24,10 +27,10 @@ const DataProvider = ({ children }) => {
   return (
     <DataContext.Provider
       value={{
-        todos,
-        refreshTodos,
-        loading: status !== "loaded",
-        loaded: status === "loaded",
+        lastTodos,
+        refreshLastTodos,
+        loading: !ready,
+        loaded: ready,
         breads,
         setBreads,
         setTitle

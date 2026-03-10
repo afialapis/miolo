@@ -4,15 +4,18 @@ import TodoList from "#ns/models/TodoList.mjs"
 import TodosContext from "./TodosContext.jsx"
 
 const TodosProvider = ({ children }) => {
-  const [status, setStatus] = useState("loaded")
+  // const [status, setStatus] = useState("loaded")
   const { useSsrData, fetcher, authenticated } = useSessionContext()
   const [useCrud, setUseCrud] = useState(true)
 
-  const [todoList, setTodoList, refreshTodoList] = useSsrData(
-    "todos",
-    [],
-    async (_context, fetcher) => {
-      setStatus("loading")
+  const {
+    data: todoList,
+    setData: setTodoList,
+    refresh: refreshTodoList,
+    ready
+  } = useSsrData("todos", {
+    loader: async (_context, fetcher) => {
+      //setStatus("loading")
       let data
       if (useCrud) {
         const res = await fetcher.read("/crud/todo")
@@ -20,10 +23,10 @@ const TodosProvider = ({ children }) => {
       } else {
         data = await fetcher.get("/api/todo/list")
       }
-      setStatus("loaded")
+      //setStatus("loaded")
       return new TodoList(data.sort((a, b) => b.created_at - a.created_at))
     }
-  )
+  })
 
   const addTodo = useCallback(
     (text) => {
@@ -55,7 +58,7 @@ const TodosProvider = ({ children }) => {
       async function toggleIt() {
         const nTodoList = [...todoList]
         const selectedTodoIndex = nTodoList.findIndex((item) => item.id === todoId)
-        nTodoList[selectedTodoIndex].done = !nTodoList[selectedTodoIndex].done
+        nTodoList[selectedTodoIndex].toggle()
 
         setTodoList(nTodoList)
 
@@ -122,8 +125,8 @@ const TodosProvider = ({ children }) => {
       value={{
         todoList,
         refreshTodoList,
-        loading: status !== "loaded",
-        loaded: status === "loaded",
+        loading: !ready,
+        loaded: ready,
         addTodo,
         toggleTodo,
         removeTodo,

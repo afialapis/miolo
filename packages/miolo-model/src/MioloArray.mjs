@@ -33,6 +33,8 @@ export default class MioloArray extends CacheMixin(Array) {
     return [...this].map((i) => i.get_data())
   }
 
+  getData = this.get_data
+
   find_index_by_field(field, value) {
     if (this.length >= 0) {
       const fidx = this.findIndex((elem) => {
@@ -45,6 +47,8 @@ export default class MioloArray extends CacheMixin(Array) {
     }
     return -1
   }
+
+  findIndexByField = this.find_index_by_field
 
   find_by_field(field, value) {
     if (this.length >= 0) {
@@ -59,9 +63,13 @@ export default class MioloArray extends CacheMixin(Array) {
     return undefined
   }
 
+  findByField = this.find_by_field
+
   find_by_id(id) {
     return this.find_by_field("id", id)
   }
+
+  findById = this.find_by_id
 
   remove_by_field(field, value) {
     const fidx = this.find_index_by_field(field, value)
@@ -69,6 +77,8 @@ export default class MioloArray extends CacheMixin(Array) {
       this.splice(fidx, 1)
     }
   }
+
+  removeByField = this.remove_by_field
 
   append(data) {
     const item = new this.itemClass(data)

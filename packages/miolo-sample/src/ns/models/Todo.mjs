@@ -10,6 +10,9 @@ export default class Todo extends MioloModel {
   get done() {
     return this._get("done", false)
   }
+  toggle() {
+    this._set("done", !this.done)
+  }
 
   get createdAt() {
     return this._get("created_at")

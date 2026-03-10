@@ -228,7 +228,7 @@ const init_logger = (config, emailer, prefix = "miolo") => {
   //
   // Mail transport
   //
-  if (config?.mail?.enabled === true) {
+  if (emailer && config?.mail?.enabled === true) {
     const MailerLogger = init_logger_to_mail(config.mail, emailer)
     transports.MailerLogger = MailerLogger
 

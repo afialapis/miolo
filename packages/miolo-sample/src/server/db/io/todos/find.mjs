@@ -1,13 +1,9 @@
 import { db_todo_read } from "./read.mjs"
 
 export async function db_todo_find(ctx, params) {
-  ctx.miolo.logger.verbose(`[db_todo_find] id: ${params?.id}`)
+  ctx.miolo.logger.verbose(`[db_todo_find] id: ${params?.filter?.id}`)
 
-  const filter = {
-    id: params.id
-  }
-
-  const todos = await db_todo_read(ctx, filter)
+  const todos = await db_todo_read(ctx, params)
 
   if (todos.length === 0) {
     return null

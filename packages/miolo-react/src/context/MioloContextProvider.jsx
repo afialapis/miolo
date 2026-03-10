@@ -73,8 +73,8 @@ const MioloContextProvider = ({ context, children }) => {
     })
   }, [])
 
-  const useSsrData = (name, defval, loader, modifier) => {
-    return useSsrDataOrReload(innerContext, mioloObj, name, defval, loader, modifier)
+  const useSsrData = (name, options) => {
+    return useSsrDataOrReload(innerContext, mioloObj, name, options)
   }
 
   return (

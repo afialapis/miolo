@@ -493,6 +493,9 @@ export default function make_config_defaults() {
           // misses change events, so enforce polling for consistency
           usePolling: true,
           interval: 100
+        },
+        ssr: {
+          noExternal: ["miolo-react"]
         }
       },
 

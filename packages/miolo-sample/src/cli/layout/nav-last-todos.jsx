@@ -1,6 +1,5 @@
 "use client"
 import { Cable, ChartSpline, ChevronRight, HousePlug, Route, RouteOff } from "lucide-react"
-import { useMemo } from "react"
 import { Link } from "react-router"
 
 import {
@@ -21,11 +20,7 @@ import {
 import useDataContext from "#cli/context/data/useDataContext.mjs"
 
 export function NavLastTodos() {
-  const { todos } = useDataContext()
-
-  const lastTodos = useMemo(() => {
-    return todos.sort((a, b) => b.created_at - a.created_at).slice(0, 5)
-  }, [todos])
+  const { lastTodos } = useDataContext()
 
   return (
     <SidebarGroup>
@@ -50,7 +45,7 @@ export function NavLastTodos() {
               <CollapsibleContent>
                 <SidebarMenuSub>
                   {lastTodos.map((todo) => (
-                    <SidebarMenuSubItem key={todo.description}>
+                    <SidebarMenuSubItem key={todo.id}>
                       <SidebarMenuSubButton asChild>
                         <Link to={`/`}>
                           {todo.done ? <RouteOff color="red" /> : <Route color="green" />}
