@@ -34,22 +34,28 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
   const [needToRefresh, setNeedToRefresh] = useState(ssrDataFromContext === undefined)
   const [status, setStatus] = useState(needToRefresh ? "idle" : "loaded")
+  const [error, setError] = useState(undefined)
 
   const refreshSsrData = useCallback(async () => {
+    setStatus("loading")
     if (loader !== undefined) {
       const nSsrData = await loader(context, fetcher)
       setSsrData(_parseData(nSsrData))
       setStatus("loaded")
+      setError(undefined)
     } else {
       if (!url) {
-        throw new Error(`[miolo][useSsrDataOrReload] No url provided for ${name}`)
-      }
-      const resp = await fetcher.get(url, params)
-      if (resp.ok) {
-        setSsrData(_parseData(resp?.data))
-        setStatus("loaded")
+        setError(`No url provided for ${name}`)
       } else {
-        setStatus("error")
+        const resp = await fetcher.get(url, params)
+        if (resp.ok) {
+          setSsrData(_parseData(resp?.data))
+          setStatus("loaded")
+          setError(undefined)
+        } else {
+          setError(resp?.error || "Unknonwn error")
+          setStatus("loaded")
+        }
       }
     }
   }, [context, fetcher, loader, url, params, _parseData, name])
@@ -70,7 +76,8 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     data: ssrData,
     setData: (data) => setSsrData(_parseData(data)),
     refresh: refreshSsrData,
-    ok: status !== "error",
+    error,
+    ok: error === undefined,
     ready: status === "loaded" || status === "error"
   }
 }
