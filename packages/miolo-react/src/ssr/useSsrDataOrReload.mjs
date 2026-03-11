@@ -16,11 +16,11 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
   const _parseData = useCallback(
     (value) => {
       let parsed = value
-      if (modifier !== undefined) {
-        parsed = modifier(parsed)
-      }
       if (model !== undefined) {
         parsed = new model(parsed)
+      }
+      if (modifier !== undefined) {
+        parsed = modifier(parsed)
       }
       return parsed
     },

@@ -1,4 +1,5 @@
 import CacheMixin from "./CacheMixin.mjs"
+import MioloArray from "./MioloArray.mjs"
 
 export default class MioloModel extends CacheMixin() {
   constructor(data) {
@@ -25,7 +26,7 @@ export default class MioloModel extends CacheMixin() {
   get_extra_data() {
     const data = {}
     for (const [key, value] of Object.entries(this)) {
-      if (value instanceof MioloModel) {
+      if (value instanceof MioloModel || value instanceof MioloArray) {
         data[key] = value.get_data()
       } else if (Array.isArray(value) && value.every((v) => v instanceof MioloModel)) {
         data[key] = value.map((v) => v.get_data())
@@ -53,6 +54,17 @@ export default class MioloModel extends CacheMixin() {
     this.data = {
       ...this.data,
       ...changes
+    }
+  }
+
+  merge(model) {
+    this.update(model.getData())
+    for (const [key, value] of Object.entries(model)) {
+      if (value instanceof MioloModel || value instanceof MioloArray) {
+        this[key] = value
+      } else if (Array.isArray(value) && value.every((v) => v instanceof MioloModel)) {
+        this[key] = value
+      }
     }
   }
 }
