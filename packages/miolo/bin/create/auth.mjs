@@ -4,8 +4,8 @@ import path from "node:path"
 /**
  * Updates server/miolo/index.mjs with correct auth import
  */
-export function updateServerIndex(destPath, authMethod) {
-  if (authMethod === "passport") return
+export function updateServerIndex(destPath, authType) {
+  if (authType === "passport") return
 
   const serverIndexPath = path.join(destPath, "src/server/miolo/index.mjs")
 
@@ -17,7 +17,7 @@ export function updateServerIndex(destPath, authMethod) {
   let content = fs.readFileSync(serverIndexPath, "utf8")
 
   // Replace the auth import line
-  content = content.replaceAll("passport", authMethod)
+  content = content.replaceAll("passport", authType)
 
   fs.writeFileSync(serverIndexPath, content, "utf8")
 }

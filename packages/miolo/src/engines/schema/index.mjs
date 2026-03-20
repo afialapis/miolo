@@ -30,9 +30,21 @@ export function with_miolo_schema(fn, schema) {
 
     // check parsed value is ok
     if (!v?.value) {
-      error = `Schema returned unknown result for ${fn.name}: ${JSON.stringify(v)}`
-      ctx.miolo.logger.silly(`[validation][${fn.name}] ${error}`)
-      throw new Error(error)
+      const description = schema.describe()
+
+      // Check if schema was deliberately set to allow only null
+      //  schema = Joi.any().allow(null)
+      const isOnlyNull =
+        description.type === "any" &&
+        description.allow &&
+        description.allow.length === 1 &&
+        description.allow[0] === null
+
+      if (!isOnlyNull) {
+        error = `Schema returned unknown result for ${fn.name}: ${JSON.stringify(v)}`
+        ctx.miolo.logger.silly(`[validation][${fn.name}] ${error}`)
+        throw new Error(error)
+      }
     }
 
     return await fn(ctx, v.value)

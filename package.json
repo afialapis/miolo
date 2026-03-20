@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "3.0.0-beta.166",
+  "version": "3.0.0-beta.167",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -17,7 +17,7 @@
   "license": "MIT",
   "type": "module",
   "private": true,
-  "packageManager": "npm@11.11.0",
+  "packageManager": "npm@11.12.0",
   "workspaces": [
     "packages/*"
   ],
@@ -29,7 +29,7 @@
     "lint:fix": "turbo run lint:fix",
     "dist": "turbo run dist",
     "test": "turbo run test",
-    "create-demo-clean": "rm -fr demo/*",
+    "create-demo-clean": "rm -fr demo/* && turbo run dist",
     "create-demo-guest": "npm run create-demo-clean && cd demo && node ../packages/miolo/bin/index.mjs create miolo-demo --d=. --auth=guest && npm run dev",
     "create-demo-basic": "npm run create-demo-clean && cd demo && node ../packages/miolo/bin/index.mjs create miolo-demo --d=. --auth=basic && npm run dev",
     "create-demo-passport": "npm run create-demo-clean && cd demo && node ../packages/miolo/bin/index.mjs create miolo-demo --d=. --auth=passport && npm run dev",
@@ -44,8 +44,8 @@
     "publish-all": "npm run site && npm run publish-miolo && npm run publish-miolo-cli && npm run publish-miolo-react && npm run publish-miolo-model"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.6",
-    "turbo": "^2.8.15"
+    "@biomejs/biome": "2.4.8",
+    "turbo": "^2.8.20"
   },
   "overrides": {
     "@babel/runtime": "^7.28.6",

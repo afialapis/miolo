@@ -18,12 +18,10 @@ export function validateAppName(name) {
 /**
  * Validates auth method
  */
-export function validateAuthMethod(authMethod) {
-  const validAuthMethods = ["passport", "basic", "guest"]
-  if (!validAuthMethods.includes(authMethod)) {
-    throw new Error(
-      `Invalid auth method: ${authMethod}. Valid options: ${validAuthMethods.join(", ")}`
-    )
+export function validateAuthType(authType) {
+  const validAuthTypes = ["passport", "basic", "guest"]
+  if (!validAuthTypes.includes(authType)) {
+    throw new Error(`Invalid auth type: ${authType}. Valid options: ${validAuthTypes.join(", ")}`)
   }
   return true
 }

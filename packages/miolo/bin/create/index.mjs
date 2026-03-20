@@ -7,7 +7,7 @@ import { copyTemplate } from "./copy.mjs"
 import { updateDockerFiles } from "./docker.mjs"
 import { updateEnvFile } from "./pkgjson.mjs"
 // Import modular functions
-import { validateAppName, validateAuthMethod } from "./validation.mjs"
+import { validateAppName, validateAuthType } from "./validation.mjs"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -23,10 +23,10 @@ export default async function create(appName, options = {}) {
     validateAppName(appName)
 
     // Parse options
-    const { port, auth: authMethod = "passport", dest = `./${appName}` } = options
+    const { port, auth: authType = "passport", dest = `./${appName}` } = options
 
     // Validate auth method
-    validateAuthMethod(authMethod)
+    validateAuthType(authType)
 
     // Get source path (template or miolo-sample for development)
     // In development (monorepo), use miolo-sample directly
@@ -61,13 +61,13 @@ export default async function create(appName, options = {}) {
 
     console.log("[miolo] Copying template from:", sourcePath)
     console.log("[miolo] Creating app at:", destPath)
-    console.log("[miolo] Auth method:", authMethod)
+    console.log("[miolo] Auth method:", authType)
     if (port) {
       console.log("[miolo] Port:", port)
     }
 
     // Copy template files
-    copyTemplate(sourcePath, destPath, appName, { authMethod })
+    copyTemplate(sourcePath, destPath, appName, { authType })
 
     console.log("[miolo] Template copied successfully")
 
@@ -80,7 +80,7 @@ export default async function create(appName, options = {}) {
     }
 
     // Update server/miolo/index.mjs with correct auth import
-    updateServerIndex(destPath, authMethod)
+    updateServerIndex(destPath, authType)
 
     // Install dependencies
     console.log("[miolo] Installing dependencies...")

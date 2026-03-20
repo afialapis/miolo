@@ -108,9 +108,26 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
                 ctx.miolo.logger.silly(`[router] Schema validated data for ${url} successfully`)
                 ctx.request.body = v.value
               } else {
-                ctx.miolo.logger.warn(
-                  `[router] Schema returned unknown result for ${url}: ${JSON.stringify(v)}. Let's ignore it.`
-                )
+                const description = route.schema.describe()
+
+                // Check if schema was deliberately set to allow only null
+                //  schema = Joi.any().allow(null)
+                const isOnlyNull =
+                  description.type === "any" &&
+                  description.allow &&
+                  description.allow.length === 1 &&
+                  description.allow[0] === null
+
+                if (isOnlyNull) {
+                  ctx.miolo.logger.silly(
+                    `[router] Schema allowed null param to ${url} successfully`
+                  )
+                  ctx.request.body = v.value
+                } else {
+                  ctx.miolo.logger.warn(
+                    `[router] Schema returned unknown result for ${url}: ${JSON.stringify(v)}. Let's ignore it.`
+                  )
+                }
               }
             } catch (error) {
               ctx.miolo.logger.error(

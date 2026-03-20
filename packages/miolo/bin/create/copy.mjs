@@ -59,7 +59,7 @@ export function transformContent(content, appName) {
  * Copies a directory recursively with transformations
  */
 export function copyDirectory(src, dest, appName, options = {}) {
-  const { authMethod } = options
+  const { authType } = options
 
   // Create destination if it doesn't exist
   if (!fs.existsSync(dest)) {
@@ -85,7 +85,7 @@ export function copyDirectory(src, dest, appName, options = {}) {
         fs.mkdirSync(destPath, { recursive: true })
 
         // Copy only the selected auth file
-        const authFile = `${authMethod}.mjs`
+        const authFile = `${authType}.mjs`
         const srcAuthFile = path.join(srcPath, authFile)
         const destAuthFile = path.join(destPath, authFile)
 

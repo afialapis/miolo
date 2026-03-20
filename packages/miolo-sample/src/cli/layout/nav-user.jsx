@@ -91,7 +91,7 @@ export function NavUser() {
               <Shield />
               Seguridad
             </DropdownMenuItem>
-            {authMethod === "passport" && (
+            {["local", "google", "basic"].includes(authMethod) && (
               <DropdownMenuItem onSelect={() => logout()}>
                 <LogOut />
                 Cerrar sesión
