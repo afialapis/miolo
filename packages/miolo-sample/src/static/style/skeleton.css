@@ -28,13 +28,7 @@
 .skeleton-loading button,
 .skeleton-loading a,
 .skeleton-loading .skeleton-apply {
-  @apply 
-    bg-gray-200
-    dark:bg-gray-700
-    rounded-md
-    text-transparent
-    relative
-    overflow-hidden;
+  @apply bg-gray-200 dark:bg-gray-700 rounded-md text-transparent relative overflow-hidden;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   pointer-events: none; /* Para deshabilitar la interacción */
 }

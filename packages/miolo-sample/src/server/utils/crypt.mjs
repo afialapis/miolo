@@ -35,4 +35,4 @@ function generateRandomPassword() {
   return _generateRandomPassword(PASSWORD_LENGTH, ALL_CHARS)
 }
 
-export { sha512, generateRandomPassword }
+export { generateRandomPassword, sha512 }

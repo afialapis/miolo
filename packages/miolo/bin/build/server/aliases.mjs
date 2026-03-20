@@ -109,4 +109,4 @@ function getRollupPluginForResolvingAliases(pkgPath) {
   return [plugin]
 }
 
-export { hasAliases, getBabelPluginForResolvingAliases, getRollupPluginForResolvingAliases }
+export { getBabelPluginForResolvingAliases, getRollupPluginForResolvingAliases, hasAliases }

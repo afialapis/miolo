@@ -53,4 +53,4 @@ function AlertDescription({ className, ...props }) {
   )
 }
 
-export { Alert, AlertTitle, AlertDescription }
+export { Alert, AlertDescription, AlertTitle }
