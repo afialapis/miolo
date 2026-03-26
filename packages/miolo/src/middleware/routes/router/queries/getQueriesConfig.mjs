@@ -6,8 +6,8 @@ import { DEFAULT_AUTH_USER } from "../defaults.mjs"
     prefix: '/queries',
 
     auth,
-    before: (ctx) => {return goon/!goon},
-    after : (ctx, data) => {return data},
+    before: (ctx) => {return goon/!goon} or array of functions,
+    after : (ctx, data) => {return data} or array of functions,
     
 
     routes: [
@@ -25,8 +25,8 @@ import { DEFAULT_AUTH_USER } from "../defaults.mjs"
           //  (you may want {keep_body: true})
         } ,  
         auth,
-        before:  async (ctx) => { return true/false },
-        after :  async (ctx, data) => { return data },
+        before:  async (ctx) => { return true/false } or array of functions,
+        after :  async (ctx, data) => { return data } or array of functions,
         schema: a Joi schema,
         keep_body: false by default. If true, miolo wont wnsure ctx.body after callback.
       }

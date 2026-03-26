@@ -14,18 +14,21 @@ const TodosProvider = ({ children }) => {
     refresh: refreshTodoList,
     ready
   } = useSsrData("todos", {
-    loader: async (_context, fetcher) => {
-      //setStatus("loading")
-      let data
-      if (useCrud) {
-        const res = await fetcher.read("/crud/todo")
-        data = res.data
-      } else {
-        data = await fetcher.get("/api/todo/list")
-      }
-      //setStatus("loaded")
-      return new TodoList(data.sort((a, b) => b.created_at - a.created_at))
-    }
+    loader: useCallback(
+      async (_context, fetcher) => {
+        //setStatus("loading")
+        let data
+        if (useCrud) {
+          const res = await fetcher.read("/crud/todo")
+          data = res.data
+        } else {
+          data = await fetcher.get("/api/todo/list")
+        }
+        //setStatus("loaded")
+        return new TodoList(data.sort((a, b) => b.created_at - a.created_at))
+      },
+      [useCrud]
+    )
   })
 
   const addTodo = useCallback(

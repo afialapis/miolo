@@ -73,13 +73,22 @@ function attachCrudRoutes(router, crudConfigs, logger) {
 
           let goon = true
           if (route?.before) {
-            goon = await route.before(ctx)
+            if (Array.isArray(route.before)) {
+              for (const before of route.before) {
+                goon = await before(ctx)
+                if (!goon) {
+                  break
+                }
+              }
+            } else {
+              goon = await route.before(ctx)
+            }
           }
 
           if (!goon) {
             ctx.body = {
               ok: false,
-              error: "Not allowd"
+              error: "Not allowed"
             }
             return
           }

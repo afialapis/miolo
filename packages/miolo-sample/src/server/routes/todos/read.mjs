@@ -15,6 +15,7 @@ export async function r_todo_list(ctx, params) {
   }
 }
 
+// biome-ignore lint/correctness/noUnusedFunctionParameters: params is not used
 export async function r_todo_last(ctx, params) {
   try {
     ctx.miolo.logger.info(`[r_todo_last] Reading last todos`)

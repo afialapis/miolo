@@ -8,8 +8,8 @@ import { DEFAULT_AUTH_USER, DEFAULT_USE_USER_FIELDS } from "../defaults.mjs"
 
     auth,
     bodyField,
-    before: (ctx) => {return goon/!goon},
-    after : (ctx, data) => {return data},
+    before: (ctx) => {return goon/!goon} or array of functions,
+    after : (ctx, data) => {return data} or array of functions,
     
     routes: an array of tables config, where each config can be:
       - a simple string with the table name
@@ -30,8 +30,8 @@ import { DEFAULT_AUTH_USER, DEFAULT_USE_USER_FIELDS } from "../defaults.mjs"
 
           auth,
           bodyField,
-          before: (ctx) => {return goon/!goon},
-          after : (ctx, data) => {return data},
+          before: (ctx) => {return goon/!goon} or array of functions,
+          after : (ctx, data) => {return data} or array of functions,
     
         }      
   }]

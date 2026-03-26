@@ -158,7 +158,9 @@ export default function make_config_defaults() {
       //   error_code: 401
       // },
       // before: async (ctx) => {return bool} // If bool false, query callback not run
+      //         it can also be an array of functions
       // after : async (ctx, data) => {return modified_data}
+      //         it can also be an array of functions
 
       crud: [
         {
@@ -206,8 +208,8 @@ export default function make_config_defaults() {
                 //  (you may want {keep_body: true})
               } ,  
               auth: ...,
-              before:  async (ctx) => { return true/false },
-              after :  async (ctx, data) => { return data },
+              before:  async (ctx) => { return true/false } or array of functions,
+              after :  async (ctx, data) => { return data } or array of functions,
               schema: a Joi schema,
               keep_body: false by default. If true, miolo wont wnsure ctx.body after callback.
             },          
