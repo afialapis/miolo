@@ -73,7 +73,7 @@ test("MioloArray basic methods", async (t) => {
 
   await t.test("append", () => {
     const list = new FlavourList(FLAVOUR_TYPES)
-    const newItem = list.append({
+    const newItem = list.push({
       id: "f5",
       name: "Avena",
       texture: "Fina",

@@ -6,6 +6,24 @@ export default (BaseClass = class {}) =>
 
     resetCache = this.reset_cache
 
+    get_from_cache(key) {
+      if (this.__cache__ === undefined) {
+        return undefined
+      }
+      return this.__cache__[key]
+    }
+
+    getFromCache = this.get_from_cache
+
+    set_to_cache(key, value) {
+      if (this.__cache__ === undefined) {
+        this.__cache__ = {}
+      }
+      this.__cache__[key] = value
+    }
+
+    setToCache = this.set_to_cache
+
     get_from_cache_or_make(cache_key, make_callback) {
       if (this.__cache__ === undefined) {
         this.__cache__ = {}

@@ -30,7 +30,7 @@ test("MioloArray cache methods", async (t) => {
     const list = new FlavourList([{ strength: "W5" }, { strength: "W15" }])
     list.getTotalScore() // warms cache
 
-    list.append({ strength: "W10" })
+    list.push({ strength: "W10" })
     list.reset_cache()
 
     const newTotal = list.getTotalScore()

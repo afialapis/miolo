@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import getSsrDataFromContext from "./getSsrDataFromContext.mjs"
+import usePropsCheck from "./usePropsCheck.mjs"
 
 const useSsrDataOrReload = (context, miolo, name, options) => {
   const { fetcher } = miolo
@@ -13,12 +14,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     model = undefined
   } = options
 
-  const prevLoader = useRef(loader)
-  const prevEffect = useRef(effect)
-  const loaderChangeCount = useRef(0)
-  const effectChangeCount = useRef(0)
-  const loaderChangeTime = useRef(0)
-  const effectChangeTime = useRef(0)
+  usePropsCheck(loader, effect, modifier)
 
   const parseData = useCallback(
     (value) => {
@@ -82,47 +78,12 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
   }, [status, context, fetcher, loader, url, params, parseData, name])
 
   useEffect(() => {
-    if (prevLoader.current !== undefined && prevLoader.current !== loader) {
-      const now = Date.now()
-      // Si el cambio ocurrió rápido (<100ms desde el último cambio), sumamos al contador continuo
-      if (now - loaderChangeTime.current < 100) {
-        loaderChangeCount.current += 1
-        if (loaderChangeCount.current >= 4) {
-          console.warn(
-            "🚨 [miolo][useSsrDataOrReload]: 'options.loader' varies too frequently. Wrap it in a useCallback!"
-          )
-        }
-      } else {
-        // Ha pasado suficiente tiempo como para ser un cambio humano/aislado
-        loaderChangeCount.current = 1
-      }
-      loaderChangeTime.current = now
-    }
-    prevLoader.current = loader
-  }) // Evalúa en cada render
-
-  useEffect(() => {
-    if (prevEffect.current !== undefined && prevEffect.current !== effect) {
-      const now = Date.now()
-      if (now - effectChangeTime.current < 100) {
-        effectChangeCount.current += 1
-        if (effectChangeCount.current >= 4) {
-          console.warn(
-            "🚨 [miolo][useSsrDataOrReload]: 'options.effect' varies too frequently. Wrap it in a useMemo or useCallback!"
-          )
-        }
-      } else {
-        effectChangeCount.current = 1
-      }
-      effectChangeTime.current = now
-    }
-    prevEffect.current = effect
-  }) // Evalúa en cada render
-
-  useEffect(() => {
     try {
       if (status === "idle") {
-        const changed = effect?.() === true
+        const changed =
+          effect === undefined ||
+          (typeof effect === "function" && effect() === true) ||
+          effect === true
         if (changed === true) {
           refreshSsrData()
         }
