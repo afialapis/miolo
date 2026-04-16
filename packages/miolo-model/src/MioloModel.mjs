@@ -65,12 +65,22 @@ export default class MioloModel extends CacheMixin() {
   }
 
   update(changes) {
+    this.reset_cache()
+
     if (this.data === undefined) {
       this.data = {}
     }
     this.data = {
       ...this.data,
       ...changes
+    }
+
+    for (const [key, value] of Object.entries(this)) {
+      if (value instanceof MioloModel) {
+        if (changes[key] !== undefined) {
+          value.update(changes[key])
+        }
+      }
     }
   }
 
