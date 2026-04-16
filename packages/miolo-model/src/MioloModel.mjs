@@ -27,6 +27,9 @@ export default class MioloModel extends CacheMixin() {
   get_extra_data() {
     const data = {}
     for (const [key, value] of Object.entries(this)) {
+      if (key.startsWith("__")) {
+        continue
+      }
       if (value instanceof MioloModel || value instanceof MioloArray) {
         data[key] = value.get_data()
       } else if (Array.isArray(value) && value.every((v) => v instanceof MioloModel)) {
@@ -39,6 +42,9 @@ export default class MioloModel extends CacheMixin() {
   getExtraData() {
     const data = {}
     for (const [key, value] of Object.entries(this)) {
+      if (key.startsWith("__")) {
+        continue
+      }
       if (value instanceof MioloModel || value instanceof MioloArray) {
         data[key] = value.getData()
       } else if (Array.isArray(value) && value.every((v) => v instanceof MioloModel)) {
@@ -76,6 +82,9 @@ export default class MioloModel extends CacheMixin() {
     }
 
     for (const [key, value] of Object.entries(this)) {
+      if (key.startsWith("__")) {
+        continue
+      }
       if (value instanceof MioloModel) {
         if (changes[key] !== undefined) {
           value.update(changes[key])
@@ -87,6 +96,9 @@ export default class MioloModel extends CacheMixin() {
   merge(model) {
     this.update(model.getData())
     for (const [key, value] of Object.entries(model)) {
+      if (key.startsWith("__")) {
+        continue
+      }
       if (value instanceof MioloModel || value instanceof MioloArray) {
         this[key] = value
       } else if (Array.isArray(value) && value.every((v) => v instanceof MioloModel)) {
