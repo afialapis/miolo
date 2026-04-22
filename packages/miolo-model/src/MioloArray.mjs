@@ -98,10 +98,10 @@ export default class MioloArray extends CacheMixin(Array) {
   }
 
   clone() {
-    const clonedItems = []
-    this.forEach((item) => {
-      clonedItems.push(item.clone())
-    })
-    return new MioloArray(this.itemClass, clonedItems)
+    const currentData = this.getData()
+    const clonedData = JSON.parse(JSON.stringify(currentData))
+    const clone = new this.constructor(clonedData)
+    // Object.assign(clone, this)
+    return clone
   }
 }
