@@ -24,21 +24,18 @@ import { init_session_middleware } from "./session/index.mjs"
 //   google_url_logout_redirect: '/'
 // }
 
-const def_get_user_id = (user, done, _ctx) => done(null, user.id)
+const def_get_user_id = async (user, _ctx) => user?.id
 
-const def_find_user_by_id = (_id, done, _ctx) => {
-  const err = Error("You need to define auth.passport.find_user_by_id")
-  done(err, null)
+const def_find_user_by_id = async (_id, ctx) => {
+  throw new Error("You need to define auth.passport.find_user_by_id")
 }
 
-const def_local_auth_user = (_username, _password, done, _ctx) => {
-  const err = Error("You need to define auth.passport.local_auth_user")
-  done(err, null)
+const def_local_auth_user = async (_username, _password, _ctx) => {
+  throw new Error("You need to define auth.passport.local_auth_user")
 }
 
-const def_google_auth_user = (_accessToken, _refreshToken, _profile, done, _ctx) => {
-  const err = Error("You need to define auth.passport.google_auth_user")
-  done(err, null)
+const def_google_auth_user = async (_accessToken, _refreshToken, _profile, _ctx) => {
+  throw new Error("You need to define auth.passport.google_auth_user")
 }
 
 const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig) => {
@@ -82,10 +79,13 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         ctx.sessionId = ctx.session?.externalKey
           ? ctx.getSessionStoreKey(ctx.session?.externalKey)
           : undefined
-        return get_user_id_f(user, done, ctx)
+        get_user_id_f(user, ctx).then((uid) => {
+          return done(null, uid || false)
+        })
       } catch (error) {
-        ctx.miolo.logger.error(`[auth][passport] Error serializing user: ${error}`)
-        return done(error, undefined)
+        const msg = `Error serializing user: ${error}`
+        ctx.miolo.logger.error(`[auth][passport] ${msg}`)
+        return done(null, false, { message: msg })
       }
     })
   }
@@ -97,10 +97,13 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         ctx.sessionId = ctx.session?.externalKey
           ? ctx.getSessionStoreKey(ctx.session?.externalKey)
           : undefined
-        return find_user_by_id_f(id, done, ctx)
+        find_user_by_id_f(id, ctx).then((user) => {
+          return done(null, user || false)
+        })
       } catch (error) {
-        ctx.miolo.logger.error(`[auth][passport] Error deserializing user: ${error}`)
-        return done(error, undefined)
+        const msg = `Error deserializing user: ${error}`
+        ctx.miolo.logger.error(`[auth][passport] ${msg}`)
+        return done(null, false, { message: msg })
       }
     })
   }
@@ -110,7 +113,15 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
       ctx.sessionId = ctx.session?.externalKey
         ? ctx.getSessionStoreKey(ctx.session?.externalKey)
         : undefined
-      return local_auth_user_f(username, password, done, ctx)
+      try {
+        local_auth_user_f(username, password, ctx).then(([user, msg]) => {
+          return done(null, user || false, { message: msg || "" })
+        })
+      } catch (error) {
+        const msg = `Error local auth user: ${error}`
+        ctx.miolo.logger.error(`[auth][passport] ${msg}`)
+        return done(null, false, { message: msg })
+      }
     })
 
   let google_strategy
@@ -128,7 +139,15 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
           ctx.sessionId = ctx.session?.externalKey
             ? ctx.getSessionStoreKey(ctx.session?.externalKey)
             : undefined
-          return google_auth_user_f(accessToken, refreshToken, profile, done, ctx)
+          try {
+            google_auth_user_f(accessToken, refreshToken, profile, ctx).then(([user, msg]) => {
+              return done(null, user || false, { message: msg || "" })
+            })
+          } catch (error) {
+            const msg = `Error google auth user: ${error}`
+            ctx.miolo.logger.error(`[auth][passport] ${msg}`)
+            return done(null, false, { message: msg })
+          }
         }
       )
   }

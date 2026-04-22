@@ -106,4 +106,15 @@ export default class MioloModel extends CacheMixin() {
       }
     }
   }
+
+  clone() {
+    const currentData = this.getData()
+    const clonedData = JSON.parse(JSON.stringify(currentData))
+
+    const clone = new this.constructor(clonedData)
+
+    Object.assign(clone, this)
+
+    return clone
+  }
 }
