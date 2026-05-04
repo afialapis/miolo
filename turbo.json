@@ -55,6 +55,24 @@
         "^dist"
       ],
       "outputs": []
+    },
+    "build": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [],
+      "outputs": []
+    },
+    "start": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [],
+      "outputs": []
+    },
+    "stop": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [],
+      "outputs": []
     }
   }
 }

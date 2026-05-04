@@ -5,7 +5,7 @@ export async function r_todo_list(ctx, params) {
   try {
     ctx.miolo.logger.info(`[r_todo_list] Reading todo list`)
 
-    const res = await db_todo_read(ctx, params)
+    const res = await db_todo_read(ctx, { filter: {}, options: {} })
 
     ctx.miolo.logger.info(`[r_todo_list] Read todo list (${res.length})`)
     return { ok: true, data: res }

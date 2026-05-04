@@ -73,6 +73,15 @@ class Fetcher {
 
     const response = await fetch(wurl, request)
 
+    if (response.ok === false) {
+      return {
+        ok: false,
+        status: response.status,
+        response,
+        error: response.statusText
+      }
+    }
+
     if (response.redirected) {
       const isBrowser = typeof window === "object"
       if (isBrowser) {

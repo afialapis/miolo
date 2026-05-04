@@ -1,0 +1,21 @@
+{
+  "name": "miolo-sample",
+  "short_name": "miolo-sample",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#fb64b6",
+  "description": "A simple PWA for miolo-sample",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "30x30",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/static/img/miolo_logo.png",
+      "sizes": "600x600",
+      "type": "image/png"
+    }
+  ]
+}

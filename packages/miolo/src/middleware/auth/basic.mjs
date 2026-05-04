@@ -66,7 +66,7 @@ const init_basic_auth_middleware = (app, options) => {
       return unauth_err()
     }
 
-    const user = await auth_user(aaccount.username, aaccount.password, app.context.miolo)
+    const user = await auth_user(aaccount.username, aaccount.password, ctx)
 
     if (user === false || user === undefined || user === null) {
       return unauth_err()

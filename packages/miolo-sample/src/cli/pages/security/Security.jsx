@@ -15,8 +15,11 @@ export default function Security() {
         const resp = await fetcher.post("/user/chpwd", params)
         if (resp.ok === true) {
           toast.success(resp.data.msg)
+        } else {
+          toast.error(resp.error)
         }
-        return { ok: true, error: undefined }
+
+        return { ok: resp.ok, error: resp?.error }
       } catch (e) {
         return { ok: false, error: `Error al modificar la contraseña: ${e}` }
       }

@@ -23,6 +23,13 @@ export default function make_config_defaults() {
 
       static: {
         favicon: root("src/static/img/favicon.ico"),
+        headers: {
+          "/sw.js": {
+            "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+          }
+          //"/index.html": { "Cache-Control": "no-cache, max-age=0" },
+          //"/": { "Cache-Control": "no-cache, max-age=0" }
+        },
         folders: {
           "/build": root("build"),
           "/static": root("src/static"),

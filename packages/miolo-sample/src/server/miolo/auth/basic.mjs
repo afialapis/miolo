@@ -1,9 +1,9 @@
 import { db_auth_user } from "#server/db/io/users/auth.mjs"
 
-const local_auth_user = async (username, password, miolo) => {
-  const [user, _msg] = await db_auth_user(miolo, username, password)
+const local_auth_user = async (username, password, ctx) => {
+  const [user, msg] = await db_auth_user(ctx.miolo, username, password)
 
-  return user
+  return [user, msg]
 }
 
 export default {

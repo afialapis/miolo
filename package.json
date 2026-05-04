@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "3.0.0-beta.181",
+  "version": "3.0.0-beta.182",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -35,7 +35,9 @@
     "create-demo-passport": "npm run create-demo-clean && cd demo && node ../packages/miolo/bin/index.mjs create miolo-demo --d=. --auth=passport && npm run dev",
     "sample": "turbo run dev --filter=miolo-sample",
     "sample-deb": "turbo run deb --filter=miolo-sample",
-    "sample-prod": "turbo run prod --filter=miolo-sample",
+    "sample-prod-build": "turbo run build --filter=miolo-sample",
+    "sample-prod-start": "turbo run start --filter=miolo-sample",
+    "sample-prod-stop": "turbo run stop --filter=miolo-sample",
     "site": "npx arredemo build",
     "publish-miolo": "cd ./packages/miolo && npm run dist && npm publish && cd ../..",
     "publish-miolo-cli": "cd ./packages/miolo-cli && npm publish && cd ../..",
@@ -44,8 +46,8 @@
     "publish-all": "npm run site && npm run publish-miolo && npm run publish-miolo-cli && npm run publish-miolo-react && npm run publish-miolo-model"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.12",
-    "turbo": "^2.9.6"
+    "@biomejs/biome": "2.4.14",
+    "turbo": "^2.9.8"
   },
   "overrides": {
     "@babel/runtime": "^7.28.6",
