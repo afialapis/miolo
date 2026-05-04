@@ -1,4 +1,5 @@
 import http from "node:http"
+import https from "node:https"
 //import util                       from 'util'
 import { createHttpTerminator } from "http-terminator"
 
@@ -37,7 +38,14 @@ export function init_http_server(app, config) {
       }
 
       // Init server
-      const server = http.createServer(app.callback())
+      const server =
+        config?.ssl === undefined
+          ? http.createServer(app.callback())
+          : https
+              .createServer(config.ssl, app.callback())
+              .listen(config.port, config.hostname, () => {
+                logger.info("[http][start] Server running at https://localhost:8010")
+              })
 
       // Init terminator
       const httpTerminator = createHttpTerminator({

@@ -19,6 +19,12 @@ export default function make_config_defaults() {
           ? process.env?.MIOLO_HOSTNAME_DOCKER || "0.0.0.0"
           : process.env?.MIOLO_HOSTNAME || "localhost",
 
+      ssl: undefined,
+      //ssl: {
+      //    key: fs.readFileSync('.../key.pem'),
+      //    cert: fs.readFileSync('.../cert.pem'),
+      // }
+
       catcher_url: "/sys/jserror",
 
       static: {

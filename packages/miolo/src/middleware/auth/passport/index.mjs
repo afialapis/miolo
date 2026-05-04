@@ -26,7 +26,7 @@ import { init_session_middleware } from "./session/index.mjs"
 
 const def_get_user_id = async (user, _ctx) => user?.id
 
-const def_find_user_by_id = async (_id, ctx) => {
+const def_find_user_by_id = async (_id, _ctx) => {
   throw new Error("You need to define auth.passport.find_user_by_id")
 }
 

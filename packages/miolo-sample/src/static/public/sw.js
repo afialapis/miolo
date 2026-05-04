@@ -2,7 +2,7 @@ const CACHE_NAME = "miolo-sample-cache-v1"
 
 // 1. EVENTO INSTALL: Ocurre la primera vez que el usuario entra.
 // Aquí cacheamos el "App Shell" (lo básico para que la app abra sin red).
-self.addEventListener("install", (event) => {
+self.addEventListener("install", (_event) => {
   /*console.log(`[miolo][sw] installing`)
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -33,7 +33,7 @@ self.addEventListener("activate", (event) => {
 })
 
 // 3. EVENTO FETCH: El núcleo de tu estrategia
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", (_event) => {
   /*console.log(`[miolo][sw] fetching`)
   // ESTRATEGIA PARA LLAMADAS POST
   if (event.request.method === "POST" || event.request.method === "PUT") {

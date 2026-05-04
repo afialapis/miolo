@@ -1,7 +1,7 @@
 import { db_todo_find } from "#server/db/io/todos/find.mjs"
 import { db_todo_read } from "#server/db/io/todos/read.mjs"
 
-export async function r_todo_list(ctx, params) {
+export async function r_todo_list(ctx, _params) {
   try {
     ctx.miolo.logger.info(`[r_todo_list] Reading todo list`)
 
