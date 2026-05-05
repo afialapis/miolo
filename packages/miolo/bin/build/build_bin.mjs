@@ -1,4 +1,4 @@
-import { cleanFolder } from "../util.mjs"
+// import { cleanFolder } from "../util.mjs"
 import { miolo_build_server } from "./server/index.mjs"
 
 export default async function (appName, binEntry, binDest, binName, binExt) {
@@ -7,7 +7,7 @@ export default async function (appName, binEntry, binDest, binName, binExt) {
   const pkgPath = process.cwd()
 
   // 1. Clean destination folder
-  cleanFolder(binDest)
+  // cleanFolder(binDest)
 
   // 2. Build Backend script
   await miolo_build_server(appName, pkgPath, {}, binEntry, binDest, binName, binExt)
