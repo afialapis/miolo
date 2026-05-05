@@ -45,7 +45,8 @@ export default async function (
   )
 
   // 4. Build Backend: Node server
-  await miolo_build_server(appName, pkgPath, config, srvEntry, srvDest, srvExt)
+  const srvName = appName
+  await miolo_build_server(appName, pkgPath, config, srvEntry, srvDest, srvName, srvExt)
 
   console.log(`[${appName}][build] Build process completed successfully!`)
   process.exit(0)

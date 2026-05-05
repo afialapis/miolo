@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import path from "node:path"
 import yargs from "yargs-parser"
 import { init_env_config } from "../src/config/env.mjs"
 
@@ -42,6 +43,11 @@ async function main() {
     const srvExt = args["server-ext"] || process.env.MIOLO_BUILD_SERVER_EXT || "node.bundle.mjs"
     const ssrEntry = args["ssr-entry"] || process.env.MIOLO_BUILD_SERVER_SSR_ENTRY
     const ssrDest = args["ssr-dest"] || process.env.MIOLO_BUILD_SERVER_DEST || "./build/server"
+    const binDest = args["bin-dest"] || "./build/bin"
+    const binEntry = args["bin-entry"]
+    const binName =
+      args["bin-name"] || (binEntry ? path.basename(binEntry, path.extname(binEntry)) : "")
+    const binExt = args["bin-ext"] || "node.bundle.mjs"
 
     switch (command) {
       case "dev": {
@@ -73,6 +79,12 @@ async function main() {
           ssrEntry,
           ssrDest
         )
+        break
+      }
+
+      case "build-bin": {
+        const buildHandler = (await import("./build/build_bin.mjs")).default
+        await buildHandler(appName, binEntry, binDest, binName, binExt)
         break
       }
 

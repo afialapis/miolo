@@ -16,15 +16,16 @@ import { miolo_build_banner } from "./banner.mjs"
 const NODE_ENV = process.env?.NODE_ENV || "production"
 
 export async function miolo_build_options_for_server(
-  appName,
+  _appName,
   pkgPath,
   srvEntry,
   srvDest,
+  srvName,
   srvExt,
   bundleDeps = true
 ) {
   const input = path.join(pkgPath, srvEntry)
-  const outputFile = path.join(pkgPath, srvDest, `${appName}.${srvExt}`)
+  const outputFile = path.join(pkgPath, srvDest, `${srvName}.${srvExt}`)
 
   const inputOptions = {
     input,
