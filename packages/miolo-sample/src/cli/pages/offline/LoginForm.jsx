@@ -14,8 +14,8 @@ export function LoginForm({ className, forgotLink }) {
   const handleLocalLogin = useCallback(
     async (ev) => {
       ev.preventDefault()
-      const { authenticated } = await localLogin({ username: email, password: pwd })
-      setValid(authenticated === true)
+      const data = await localLogin({ username: email, password: pwd })
+      setValid(data?.authenticated === true)
     },
     [email, pwd, localLogin]
   )

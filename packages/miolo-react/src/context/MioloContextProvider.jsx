@@ -25,7 +25,11 @@ const MioloContextProvider = ({ context, children }) => {
           setInnerContext((current) => {
             return {
               ...current,
-              ...resp?.data
+              ...resp.data,
+              config: {
+                ...current.config,
+                ...(resp.data?.config || {})
+              }
             }
           })
         }

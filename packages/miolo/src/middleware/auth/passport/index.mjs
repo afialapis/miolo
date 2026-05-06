@@ -115,6 +115,14 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         : undefined
       try {
         local_auth_user_f(username, password, ctx).then(([user, msg]) => {
+          ctx.body = {
+            authenticated: user || false,
+            message: msg,
+            user: user,
+            config: {
+              auth_method: "local"
+            }
+          }
           return done(null, user || false, { message: msg || "" })
         })
       } catch (error) {
@@ -141,6 +149,14 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
             : undefined
           try {
             google_auth_user_f(accessToken, refreshToken, profile, ctx).then(([user, msg]) => {
+              ctx.body = {
+                authenticated: user || false,
+                message: msg,
+                user: user,
+                config: {
+                  auth_method: "google"
+                }
+              }
               return done(null, user || false, { message: msg || "" })
             })
           } catch (error) {
@@ -215,7 +231,10 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
           ok: true,
           data: {
             user: user,
-            authenticated: true
+            authenticated: true,
+            config: {
+              auth_method: "local"
+            }
           }
         }
 
