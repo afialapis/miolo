@@ -141,7 +141,8 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
           clientID: google_client_id,
           clientSecret: google_client_secret,
           callbackURL: google_url_callback_f,
-          passReqToCallback: true
+          passReqToCallback: true,
+          proxy: process.env.NODE_ENV === "production"
         },
         (_req, accessToken, refreshToken, profile, done) => {
           ctx.sessionId = ctx.session?.externalKey

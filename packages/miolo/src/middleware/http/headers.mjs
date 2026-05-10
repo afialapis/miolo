@@ -56,10 +56,20 @@ const init_headers_middleware = (app, http) => {
   })
 
   _if_options(http, "proxy", (options) => {
-    const [tpath, toptions] = _proxy_options(options)
-    logger.debug(`[http] Setting Proxy for ${tpath} to ${toptions.target} `)
+    // Ensure NGINX is setting headers as:
+    // proxy_set_header Host $host;
+    // proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    // proxy_set_header X-Forwarded-Proto $scheme;
 
-    app.use(koa_proxy(tpath, toptions))
+    if (options === true) {
+      app.proxy = true
+      logger.debug(`[http] Setting Proxy to true`)
+    } else {
+      const [tpath, toptions] = _proxy_options(options)
+      logger.debug(`[http] Setting Proxy for ${tpath} to ${toptions.target} `)
+
+      app.use(koa_proxy(tpath, toptions))
+    }
   })
 }
 
