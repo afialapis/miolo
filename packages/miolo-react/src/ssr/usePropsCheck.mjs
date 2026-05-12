@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react"
 
-export default function usePropsCheck(loader, effect, modifier) {
+export default function usePropsCheck(loader, effect, modifier, desc) {
   const prevLoader = useRef(loader)
   const prevEffect = useRef(effect)
   const prevModifier = useRef(modifier)
@@ -19,7 +19,7 @@ export default function usePropsCheck(loader, effect, modifier) {
         loaderChangeCount.current += 1
         if (loaderChangeCount.current >= 4) {
           console.warn(
-            "🚨 [miolo][useSsrDataOrReload]: 'options.loader' varies too frequently. Wrap it in a useCallback!"
+            `🚨 [miolo][useSsrDataOrReload]: 'options.loader' varies too frequently. Wrap it in a useCallback! ${desc}`
           )
         }
       } else {
@@ -38,7 +38,7 @@ export default function usePropsCheck(loader, effect, modifier) {
         effectChangeCount.current += 1
         if (effectChangeCount.current >= 4) {
           console.warn(
-            "🚨 [miolo][useSsrDataOrReload]: 'options.effect' varies too frequently. Wrap it in a useMemo or useCallback!"
+            `🚨 [miolo][useSsrDataOrReload]: 'options.effect' varies too frequently. Wrap it in a useMemo or useCallback! ${desc}`
           )
         }
       } else {
@@ -56,7 +56,7 @@ export default function usePropsCheck(loader, effect, modifier) {
         modifierChangeCount.current += 1
         if (modifierChangeCount.current >= 4) {
           console.warn(
-            "🚨 [miolo][useSsrDataOrReload]: 'options.modifier' varies too frequently. Wrap it in a useCallback!"
+            `🚨 [miolo][useSsrDataOrReload]: 'options.modifier' varies too frequently. Wrap it in a useCallback! ${desc}`
           )
         }
       } else {

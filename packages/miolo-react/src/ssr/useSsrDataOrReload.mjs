@@ -24,7 +24,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     ttl = undefined
   } = options
 
-  usePropsCheck(loader, effect, modifier)
+  usePropsCheck(loader, effect, modifier, name)
 
   const parseData = useCallback(
     (value) => {
@@ -162,15 +162,17 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
   }, [status, refreshSsrData, effect, name, ttl, parseData, cache])
 
   useEffect(() => {
-    if (ssrDataFromContext !== undefined && typeof window !== "undefined") {
-      import("idb-keyval").then(({ set }) => {
-        set(`ssr-cache-${name}`, {
-          data: makeSerializable(ssrDataFromContext),
-          ts: Date.now()
-        }).catch(() => {})
-      })
+    if (cache === true) {
+      if (ssrDataFromContext !== undefined && typeof window !== "undefined") {
+        import("idb-keyval").then(({ set }) => {
+          set(`ssr-cache-${name}`, {
+            data: makeSerializable(ssrDataFromContext),
+            ts: Date.now()
+          }).catch(() => {})
+        })
+      }
     }
-  }, [ssrDataFromContext, name])
+  }, [ssrDataFromContext, name, cache])
 
   const invalidate = useCallback(() => {
     if (typeof window !== "undefined") {
