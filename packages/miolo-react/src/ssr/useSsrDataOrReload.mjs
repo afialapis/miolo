@@ -2,6 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import getSsrDataFromContext from "./getSsrDataFromContext.mjs"
 import usePropsCheck from "./usePropsCheck.mjs"
 
+const makeSerializable = (obj) => {
+  try {
+    return JSON.parse(JSON.stringify(obj))
+  } catch (e) {
+    return obj
+  }
+}
+
 const useSsrDataOrReload = (context, miolo, name, options) => {
   const { fetcher } = miolo
   const {
@@ -11,7 +19,9 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     params = undefined,
     modifier = undefined,
     effect = undefined,
-    model = undefined
+    model = undefined,
+    cache = true,
+    ttl = undefined
   } = options
 
   usePropsCheck(loader, effect, modifier)
@@ -47,8 +57,17 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
       setSsrData(parseData(data))
       setStatus("loaded")
       setError(undefined)
+      if (cache === true) {
+        if (typeof window !== "undefined") {
+          import("idb-keyval").then(({ set }) => {
+            set(`ssr-cache-${name}`, { data: makeSerializable(data), ts: Date.now() }).catch(
+              () => {}
+            )
+          })
+        }
+      }
     },
-    [parseData]
+    [parseData, name, cache]
   )
 
   const refreshSsrData = useCallback(async () => {
@@ -59,42 +78,113 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     setStatus("loading")
     setError(undefined)
 
+    let newData
+
     if (loader !== undefined) {
-      const nSsrData = await loader(context, fetcher)
-      setSsrData(parseData(nSsrData))
+      newData = await loader(context, fetcher)
     } else {
       if (!url) {
         setError(`No url provided for ${name}`)
       } else {
         const resp = await fetcher.get(url, params)
         if (resp.ok) {
-          setSsrData(parseData(resp?.data))
+          newData = resp?.data
         } else {
-          setError(resp?.error || "Unknonwn error")
+          setError(resp?.error || "Unknown error")
         }
       }
     }
-    setStatus("loaded")
-  }, [status, context, fetcher, loader, url, params, parseData, name])
 
-  useEffect(() => {
-    try {
-      if (status === "idle") {
-        const changed =
-          effect === undefined ||
-          (typeof effect === "function" && effect() === true) ||
-          effect === true
-        if (changed === true) {
-          refreshSsrData()
+    if (newData !== undefined) {
+      if (cache === true) {
+        if (typeof window !== "undefined") {
+          try {
+            const { set } = await import("idb-keyval")
+            await set(`ssr-cache-${name}`, { data: makeSerializable(newData), ts: Date.now() })
+          } catch (err) {
+            console.error(err)
+          }
         }
       }
-    } catch (_) {}
-  }, [status, refreshSsrData, effect])
+      setSsrData(parseData(newData))
+    }
+
+    setStatus("loaded")
+  }, [status, context, fetcher, loader, url, params, parseData, name, cache])
+
+  useEffect(() => {
+    let mounted = true
+
+    const loadData = async () => {
+      if (!mounted) return
+
+      try {
+        if (status === "idle") {
+          const changed =
+            effect === undefined ||
+            (typeof effect === "function" && effect() === true) ||
+            effect === true
+
+          if (changed === true) {
+            let cached = null
+            if (cache === true) {
+              if (typeof window !== "undefined") {
+                try {
+                  const { get } = await import("idb-keyval")
+                  cached = await get(`ssr-cache-${name}`)
+                } catch (err) {
+                  console.error(err)
+                }
+              }
+            }
+
+            if (cached && cached.data !== undefined) {
+              setSsrData(parseData(cached.data))
+
+              if (ttl !== undefined && Date.now() - cached.ts > ttl * 1000) {
+                refreshSsrData()
+              } else {
+                setStatus("loaded")
+              }
+            } else {
+              refreshSsrData()
+            }
+          }
+        }
+      } catch (_) {}
+    }
+
+    loadData()
+
+    return () => {
+      mounted = false
+    }
+  }, [status, refreshSsrData, effect, name, ttl, parseData, cache])
+
+  useEffect(() => {
+    if (ssrDataFromContext !== undefined && typeof window !== "undefined") {
+      import("idb-keyval").then(({ set }) => {
+        set(`ssr-cache-${name}`, {
+          data: makeSerializable(ssrDataFromContext),
+          ts: Date.now()
+        }).catch(() => {})
+      })
+    }
+  }, [ssrDataFromContext, name])
+
+  const invalidate = useCallback(() => {
+    if (typeof window !== "undefined") {
+      import("idb-keyval").then(({ del }) => {
+        del(`ssr-cache-${name}`).catch(() => {})
+      })
+    }
+  }, [name])
 
   return {
     data: ssrData,
     setData: updateSsrData,
     refresh: refreshSsrData,
+    invalidate,
     error,
     ok: error === undefined,
     ready: status === "loaded"

@@ -16,6 +16,7 @@ const TodosProvider = ({ children }) => {
     refresh: refreshTodoList,
     ready
   } = useSsrData("todos", {
+    model: TodoList,
     loader: useCallback(
       async (_context, fetcher) => {
         //setStatus("loading")
@@ -26,7 +27,7 @@ const TodosProvider = ({ children }) => {
         }
         const data = res?.data || []
         //setStatus("loaded")
-        return new TodoList(data.sort((a, b) => b.created_at - a.created_at))
+        return data.sort((a, b) => b.created_at - a.created_at)
       },
       [useCrud, toast]
     )
@@ -49,9 +50,9 @@ const TodosProvider = ({ children }) => {
           toast.error(`Error adding todo: ${res.error}`)
         }
 
-        todoObject.id = res?.data?.id
+        todoObject.id = useCrud ? res?.data : res?.data?.id
 
-        setTodoList([todoObject, ...todoList])
+        setTodoList([todoObject, ...todoList.getData()])
       }
 
       addIt()
@@ -62,9 +63,9 @@ const TodosProvider = ({ children }) => {
   const toggleTodo = useCallback(
     (todoId) => {
       async function toggleIt() {
-        const nTodoList = [...todoList]
+        const nTodoList = [...todoList.getData()]
         const selectedTodoIndex = nTodoList.findIndex((item) => item.id === todoId)
-        nTodoList[selectedTodoIndex].toggle()
+        nTodoList[selectedTodoIndex].done = !nTodoList[selectedTodoIndex].done
 
         setTodoList(nTodoList)
 
@@ -87,7 +88,7 @@ const TodosProvider = ({ children }) => {
 
   const removeTodo = useCallback(
     async (todoId) => {
-      const nTodoList = [...todoList]
+      const nTodoList = [...todoList.getData()]
       nTodoList.splice(
         nTodoList.findIndex((item) => item.id === todoId),
         1
