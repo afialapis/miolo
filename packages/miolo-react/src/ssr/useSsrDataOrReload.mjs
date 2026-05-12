@@ -5,7 +5,7 @@ import usePropsCheck from "./usePropsCheck.mjs"
 const makeSerializable = (obj) => {
   try {
     return JSON.parse(JSON.stringify(obj))
-  } catch (e) {
+  } catch (_) {
     return obj
   }
 }
@@ -20,7 +20,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     modifier = undefined,
     effect = undefined,
     model = undefined,
-    cache = true,
+    cache = false,
     ttl = undefined
   } = options
 
