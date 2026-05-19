@@ -27,6 +27,12 @@ function _miolo_cacher_options_merge(def, opt, logger) {
   }
 }
 
+export function miolo_cacher_options_for_fly(config, options, logger) {
+  const d = config.cache.default
+
+  return _miolo_cacher_options_merge(d, options, logger)
+}
+
 export function miolo_cacher_options_for_calustra(config, logger) {
   const d = config.cache.default
   const c = config.cache.calustra

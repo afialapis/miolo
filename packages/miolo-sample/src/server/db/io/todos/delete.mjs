@@ -1,5 +1,5 @@
 import Joi from "joi"
-import { with_miolo_schema } from "miolo"
+import { with_miolo_input_schema } from "miolo"
 import { opt_int } from "#server/utils/schema.mjs"
 import { db_todo_find } from "./find.mjs"
 
@@ -26,4 +26,4 @@ const todo_delete_schema = Joi.object({
   id: opt_int
 })
 
-export const db_todo_delete = with_miolo_schema(_db_todo_delete, todo_delete_schema)
+export const db_todo_delete = with_miolo_input_schema(_db_todo_delete, todo_delete_schema)

@@ -44,7 +44,8 @@ export async function miolo_build_options_for_server(
       externals({
         packagePath: path.join(pkgPath, "package.json"),
         deps: !bundleDeps,
-        peerDeps: !bundleDeps
+        peerDeps: !bundleDeps,
+        include: ["@node-rs/xxhash"]
       }),
       nodeResolve({
         rootDir: pkgPath,

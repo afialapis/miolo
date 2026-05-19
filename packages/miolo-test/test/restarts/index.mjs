@@ -39,7 +39,6 @@ test("restarts", async (t) => {
     `[miolo-test-restarts][server][cache-set] should set some value on cache`,
     async () => {
       random_value = Math.random().toString()
-
       const cache = await app.context.miolo.cache.get_cache("test")
       await cache.setItem("test-value", random_value)
     }

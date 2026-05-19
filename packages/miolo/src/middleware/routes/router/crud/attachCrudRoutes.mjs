@@ -107,7 +107,13 @@ function attachCrudRoutes(router, crudConfigs, logger) {
           data = await callback(model, uinfo)
 
           if (route?.after) {
-            data = await route.after(ctx, data)
+            if (Array.isArray(route.after)) {
+              for (const after of route.after) {
+                data = await after(ctx, data)
+              }
+            } else {
+              data = await route.after(ctx, data)
+            }
           }
         } catch (error) {
           ctx.miolo.logger.error(`[router] Unexpected error on CRUD ${route.name}-${op}`)

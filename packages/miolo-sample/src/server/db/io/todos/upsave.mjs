@@ -1,5 +1,5 @@
 import Joi from "joi"
-import { with_miolo_schema } from "miolo"
+import { with_miolo_input_schema } from "miolo"
 import { bool_null, opt_int, opt_str_null } from "#server/utils/schema.mjs"
 
 async function _db_todo_upsave(ctx, params) {
@@ -29,4 +29,4 @@ const todo_upsave_schema = Joi.object({
   done: bool_null
 })
 
-export const db_todo_upsave = with_miolo_schema(_db_todo_upsave, todo_upsave_schema)
+export const db_todo_upsave = with_miolo_input_schema(_db_todo_upsave, todo_upsave_schema)

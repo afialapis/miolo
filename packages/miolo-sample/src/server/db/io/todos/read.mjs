@@ -1,5 +1,5 @@
 import Joi from "joi"
-import { with_miolo_schema } from "miolo"
+import { with_miolo_input_schema } from "miolo"
 import { make_query_filter } from "#server/db/io/filter.mjs"
 import { bool_null, opt_int, opt_str_null } from "#server/utils/schema.mjs"
 
@@ -80,4 +80,4 @@ const todo_read_schema = Joi.object({
   })
 })
 
-export const db_todo_read = with_miolo_schema(_db_todo_read, todo_read_schema)
+export const db_todo_read = with_miolo_input_schema(_db_todo_read, todo_read_schema)

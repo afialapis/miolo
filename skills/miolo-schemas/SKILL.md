@@ -1,18 +1,18 @@
 ---
 name: miolo-schemas
-description: Joi validation schemas and patterns for miolo applications. Use when implementing request/parameter validation for routes or database functions, creating reusable schema components, or using with_miolo_schema wrapper.
+description: Joi validation schemas and patterns for miolo applications. Use when implementing request/parameter validation for routes or database functions, creating reusable schema components, or using with_miolo_input_schema and with_miolo_output_schema wrappers.
 ---
 
 # Miolo Validation Schemas
 
 Joi validation schema patterns for miolo routes and database functions.
 
-## Schema Wrapper: with_miolo_schema
+## Schema Wrappers: with_miolo_input_schema and with_miolo_output_schema
 
-Use `with_miolo_schema` to wrap route handlers and database functions with validation:
+Use `with_miolo_input_schema` to wrap route handlers and database functions to validate incoming parameters.
 
 ```javascript
-import { with_miolo_schema } from 'miolo'
+import { with_miolo_input_schema } from 'miolo'
 import Joi from 'joi'
 
 // Define schema
@@ -29,16 +29,38 @@ async function _r_todo_upsave(ctx, params) {
   // ...
 }
 
-export const r_todo_upsave = with_miolo_schema(_r_todo_upsave, todoSchema)
+export const r_todo_upsave = with_miolo_input_schema(_r_todo_upsave, todoSchema)
 ```
 
 **Key benefits:**
-- Automatic validation before function execution
+- Automatic validation before function execution (input) or before sending the response (output)
 - Validation errors handled automatically
 - Default values applied
 - Type coercion
+- Extraneous fields removed (diff log generated on output schemas)
+
+### Using `with_miolo_output_schema`
+
+Use `with_miolo_output_schema` to ensure that data returned by a function matches the expected format, automatically stripping any extra properties not defined in the schema.
+
+```javascript
+import { with_miolo_output_schema } from 'miolo'
+import Joi from 'joi'
+
+const todoOutputSchema = Joi.object({
+  ok: Joi.boolean().required(),
+  data: Joi.object({
+    id: Joi.number().required(),
+    description: Joi.string().required()
+  })
+})
+
+export const db_todo_insert = with_miolo_output_schema(_db_todo_insert, todoOutputSchema)
+```
 
 ## Using Schemas in Routes
+
+Route definitions accept a `schema` object that can contain both `input` and `output` schemas:
 
 ### Inline Schema (Route Definition)
 
@@ -55,9 +77,15 @@ export default [{
       url: '/todo/last_hours',
       auth,
       callback: r_todo_count_last_hours,
-      schema: Joi.object({
-        hours: Joi.number().min(1).max(24).required()
-      })
+      schema: {
+        input: Joi.object({
+          hours: Joi.number().min(1).max(24).required()
+        }),
+        output: Joi.object({
+          ok: Joi.boolean().required(),
+          data: Joi.number().required()
+        })
+      }
     }
   ]
 }]
@@ -68,7 +96,7 @@ export default [{
 Wrap the handler function with schema:
 
 ```javascript
-import { with_miolo_schema } from 'miolo'
+import { with_miolo_input_schema } from 'miolo'
 import Joi from 'joi'
 
 const todoSchema = Joi.object({
@@ -82,7 +110,7 @@ export default [{
       method: 'POST',
       url: '/todo/fake',
       auth,
-      callback: with_miolo_schema(r_todo_insert_fake, todoSchema)
+      callback: with_miolo_input_schema(r_todo_insert_fake, todoSchema)
     }
   ]
 }]
@@ -93,7 +121,7 @@ export default [{
 **Strongly recommended** to validate database function parameters:
 
 ```javascript
-import { with_miolo_schema } from 'miolo'
+import { with_miolo_input_schema } from 'miolo'
 import Joi from 'joi'
 import { opt_int, bool_null, opt_str_null } from '#server/utils/schema.mjs'
 
@@ -118,13 +146,13 @@ const todo_read_schema = Joi.object({
 })
 
 // Export wrapped function
-export const db_todo_read = with_miolo_schema(_db_todo_read, todo_read_schema)
+export const db_todo_read = with_miolo_input_schema(_db_todo_read, todo_read_schema)
 ```
 
 **Pattern:**
 1. Create private implementation function with `_` prefix
 2. Define schema using partial schemas from `utils/schema.mjs`
-3. Export wrapped function with `with_miolo_schema`
+3. Export wrapped function with `with_miolo_input_schema`
 
 ## Partial Schemas (Reusable Components)
 
@@ -254,14 +282,15 @@ const schema = Joi.object({
 
 ## Best Practices
 
-1. **Always validate route parameters** - Use schema in route definition or with_miolo_schema
-2. **Strongly recommended for db functions** - Wrap all db_*() functions with schemas
+1. **Always validate route parameters and outputs** - Use `schema: { input, output }` in route definition.
+2. **Strongly recommended for db functions** - Wrap all db_*() functions with schemas using `with_miolo_input_schema` or `with_miolo_output_schema`.
 3. **Use partial schemas** - Reuse common patterns from `utils/schema.mjs`
 4. **Add to partial schemas** - Extend `utils/schema.mjs` with new reusable patterns
 5. **Private + public pattern** - Use `_function_name` for implementation, export wrapped version
 6. **Default values** - Use `.default()` for optional fields with sensible defaults
 7. **Allow null carefully** - Only use `.allow(null)` when null is a valid business value
 8. **Validate early** - Validation should happen before any business logic
+9. **Remove unused properties** - `with_miolo_output_schema` ensures the client doesn't get extraneous fields.
 
 ## Extending Partial Schemas
 

@@ -164,10 +164,17 @@ export default [{
       url: '/item/search',
       auth,
       callback: r_item_search,
-      schema: Joi.object({
-        query: Joi.string().min(3).required(),
-        limit: Joi.number().min(1).max(100).default(20)
-      })
+      schema: {
+        input: Joi.object({
+          query: Joi.string().min(3).required(),
+          limit: Joi.number().min(1).max(100).default(20)
+        }),
+        output: Joi.object({
+          ok: Joi.boolean().required(),
+          data: Joi.array().items(Joi.object()).required(),
+          error: Joi.string().optional()
+        })
+      }
     }
   ]
 }]
@@ -175,7 +182,7 @@ export default [{
 
 **Wrapper function:**
 ```javascript
-import { with_miolo_schema } from 'miolo'
+import { with_miolo_input_schema } from 'miolo'
 import Joi from 'joi'
 
 const itemSchema = Joi.object({
@@ -190,7 +197,7 @@ export default [{
       method: 'POST',
       url: '/item/save',
       auth,
-      callback: with_miolo_schema(r_item_upsave, itemSchema)
+      callback: with_miolo_input_schema(r_item_upsave, itemSchema)
     }
   ]
 }]
@@ -305,7 +312,7 @@ export async function r_item_find(ctx, params) {
 2. **Consistent naming** - Routes start with `r_`, database functions with `db_`
 3. **Always log** - Use `ctx.miolo.logger` for all operations (`info`level)
 4. **Return consistent format** - Always `{ ok, data }` or `{ ok, error }`
-5. **Validate inputs** - Use Joi schemas for validation
+5. **Validate inputs (and outputs)** - Use Joi schemas for validation
 6. **Handle errors** - Wrap in try/catch, return meaningful errors
 7. **Check user access** - Use `ctx.state.user` to verify permissions
 8. **Keep handlers thin** - Business logic in `db/io/`, routes only handle HTTP

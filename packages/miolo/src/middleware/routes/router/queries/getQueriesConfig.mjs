@@ -27,7 +27,10 @@ import { DEFAULT_AUTH_USER } from "../defaults.mjs"
         auth,
         before:  async (ctx) => { return true/false } or array of functions,
         after :  async (ctx, data) => { return data } or array of functions,
-        schema: a Joi schema,
+        schema: {
+          input: a Joi schema for validating input data,
+          output: a Joi schema for validating output data,
+        },
         keep_body: false by default. If true, miolo wont wnsure ctx.body after callback.
       }
     ]

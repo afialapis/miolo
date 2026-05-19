@@ -1,5 +1,5 @@
 import Joi from "joi"
-import { with_miolo_schema } from "miolo"
+import { with_miolo_input_schema } from "miolo"
 import { bool_null, opt_int } from "#server/utils/schema.mjs"
 import { db_todo_find } from "./find.mjs"
 import { db_todo_upsave } from "./upsave.mjs"
@@ -34,4 +34,4 @@ const todo_toggle_schema = Joi.object({
   done: bool_null
 })
 
-export const db_todo_toggle = with_miolo_schema(_db_todo_toggle, todo_toggle_schema)
+export const db_todo_toggle = with_miolo_input_schema(_db_todo_toggle, todo_toggle_schema)

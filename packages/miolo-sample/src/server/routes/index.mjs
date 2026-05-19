@@ -1,5 +1,5 @@
 import Joi from "joi"
-import { with_miolo_schema } from "miolo"
+import { with_miolo_input_schema, with_miolo_output_schema } from "miolo"
 import { r_todo_delete, r_todo_toggle_done, r_todo_upsave } from "./todos/mod.mjs"
 
 import { r_todo_find, r_todo_last, r_todo_list } from "./todos/read.mjs"
@@ -32,18 +32,31 @@ export default [
         method: "GET",
         // Passing schema on the route definition
         callback: r_todo_count_last_hours,
-        schema: Joi.object({
-          hours: Joi.number().min(1).max(24)
-        })
+        schema: {
+          input: Joi.object({
+            hours: Joi.number().min(1).max(24)
+          }),
+          output: Joi.object({
+            count: Joi.number()
+          })
+        }
       },
       {
         url: "/todo/fake",
         method: "POST",
         // Wrapping function with the schema
-        callback: with_miolo_schema(
-          r_todo_insert_fake,
+        callback: with_miolo_output_schema(
+          with_miolo_input_schema(
+            r_todo_insert_fake,
+            Joi.object({
+              done: Joi.bool().optional().default(false)
+            })
+          ),
           Joi.object({
-            done: Joi.bool().optional().default(false)
+            ok: Joi.bool(),
+            data: Joi.object({
+              id: Joi.number()
+            })
           })
         ),
         auth
