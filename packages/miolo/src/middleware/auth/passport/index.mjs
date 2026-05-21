@@ -247,9 +247,22 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
   }
 
   // handle auth routes
-  const handleGoogleLogin = passport.authenticate("google", {
-    scope: ["profile", "email"]
-  })
+  const handleGoogleLogin = (ctx, next) => {
+    ctx.miolo.logger.debug(`[auth][google] handleGoogleLogin() - authenticating...`)
+
+    const redirectUrl = ctx.query.redirect || "/"
+
+    ctx.miolo.logger.info(
+      `[auth][google] handleGoogleLogin() - authenticating with redirectUrl: ${redirectUrl}`
+    )
+
+    const strategy = passport.authenticate("google", {
+      scope: ["profile", "email"],
+      state: redirectUrl
+    })
+
+    return strategy(ctx, next)
+  }
 
   const handleGoogleCallback = (ctx, next) => {
     ctx.miolo.logger.debug(`[auth][google] handleGoogleCallback() - authenticating...`)
@@ -287,12 +300,21 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         // ctx.body = {
         //   ok: true,
         //   data: {
-        //     user : user,
-        //     authenticated: true
+        //     user: user,
+        //     authenticated: true,
+        //     config: {
+        //       auth_method: "google"
+        //     }
         //   }
         // }
 
-        ctx.redirect(google_url_login_redirect || "/")
+        const redirectUrl = ctx.query.state || google_url_login_redirect || "/"
+
+        ctx.miolo.logger.info(
+          `[auth][google] handleGoogleCallback() - redirecting to: ${redirectUrl}. query.state: ${ctx.query.state}. google_url_login_redirect: ${google_url_login_redirect}`
+        )
+
+        ctx.redirect(redirectUrl)
       }
     })(ctx, next)
   }

@@ -42,8 +42,9 @@ const MioloContextProvider = ({ context, children }) => {
     [innerContext, mioloObj]
   )
 
-  const googleLogin = useCallback(() => {
-    window.location.href = "/auth/google"
+  const googleLogin = useCallback((redirect = "/") => {
+    const url = `/auth/google?redirect=${encodeURIComponent(redirect)}`
+    window.location.href = url
   }, [])
 
   const logout = useCallback(async () => {

@@ -390,7 +390,7 @@ export default function make_config_defaults() {
       //                   err   => done(error, null)
       //  local_url_login : '/login',
       //  local_url_logout: '/logout',
-      //  local_url_login_redirect: undefined
+      //  local_url_login_redirect: '/
       //  local_url_logout_redirect: '/'
       //  google_auth_user: (accessToken, refreshToken, profile, done, ctx) => done(null, {id: 1})
       //                   auth  => done(null, user)
