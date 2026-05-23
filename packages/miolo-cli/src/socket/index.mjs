@@ -1,6 +1,6 @@
 import { io } from "socket.io-client"
 
-export function init_socket(domain, options) {
-  const socket = io(domain, options)
+export function init_socket(url, options) {
+  const socket = io(url, options)
   return socket
 }

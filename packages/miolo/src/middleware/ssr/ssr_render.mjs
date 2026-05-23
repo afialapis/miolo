@@ -6,7 +6,7 @@ export async function init_ssr_render_middleware(app, config, devRender = undefi
   const ssrConfig = config.build.ssr
   const httpConfig = config.http
   const authConfig = config?.auth || {}
-  // const socketConfig = config?.socket || {}
+  const socketConfig = config?.socket || {}
 
   const ssr_build_context = ssr_context_builder_make(app, ssrConfig)
   const ssr_loader = ssr_loader_make(app, ssrConfig)
@@ -32,11 +32,12 @@ export async function init_ssr_render_middleware(app, config, devRender = undefi
         logout_url:
           ctx.session?.auth_method === "google"
             ? authConfig?.passport?.google_url_logout
-            : authConfig?.passport?.local_url_logout
-        //socket: {
-        //  enabled: socketConfig?.enabled===true,
-        //  config: socketConfig?.config?.cli || {}
-        //}
+            : authConfig?.passport?.local_url_logout,
+        socket: {
+          enabled: socketConfig?.enabled === true,
+          url: socketConfig?.config?.cli?.url || null,
+          options: socketConfig?.config?.cli?.options || {}
+        }
       }
       ctx.miolo.logger.debug(
         `[render-ssr] rendering an ${ctx?.session?.authenticated === true ? "authenticated" : "unauthenticated"} context...`

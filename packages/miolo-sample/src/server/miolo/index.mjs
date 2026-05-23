@@ -19,6 +19,25 @@ export default () => {
     build: {
       ssr: { loader }
     },
-    cron: init_cron()
+    cron: init_cron(),
+    socket: {
+      enabled: true,
+      namespaces: [
+        {
+          name: "todos-update",
+          listener: (data) => {
+            console.log("TODOS UPDATED!!!")
+            console.log(data)
+          }
+        },
+        {
+          name: "ping",
+          listener: (data) => {
+            console.log("PING!!!")
+            console.log(data)
+          }
+        }
+      ]
+    }
   }
 }

@@ -92,7 +92,7 @@ const MioloContextProvider = ({ context, children }) => {
         updateUser,
         authenticated: innerContext.authenticated,
         fetcher: mioloObj.fetcher,
-        //socket: mioloObj.socket,
+        socket: mioloObj.socket,
         googleLogin,
         localLogin,
         logout,

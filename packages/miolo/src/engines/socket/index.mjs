@@ -1,4 +1,3 @@
-//import IO from 'koa-socket-2'
 import { Server } from "socket.io"
 
 function init_socket(app, config) {
@@ -12,8 +11,44 @@ function init_socket(app, config) {
 
   const io = new Server(app.http.server)
 
+  if (config?.userRooms === true) {
+    io.use(async (socket, next) => {
+      try {
+        const { store, options } = app.context.miolo.session || {}
+        if (store && options) {
+          // Create a fake Koa context to easily parse the signed cookies
+          const ctx = app.createContext(
+            socket.request,
+            socket.request.res || { headersSent: false }
+          )
+
+          // Read the session cookie (Koa handles signature validation if options.signed is true)
+          const sessionCookieValue = ctx.cookies.get(options.key, options)
+
+          if (sessionCookieValue) {
+            // If the cookie is present, koa-session stores the external key directly
+            // or sometimes it's base64 encoded. koa-session's decode function:
+            const sessionId = sessionCookieValue
+
+            const session = await store.get(sessionId, undefined, {})
+
+            if (session?.user) {
+              const userId = session.user?.id
+              socket.join(`user_${userId}`)
+              socket.mioloUser = userId // Attach for convenience
+              logger.info(`[socket] Socket ${socket.id} joined room user_${userId}`)
+            }
+          }
+        }
+      } catch (err) {
+        logger.error(`[socket] Error parsing session: ${err.message}`)
+      }
+      next()
+    })
+  }
+
   io.on("connection", (socket) => {
-    logger.debug(`[socket] Connection from ... `) // ${i.ip} ${i.id}`)
+    logger.info(`[socket] Connection from ... `) // ${i.ip} ${i.id}`)
 
     if (config?.connection) {
       config.connection(socket)
@@ -24,42 +59,7 @@ function init_socket(app, config) {
     }
   })
 
-  //  const getInfo = (ctx) => {
-  //    let i= {id: '', ip: ''}
-  //    try {
-  //      i.id = ctx.socket.id
-  //    } catch (e) {}
-  //    try {
-  //      i.ip = ctx.socket.handshake.address
-  //    } catch (e) {}
-  //    return i
-  //  }
-
-  // const io = new IO({ origins: '*:*'})
-
-  //  io.on('connection', function (ctx, data) {
-  //    const logger = ctx.miolo.logger
-  //    const i= getInfo(ctx)
-  //    logger.warn(`[socket] Connection from ${i.ip} ${i.id}`)
-  //    if (config?.connection) {
-  //      config.connection(ctx, data)
-  //    }
-  //  })
-
-  //  io.on('disconnect', function (ctx, data) {
-  //    const logger = ctx.miolo.logger
-  //    const i = getInfo(ctx)
-  //    logger.warn(`[socket] Disconnected ${i.ip} ${i.id} => ${data}`)
-  //  })
-  //
-  //  io.on('error', function (ctx, data) {
-  //    const logger = ctx.miolo.logger
-  //    const i = getInfo(ctx)
-  //    logger.error(`[socket] Error on ${i.ip} ${i.id} => ${data}`)
-  //  })
-  //
-  //
-  //  io.attach(app)
+  app.context.miolo.io = io
 }
 
 export { init_socket }

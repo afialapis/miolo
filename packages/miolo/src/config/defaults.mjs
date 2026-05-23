@@ -476,10 +476,13 @@ export default function make_config_defaults() {
 
     socket: {
       enabled: false,
+      // Auto create rooms based on sessions
+      // To be able to do like: app.context.miolo.io.to('user_<id>').emit('ns', newData);
+      userRooms: true,
       cli: {
         /**
-         domain: '',
-        options: {}
+         url: '',
+         options: {}
         */
       }
       /*

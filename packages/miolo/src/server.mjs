@@ -1,8 +1,8 @@
 import Koa from "koa"
 import { init_config } from "./config/index.mjs"
-//import {init_socket}                      from './engines/socket/index.mjs'
 import { init_cron } from "./engines/cron/index.mjs"
 import { init_http_server } from "./engines/http/index.mjs"
+import { init_socket } from "./engines/socket/index.mjs"
 import { init_basic_auth_middleware } from "./middleware/auth/basic.mjs"
 import { init_guest_auth_middleware } from "./middleware/auth/guest.mjs"
 import { init_passport_auth_middleware } from "./middleware/auth/passport/index.mjs"
@@ -102,6 +102,9 @@ async function miolo(makeConfig, devInit = undefined, devRender = undefined) {
     }
 
     await app.http.start()
+    if (app.context.miolo?.io) {
+      app.context.miolo.io.attach(app.http.server)
+    }
     await app.cron.start()
   }
 
@@ -124,7 +127,7 @@ async function miolo(makeConfig, devInit = undefined, devRender = undefined) {
   }
 
   // Socket.io
-  // init_socket(app, config?.socket)
+  init_socket(app, config?.socket)
 
   return app
 }

@@ -18,6 +18,11 @@ function init_session_middleware(app, sessionConfig, cacheConfig) {
     ...(sessionConfig.options || {})
   }
 
+  app.context.miolo.session = {
+    store,
+    options
+  }
+
   app.use(createSession(options, app))
 
   app.use(async (ctx, next) => {

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import useSessionContext from "#cli/context/session/useSessionContext.mjs"
 import useUIContext from "#cli/context/ui/useUIContext.mjs"
 import TodoList from "#ns/models/TodoList.mjs"
@@ -6,9 +6,10 @@ import TodosContext from "./TodosContext.jsx"
 
 const TodosProvider = ({ children }) => {
   // const [status, setStatus] = useState("loaded")
-  const { useSsrData, fetcher, authenticated } = useSessionContext()
+  const { useSsrData, fetcher, socket, authenticated } = useSessionContext()
   const { toast } = useUIContext()
   const [useCrud, setUseCrud] = useState(true)
+  const [socketInited, setSocketInited] = useState(false)
 
   const {
     data: todoList,
@@ -132,6 +133,34 @@ const TodosProvider = ({ children }) => {
     refreshTodoList()
   }, [fetcher, refreshTodoList, toast])
 
+  const pingSocket = useCallback(() => {
+    if (!socket) {
+      toast.error("Socket not initialized")
+      return
+    }
+    socket.emit("ping", { timestamp: new Date().toISOString() })
+  }, [socket, toast])
+
+  useEffect(() => {
+    if (socket === undefined) {
+      return
+    }
+
+    if (socketInited) {
+      return
+    }
+    setSocketInited(true)
+
+    socket.on("connect", () => {
+      console.log("Connected to server!")
+    })
+
+    socket.on("todos-update", (data) => {
+      console.log("TODOS UPDATED!!!")
+      console.log(data)
+    })
+  }, [socket, socketInited])
+
   return (
     <TodosContext.Provider
       value={{
@@ -146,7 +175,8 @@ const TodosProvider = ({ children }) => {
         insertFakeTodo,
         canEdit: authenticated,
         useCrud,
-        setUseCrud
+        setUseCrud,
+        pingSocket
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import { Bomb, Bone, CircleQuestionMark, RefreshCw } from "lucide-react"
+import { Bomb, Bone, CircleQuestionMark, Phone, RefreshCw } from "lucide-react"
 import { useState } from "react"
 import { Field, FieldContent, FieldLabel } from "#cli/components/ui/field.jsx"
 import { Button } from "#cli/components/ui/patched/button.jsx"
@@ -12,8 +12,15 @@ const throwAnError = () => {
 }
 
 export default function TodoActions() {
-  const { refreshTodoList, checkLastHours, insertFakeTodo, canEdit, useCrud, setUseCrud } =
-    useTodosContext()
+  const {
+    refreshTodoList,
+    checkLastHours,
+    insertFakeTodo,
+    canEdit,
+    useCrud,
+    setUseCrud,
+    pingSocket
+  } = useTodosContext()
   const [hours, _setHours] = useState(1)
 
   return (
@@ -50,6 +57,15 @@ export default function TodoActions() {
         >
           <Bomb size={18} />
           {`Throw an JS error`}
+        </Button>
+
+        <Button
+          onClick={() => pingSocket()}
+          disabled={!canEdit}
+          className={`px-4 py-6  text-white rounded-lg transition-colors flex items-center gap-2 cursor-pointer ${useCrud ? "bg-pink-500 hover:bg-pink-400" : "bg-blue-500 hover:bg-blue-400"}`}
+        >
+          <Phone size={18} />
+          Ping through socket
         </Button>
       </div>
 

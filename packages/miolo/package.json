@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "3.0.0-beta.203",
+  "version": "3.0.0-beta.204",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -47,7 +47,7 @@
     "@babel/plugin-proposal-decorators": "^7.29.0",
     "@babel/preset-env": "^7.29.5",
     "@babel/preset-react": "^7.28.5",
-    "@dotenvx/dotenvx": "^1.66.0",
+    "@dotenvx/dotenvx": "^1.67.0",
     "@koa/bodyparser": "^6.1.0",
     "@koa/cors": "^5.0.0",
     "@koa/router": "^15.5.0",
@@ -72,7 +72,7 @@
     "is-plain-object": "^5.0.0",
     "joi": "^18.2.1",
     "jwt-simple": "^0.5.6",
-    "koa": "^3.2.0",
+    "koa": "^3.2.1",
     "koa-compress": "^5.2.1",
     "koa-connect": "^2.1.1",
     "koa-favicon": "^2.1.0",
@@ -83,7 +83,7 @@
     "koa-session": "^7.0.2",
     "koa-static": "^5.0.0",
     "nanoid": "^5.1.11",
-    "nodemailer": "^8.0.7",
+    "nodemailer": "^8.0.8",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "rollup": "^4.60.4",
@@ -94,7 +94,7 @@
     "statuses": "^2.0.2",
     "tailwindcss": "^4.3.0",
     "tinguir": "^0.0.7",
-    "vite": "^8.0.13",
+    "vite": "^8.0.14",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0",
     "yargs-parser": "^22.0.0"
