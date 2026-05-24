@@ -16,8 +16,8 @@ The SSR loader preloads data on the server before sending the initial HTML to th
 **File:** `src/server/miolo/ssr/loader.mjs`
 
 ```javascript
-import { db_todo_read } from '#server/db/io/todos/read.mjs'
-import { db_user_profile } from '#server/db/io/users/read.mjs'
+import { db_todo_read } from '#server/io/db/todos/read.mjs'
+import { db_user_profile } from '#server/io/db/users/read.mjs'
 
 const loader = async (ctx) => {
   let todos = []

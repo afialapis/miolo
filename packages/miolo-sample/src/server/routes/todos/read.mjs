@@ -1,5 +1,5 @@
-import { db_todo_find } from "#server/db/io/todos/find.mjs"
-import { db_todo_read } from "#server/db/io/todos/read.mjs"
+import { db_todo_find } from "#server/io/db/todos/find.mjs"
+import { db_todo_read } from "#server/io/db/todos/read.mjs"
 
 export async function r_todo_list(ctx, _params) {
   try {

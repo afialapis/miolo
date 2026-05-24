@@ -27,125 +27,134 @@
 
 # Intro
 
-[`miolo`](https://www.afialapis.com/os/miolo) is an all-in-one koa-based server.
+[`miolo`](https://www.afialapis.com/os/miolo) is an all-in-one koa-based server framework for building robust, full-stack web applications. It provides built-in tools for CLI initialization, React frontend integration, authentication, database management, and more.
 
+## Quick Start
 
-## Server middleware
+Initialize a new miolo application using the CLI:
 
-## init
+```bash
+npx miolo create my-app
+cd my-app
+npm run dev
+```
 
-```miolo(config, render)```
+This will create a project based on `miolo-sample` with the standard miolo architecture.
 
-config: ver defaults.js
+# Backend API and Configuration
 
-render:
-	undefined         => renderiza un html fallback
-	html     (string) => renderiza ese HTML
-	middleware        => renderiza HTML con posibilidad de SSR
+Miolo provides a comprehensive server API initialized via `miolo(config, render)`.
 
-### Custom `ctx` properties
+## Initialization
 
-  ctx.request.body
-  ctx.request.ip
+```javascript
+import miolo from 'miolo'
 
-  From koa-passport:
+// Server initialization
+const config = {
+  name: "my-app",
+  http: { port: 8001 },
+  auth: { /* passport config */ },
+  db: { /* db config */ },
+  routes: [ /* route definitions */ ],
+  cache: { /* cache config */ },
+  cron: [ /* cron jobs */ ],
+  socket: { enabled: true, namespaces: [] }
+}
 
-  ctx.isAuthenticated()
-  ctx.isUnauthenticated()
-  await ctx.login()
-  ctx.logout()
-  ctx.state.user
+// Start the server
+miolo(config, renderHtmlFn)
+```
 
-  From auth:
-    ctx.session.user
-    ctx.session.authenticated
-    ctx.session.token (if guest auth)
-                 
+## Custom `ctx` Properties
 
-# Use `tailwind`
+Miolo extends the Koa `ctx` object with useful properties and methods:
 
-In your css entry:
+**Request & General:**
+- `ctx.request.body`
+- `ctx.request.ip`
+- `ctx.miolo` - The core miolo instance (contains `.db`, `.logger`, `.config`, etc.)
 
+**Authentication (via koa-passport):**
+- `ctx.isAuthenticated()`
+- `ctx.isUnauthenticated()`
+- `await ctx.login()`
+- `ctx.logout()`
+- `ctx.state.user` - Current authenticated user object
+
+**Session / Auth context:**
+- `ctx.session.user`
+- `ctx.session.authenticated`
+- `ctx.session.token` (if using guest auth)
+
+## Configuration Options
+
+The `config` object passed to `miolo()` supports the following top-level keys:
+
+- **`name`** (String): Application name.
+- **`http`** (Object): Web server config (`port`, `hostname`).
+- **`auth`** (Object): Authentication configuration (`passport`, `basic`, `guest`).
+- **`db`** (Object): PostgreSQL database config (host, port, user, max pool, schemas).
+- **`routes`** (Array): API route registrations.
+- **`cache`** (Object): Caching strategy (e.g., Redis).
+- **`cron`** (Array): Scheduled bot tasks.
+- **`socket`** (Object): Socket.io real-time configuration.
+- **`build.ssr.loader`** (Function): Server-side rendering data loader function.
+
+# Best Practices & Recommendations
+
+To maintain consistency across miolo-based applications, please adhere to the following architecture and patterns (modeled after `miolo-sample`):
+
+## 1. Project Structure
+
+Always maintain the following fundamental directory structure:
+
+```
+src/
+├── cli/              # React Frontend Application
+├── ns/               # Shared models between server & cli
+├── server/           # Backend API and Logic
+│   ├── bot/          # Cron jobs and CLI scripts
+│   ├── io/           # Data fetching and manipulation
+│   │   ├── cache/    # Caching layer (naming convention: ch_*)
+│   │   └── db/       # Strict DB queries with schemas (naming convention: db_*)
+│   ├── miolo/        # Server initialization config (db.mjs, auth.mjs, index.mjs)
+│   ├── routes/       # HTTP endpoints logic (naming convention: r_*)
+│   └── trigger/      # Side-effects (Mails, Webhooks, Push Notifications)
+```
+
+## 2. File Organization & Naming
+
+- **Database Layer (`src/server/io/db/`)**: Contains ALL database interactions. Functions must start with `db_` (e.g., `db_user_read`, `db_item_upsave`). Never write raw SQL inside route handlers.
+- **Cache Layer (`src/server/io/cache/`)**: Handles cached data retrieval. Functions must start with `ch_`.
+- **Routes Layer (`src/server/routes/`)**: HTTP endpoints. Functions must start with `r_` (e.g., `r_user_login`, `r_item_list`). These functions orchestrate the request and call the `io` or `trigger` layers.
+- **Bot/CLI (`src/server/bot/`)**: All background tasks, chron jobs, and CLI tools go here.
+
+## 3. Database Filters
+
+When implementing SELECT queries in `io/db`, always use the `make_query_filter()` utility provided by `miolo`. This prevents SQL injection and provides a standardized way of accepting dynamic WHERE clauses from the client.
+
+## 4. Client Contexts (React)
+
+On the client side (`src/cli/`), deeply integrate React Contexts for global state management. Group UI components in `src/cli/components/`, and pages logically in `src/cli/pages/`.
+
+## 5. UI Libraries (Tailwind & shadcn)
+
+Miolo supports easy integration with modern frontend tools.
+
+**Tailwind CSS (v4):**
+In your CSS entry, just add:
 ```css
 @import "tailwindcss";
 ```
+No `tailwind.config.js` or `postcss.config.js` is needed. Use CSS `@theme` rules instead.
 
-No need of `postcss.config.js`
-No need of `tailwind.config.js` => use CSS @theme and company instead
-
-
-# Use `shadcn`
-
-```sh
+**shadcn/ui Integration:**
+Install dependencies:
+```bash
 npm install class-variance-authority clsx tailwind-merge lucide-react tw-animate-css
 ```
-
-`miolo` config:
-```js
-  # build: {
-  #   vite: {
-  #     resolve: {
-  #       alias: {
-  #         "@": path.resolve(proot('cli')),
-  #       },
-  #     },        
-  #   }
-  # }
-```
-
-Ensure `package.json`:
-
-```json
-  "imports": {
-    "#cli/*": "./src/cli/*",
-    ...
-  },
-```
-
-Modify `jsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    ...
-    "baseUrl": "./",
-    "paths": {
-      ...
-      "#cli": ["./src/cli"],    
-    }    
-  }
-  ...
-}
-```
-
-Create `components.json`:
-
-```json
-{
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
-  "rsc": false,
-  "tsx": false,
-  "tailwind": {
-    "config": "",
-    "css": "src/cli/styles/globals.css",
-    "baseColor": "neutral",
-    "cssVariables": true,
-    "prefix": ""
-  },
-  "aliases": {
-    // Must be relative to the baseUrl defined in jsconfig.json
-    "components": "#cli/components",
-    "utils": "#cli/lib/utils",
-    "ui": "#cli/components/ui",
-    "lib": "#cli/lib",
-    "hooks": "#cli/hooks"
-  },
-  "iconLibrary": "lucide"
-}
-```
-
-Create `cli/styles/globals.css`, `cli/lib/utils.mjs`
+Ensure your `components.json` and `jsconfig.json` use the `#cli/*` alias paths provided by default in miolo projects.
 
 # Changelog
 

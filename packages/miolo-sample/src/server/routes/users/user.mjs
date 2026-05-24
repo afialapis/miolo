@@ -1,5 +1,5 @@
-import { db_password_change } from "#server/db/io/users/pwd.mjs"
-import { db_user_save } from "#server/db/io/users/save.mjs"
+import { db_password_change } from "#server/io/db/users/pwd.mjs"
+import { db_user_save } from "#server/io/db/users/save.mjs"
 import { generateRandomPassword } from "#server/utils/crypt.mjs"
 
 export async function r_forgot(ctx, params) {

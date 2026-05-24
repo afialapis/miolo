@@ -2,7 +2,7 @@ import {
   db_auth_user,
   db_find_user_by_id,
   db_user_find_or_create_from_google
-} from "#server/db/io/users/auth.mjs"
+} from "#server/io/db/users/auth.mjs"
 
 const get_user_id = async (user, ctx) => {
   ctx.miolo.logger.debug(

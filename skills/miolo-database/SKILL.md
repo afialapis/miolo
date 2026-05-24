@@ -1,6 +1,6 @@
 ---
 name: miolo-database
-description: Database query patterns and organization for miolo applications. Use when creating database queries, organizing db/io structure, writing SQL, or implementing data access layers in miolo apps. For validation schemas, see miolo-schemas skill.
+description: Database query patterns and organization for miolo applications. Use when creating database queries, organizing io/db structure, writing SQL, or implementing data access layers in miolo apps. For validation schemas, see miolo-schemas skill.
 ---
 
 # Miolo Database Patterns
@@ -9,10 +9,10 @@ Database query organization and patterns for miolo applications using PostgreSQL
 
 ## Database Layer Organization
 
-All database queries are in `src/server/db/io/`, organized by domain:
+All database queries are in `src/server/io/db/`, organized by domain:
 
 ```
-src/server/db/io/
+src/server/io/db/
 ├── filter.mjs         # Common query filters
 ├── users/             # User-related queries
 │   ├── auth.mjs
@@ -31,7 +31,7 @@ src/server/db/io/
 All database functions follow consistent naming and structure:
 
 ```javascript
-// src/server/db/io/items/read.mjs
+// src/server/io/db/items/read.mjs
 
 export async function db_item_read(ctx, params) {
   ctx.miolo.logger.verbose('[db_item_read] Reading items...')
@@ -196,12 +196,12 @@ if (users.length === 0) {
 
 ## Query Filters with make_query_filter
 
-All SELECT queries should use `make_query_filter()` from `db/io/filter.mjs` to build WHERE clauses:
+All SELECT queries should use `make_query_filter()` from `io/db/filter.mjs` to build WHERE clauses:
 
-**File:** `src/server/db/io/filter.mjs`
+**File:** `src/server/io/db/filter.mjs`
 
 ```javascript
-import { make_query_filter } from '#server/db/io/filter.mjs'
+import { make_query_filter } from '#server/io/db/filter.mjs'
 
 export async function db_todo_read(ctx, filter) {
   ctx.miolo.logger.verbose('[db_todo_read] Reading todos...')
@@ -346,13 +346,13 @@ Run initialization:
 6. **Use transactions** - For multi-query operations that must succeed/fail together
 7. **Index properly** - Add indexes on frequently queried columns
 8. **Limit results** - Always use LIMIT for list queries to prevent large responses
-9. **Keep queries in db/io/** - Never write SQL in route handlers
+9. **Keep queries in io/db/** - Never write SQL in route handlers
 10. **Always log** - Use `ctx.miolo.logger` for all operations (`verbose` level)
 
 ## Examples from miolo-sample
 
 See actual implementations:
-- `src/server/db/io/todos/read.mjs` - Read queries
-- `src/server/db/io/todos/upsave.mjs` - Insert/update pattern
-- `src/server/db/io/users/auth.mjs` - Authentication query
+- `src/server/io/db/todos/read.mjs` - Read queries
+- `src/server/io/db/todos/upsave.mjs` - Insert/update pattern
+- `src/server/io/db/users/auth.mjs` - Authentication query
 - `src/server/miolo/db.mjs` - Database configuration

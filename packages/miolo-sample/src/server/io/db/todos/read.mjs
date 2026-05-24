@@ -1,6 +1,6 @@
 import Joi from "joi"
 import { with_miolo_input_schema } from "miolo"
-import { make_query_filter } from "#server/db/io/filter.mjs"
+import { make_query_filter } from "#server/io/db/filter.mjs"
 import { bool_null, opt_int, opt_str_null } from "#server/utils/schema.mjs"
 
 /**

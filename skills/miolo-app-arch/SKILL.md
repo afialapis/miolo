@@ -5,7 +5,7 @@ description: Standard architecture patterns for miolo applications. Use when cre
 
 # Miolo Application Architecture
 
-This skill defines the standard architecture for miolo applications based on miolo-sample, the reference implementation for miolo apps.
+This skill defines the standard architecture for miolo applications, based on modern best practices (as seen in `miolo-sample`).
 
 ## Project Structure Overview
 
@@ -21,7 +21,7 @@ miolo-app/
 ├── biome.json            # Biome configuration
 ├── postcss.config.js     # PostCSS/Tailwind configuration
 ├── docker/               # Docker deployment configuration
-├── db/                   # Database initialization (optional)
+├── db/                   # Database initialization scripts and files
 ├── build/                # Production build output
 ├── src/                  # Source code
 │   ├── cli/              # Client-side React application
@@ -89,13 +89,11 @@ Docker deployment configuration:
 - `docker-compose.yaml` - Service orchestration
 - `Dockerfile` - Container build instructions
 
-### db/ (optional)
+### db/
 
 Database initialization scripts:
 - `init.sh` - Database creation and setup script
 - `sql/` - SQL migration files (executed in alphabetical order)
-
-Not required for all apps, but recommended for PostgreSQL-based applications.
 
 ### build/
 
@@ -107,7 +105,7 @@ Created by `npm run build`, used in production deployment.
 
 ### src/cli/
 
-Client-side React application code. **Fixed subdirectory structure**:
+Client-side React application code. Utilizes **React Router v7** for client routing and deeply integrates **React Contexts** for state management. **Fixed subdirectory structure**:
 
 ```
 src/cli/
@@ -132,12 +130,12 @@ src/cli/
     └── ...              # Feature-specific page directories
 ```
 
-**Rules:**
+**Rules & Best Practices:**
 - Respect the subdirectory structure
-- Place new components in appropriate subdirectories
+- **React Contexts**: Contexts are heavily prioritized for global state, data caching, and UI management. 
+- **Client Routing**: Uses `react-router` v7. Main split happens in `Index.jsx` based on session state (using contexts).
 - Pages go in `pages/`, grouped by feature
 - Reusable UI components in `components/`
-- Contexts follow the established pattern (Context.jsx, Provider.jsx, useContext.mjs)
 
 ### src/ns/
 
@@ -145,55 +143,49 @@ Shared code accessible from both client and server:
 
 ```
 src/ns/
-└── models/              # Data models
-    ├── base/            # Base classes (BaseModel, BaseArray, etc.)
+└── models/              # Data models (using miolo-model)
+    ├── base/            # Base classes
     └── ...              # Application-specific models
 ```
 
-Use for code that needs to run in both environments.
+**miolo-model**: Utilize the `miolo-model` package to define robust data models that can be seamlessly validated and used across both client and server.
 
 ### src/server/
 
-Backend server code. **Semi-fixed subdirectory structure**:
+Backend server code. **Fixed subdirectory structure**:
 
 ```
 src/server/
 ├── server.mjs           # Server entry point
-├── cache/               # Cache implementations
-├── db/                  # Database layer
-│   ├── io/              # Database I/O operations (queries)
-│   │   ├── users/       # User-related queries
-│   │   ├── todos/       # Example: todo queries
-│   │   └── ...          # Feature-specific query directories
-│   └── triggers/        # Database triggers
-├── lib/                 # Server libraries
+├── bot/                 # Scripts to run from cron or console
+├── io/                  # Data I/O layer
+│   ├── cache/           # Cache layer between DB and outside world (naming: ch_)
+│   └── db/              # Database operations only. Uses schemas. (naming: db_)
+│       ├── users/       # User-related queries
+│       └── ...          # Feature-specific query directories
 ├── miolo/               # Miolo server configuration
 │   ├── auth/            # Authentication strategies
 │   ├── cache.mjs        # Cache configuration
-│   ├── cron/            # Cron jobs
 │   ├── db.mjs           # Database configuration
 │   ├── http.mjs         # HTTP configuration
 │   ├── index.mjs        # Main miolo config
 │   ├── routes/          # Base route configuration
-│   └── ssr/             # Server-side rendering
-├── routes/              # API endpoints (developers add here)
+│   └── ssr/             # Server-side rendering entry and loader
+├── routes/              # Centralized GET/POST routes. Index all r_ functions.
 │   ├── index.mjs        # Route registration
 │   ├── users/           # User endpoints
 │   └── ...              # Feature-specific route directories
+├── trigger/             # Outgoing functionalities: mailing, messaging, notifications.
 └── utils/               # Server utilities
 ```
 
 **Rules:**
-- `cache/`, `lib/`, `utils/`, `miolo/` are relatively fixed
-- **Developers add new API endpoints in `routes/`**
-- **Database queries go in `db/io/`**, organized by domain
-- Each route directory contains endpoint handlers
-- Register new routes in `routes/index.mjs`
-
-**Key pattern:** When adding a new feature:
-1. Create queries in `db/io/feature-name/`
-2. Create route handlers in `routes/feature-name/`
-3. Register routes in `routes/index.mjs`
+- **`io/db/`**: STRICTLY database operations. Functions must use validation schemas and start with `db_`.
+- **`io/cache/`**: Caching layer handling data fetching from DB with a cache mechanism. Functions start with `ch_`.
+- **`routes/`**: Centralizes all HTTP endpoints. Functions start with `r_`. These functions pick the request, and call `io/db`, `io/cache`, or `trigger/` as appropriate. Special mention applies to functions used in the `before`/`after` hooks of routes.
+- **`trigger/`**: Contains side-effect outgoing modules like emails, push notifications, or webhooks.
+- **`bot/`**: CLI or cron scripts meant to execute periodically or via the console.
+- **SSR (Server-Side Rendering)**: Configuration and loaders for SSR are stored in `miolo/ssr/`. It speeds up initial load and SEO by preloading data on the server.
 
 ### src/static/
 
@@ -203,8 +195,6 @@ Static assets:
 src/static/
 ├── fonts/               # Custom fonts
 ├── img/                 # Images
-│   ├── default/         # Default images (avatars, etc.)
-│   └── ...
 ├── public/              # Public root files (favicon, robots.txt)
 └── style/               # Global CSS
 ```
@@ -217,28 +207,6 @@ src/static/
 4. **Deploy**: Use docker/ configuration or build/server/run.mjs
 
 ## Best Practices
-
-1. **Respect directory structure** - Don't create new top-level directories without reason
-2. **Use import aliases** - Always use `#cli/`, `#server/`, etc. for imports
-3. **Follow naming conventions** - Use lowercase with hyphens for directories, camelCase for files
-4. **Organize by feature** - In routes/ and db/io/, group by domain/feature
-5. **Keep server config in miolo/** - Don't modify unless necessary
-6. **Use contexts for state** - Follow established context patterns in cli/context/
-
-## Common Patterns
-
-**Adding a new feature:**
-```
-1. Add database queries: src/server/db/io/myfeature/*.mjs
-2. Add API routes: src/server/routes/myfeature/*.mjs
-3. Register routes: src/server/routes/index.mjs
-4. Add client pages: src/cli/pages/myfeature/*.jsx
-5. Add components if needed: src/cli/components/myfeature/*.jsx
-```
-
-**Adding authentication:**
-- Strategies in `src/server/miolo/auth/`
-- Configure in `src/server/miolo/index.mjs`
 
 **Adding static assets:**
 - Images: `src/static/img/`

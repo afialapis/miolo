@@ -324,6 +324,6 @@ const eventSchema = Joi.object({
 
 See actual implementations:
 - `src/server/utils/schema.mjs` - Partial schema definitions
-- `src/server/db/io/todos/read.mjs` - Database function with schema
-- `src/server/db/io/todos/upsave.mjs` - Insert/update with schema
+- `src/server/io/db/todos/read.mjs` - Database function with schema
+- `src/server/io/db/todos/upsave.mjs` - Insert/update with schema
 - `src/server/routes/index.mjs` - Route schemas (inline and wrapper)

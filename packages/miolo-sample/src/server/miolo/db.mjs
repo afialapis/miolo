@@ -1,6 +1,6 @@
 // import path from 'path'
 // import {fileURLToPath} from 'url'
-import { beforeInsertUser } from "#server/db/triggers/user.mjs"
+import { beforeInsertUser } from "#server/io/db/triggers/user.mjs"
 
 // const __filename = fileURLToPath(import.meta.url)
 // const __dirname = path.dirname(__filename)

@@ -1,6 +1,6 @@
-import { db_todo_delete } from "#server/db/io/todos/delete.mjs"
-import { db_todo_toggle } from "#server/db/io/todos/toggle.mjs"
-import { db_todo_upsave } from "#server/db/io/todos/upsave.mjs"
+import { db_todo_delete } from "#server/io/db/todos/delete.mjs"
+import { db_todo_toggle } from "#server/io/db/todos/toggle.mjs"
+import { db_todo_upsave } from "#server/io/db/todos/upsave.mjs"
 
 export async function r_todo_upsave(ctx, params) {
   try {

@@ -43,7 +43,7 @@ Unified authentication using Passport.js supporting both **local (username/passw
 
 ```javascript
 import { db_find_user_by_id, db_auth_user, 
-         db_user_find_or_create_from_google } from '#server/db/io/users/auth.mjs'
+         db_user_find_or_create_from_google } from '#server/io/db/users/auth.mjs'
 
 const get_user_id = (user, done, ctx) => {
   const uid = user?.id
@@ -295,7 +295,7 @@ export default [{
 
 ### User Authentication (Local)
 
-**File:** `src/server/db/io/users/auth.mjs`
+**File:** `src/server/io/db/users/auth.mjs`
 
 ```javascript
 import { sha512 } from '#server/utils/crypt.mjs'
@@ -395,7 +395,7 @@ MIOLO_SESSION_SALT=your-random-salt-here
 
 ## Database Trigger for Password Hashing
 
-**File:** `src/server/db/triggers/user.mjs`
+**File:** `src/server/io/db/triggers/user.mjs`
 
 ```javascript
 import { sha512 } from '#server/utils/crypt.mjs'
@@ -445,6 +445,6 @@ session: {
 
 See actual implementations:
 - `src/server/miolo/auth/passport.mjs` - Passport authentication config
-- `src/server/db/io/users/auth.mjs` - User authentication queries
-- `src/server/db/triggers/user.mjs` - Password hashing trigger
+- `src/server/io/db/users/auth.mjs` - User authentication queries
+- `src/server/io/db/triggers/user.mjs` - Password hashing trigger
 - `src/server/utils/crypt.mjs` - Hashing utilities

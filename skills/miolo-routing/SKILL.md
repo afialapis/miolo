@@ -5,7 +5,7 @@ description: API routing patterns for miolo applications. Use when creating or m
 
 # Miolo Routing Patterns
 
-Standard patterns for creating API routes in miolo applications following miolo-sample conventions.
+Standard patterns for creating API routes in miolo applications following miolo conventions.
 
 ## Route Organization
 
@@ -61,7 +61,7 @@ export default [{
 Route handlers receive `(ctx, params)` and return `{ ok, data }` or `{ ok, error }`:
 
 ```javascript
-import { db_item_read } from '#server/db/io/items/read.mjs'
+import { db_item_read } from '#server/io/db/items/read.mjs'
 
 export async function r_item_list(ctx, params) {
   try {
@@ -114,8 +114,8 @@ Complete CRUD implementation:
 
 ```javascript
 // items/mod.mjs
-import { db_item_upsave } from '#server/db/io/items/upsave.mjs'
-import { db_item_delete } from '#server/db/io/items/delete.mjs'
+import { db_item_upsave } from '#server/io/db/items/upsave.mjs'
+import { db_item_delete } from '#server/io/db/items/delete.mjs'
 
 export async function r_item_upsave(ctx, params) {
   try {
@@ -280,9 +280,9 @@ export async function r_item_find(ctx, params) {
 
 ## Adding a New Feature
 
-1. **Create database functions** in `src/server/db/io/feature/`:
+1. **Create database functions** in `src/server/io/db/feature/`:
    ```javascript
-   // db/io/items/read.mjs
+   // io/db/items/read.mjs
    export async function db_item_read(ctx, params) { /* ... */ }
    ```
 
@@ -308,14 +308,14 @@ export async function r_item_find(ctx, params) {
 
 ## Best Practices
 
-1. **Use database abstraction** - Never write SQL in routes, use `db/io/` functions
+1. **Use database abstraction** - Never write SQL in routes, use `io/db/` functions
 2. **Consistent naming** - Routes start with `r_`, database functions with `db_`
 3. **Always log** - Use `ctx.miolo.logger` for all operations (`info`level)
 4. **Return consistent format** - Always `{ ok, data }` or `{ ok, error }`
 5. **Validate inputs (and outputs)** - Use Joi schemas for validation
 6. **Handle errors** - Wrap in try/catch, return meaningful errors
 7. **Check user access** - Use `ctx.state.user` to verify permissions
-8. **Keep handlers thin** - Business logic in `db/io/`, routes only handle HTTP
+8. **Keep handlers thin** - Business logic in `io/db/`, routes only handle HTTP
 
 ## Examples from miolo-sample
 
