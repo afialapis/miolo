@@ -1,6 +1,6 @@
 {
   "name": "miolo-cli",
-  "version": "3.0.0-beta.204",
+  "version": "3.0.0-beta.207",
   "description": "cli utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -31,7 +31,8 @@
   },
   "dependencies": {
     "qs": "^6.15.2",
-    "socket.io-client": "^4.8.3"
+    "socket.io-client": "^4.8.3",
+    "tinguir": "^0.0.7"
   },
   "engines": {
     "node": ">=24"

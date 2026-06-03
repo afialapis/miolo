@@ -1,3 +1,4 @@
+import { useMioloContext } from "miolo-react"
 import { useCallback, useEffect, useState } from "react"
 import useSessionContext from "#cli/context/session/useSessionContext.mjs"
 import useUIContext from "#cli/context/ui/useUIContext.mjs"
@@ -6,6 +7,7 @@ import TodosContext from "./TodosContext.jsx"
 
 const TodosProvider = ({ children }) => {
   // const [status, setStatus] = useState("loaded")
+  const { logger } = useMioloContext()
   const { useSsrData, fetcher, socket, authenticated } = useSessionContext()
   const { toast } = useUIContext()
   const [useCrud, setUseCrud] = useState(true)
@@ -152,14 +154,14 @@ const TodosProvider = ({ children }) => {
     setSocketInited(true)
 
     socket.on("connect", () => {
-      console.log("Connected to server!")
+      logger.info("Connected to server!")
     })
 
     socket.on("todos-update", (data) => {
-      console.log("TODOS UPDATED!!!")
-      console.log(data)
+      logger.info("TODOS UPDATED!!!")
+      logger.info(data)
     })
-  }, [socket, socketInited])
+  }, [socket, socketInited, logger])
 
   return (
     <TodosContext.Provider

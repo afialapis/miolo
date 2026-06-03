@@ -1,6 +1,6 @@
 import Joi from "joi"
 
-export function with_miolo_input_schema(fn, schema) {
+export function with_miolo_input_schema(fn, schema, options) {
   return async (ctx, params) => {
     let error
 
@@ -14,7 +14,9 @@ export function with_miolo_input_schema(fn, schema) {
     // perform validation
     let v
     try {
-      v = schema.validate(params)
+      v = schema.validate(params, {
+        ...(options || {})
+      })
     } catch (uerror) {
       error = `Unexpected error validating input data for ${fn.name}: ${uerror?.message || uerror}`
       ctx.miolo.logger.silly(`[validation][${fn.name}] ${error}`)

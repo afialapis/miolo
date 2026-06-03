@@ -1,7 +1,7 @@
 import Joi from "joi"
 import { diffObjs } from "./diffObjs.mjs"
 
-export function with_miolo_output_schema(fn, schema) {
+export function with_miolo_output_schema(fn, schema, options) {
   const fnName = fn?.name ? `[${fn.name}]` : ""
 
   return async (ctx, params) => {
@@ -20,7 +20,10 @@ export function with_miolo_output_schema(fn, schema) {
     // perform validation over the result
     let v
     try {
-      v = schema.validate(result, { stripUnknown: true })
+      v = schema.validate(result, {
+        stripUnknown: true,
+        ...(options || {})
+      })
     } catch (uerror) {
       error = `Unexpected error validating output data for ${fn.name}: ${uerror?.message || uerror}`
       ctx.miolo.logger.silly(`[validation]${fnName} ${error}`)

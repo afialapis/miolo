@@ -28,7 +28,10 @@ export function transformPackageJson(content, appName) {
 
   // Then, replace file:../ references with npm versions
   const version = getMioloVersion()
-  transformed = transformed.replace(/"file:\.\.\/(miolo-cli|miolo-react|miolo)"/g, `"${version}"`)
+  transformed = transformed.replace(
+    /"file:\.\.\/(miolo-cli|miolo-react|miolo-model|miolo)"/g,
+    `"${version}"`
+  )
 
   return transformed
 }

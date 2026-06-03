@@ -25,6 +25,7 @@ export async function init_ssr_render_middleware(app, config, devRender = undefi
         port: httpConfig?.port,
         catcher_url: httpConfig?.catcher_url,
         auth_method: ctx.session?.auth_method,
+        log_level: ctx.miolo.logger.level,
         login_url:
           ctx.session?.auth_method === "google"
             ? authConfig?.passport?.google_url_login
