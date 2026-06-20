@@ -1,6 +1,5 @@
 import { init_config } from "./config/index.mjs"
 import { init_cron } from "./engines/cron/index.mjs"
-import { init_socket } from "./engines/socket/index.mjs"
 import { init_context_middleware } from "./middleware/context/index.mjs"
 
 export async function miolo_cron(makeConfig) {
@@ -22,9 +21,6 @@ export async function miolo_cron(makeConfig) {
   app.start = async () => {
     // Init and reset db connection
     await app.context.miolo.db.init_connection()
-    if (app.context.miolo?.io) {
-      app.context.miolo.io.attach(app.http.server)
-    }
     await app.cron.start()
   }
 
@@ -37,9 +33,6 @@ export async function miolo_cron(makeConfig) {
     await app.stop()
     await app.start()
   }
-
-  // Socket.io
-  init_socket(app, config?.socket)
 
   return app
 }
