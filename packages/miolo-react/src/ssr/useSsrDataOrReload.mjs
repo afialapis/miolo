@@ -112,13 +112,19 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     setStatus("loaded")
   }, [status, context, fetcher, loader, url, params, parseData, name, cache])
 
-  const invalidate = useCallback(() => {
+  const invalidateCache = useCallback((tName, callback = undefined) => {
     if (typeof window !== "undefined") {
       import("idb-keyval").then(({ del }) => {
-        del(`ssr-cache-${name}`).catch(() => {})
+        del(`ssr-cache-${tName}`)
+          .catch(() => {})
+          .then(() => {
+            if (callback) {
+              callback()
+            }
+          })
       })
     }
-  }, [name])
+  }, [])
 
   useEffect(() => {
     let mounted = true
@@ -198,20 +204,22 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
     socket.on("ssr-invalidate", (data) => {
       logger.info(`[ssr] ssr-invalidate ${data.name}`)
-
-      if (typeof window !== "undefined") {
-        import("idb-keyval").then(({ del }) => {
-          del(`ssr-cache-${data.name}`).catch(() => {})
-        })
-      }
+      invalidateCache(data.name)
     })
-  }, [socket, socketInited, logger])
+
+    socket.on("ssr-refresh", (data) => {
+      logger.info(`[ssr] ssr-refresh ${data.name}`)
+      invalidateCache(data.name, () => {
+        refreshSsrData()
+      })
+    })
+  }, [socket, socketInited, logger, invalidateCache, refreshSsrData])
 
   return {
     data: ssrData,
     setData: updateSsrData,
     refresh: refreshSsrData,
-    invalidate,
+    invalidate: (callback) => invalidateCache(name, callback),
     error,
     ok: error === undefined,
     ready: status === "loaded"

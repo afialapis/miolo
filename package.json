@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "3.0.0-beta.208",
+  "version": "3.0.0-beta.209",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -17,7 +17,7 @@
   "license": "MIT",
   "type": "module",
   "private": true,
-  "packageManager": "npm@11.16.0",
+  "packageManager": "npm@11.17.0",
   "workspaces": [
     "packages/*"
   ],
@@ -46,12 +46,11 @@
     "publish-all": "npm run site && npm run publish-miolo && npm run publish-miolo-cli && npm run publish-miolo-react && npm run publish-miolo-model"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.16",
-    "turbo": "^2.9.16"
+    "@biomejs/biome": "2.5.0",
+    "turbo": "^2.9.18"
   },
   "overrides": {
     "@babel/runtime": "^7.28.6",
-    "ajv": "6.14.0",
     "body-parser": "^2.2.2",
     "cookie": "^1.1.1",
     "depd": "2.0.0",
