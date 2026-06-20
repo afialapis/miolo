@@ -1,4 +1,5 @@
 import { onTickFoo } from "./foo.mjs"
+import { cacheInvalidate } from "./invalidate.mjs"
 
 // check https://github.com/kelektiv/node-cron#readme
 //
@@ -11,6 +12,13 @@ export default function init_cron() {
     name: "miolo-sample-foo",
     cronTime: "*/30 * * * *",
     onTick: onTickFoo,
+    start: true
+  })
+
+  cronList.push({
+    name: "miolo-sample-cache-invalidate",
+    cronTime: "*/1 * * * *",
+    onTick: cacheInvalidate,
     start: true
   })
 

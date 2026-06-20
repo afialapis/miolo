@@ -11,7 +11,7 @@ const makeSerializable = (obj) => {
 }
 
 const useSsrDataOrReload = (context, miolo, name, options) => {
-  const { fetcher } = miolo
+  const { fetcher, socket, logger } = miolo
   const {
     defval = [],
     loader = undefined,
@@ -47,9 +47,9 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
   const [ssrData, setSsrData] = useState(
     parseData(ssrDataFromContext !== undefined ? ssrDataFromContext : defval)
   )
-
   const [status, setStatus] = useState(ssrDataFromContext !== undefined ? "loaded" : "idle")
   const [error, setError] = useState(undefined)
+  const [socketInited, setSocketInited] = useState(false)
 
   const updateSsrData = useCallback(
     (data) => {
@@ -111,6 +111,14 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
     setStatus("loaded")
   }, [status, context, fetcher, loader, url, params, parseData, name, cache])
+
+  const invalidate = useCallback(() => {
+    if (typeof window !== "undefined") {
+      import("idb-keyval").then(({ del }) => {
+        del(`ssr-cache-${name}`).catch(() => {})
+      })
+    }
+  }, [name])
 
   useEffect(() => {
     let mounted = true
@@ -174,13 +182,30 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     }
   }, [ssrDataFromContext, name, cache])
 
-  const invalidate = useCallback(() => {
-    if (typeof window !== "undefined") {
-      import("idb-keyval").then(({ del }) => {
-        del(`ssr-cache-${name}`).catch(() => {})
-      })
+  useEffect(() => {
+    if (socket === undefined) {
+      return
     }
-  }, [name])
+
+    if (socketInited) {
+      return
+    }
+    setSocketInited(true)
+
+    socket.on("connect", () => {
+      logger.verbose("[ssr] Socket connected")
+    })
+
+    socket.on("ssr-invalidate", (data) => {
+      logger.info(`[ssr] ssr-invalidate ${data.name}`)
+
+      if (typeof window !== "undefined") {
+        import("idb-keyval").then(({ del }) => {
+          del(`ssr-cache-${data.name}`).catch(() => {})
+        })
+      }
+    })
+  }, [socket, socketInited, logger])
 
   return {
     data: ssrData,

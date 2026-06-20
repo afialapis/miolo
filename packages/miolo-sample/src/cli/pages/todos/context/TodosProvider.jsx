@@ -17,7 +17,8 @@ const TodosProvider = ({ children }) => {
     data: todoList,
     setData: setTodoList,
     refresh: refreshTodoList,
-    ready
+    ready,
+    invalidate: invalidateTodoList
   } = useSsrData("todos", {
     model: TodoList,
     loader: useCallback(
@@ -33,7 +34,8 @@ const TodosProvider = ({ children }) => {
         return data.sort((a, b) => b.created_at - a.created_at)
       },
       [useCrud, toast]
-    )
+    ),
+    cache: true
   })
 
   const addTodo = useCallback(
