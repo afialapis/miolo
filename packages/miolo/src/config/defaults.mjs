@@ -484,7 +484,7 @@ export default function make_config_defaults() {
          url: '',
          options: {}
         */
-      }
+      },
       /*
       connection: (socket) => {},
       new_namespace: (namespace) => {},
@@ -493,6 +493,10 @@ export default function make_config_defaults() {
         listener: (data) => {}
       }]
       */
+      ssr: {
+        enabled: true,
+        namespace: "ssr"
+      }
     },
 
     build: {

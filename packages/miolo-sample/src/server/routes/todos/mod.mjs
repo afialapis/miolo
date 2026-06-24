@@ -1,3 +1,4 @@
+import { ch_todo_invalidate } from "#server/io/cache/todos.mjs"
 import { db_todo_delete } from "#server/io/db/todos/delete.mjs"
 import { db_todo_toggle } from "#server/io/db/todos/toggle.mjs"
 import { db_todo_upsave } from "#server/io/db/todos/upsave.mjs"
@@ -9,6 +10,8 @@ export async function r_todo_upsave(ctx, params) {
     )
 
     const res = await db_todo_upsave(ctx, params)
+
+    await ch_todo_invalidate(ctx)
 
     ctx.miolo.logger.info(`[r_todo_upsave] Upsaved todo info for tid ${params?.id || "new"}`)
     return { ok: true, data: res }
@@ -26,6 +29,8 @@ export async function r_todo_delete(ctx, params) {
 
     const res = await db_todo_delete(ctx, params)
 
+    await ch_todo_invalidate(ctx)
+
     ctx.miolo.logger.info(`[r_todo_delete] Deleted todo for tid ${params.id}`)
     return { ok: true, data: res }
   } catch (error) {
@@ -39,6 +44,8 @@ export async function r_todo_toggle_done(ctx, params) {
     ctx.miolo.logger.info(`[r_todo_toggle_done] Toggling todo with id ${params?.id}`)
 
     const done = await db_todo_toggle(ctx, params)
+
+    await ch_todo_invalidate(ctx)
 
     ctx.miolo.logger.info(`[r_todo_toggle_done] Toggled todo with tid ${params?.id}`)
 

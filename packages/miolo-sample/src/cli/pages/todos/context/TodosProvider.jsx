@@ -10,15 +10,15 @@ const TodosProvider = ({ children }) => {
   const { logger } = useMioloContext()
   const { useSsrData, fetcher, socket, authenticated } = useSessionContext()
   const { toast } = useUIContext()
-  const [useCrud, setUseCrud] = useState(true)
+  const [useCrud, setUseCrud] = useState(false)
   const [socketInited, setSocketInited] = useState(false)
 
   const {
     data: todoList,
     setData: setTodoList,
     refresh: refreshTodoList,
-    ready,
-    invalidate: invalidateTodoList
+    ready
+    // invalidate: invalidateTodoList
   } = useSsrData("todos", {
     model: TodoList,
     loader: useCallback(

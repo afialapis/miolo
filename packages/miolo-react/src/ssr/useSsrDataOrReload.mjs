@@ -1,14 +1,23 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import getSsrDataFromContext from "./getSsrDataFromContext.mjs"
+import useOnWindowFocus from "./useOnWindowFocus.mjs"
 import usePropsCheck from "./usePropsCheck.mjs"
 
-const makeSerializable = (obj) => {
+const _makeSerializable = (obj) => {
   try {
     return JSON.parse(JSON.stringify(obj))
   } catch (_) {
     return obj
   }
 }
+
+/*
+QUE PASA CON LA DUPLICIDAD DE INVALIDACION
+- el cliente hace un cambio
+- setData() cambia estado y cache local
+- la llamada en servidor provoca un ssr-refresh (necesario para otros clientes)
+- pero se puede evitar el doble refresh en el que hace el cambio?
+*/
 
 const useSsrDataOrReload = (context, miolo, name, options) => {
   const { fetcher, socket, logger } = miolo
@@ -21,6 +30,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     effect = undefined,
     model = undefined,
     cache = false,
+    autoRefresh = true,
     ttl = undefined
   } = options
 
@@ -60,7 +70,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
       if (cache === true) {
         if (typeof window !== "undefined") {
           import("idb-keyval").then(({ set }) => {
-            set(`ssr-cache-${name}`, { data: makeSerializable(data), ts: Date.now() }).catch(
+            set(`ssr-cache-${name}`, { data: _makeSerializable(data), ts: Date.now() }).catch(
               () => {}
             )
           })
@@ -77,6 +87,8 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
     setStatus("loading")
     setError(undefined)
+
+    logger.verbose(`[miolo-react][ssr][${name}] refreshing ssr data`)
 
     let newData
 
@@ -100,7 +112,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
         if (typeof window !== "undefined") {
           try {
             const { set } = await import("idb-keyval")
-            await set(`ssr-cache-${name}`, { data: makeSerializable(newData), ts: Date.now() })
+            await set(`ssr-cache-${name}`, { data: _makeSerializable(newData), ts: Date.now() })
           } catch (err) {
             console.error(err)
           }
@@ -110,7 +122,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     }
 
     setStatus("loaded")
-  }, [status, context, fetcher, loader, url, params, parseData, name, cache])
+  }, [status, context, fetcher, loader, url, params, parseData, name, cache, logger])
 
   const invalidateCache = useCallback((tName, callback = undefined) => {
     if (typeof window !== "undefined") {
@@ -126,6 +138,46 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     }
   }, [])
 
+  const checkCacheVersions = useCallback(
+    (versions) => {
+      logger.verbose(
+        `[miolo-react][ssr][${name}] Backend versions received: ${JSON.stringify(versions)}`
+      )
+
+      const ssrVersions = versions || {}
+      if (ssrVersions[name]) {
+        const backendVersion = ssrVersions[name]
+        logger.verbose(
+          `[miolo-react][ssr][${name}] Backend version for ${name} is ${backendVersion}`
+        )
+
+        if (typeof window !== "undefined") {
+          import("idb-keyval")
+            .then(({ get }) => {
+              get(`ssr-cache-${name}`)
+                .then((cached) => {
+                  if (cached && cached.ts < backendVersion) {
+                    logger.info(
+                      `[miolo-react][ssr][${name}] ssr-versions mismatch for ${name}, invalidating`
+                    )
+                    invalidateCache(name, () => {
+                      if (autoRefresh === true) {
+                        refreshSsrData()
+                      }
+                    })
+                  } else {
+                    logger.verbose(`[miolo-react][ssr][${name}] ssr-versions match for ${name}`)
+                  }
+                })
+                .catch(() => {})
+            })
+            .catch(() => {})
+        }
+      }
+    },
+    [name, logger, invalidateCache, refreshSsrData, autoRefresh]
+  )
+
   useEffect(() => {
     let mounted = true
 
@@ -134,6 +186,8 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
       try {
         if (status === "idle") {
+          logger.verbose(`[miolo-react][ssr][${name}] loadData for ${name}...`)
+
           const changed =
             effect === undefined ||
             (typeof effect === "function" && effect() === true) ||
@@ -173,14 +227,14 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     return () => {
       mounted = false
     }
-  }, [status, refreshSsrData, effect, name, ttl, parseData, cache])
+  }, [status, refreshSsrData, effect, name, ttl, parseData, cache, logger])
 
   useEffect(() => {
     if (cache === true) {
       if (ssrDataFromContext !== undefined && typeof window !== "undefined") {
         import("idb-keyval").then(({ set }) => {
           set(`ssr-cache-${name}`, {
-            data: makeSerializable(ssrDataFromContext),
+            data: _makeSerializable(ssrDataFromContext),
             ts: Date.now()
           }).catch(() => {})
         })
@@ -199,21 +253,65 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     setSocketInited(true)
 
     socket.on("connect", () => {
-      logger.verbose("[ssr] Socket connected")
-    })
+      logger.verbose(`[miolo-react][ssr][${name}] Socket connected`)
+      if (cache === true) {
+        logger.verbose(`[miolo-react][ssr][${name}] Asking for ssr-versions`)
+        socket.emit("ssr-versions")
 
-    socket.on("ssr-invalidate", (data) => {
-      logger.info(`[ssr] ssr-invalidate ${data.name}`)
-      invalidateCache(data.name)
-    })
+        logger.verbose(`[miolo-react][ssr][${name}] Attaching ssr/cache socket handlers`)
 
-    socket.on("ssr-refresh", (data) => {
-      logger.info(`[ssr] ssr-refresh ${data.name}`)
-      invalidateCache(data.name, () => {
-        refreshSsrData()
-      })
+        socket.on("ssr-versions", checkCacheVersions)
+
+        socket.on("ssr-invalidate", (data) => {
+          logger.verbose(`[miolo-react][ssr][${name}] ssr-invalidate ${JSON.stringify(data)}`)
+          if (data.exclude_socket_id && data.exclude_socket_id === socket.id) {
+            logger.verbose(
+              `[miolo-react][ssr][${name}] ssr-invalidate ${data.name} ignored for socketid ${socket.id}`
+            )
+            return
+          }
+          logger.info(`[miolo-react][ssr][${name}] ssr-invalidate ${data.name}`)
+          invalidateCache(data.name)
+        })
+
+        socket.on("ssr-refresh", (data) => {
+          logger.verbose(
+            `[miolo-react][ssr][${name}] ssr-refresh ${JSON.stringify(data)} - my socket id: ${socket.id}`
+          )
+          if (data.exclude_socket_id && data.exclude_socket_id === socket.id) {
+            logger.verbose(
+              `[miolo-react][ssr][${name}] ssr-refresh ${data.name} ignored for socketid ${socket.id}`
+            )
+            return
+          }
+          logger.info(`[miolo-react][ssr][${name}] ssr-refresh ${data.name}`)
+          invalidateCache(data.name, () => {
+            refreshSsrData()
+          })
+        })
+      }
     })
-  }, [socket, socketInited, logger, invalidateCache, refreshSsrData])
+  }, [
+    name,
+    cache,
+    socket,
+    socketInited,
+    checkCacheVersions,
+    logger,
+    invalidateCache,
+    refreshSsrData
+  ])
+
+  useOnWindowFocus(() => {
+    if (cache !== true) {
+      return
+    }
+    if (socket === undefined) {
+      return
+    }
+    logger.verbose(`[miolo-react][ssr][${name}] Window focused, checking versions`)
+    socket.emit("ssr-versions")
+  }, [name, cache, logger, socket])
 
   return {
     data: ssrData,

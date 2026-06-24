@@ -1,5 +1,5 @@
+import { autoTodosInsert } from "./auto-todos.mjs"
 import { onTickFoo } from "./foo.mjs"
-import { cacheInvalidate } from "./invalidate.mjs"
 
 // check https://github.com/kelektiv/node-cron#readme
 //
@@ -16,9 +16,9 @@ export default function init_cron() {
   })
 
   cronList.push({
-    name: "miolo-sample-cache-invalidate",
+    name: "miolo-sample-auto-todos",
     cronTime: "*/1 * * * *",
-    onTick: cacheInvalidate,
+    onTick: autoTodosInsert,
     start: true
   })
 

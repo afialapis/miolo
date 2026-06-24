@@ -1,9 +1,10 @@
 import { intre_now, intre_to_str } from "intre"
 import { blue } from "tinguir"
+import { ch_todo_invalidate } from "#server/io/cache/todos.mjs"
 import { db_todo_upsave } from "#server/io/db/todos/upsave.mjs"
 
-export const cacheInvalidate = async (miolo) => {
-  miolo.logger.info(`${blue("[cron][cache_invalidate]")} Invalidating cache...`)
+export const autoTodosInsert = async (miolo) => {
+  miolo.logger.info(`${blue("[cron][auto-todos]")} Inserting auto todo...`)
 
   // broadcast an event to all clients
   //miolo.io.emit("ssr-invalidate", { name: "todos" })
@@ -15,7 +16,9 @@ export const cacheInvalidate = async (miolo) => {
     done: false
   })
 
-  miolo.io.emit("ssr-refresh", { name: "todos" })
+  await ch_todo_invalidate({ miolo })
+  //
+  // miolo.io.emit("ssr-refresh", { name: "todos" })
 
-  miolo.logger.info(`${blue("[cron][cache_invalidate]")} Cache invalidated!`)
+  miolo.logger.info(`${blue("[cron][auto-todos]")} Done!`)
 }

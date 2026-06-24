@@ -7,20 +7,23 @@ export function miolo_client(context) {
   const { config } = context
   const logger = init_logger(config?.log_level || "warn")
 
-  logger.verbose(`[miolo-cli] init_fetcher`)
-  const fetcher = init_fetcher(config)
-
-  if (config?.catcher_url) {
-    logger.verbose(`[miolo-cli] init_catcher at ${config?.catcher_url}`)
-    init_catcher(config?.catcher_url, fetcher)
-  }
-
   let socket
   if (config?.socket?.enabled === true) {
     logger.verbose(`[miolo-cli] init_socket at ${config?.socket?.url || "default url"}`)
     const url = config?.socket?.url
     const options = config?.socket?.options
     socket = init_socket(url, options)
+    logger.verbose(
+      `[miolo-cli] socket initiated at ${socket?.url || "default url"} with id ${socket?.id}`
+    )
+  }
+
+  logger.verbose(`[miolo-cli] init_fetcher`)
+  const fetcher = init_fetcher(config, socket)
+
+  if (config?.catcher_url) {
+    logger.verbose(`[miolo-cli] init_catcher at ${config?.catcher_url}`)
+    init_catcher(config?.catcher_url, fetcher)
   }
 
   const miolo_obj = {

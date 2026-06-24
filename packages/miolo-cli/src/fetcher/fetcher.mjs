@@ -4,9 +4,10 @@ class Fetcher {
   /**
    * @param {*} config {hostname, port, force_hostname, silent_fail: false}
    */
-  constructor(config) {
+  constructor(config, socket = undefined) {
     this.config = config
     this.http_auth = undefined
+    this.socket = socket
   }
 
   set_http_auth(auth) {
@@ -18,6 +19,10 @@ class Fetcher {
 
   get_headers() {
     const headers = {}
+
+    if (this.socket?.id) {
+      headers["x-socket-id"] = this.socket.id
+    }
 
     if (this.http_auth) {
       let { username, password } = this.http_auth

@@ -48,7 +48,23 @@ function init_socket(app, config) {
   }
 
   io.on("connection", (socket) => {
-    logger.info(`[socket] Connection from ... `) // ${i.ip} ${i.id}`)
+    logger.info(`[socket] Connection from ... `)
+
+    if (config?.ssr?.enabled === true) {
+      socket.on("ssr-versions", async () => {
+        logger.verbose(`[socket] ssr-versions requested for ${socket.id}`)
+        try {
+          const versions = await app.context.miolo.cache.get_cache_versions()
+          const ssr_versions = versions[config?.ssr?.namespace || "ssr"] || {}
+          socket.emit("ssr-versions", ssr_versions)
+          logger.verbose(
+            `[socket] ssr-versions sent for ${socket.id}: ${JSON.stringify(ssr_versions)}`
+          )
+        } catch (err) {
+          logger.error(`[socket] Error getting cache versions: ${err.message}`)
+        }
+      })
+    }
 
     if (config?.connection) {
       config.connection(socket)
@@ -58,6 +74,42 @@ function init_socket(app, config) {
       socket.on(ns.name, ns.listener)
     }
   })
+
+  if (config?.ssr?.enabled === true) {
+    io.emitSsrVersions = async (ctx) => {
+      logger.verbose(`[socket] Emitting ssr-versions`)
+      try {
+        const versions = await ctx.miolo.cache.get_cache_versions()
+        const ssr_versions = versions[config?.ssr?.namespace || "ssr"] || {}
+        io.emit("ssr-versions", ssr_versions)
+        logger.verbose(`[socket] ssr-versions sent: ${JSON.stringify(ssr_versions)}`)
+      } catch (err) {
+        logger.error(`[socket] Error emitting cache versions: ${err.message}`)
+      }
+    }
+
+    io.emitSsrInvalidate = async (ctx, name) => {
+      logger.verbose(`[socket] Emitting ssr-invalidate for ${name}`)
+      try {
+        const socketId = ctx.request?.headers?.["x-socket-id"]
+        io.emit("ssr-invalidate", { name, exclude_socket_id: socketId })
+        logger.verbose(`[socket] ssr-invalidate sent for ${name}`)
+      } catch (err) {
+        logger.error(`[socket] Error emitting ssr-invalidate: ${err.message}`)
+      }
+    }
+
+    io.emitSsrRefresh = async (ctx, name) => {
+      logger.verbose(`[socket] Emitting ssr-refresh for ${name}`)
+      try {
+        const socketId = ctx.request?.headers?.["x-socket-id"]
+        io.emit("ssr-refresh", { name, exclude_socket_id: socketId })
+        logger.verbose(`[socket] ssr-refresh sent for ${name}`)
+      } catch (err) {
+        logger.error(`[socket] Error emitting ssr-refresh: ${err.message}`)
+      }
+    }
+  }
 
   app.context.miolo.io = io
 }

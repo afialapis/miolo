@@ -7,10 +7,10 @@ const MioloContextProvider = ({ context, children }) => {
   const [innerContext, setInnerContext] = useState(context)
   const [mioloObj, setMioloObj] = useState(miolo_client(context))
 
-  useEffect(() => {
+  /*useEffect(() => {
     setInnerContext(context)
     setMioloObj(miolo_client(context))
-  }, [context])
+  }, [context])*/
 
   const localLogin = useCallback(
     async (params) => {

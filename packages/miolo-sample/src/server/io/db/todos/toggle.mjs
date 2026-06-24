@@ -7,7 +7,7 @@ import { db_todo_upsave } from "./upsave.mjs"
 async function _db_todo_toggle(ctx, params) {
   ctx.miolo.logger.verbose(`[db_todo_toggle] Toggling todo with tid ${params?.id}`)
 
-  const todo = await db_todo_find(ctx, params)
+  const todo = await db_todo_find(ctx, { filter: { id: params?.id } })
 
   if (todo == null) {
     throw new Error(`[db_todo_toggle] Trying to toggle a todo that does not exist`)

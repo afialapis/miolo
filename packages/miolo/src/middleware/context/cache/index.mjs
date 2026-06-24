@@ -94,12 +94,90 @@ export function init_context_cache(config, logger) {
     _glob_cache_mother = undefined
   }
 
+  const set_cache_version = async (name, key, version = Date.now()) => {
+    const cache_mother = await _get_cache_mother(config, logger)
+    await cache_mother.setItem(`versions:${name}:${key}`, version)
+  }
+
+  const get_cache_versions = async () => {
+    const cache_mother = await _get_cache_mother(config, logger)
+    const keys = await cache_mother.getKeys("versions:*")
+    const versions = {}
+    for (const key of keys) {
+      const parts = key.split(":")
+      if (parts.length === 3) {
+        const name = parts[1]
+        const item = parts[2]
+        const version = await cache_mother.getItem(key)
+        if (!versions[name]) {
+          versions[name] = {}
+        }
+        versions[name][item] = version
+      }
+    }
+    return versions
+  }
+
+  const _item_get_or_set = async (name, key, callback, parse_read, parse_write) => {
+    const cache = await get_cache(name)
+
+    if (!cache) {
+      logger.warn(`[cache] Cache ${name} is not ready!`)
+    }
+
+    if (cache) {
+      if (await cache.hasItem(key)) {
+        return parse_read(await cache.getItem(key))
+      }
+    }
+
+    const data = await callback()
+
+    if (cache) {
+      await cache.setItem(key, parse_write(data))
+
+      await set_cache_version(name, key)
+    }
+
+    return data
+  }
+
+  const item_get_or_set = async (name, key, callback) => {
+    return await _item_get_or_set(
+      name,
+      key,
+      callback,
+      (data) => data,
+      (data) => data
+    )
+  }
+
+  const item_get_or_set_json = async (name, key, callback) => {
+    return await _item_get_or_set(name, key, callback, JSON.parse, JSON.stringify)
+  }
+
+  const item_unset = async (name, key) => {
+    const cache = await get_cache(name)
+
+    if (!cache) {
+      logger.warn(`[cache] Cache ${name} is not ready!`)
+    }
+
+    await cache.unsetItem(key)
+    await set_cache_version(name, key)
+  }
+
   const cache_ctx = {
     init,
     get_cache,
     get_cache_names,
+    set_cache_version,
+    get_cache_versions,
     drop_cache,
-    close
+    close,
+    item_get_or_set,
+    item_get_or_set_json,
+    item_unset
   }
 
   return cache_ctx

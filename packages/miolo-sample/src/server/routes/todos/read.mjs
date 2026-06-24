@@ -1,11 +1,10 @@
-import { db_todo_find } from "#server/io/db/todos/find.mjs"
-import { db_todo_read } from "#server/io/db/todos/read.mjs"
+import { ch_todo_find, ch_todo_read } from "#server/io/cache/todos.mjs"
 
 export async function r_todo_list(ctx, _params) {
   try {
     ctx.miolo.logger.info(`[r_todo_list] Reading todo list`)
 
-    const res = await db_todo_read(ctx, { filter: {}, options: {} })
+    const res = await ch_todo_read(ctx, { filter: {}, options: {} })
 
     ctx.miolo.logger.info(`[r_todo_list] Read todo list (${res.length})`)
     return { ok: true, data: res }
@@ -20,7 +19,7 @@ export async function r_todo_last(ctx, params) {
   try {
     ctx.miolo.logger.info(`[r_todo_last] Reading last todos`)
 
-    const res = await db_todo_read(ctx, { options: { limit: 3 } })
+    const res = await ch_todo_read(ctx, { options: { limit: 3 } })
 
     ctx.miolo.logger.info(`[r_todo_last] Read last todos (${res.length})`)
     return { ok: true, data: res }
@@ -34,7 +33,7 @@ export async function r_todo_find(ctx, params) {
   try {
     ctx.miolo.logger.info(`[r_todo_find] Reading todo for tid ${params?.id}`)
 
-    const todo = await db_todo_find(ctx, { filter: { id: params?.id } })
+    const todo = await ch_todo_find(ctx, { filter: { id: params?.id } })
 
     ctx.miolo.logger.info(`[r_todo_find] Read todo for tid ${params?.id}`)
     return { ok: todo?.id !== undefined, data: todo }

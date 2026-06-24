@@ -12,7 +12,7 @@ async function _db_todo_delete(ctx, params) {
 
   const Todo = await conn.get_model("todo")
 
-  const todo = await db_todo_find(ctx, params.id)
+  const todo = await db_todo_find(ctx, { filter: { id: params?.id } })
 
   if (todo == null) {
     throw new Error(`[db_todo_delete] Trying to delete a todo that does not exist`)
