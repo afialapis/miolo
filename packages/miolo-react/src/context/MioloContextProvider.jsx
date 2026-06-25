@@ -1,11 +1,11 @@
 import { miolo_client } from "miolo-cli"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, /*useEffect,*/ useState } from "react"
 import { useSsrDataOrReload } from "../ssr/useSsrDataOrReload.mjs"
 import Context from "./MioloContext.mjs"
 
 const MioloContextProvider = ({ context, children }) => {
   const [innerContext, setInnerContext] = useState(context)
-  const [mioloObj, setMioloObj] = useState(miolo_client(context))
+  const [mioloObj, _setMioloObj] = useState(miolo_client(context))
 
   /*useEffect(() => {
     setInnerContext(context)

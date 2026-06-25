@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import getSsrDataFromContext from "./getSsrDataFromContext.mjs"
 import useOnWindowFocus from "./useOnWindowFocus.mjs"
 import usePropsCheck from "./usePropsCheck.mjs"
@@ -9,6 +9,13 @@ const _makeSerializable = (obj) => {
   } catch (_) {
     return obj
   }
+}
+
+const globalSocketState = {
+  rooms: new Map(),
+  unsubscribeTimers: new Map(),
+  lastSubscribeEmitted: new Map(),
+  versionsRequestedAt: 0
 }
 
 const useSsrDataOrReload = (context, miolo, name, options) => {
@@ -193,7 +200,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
             if (cached) {
               logger.verbose(`[miolo-react][ssr][${name}] read data for ${name} from cache`)
-              setSsrData(parseData(cached.data))
+              setSsrData(parseData(cached))
 
               if (expired) {
                 logger.verbose(`[miolo-react][ssr][${name}] expired cache for ${name}, refreshing`)
@@ -223,16 +230,45 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     }
   }, [ssrDataFromContext, cacheSet])
 
+  const handlersRef = useRef({})
+
+  useEffect(() => {
+    handlersRef.current = {
+      checkCacheVersions,
+      cacheInvalidate,
+      refreshSsrData
+    }
+  })
+
   useEffect(() => {
     if (!socket || cache !== true) {
       return
     }
 
-    const onConnect = () => {
-      logger.verbose(`[miolo-react][ssr][${name}] Socket connected, subscribing`)
-      socket.emit("ssr-subscribe", name)
-      logger.verbose(`[miolo-react][ssr][${name}] Asking for ssr-versions`)
-      socket.emit("ssr-versions")
+    const currentCount = globalSocketState.rooms.get(name) || 0
+    globalSocketState.rooms.set(name, currentCount + 1)
+
+    const pendingTimer = globalSocketState.unsubscribeTimers.get(name)
+    if (pendingTimer) {
+      clearTimeout(pendingTimer)
+      globalSocketState.unsubscribeTimers.delete(name)
+    }
+
+    const requestSubscribeAndVersions = () => {
+      const now = Date.now()
+      const lastSub = globalSocketState.lastSubscribeEmitted.get(name) || 0
+
+      if (now - lastSub > 100) {
+        globalSocketState.lastSubscribeEmitted.set(name, now)
+        logger.verbose(`[miolo-react][ssr][${name}] Socket connected, subscribing`)
+        socket.emit("ssr-subscribe", name)
+      }
+
+      if (now - globalSocketState.versionsRequestedAt > 500) {
+        globalSocketState.versionsRequestedAt = now
+        logger.verbose(`[miolo-react][ssr][${name}] Asking for ssr-versions`)
+        socket.emit("ssr-versions")
+      }
     }
 
     const onInvalidate = async (data) => {
@@ -246,7 +282,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
         return
       }
       logger.info(`[miolo-react][ssr][${name}] ssr-invalidate ${data.name}`)
-      await cacheInvalidate()
+      await handlersRef.current.cacheInvalidate()
     }
 
     const onRefresh = async (data) => {
@@ -262,30 +298,51 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
         return
       }
       logger.info(`[miolo-react][ssr][${name}] ssr-refresh ${data.name}`)
-      await cacheInvalidate()
-      refreshSsrData()
+      await handlersRef.current.cacheInvalidate()
+      handlersRef.current.refreshSsrData()
+    }
+
+    const onVersions = (versions) => {
+      if (handlersRef.current.checkCacheVersions) {
+        handlersRef.current.checkCacheVersions(versions)
+      }
     }
 
     logger.verbose(`[miolo-react][ssr][${name}] Attaching ssr/cache socket handlers`)
 
     if (socket.connected) {
-      onConnect()
+      requestSubscribeAndVersions()
     }
 
-    socket.on("connect", onConnect)
-    socket.on("ssr-versions", checkCacheVersions)
+    socket.on("connect", requestSubscribeAndVersions)
+    socket.on("ssr-versions", onVersions)
     socket.on("ssr-invalidate", onInvalidate)
     socket.on("ssr-refresh", onRefresh)
 
     return () => {
       logger.verbose(`[miolo-react][ssr][${name}] Detaching ssr/cache socket handlers`)
-      socket.emit("ssr-unsubscribe", name)
-      socket.off("connect", onConnect)
-      socket.off("ssr-versions", checkCacheVersions)
+
+      const count = globalSocketState.rooms.get(name) || 0
+      if (count > 0) {
+        globalSocketState.rooms.set(name, count - 1)
+        if (count - 1 === 0) {
+          const timer = setTimeout(() => {
+            if ((globalSocketState.rooms.get(name) || 0) === 0) {
+              socket.emit("ssr-unsubscribe", name)
+              globalSocketState.lastSubscribeEmitted.set(name, 0)
+            }
+            globalSocketState.unsubscribeTimers.delete(name)
+          }, 100)
+          globalSocketState.unsubscribeTimers.set(name, timer)
+        }
+      }
+
+      socket.off("connect", requestSubscribeAndVersions)
+      socket.off("ssr-versions", onVersions)
       socket.off("ssr-invalidate", onInvalidate)
       socket.off("ssr-refresh", onRefresh)
     }
-  }, [name, cache, socket, checkCacheVersions, logger, cacheInvalidate, refreshSsrData])
+  }, [name, cache, socket, logger])
 
   useOnWindowFocus(() => {
     if (cache !== true) {
@@ -297,7 +354,11 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     logger.verbose(
       `[miolo-react][ssr][${name}] Window focused, checking versions (socket id is ${socket.id})`
     )
-    socket.emit("ssr-versions")
+    const now = Date.now()
+    if (now - globalSocketState.versionsRequestedAt > 500) {
+      globalSocketState.versionsRequestedAt = now
+      socket.emit("ssr-versions")
+    }
   }, [name, cache, logger, socket])
 
   return {
