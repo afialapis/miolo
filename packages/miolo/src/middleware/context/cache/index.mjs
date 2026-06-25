@@ -105,9 +105,9 @@ export function init_context_cache(config, logger) {
     const versions = {}
     for (const key of keys) {
       const parts = key.split(":")
-      if (parts.length === 3) {
-        const name = parts[1]
-        const item = parts[2]
+      if (parts.length >= 3) {
+        const name = parts.slice(1, -1).join(":")
+        const item = parts[parts.length - 1]
         const version = await cache_mother.getItem(key)
         if (!versions[name]) {
           versions[name] = {}

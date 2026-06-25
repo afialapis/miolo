@@ -11,14 +11,6 @@ const _makeSerializable = (obj) => {
   }
 }
 
-/*
-QUE PASA CON LA DUPLICIDAD DE INVALIDACION
-- el cliente hace un cambio
-- setData() cambia estado y cache local
-- la llamada en servidor provoca un ssr-refresh (necesario para otros clientes)
-- pero se puede evitar el doble refresh en el que hace el cambio?
-*/
-
 const useSsrDataOrReload = (context, miolo, name, options) => {
   const { fetcher, socket, logger } = miolo
   const {
@@ -186,7 +178,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
       try {
         if (status === "idle") {
-          logger.verbose(`[miolo-react][ssr][${name}] loadData for ${name}...`)
+          logger.verbose(`[miolo-react][ssr][${name}] getting data for ${name}...`)
 
           const changed =
             effect === undefined ||
@@ -207,14 +199,17 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
             }
 
             if (cached && cached.data !== undefined) {
+              logger.verbose(`[miolo-react][ssr][${name}] read data for ${name} from cache`)
               setSsrData(parseData(cached.data))
 
               if (ttl !== undefined && Date.now() - cached.ts > ttl * 1000) {
+                logger.verbose(`[miolo-react][ssr][${name}] expired cache for ${name}, refreshing`)
                 refreshSsrData()
               } else {
                 setStatus("loaded")
               }
             } else {
+              logger.verbose(`[miolo-react][ssr][${name}] no cached data for ${name}, refreshing`)
               refreshSsrData()
             }
           }
@@ -232,7 +227,10 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
   useEffect(() => {
     if (cache === true) {
       if (ssrDataFromContext !== undefined && typeof window !== "undefined") {
+        logger.verbose(`[miolo-react][ssr][${name}] read data for ${name} from context`)
+
         import("idb-keyval").then(({ set }) => {
+          logger.verbose(`[miolo-react][ssr][${name}] writing data for ${name} to cache`)
           set(`ssr-cache-${name}`, {
             data: _makeSerializable(ssrDataFromContext),
             ts: Date.now()
@@ -240,7 +238,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
         })
       }
     }
-  }, [ssrDataFromContext, name, cache])
+  }, [logger, ssrDataFromContext, name, cache])
 
   useEffect(() => {
     if (socket === undefined) {
@@ -309,7 +307,9 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     if (socket === undefined) {
       return
     }
-    logger.verbose(`[miolo-react][ssr][${name}] Window focused, checking versions`)
+    logger.verbose(
+      `[miolo-react][ssr][${name}] Window focused, checking versions (socket id is ${socket.id})`
+    )
     socket.emit("ssr-versions")
   }, [name, cache, logger, socket])
 
