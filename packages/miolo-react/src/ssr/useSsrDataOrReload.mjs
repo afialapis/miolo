@@ -51,25 +51,57 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
   )
   const [status, setStatus] = useState(ssrDataFromContext !== undefined ? "loaded" : "idle")
   const [error, setError] = useState(undefined)
-  const [socketInited, setSocketInited] = useState(false)
+
+  const cacheInvalidate = useCallback(async () => {
+    if (typeof window !== "undefined") {
+      const { del } = await import("idb-keyval")
+      await del(`ssr-cache-${name}`)
+    }
+  }, [name])
+
+  const cacheSet = useCallback(
+    async (data) => {
+      if (cache === true) {
+        if (typeof window !== "undefined") {
+          try {
+            const { set } = await import("idb-keyval")
+            await set(`ssr-cache-${name}`, { data: _makeSerializable(data), ts: Date.now() })
+          } catch (err) {
+            logger.error(`[miolo-react][ssr][${name}] error setting cache for ${name}: ${err}`)
+          }
+        }
+      }
+    },
+    [logger, cache, name]
+  )
+
+  const cacheGet = useCallback(async () => {
+    if (cache === true) {
+      if (typeof window !== "undefined") {
+        try {
+          const { get } = await import("idb-keyval")
+          const cached = await get(`ssr-cache-${name}`)
+          if (cached && cached.data !== undefined) {
+            const expired = ttl !== undefined && Date.now() - cached.ts > ttl * 1000
+            return [cached.data, expired, cached.ts]
+          }
+        } catch (err) {
+          logger.error(`[miolo-react][ssr][${name}] error getting cache for ${name}: ${err}`)
+        }
+      }
+    }
+    return [null, false]
+  }, [logger, cache, name, ttl])
 
   const updateSsrData = useCallback(
     (data) => {
       setStatus("loading")
       setSsrData(parseData(data))
-      setStatus("loaded")
       setError(undefined)
-      if (cache === true) {
-        if (typeof window !== "undefined") {
-          import("idb-keyval").then(({ set }) => {
-            set(`ssr-cache-${name}`, { data: _makeSerializable(data), ts: Date.now() }).catch(
-              () => {}
-            )
-          })
-        }
-      }
+      setStatus("loaded")
+      /*await*/ cacheSet(data)
     },
-    [parseData, name, cache]
+    [parseData, cacheSet]
   )
 
   const refreshSsrData = useCallback(async () => {
@@ -100,38 +132,15 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     }
 
     if (newData !== undefined) {
-      if (cache === true) {
-        if (typeof window !== "undefined") {
-          try {
-            const { set } = await import("idb-keyval")
-            await set(`ssr-cache-${name}`, { data: _makeSerializable(newData), ts: Date.now() })
-          } catch (err) {
-            console.error(err)
-          }
-        }
-      }
       setSsrData(parseData(newData))
+      /*await*/ cacheSet(newData)
     }
 
     setStatus("loaded")
-  }, [status, context, fetcher, loader, url, params, parseData, name, cache, logger])
-
-  const invalidateCache = useCallback((tName, callback = undefined) => {
-    if (typeof window !== "undefined") {
-      import("idb-keyval").then(({ del }) => {
-        del(`ssr-cache-${tName}`)
-          .catch(() => {})
-          .then(() => {
-            if (callback) {
-              callback()
-            }
-          })
-      })
-    }
-  }, [])
+  }, [status, context, fetcher, loader, url, params, parseData, name, cacheSet, logger])
 
   const checkCacheVersions = useCallback(
-    (versions) => {
+    async (versions) => {
       logger.verbose(
         `[miolo-react][ssr][${name}] Backend versions received: ${JSON.stringify(versions)}`
       )
@@ -143,31 +152,25 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
           `[miolo-react][ssr][${name}] Backend version for ${name} is ${backendVersion}`
         )
 
-        if (typeof window !== "undefined") {
-          import("idb-keyval")
-            .then(({ get }) => {
-              get(`ssr-cache-${name}`)
-                .then((cached) => {
-                  if (cached && cached.ts < backendVersion) {
-                    logger.info(
-                      `[miolo-react][ssr][${name}] ssr-versions mismatch for ${name}, invalidating`
-                    )
-                    invalidateCache(name, () => {
-                      if (autoRefresh === true) {
-                        refreshSsrData()
-                      }
-                    })
-                  } else {
-                    logger.verbose(`[miolo-react][ssr][${name}] ssr-versions match for ${name}`)
-                  }
-                })
-                .catch(() => {})
-            })
-            .catch(() => {})
+        const [cached, expired, ts] = await cacheGet()
+        if (cached) {
+          if (expired || ts < backendVersion) {
+            logger.info(
+              `[miolo-react][ssr][${name}] ssr-versions mismatch for ${name}, invalidating`
+            )
+            await cacheInvalidate()
+            if (autoRefresh === true) {
+              refreshSsrData()
+            }
+          } else {
+            logger.verbose(`[miolo-react][ssr][${name}] ssr-versions match for ${name}`)
+          }
+        } else {
+          logger.warn(`[miolo-react][ssr][${name}] No cached data found for ${name}`)
         }
       }
     },
-    [name, logger, invalidateCache, refreshSsrData, autoRefresh]
+    [name, logger, cacheGet, cacheInvalidate, refreshSsrData, autoRefresh]
   )
 
   useEffect(() => {
@@ -186,23 +189,13 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
             effect === true
 
           if (changed === true) {
-            let cached = null
-            if (cache === true) {
-              if (typeof window !== "undefined") {
-                try {
-                  const { get } = await import("idb-keyval")
-                  cached = await get(`ssr-cache-${name}`)
-                } catch (err) {
-                  console.error(err)
-                }
-              }
-            }
+            const [cached, expired, _ts] = await cacheGet()
 
-            if (cached && cached.data !== undefined) {
+            if (cached) {
               logger.verbose(`[miolo-react][ssr][${name}] read data for ${name} from cache`)
               setSsrData(parseData(cached.data))
 
-              if (ttl !== undefined && Date.now() - cached.ts > ttl * 1000) {
+              if (expired) {
                 logger.verbose(`[miolo-react][ssr][${name}] expired cache for ${name}, refreshing`)
                 refreshSsrData()
               } else {
@@ -222,83 +215,77 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     return () => {
       mounted = false
     }
-  }, [status, refreshSsrData, effect, name, ttl, parseData, cache, logger])
+  }, [status, refreshSsrData, effect, name, parseData, cacheGet, logger])
 
   useEffect(() => {
-    if (cache === true) {
-      if (ssrDataFromContext !== undefined && typeof window !== "undefined") {
-        logger.verbose(`[miolo-react][ssr][${name}] read data for ${name} from context`)
-
-        import("idb-keyval").then(({ set }) => {
-          logger.verbose(`[miolo-react][ssr][${name}] writing data for ${name} to cache`)
-          set(`ssr-cache-${name}`, {
-            data: _makeSerializable(ssrDataFromContext),
-            ts: Date.now()
-          }).catch(() => {})
-        })
-      }
+    if (ssrDataFromContext !== undefined) {
+      /*await*/ cacheSet(ssrDataFromContext)
     }
-  }, [logger, ssrDataFromContext, name, cache])
+  }, [ssrDataFromContext, cacheSet])
 
   useEffect(() => {
-    if (socket === undefined) {
+    if (!socket || cache !== true) {
       return
     }
 
-    if (socketInited) {
-      return
+    const onConnect = () => {
+      logger.verbose(`[miolo-react][ssr][${name}] Socket connected, subscribing`)
+      socket.emit("ssr-subscribe", name)
+      logger.verbose(`[miolo-react][ssr][${name}] Asking for ssr-versions`)
+      socket.emit("ssr-versions")
     }
-    setSocketInited(true)
 
-    socket.on("connect", () => {
-      logger.verbose(`[miolo-react][ssr][${name}] Socket connected`)
-      if (cache === true) {
-        logger.verbose(`[miolo-react][ssr][${name}] Asking for ssr-versions`)
-        socket.emit("ssr-versions")
+    const onInvalidate = async (data) => {
+      if (data.name !== name) return
 
-        logger.verbose(`[miolo-react][ssr][${name}] Attaching ssr/cache socket handlers`)
-
-        socket.on("ssr-versions", checkCacheVersions)
-
-        socket.on("ssr-invalidate", (data) => {
-          logger.verbose(`[miolo-react][ssr][${name}] ssr-invalidate ${JSON.stringify(data)}`)
-          if (data.exclude_socket_id && data.exclude_socket_id === socket.id) {
-            logger.verbose(
-              `[miolo-react][ssr][${name}] ssr-invalidate ${data.name} ignored for socketid ${socket.id}`
-            )
-            return
-          }
-          logger.info(`[miolo-react][ssr][${name}] ssr-invalidate ${data.name}`)
-          invalidateCache(data.name)
-        })
-
-        socket.on("ssr-refresh", (data) => {
-          logger.verbose(
-            `[miolo-react][ssr][${name}] ssr-refresh ${JSON.stringify(data)} - my socket id: ${socket.id}`
-          )
-          if (data.exclude_socket_id && data.exclude_socket_id === socket.id) {
-            logger.verbose(
-              `[miolo-react][ssr][${name}] ssr-refresh ${data.name} ignored for socketid ${socket.id}`
-            )
-            return
-          }
-          logger.info(`[miolo-react][ssr][${name}] ssr-refresh ${data.name}`)
-          invalidateCache(data.name, () => {
-            refreshSsrData()
-          })
-        })
+      logger.verbose(`[miolo-react][ssr][${name}] ssr-invalidate ${JSON.stringify(data)}`)
+      if (data.exclude_socket_id && data.exclude_socket_id === socket.id) {
+        logger.verbose(
+          `[miolo-react][ssr][${name}] ssr-invalidate ${data.name} ignored for socketid ${socket.id}`
+        )
+        return
       }
-    })
-  }, [
-    name,
-    cache,
-    socket,
-    socketInited,
-    checkCacheVersions,
-    logger,
-    invalidateCache,
-    refreshSsrData
-  ])
+      logger.info(`[miolo-react][ssr][${name}] ssr-invalidate ${data.name}`)
+      await cacheInvalidate()
+    }
+
+    const onRefresh = async (data) => {
+      if (data.name !== name) return
+
+      logger.verbose(
+        `[miolo-react][ssr][${name}] ssr-refresh ${JSON.stringify(data)} - my socket id: ${socket.id}`
+      )
+      if (data.exclude_socket_id && data.exclude_socket_id === socket.id) {
+        logger.verbose(
+          `[miolo-react][ssr][${name}] ssr-refresh ${data.name} ignored for socketid ${socket.id}`
+        )
+        return
+      }
+      logger.info(`[miolo-react][ssr][${name}] ssr-refresh ${data.name}`)
+      await cacheInvalidate()
+      refreshSsrData()
+    }
+
+    logger.verbose(`[miolo-react][ssr][${name}] Attaching ssr/cache socket handlers`)
+
+    if (socket.connected) {
+      onConnect()
+    }
+
+    socket.on("connect", onConnect)
+    socket.on("ssr-versions", checkCacheVersions)
+    socket.on("ssr-invalidate", onInvalidate)
+    socket.on("ssr-refresh", onRefresh)
+
+    return () => {
+      logger.verbose(`[miolo-react][ssr][${name}] Detaching ssr/cache socket handlers`)
+      socket.emit("ssr-unsubscribe", name)
+      socket.off("connect", onConnect)
+      socket.off("ssr-versions", checkCacheVersions)
+      socket.off("ssr-invalidate", onInvalidate)
+      socket.off("ssr-refresh", onRefresh)
+    }
+  }, [name, cache, socket, checkCacheVersions, logger, cacheInvalidate, refreshSsrData])
 
   useOnWindowFocus(() => {
     if (cache !== true) {
@@ -317,7 +304,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     data: ssrData,
     setData: updateSsrData,
     refresh: refreshSsrData,
-    invalidate: (callback) => invalidateCache(name, callback),
+    invalidate: cacheInvalidate,
     error,
     ok: error === undefined,
     ready: status === "loaded"

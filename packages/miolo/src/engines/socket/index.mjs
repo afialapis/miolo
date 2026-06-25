@@ -51,6 +51,16 @@ function init_socket(app, config) {
     logger.info(`[socket] Connection from ... `)
 
     if (config?.ssr?.enabled === true) {
+      socket.on("ssr-subscribe", (name) => {
+        logger.verbose(`[socket] Socket ${socket.id} joined ssr room ${name}`)
+        socket.join(`ssr:${name}`)
+      })
+
+      socket.on("ssr-unsubscribe", (name) => {
+        logger.verbose(`[socket] Socket ${socket.id} left ssr room ${name}`)
+        socket.leave(`ssr:${name}`)
+      })
+
       socket.on("ssr-versions", async () => {
         logger.verbose(`[socket] ssr-versions requested for ${socket.id}`)
         try {
@@ -92,7 +102,7 @@ function init_socket(app, config) {
       logger.verbose(`[socket] Emitting ssr-invalidate for ${name}`)
       try {
         const socketId = ctx.request?.headers?.["x-socket-id"]
-        io.emit("ssr-invalidate", { name, exclude_socket_id: socketId })
+        io.to(`ssr:${name}`).emit("ssr-invalidate", { name, exclude_socket_id: socketId })
         logger.verbose(`[socket] ssr-invalidate sent for ${name}`)
       } catch (err) {
         logger.error(`[socket] Error emitting ssr-invalidate: ${err.message}`)
@@ -103,7 +113,7 @@ function init_socket(app, config) {
       logger.verbose(`[socket] Emitting ssr-refresh for ${name}`)
       try {
         const socketId = ctx.request?.headers?.["x-socket-id"]
-        io.emit("ssr-refresh", { name, exclude_socket_id: socketId })
+        io.to(`ssr:${name}`).emit("ssr-refresh", { name, exclude_socket_id: socketId })
         logger.verbose(`[socket] ssr-refresh sent for ${name}`)
       } catch (err) {
         logger.error(`[socket] Error emitting ssr-refresh: ${err.message}`)
