@@ -36,7 +36,7 @@ function init_socket(app, config) {
               const userId = session.user?.id
               socket.join(`user_${userId}`)
               socket.mioloUser = userId // Attach for convenience
-              logger.info(`[socket] Socket ${socket.id} joined room user_${userId}`)
+              logger.verbose(`[socket] Socket ${socket.id} joined room user_${userId}`)
             }
           }
         }
@@ -48,7 +48,7 @@ function init_socket(app, config) {
   }
 
   io.on("connection", (socket) => {
-    logger.info(`[socket] Connection from ... `)
+    logger.verbose(`[socket] Connection from ${socket?.id || "?"} `)
 
     if (config?.ssr?.enabled === true) {
       socket.on("ssr-subscribe", (name) => {
@@ -98,22 +98,23 @@ function init_socket(app, config) {
       }
     }
 
-    io.emitSsrInvalidate = async (ctx, name) => {
-      logger.verbose(`[socket] Emitting ssr-invalidate for ${name}`)
+    io.emitSsrRefresh = async (ctx, name, options) => {
+      const { lazy = false, excludeCurrent = false, onlyCurrent = false } = options || {}
+      logger.verbose(`[socket] Emitting ssr-refresh for ${name} ${lazy ? "(lazy)" : ""}`)
       try {
-        const socketId = ctx.request?.headers?.["x-socket-id"]
-        io.to(`ssr:${name}`).emit("ssr-invalidate", { name, exclude_socket_id: socketId })
-        logger.verbose(`[socket] ssr-invalidate sent for ${name}`)
-      } catch (err) {
-        logger.error(`[socket] Error emitting ssr-invalidate: ${err.message}`)
-      }
-    }
+        const opts = { name, lazy }
+        if (excludeCurrent || onlyCurrent) {
+          const socketId = ctx.request?.headers?.["x-socket-id"]
+          if (socketId) {
+            if (excludeCurrent) {
+              opts.exclude_socket_id = socketId
+            } else {
+              opts.only_socket_id = socketId
+            }
+          }
+        }
 
-    io.emitSsrRefresh = async (ctx, name) => {
-      logger.verbose(`[socket] Emitting ssr-refresh for ${name}`)
-      try {
-        const socketId = ctx.request?.headers?.["x-socket-id"]
-        io.to(`ssr:${name}`).emit("ssr-refresh", { name, exclude_socket_id: socketId })
+        io.to(`ssr:${name}`).emit("ssr-refresh", opts)
         logger.verbose(`[socket] ssr-refresh sent for ${name}`)
       } catch (err) {
         logger.error(`[socket] Error emitting ssr-refresh: ${err.message}`)

@@ -35,5 +35,5 @@ export async function ch_todo_invalidate(ctx) {
   }
 
   ctx.miolo.logger.verbose(`[cache][todo] Invalidating connected clients`)
-  await ctx.miolo.io.emitSsrRefresh(ctx, "todos")
+  await ctx.miolo.io.emitSsrRefresh(ctx, "todos", { excludeCurrent: true })
 }

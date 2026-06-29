@@ -1,5 +1,6 @@
-import { Bomb, Bone, CircleQuestionMark, Phone, RefreshCw } from "lucide-react"
+import { Bomb, Bone, CircleQuestionMark, Link, Phone, RefreshCw } from "lucide-react"
 import { useState } from "react"
+import { useNavigate } from "react-router"
 import { Field, FieldContent, FieldLabel } from "#cli/components/ui/field.jsx"
 import { Button } from "#cli/components/ui/patched/button.jsx"
 import { Switch } from "#cli/components/ui/switch.jsx"
@@ -22,6 +23,12 @@ export default function TodoActions() {
     pingSocket
   } = useTodosContext()
   const [hours, _setHours] = useState(1)
+
+  const navigate = useNavigate()
+
+  const forceURLChange = () => {
+    navigate("/?t=" + Date.now() /*, { replace: true }*/)
+  }
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -66,6 +73,15 @@ export default function TodoActions() {
         >
           <Phone size={18} />
           Ping through socket
+        </Button>
+
+        <Button
+          onClick={() => forceURLChange()}
+          disabled={!canEdit}
+          className={`px-4 py-6  text-white rounded-lg transition-colors flex items-center gap-2 cursor-pointer ${useCrud ? "bg-pink-500 hover:bg-pink-400" : "bg-blue-500 hover:bg-blue-400"}`}
+        >
+          <Link size={18} />
+          Force URL change
         </Button>
       </div>
 

@@ -1,6 +1,6 @@
 {
   "name": "miolo-react",
-  "version": "3.0.0-beta.217",
+  "version": "3.0.0-beta.220",
   "description": "React utils for miolo",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -30,7 +30,7 @@
     "prepublishOnly": "npm run lint"
   },
   "dependencies": {
-    "idb-keyval": "^6.2.5",
+    "idb-keyval": "^6.2.6",
     "miolo-cli": "../miolo-cli"
   },
   "peerDependencies": {

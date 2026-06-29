@@ -11,6 +11,31 @@ const _makeSerializable = (obj) => {
   }
 }
 
+let _historyPatched = false
+const patchHistory = () => {
+  if (typeof window === "undefined" || _historyPatched) return
+
+  const originalPushState = window.history.pushState
+  window.history.pushState = function (...args) {
+    const ret = originalPushState.apply(this, args)
+    window.dispatchEvent(new Event("miolo-navigation"))
+    return ret
+  }
+
+  const originalReplaceState = window.history.replaceState
+  window.history.replaceState = function (...args) {
+    const ret = originalReplaceState.apply(this, args)
+    window.dispatchEvent(new Event("miolo-navigation"))
+    return ret
+  }
+
+  window.addEventListener("popstate", () => {
+    window.dispatchEvent(new Event("miolo-navigation"))
+  })
+
+  _historyPatched = true
+}
+
 const globalSocketState = {
   rooms: new Map(),
   unsubscribeTimers: new Map(),
@@ -58,6 +83,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
   )
   const [status, setStatus] = useState(ssrDataFromContext !== undefined ? "loaded" : "idle")
   const [error, setError] = useState(undefined)
+  const pendingLazyRefreshRef = useRef(false)
 
   const cacheInvalidate = useCallback(async () => {
     if (typeof window !== "undefined") {
@@ -102,6 +128,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
   const updateSsrData = useCallback(
     (data) => {
+      pendingLazyRefreshRef.current = false
       setStatus("loading")
       setSsrData(parseData(data))
       setError(undefined)
@@ -116,6 +143,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
       return
     }
 
+    pendingLazyRefreshRef.current = false
     setStatus("loading")
     setError(undefined)
 
@@ -146,7 +174,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     setStatus("loaded")
   }, [status, context, fetcher, loader, url, params, parseData, name, cacheSet, logger])
 
-  const checkCacheVersions = useCallback(
+  const cacheVersionsCheck = useCallback(
     async (versions) => {
       logger.verbose(
         `[miolo-react][ssr][${name}] Backend versions received: ${JSON.stringify(versions)}`
@@ -234,11 +262,34 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
   useEffect(() => {
     handlersRef.current = {
-      checkCacheVersions,
+      cacheVersionsCheck,
       cacheInvalidate,
-      refreshSsrData
+      refreshSsrData,
+      refreshSsrDataLazy: () => {
+        pendingLazyRefreshRef.current = true
+      }
     }
   })
+
+  useEffect(() => {
+    if (cache === true) {
+      patchHistory()
+    }
+
+    const onNav = () => {
+      if (pendingLazyRefreshRef.current) {
+        logger.verbose(
+          `[miolo-react][ssr][${name}] navigation detected, doing pending lazy refresh`
+        )
+        pendingLazyRefreshRef.current = false
+        refreshSsrData()
+      }
+    }
+    window.addEventListener("miolo-navigation", onNav)
+    return () => {
+      window.removeEventListener("miolo-navigation", onNav)
+    }
+  }, [cache, name, logger, refreshSsrData])
 
   useEffect(() => {
     if (!socket || cache !== true) {
@@ -271,20 +322,6 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
       }
     }
 
-    const onInvalidate = async (data) => {
-      if (data.name !== name) return
-
-      logger.verbose(`[miolo-react][ssr][${name}] ssr-invalidate ${JSON.stringify(data)}`)
-      if (data.exclude_socket_id && data.exclude_socket_id === socket.id) {
-        logger.verbose(
-          `[miolo-react][ssr][${name}] ssr-invalidate ${data.name} ignored for socketid ${socket.id}`
-        )
-        return
-      }
-      logger.info(`[miolo-react][ssr][${name}] ssr-invalidate ${data.name}`)
-      await handlersRef.current.cacheInvalidate()
-    }
-
     const onRefresh = async (data) => {
       if (data.name !== name) return
 
@@ -297,14 +334,30 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
         )
         return
       }
-      logger.info(`[miolo-react][ssr][${name}] ssr-refresh ${data.name}`)
+      if (data.only_socket_id && data.only_socket_id !== socket.id) {
+        logger.verbose(
+          `[miolo-react][ssr][${name}] ssr-refresh ${data.name} ignored for socketid ${socket.id} (only_socket_id mismatch)`
+        )
+        return
+      }
+
+      logger.info(
+        `[miolo-react][ssr][${name}] ssr-refresh ${data.name}${data.lazy ? " (lazy)" : ""}`
+      )
       await handlersRef.current.cacheInvalidate()
-      handlersRef.current.refreshSsrData()
+
+      if (!data.lazy) {
+        handlersRef.current.refreshSsrData()
+      } else {
+        if (handlersRef.current.refreshSsrDataLazy) {
+          handlersRef.current.refreshSsrDataLazy()
+        }
+      }
     }
 
     const onVersions = (versions) => {
-      if (handlersRef.current.checkCacheVersions) {
-        handlersRef.current.checkCacheVersions(versions)
+      if (handlersRef.current.cacheVersionsCheck) {
+        handlersRef.current.cacheVersionsCheck(versions)
       }
     }
 
@@ -316,7 +369,6 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
     socket.on("connect", requestSubscribeAndVersions)
     socket.on("ssr-versions", onVersions)
-    socket.on("ssr-invalidate", onInvalidate)
     socket.on("ssr-refresh", onRefresh)
 
     return () => {
@@ -339,7 +391,6 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
       socket.off("connect", requestSubscribeAndVersions)
       socket.off("ssr-versions", onVersions)
-      socket.off("ssr-invalidate", onInvalidate)
       socket.off("ssr-refresh", onRefresh)
     }
   }, [name, cache, socket, logger])
