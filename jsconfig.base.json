@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "checkJs": false,
+    "target": "ES6",
+    "module": "ES6",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "maxNodeModuleJsDepth": 0
+  },
+  "exclude": ["**/node_modules", "**/arredemo", "**/demo", "**/skills", "**/template"]
+}

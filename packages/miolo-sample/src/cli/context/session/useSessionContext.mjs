@@ -1,3 +1,5 @@
+// @ts-check
+
 import { useContext } from "react"
 import SessionContext from "./SessionContext.mjs"
 

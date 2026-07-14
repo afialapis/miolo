@@ -1,10 +1,11 @@
+// @ts-check
+
 import { useCallback, useState } from "react"
 import useSessionContext from "#cli/context/session/useSessionContext.mjs"
 import TodoList from "#ns/models/TodoList.mjs"
 import DataContext from "./DataContext.jsx"
 
 /**
- * @typedef {import('#ns/models/TodoList.mjs').default} TodoList
  * @typedef {import('#ns/models/Todo.mjs').default} Todo
  *
  * @typedef {Object} DataContextData
@@ -18,10 +19,8 @@ import DataContext from "./DataContext.jsx"
  */
 
 /**
- * @param {Object} props - The props object.
- * @param {React.ReactNode} props.children - The children of the component.
- * @returns {React.ReactNode} The provider.
- * @public
+ * @param {Object} props
+ * @param {any} props.children
  */
 const DataProvider = ({ children }) => {
   const [breads, setBreads] = useState([])
@@ -35,10 +34,10 @@ const DataProvider = ({ children }) => {
     url: "/api/todo/list",
     params: { options: { limit: 4 } },
     model: TodoList,
-    modifier: (data) => data.sort((a, b) => b.created_at - a.created_at)
+    modifier: (/** @type {TodoList} */ data) => data.sort((a, b) => b.created_at - a.created_at)
   })
 
-  const setTitle = useCallback((title) => {
+  const setTitle = useCallback((/** @type {string} */ title) => {
     if (document) {
       document.title = title
     }

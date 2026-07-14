@@ -1,6 +1,6 @@
 {
   "name": "miolo",
-  "version": "3.0.0-beta.225",
+  "version": "3.0.0-beta.226",
   "description": "all-in-one koa-based server",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -27,6 +27,7 @@
     "reset": "npm run clean-root && npm run clean-pkgs && npm i && turbo telemetry disable >> /dev/null",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
+    "lint:types": "turbo run lint:types",
     "dist": "turbo run dist",
     "test": "turbo run test",
     "create-demo-clean": "rm -fr demo/* && turbo run dist",
@@ -47,7 +48,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.3",
-    "turbo": "^2.10.5"
+    "turbo": "^2.10.5",
+    "typescript": "^7.0.2"
   },
   "overrides": {
     "@babel/runtime": "^7.28.6",

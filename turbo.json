@@ -17,6 +17,9 @@
     "lint:fix": {
       "cache": false
     },
+    "lint:types": {
+      "cache": false
+    },
     "dist": {
       "inputs": [
         "$TURBO_DEFAULT$",

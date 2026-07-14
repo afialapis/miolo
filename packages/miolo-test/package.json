@@ -10,6 +10,7 @@
   "scripts": {
     "lint": "biome check ./src ./test --reporter=github",
     "lint:fix": "biome check --write ./src ./test --reporter=github",
+    "lint:types": "tsc -p jsconfig.json --noEmit",
     "reset": "rm -fr package-lock.json npm-lock.yaml build/* && npm i",
     "test": "node --test ./test/index.mjs"
   },
