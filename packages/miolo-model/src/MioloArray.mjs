@@ -1,13 +1,12 @@
 import CacheMixin from "./CacheMixin.mjs"
 
 export default class MioloArray extends CacheMixin(Array) {
-
   /**
    * Create a new MioloArray.
    * @param {Function} itemClass - The class of the items in the array.
    * @param {Array<MioloModel> | Array<Object>} items - The items to initialize the array with.
    * @param {...any} extra - Extra parameters to pass to the item class constructor.
-   */  
+   */
   constructor(itemClass, items = [], ...extra) {
     // Arrays can be inited with a number
     if (typeof items === "number") {
@@ -36,7 +35,7 @@ export default class MioloArray extends CacheMixin(Array) {
    * Returns the last item in the array.
    * @returns {MioloModel} The last item in the array.
    * @public
-   */  
+   */
   last() {
     return this[this.length - 1]
   }
@@ -48,7 +47,7 @@ export default class MioloArray extends CacheMixin(Array) {
    *       (attributes with prefix "__" are ignored).
    * @returns {Object} All the data of the instance.
    * @public
-   */    
+   */
   get_data() {
     return [...this].map((i) => i.get_data())
   }
@@ -60,7 +59,7 @@ export default class MioloArray extends CacheMixin(Array) {
    *       (attributes with prefix "__" are ignored).
    * @returns {Object} All the data of the instance.
    * @public
-   */    
+   */
   getData() {
     return [...this].map((i) => i.getData())
   }
@@ -91,7 +90,7 @@ export default class MioloArray extends CacheMixin(Array) {
    * @param {any} value - The value to search for.
    * @returns {number} The index of the first item that has the given field and value, or -1 if not found.
    * @public
-   */  
+   */
   findIndexByField(field, value) {
     return this.find_index_by_field(field, value)
   }
@@ -102,7 +101,7 @@ export default class MioloArray extends CacheMixin(Array) {
    * @param {any} value - The value to search for.
    * @returns {MioloModel} The first item in the array that has the given field and value, or undefined if not found.
    * @public
-   */  
+   */
   find_by_field(field, value) {
     if (this.length >= 0) {
       const filt = this.filter((elem) => {
@@ -122,7 +121,7 @@ export default class MioloArray extends CacheMixin(Array) {
    * @param {any} value - The value to search for.
    * @returns {MioloModel} The first item in the array that has the given field and value, or undefined if not found.
    * @public
-   */   
+   */
   findByField(field, value) {
     return this.find_by_field(field, value)
   }
@@ -132,7 +131,7 @@ export default class MioloArray extends CacheMixin(Array) {
    * @param {string} id - The id to search for.
    * @returns {MioloModel} The first item in the array that has the given id, or undefined if not found.
    * @public
-   */  
+   */
   find_by_id(id) {
     return this.find_by_field("id", id)
   }
@@ -142,7 +141,7 @@ export default class MioloArray extends CacheMixin(Array) {
    * @param {string} id - The id to search for.
    * @returns {MioloModel} The first item in the array that has the given id, or undefined if not found.
    * @public
-   */   
+   */
   findById(id) {
     return this.find_by_id(id)
   }
@@ -152,7 +151,7 @@ export default class MioloArray extends CacheMixin(Array) {
    * @param {string} field - The field to search for.
    * @param {any} value - The value to search for.
    * @public
-   */  
+   */
   remove_by_field(field, value) {
     const fidx = this.find_index_by_field(field, value)
     if (fidx >= 0) {
@@ -165,7 +164,7 @@ export default class MioloArray extends CacheMixin(Array) {
    * @param {string} field - The field to search for.
    * @param {any} value - The value to search for.
    * @public
-   */   
+   */
   removeByField(field, value) {
     return this.remove_by_field(field, value)
   }
@@ -175,7 +174,7 @@ export default class MioloArray extends CacheMixin(Array) {
    * @param {Object} data - The data to push to the array.
    * @returns {MioloModel | Object} The new item.
    * @public
-   */    
+   */
   push(data) {
     const item =
       data !== undefined && data instanceof this.itemClass ? data : new this.itemClass(data)
@@ -187,7 +186,7 @@ export default class MioloArray extends CacheMixin(Array) {
    * Creates a shallow clone of the model.
    * @returns {MioloArray} A shallow clone of the model.
    * @public
-   */    
+   */
   clone() {
     const currentData = this.getData()
     const clonedData = JSON.parse(JSON.stringify(currentData))

@@ -5,7 +5,6 @@ import useUIContext from "#cli/context/ui/useUIContext.mjs"
 import TodoList from "#ns/models/TodoList.mjs"
 import TodosContext from "./TodosContext.jsx"
 
-
 /**
  * @typedef {Object} TodosProviderData
  * @property {TodoList} todoList - The list of todos.
@@ -22,8 +21,6 @@ import TodosContext from "./TodosContext.jsx"
  * @property {Function} setUseCrud - Function to set the use crud.
  * @property {Function} pingSocket - Function to ping the socket.
  */
-
-
 
 const TodosProvider = ({ children }) => {
   // const [status, setStatus] = useState("loaded")

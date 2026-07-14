@@ -23,4 +23,3 @@ export default function patchHistory() {
 
   _historyPatched = true
 }
-

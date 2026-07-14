@@ -38,7 +38,7 @@ export default class MioloModel extends CacheMixin() {
    * @returns {any} The value from the model's data.
    * @public
    * @deprecated Use get_value() instead.
-   */  
+   */
   _get(field, def) {
     return this.get_value(field, def)
   }
@@ -62,7 +62,7 @@ export default class MioloModel extends CacheMixin() {
    * @param {any} val - The value to set.
    * @public
    * @deprecated Use set_value() instead.
-   */  
+   */
   _set(field, val) {
     this.set_value(field, val)
   }
@@ -93,7 +93,7 @@ export default class MioloModel extends CacheMixin() {
    * Attributes with prefix "__" are ignored.
    * @returns {Object} The extra data from the model.
    * @private
-   */  
+   */
   _getExtraData() {
     const data = {}
     for (const [key, value] of Object.entries(this)) {
@@ -116,7 +116,7 @@ export default class MioloModel extends CacheMixin() {
    *       (attributes with prefix "__" are ignored).
    * @returns {Object} All the data of the instance.
    * @public
-   */  
+   */
   get_data() {
     const extra = this._get_extra_data() || {}
     return {
@@ -132,7 +132,7 @@ export default class MioloModel extends CacheMixin() {
    *       (attributes with prefix "__" are ignored).
    * @returns {Object} All the data of the instance.
    * @public
-   */    
+   */
   getData() {
     const extra = this._getExtraData() || {}
     return {
@@ -179,7 +179,7 @@ export default class MioloModel extends CacheMixin() {
    *  (ignoring those prefixed with "__").
    * @param {Object} model - The model to merge with.
    * @public
-   */  
+   */
   merge(model) {
     this.update(model.getData())
     for (const [key, value] of Object.entries(model)) {
@@ -198,7 +198,7 @@ export default class MioloModel extends CacheMixin() {
    * Creates a shallow clone of the model.
    * @returns {MioloModel} A shallow clone of the model.
    * @public
-   */  
+   */
   clone() {
     const currentData = this.getData()
     const clonedData = JSON.parse(JSON.stringify(currentData))

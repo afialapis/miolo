@@ -48,7 +48,7 @@ export default class Todo extends MioloModel {
    * Get the last update date of the todo.
    * @returns {number|undefined} The last update date of the todo.
    * @public
-   */  
+   */
   get lastUpdateAt() {
     return this.get_value("last_update_at")
   }
@@ -66,7 +66,7 @@ export default class Todo extends MioloModel {
    * Get the user who last updated the todo.
    * @returns {number|undefined} The user who last updated the todo.
    * @public
-   */  
+   */
   get lastUpdateBy() {
     return this.get_value("last_update_by")
   }

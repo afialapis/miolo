@@ -1,6 +1,5 @@
 export default (BaseClass = class {}) =>
   class extends BaseClass {
-
     /**
      * Reset the model's cache.
      * @public
@@ -81,7 +80,7 @@ export default (BaseClass = class {}) =>
      * @param {Function} make_callback - The function to make the value if it doesn't exist.
      * @returns {any} The value from the cache.
      * @public
-     */    
+     */
     getFromCacheOrMake = this.get_from_cache_or_make
 
     /**

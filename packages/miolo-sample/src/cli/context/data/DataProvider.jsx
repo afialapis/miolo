@@ -6,7 +6,7 @@ import DataContext from "./DataContext.jsx"
 /**
  * @typedef {import('#ns/models/TodoList.mjs').default} TodoList
  * @typedef {import('#ns/models/Todo.mjs').default} Todo
- * 
+ *
  * @typedef {Object} DataContextData
  * @property {TodoList} lastTodos - The list of last todos.
  * @property {(options?: Object) => Promise<void>} refreshLastTodos - Function to refresh the list of last todos.

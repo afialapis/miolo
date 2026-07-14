@@ -3,11 +3,10 @@ import { useCallback, /*useEffect,*/ useState } from "react"
 import { useSsrDataOrReload } from "../ssr/useSsrDataOrReload.mjs"
 import Context from "./MioloContext.mjs"
 
-
 /**
  * @typedef {import('../ssr/useSsrDataOrReload.mjs').MioloSSRData} MioloSSRData
  * @typedef {import('../ssr/useSsrDataOrReload.mjs').MioloSSRDataOptions} MioloSSRDataOptions
- * 
+ *
  * @typedef {Object} MioloContextData
  * @property {Object} user - session's data as in app.ctx
  * @property {boolean} authenticated - authenticated flag as in app.ctx

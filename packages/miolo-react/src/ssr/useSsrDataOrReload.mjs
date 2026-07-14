@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import getSsrDataFromContext from "./getSsrDataFromContext.mjs"
-import useOnWindowFocus from "./useOnWindowFocus.mjs"
-import usePropsCheck from "./usePropsCheck.mjs"
 import patchHistory from "./patchHistory.mjs"
 import useIndexedDb from "./useIndexedDb.mjs"
-
+import useOnWindowFocus from "./useOnWindowFocus.mjs"
+import usePropsCheck from "./usePropsCheck.mjs"
 
 /**
  * @typedef {import('miolo-model').MioloModel} MioloModel
  * @typedef {import('miolo-model').MioloArray} MioloArray
- * 
- * 
+ *
+ *
  *
  * @typedef {Object} MioloSSRDataOptions
  * @property {any} [defval=[]] - The default value for the data.
@@ -23,19 +22,18 @@ import useIndexedDb from "./useIndexedDb.mjs"
  * @property {boolean} [cache=false] - Whether to cache the data.
  * @property {number} [ttl] - The time to live for the cached data in seconds.
  * @property {boolean} [autoRefresh=true] - Whether to automatically refresh the data on cache expiration.
- * 
- * 
+ *
+ *
  * @typedef {Object} MioloSSRData
  * @property {MioloModel | MioloArray | any} data - The data state. Generaly defined by @model and/or @modifier options.
  * @property {Function} setData - Set the data state directly.
  * @property {Function} refresh - If needed, remotely reload data (by calling @loader or @url).
  * @property {Function} invalidate - Invalidate the data cache (requires @cache to be true).
  * @property {string|undefined} error - The error message if any.
- * 
+ *
  * @property {boolean} ok - Status of SSR data, true if everything was ssr'ed or remotely loaded ok.
  * @property {boolean} ready - true when @data is loaded (either ssr'ed or remotely).
  */
-
 
 const globalSocketState = {
   rooms: new Map(),
@@ -46,7 +44,7 @@ const globalSocketState = {
 
 /**
  * Hook to get some ssr data or reload it if needed.
- * 
+ *
  * @param {Object} context - The miolo context's state object.
  * @param {Object} miolo - The miolo client object, that is:
  *   - @prop {Object} fetcher - The fetcher object.
@@ -99,7 +97,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
   const pendingLazyRefreshRef = useRef(false)
 
   const { cacheInvalidate, cacheSet, cacheGet } = useIndexedDb(name, logger, cache, ttl)
-  
+
   const updateSsrData = useCallback(
     (data) => {
       pendingLazyRefreshRef.current = false

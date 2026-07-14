@@ -1,6 +1,5 @@
 import { useCallback } from "react"
 
-
 const _makeSerializable = (obj) => {
   try {
     return JSON.parse(JSON.stringify(obj))
@@ -10,7 +9,6 @@ const _makeSerializable = (obj) => {
 }
 
 export default function useIndexedDb(name, logger, cache, ttl) {
-
   const cacheInvalidate = useCallback(async () => {
     if (typeof window !== "undefined") {
       const { del } = await import("idb-keyval")
@@ -55,6 +53,6 @@ export default function useIndexedDb(name, logger, cache, ttl) {
   return {
     cacheInvalidate,
     cacheSet,
-    cacheGet,
+    cacheGet
   }
 }
