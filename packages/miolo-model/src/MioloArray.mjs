@@ -1,5 +1,12 @@
 import CacheMixin from "./CacheMixin.mjs"
 
+/**
+ * Represents an array of MioloModel instances.
+ * Inherits all native JS Array methods.
+ *
+ * @template T
+ * @extends {Array<T>}
+ */
 export default class MioloArray extends CacheMixin(Array) {
   /**
    * Create a new MioloArray.
