@@ -12,27 +12,27 @@ import usePropsCheck from "./usePropsCheck.mjs"
  *
  *
  * @typedef {Object} MioloSSRDataOptions
- * @property {any} [defval=[]] - The default value for the data.
- * @property {Function} [loader] - A function that loads the data remotely. You need either @loader or @url.
- * @property {string} [url] - The URL to load the data from. You need either @loader or @url.
- * @property {Object} [params] - The parameters to pass to the @loader.
- * @property {MioloModel} [model] - A MioloModel class for the data.
- * @property {Function} [modifier] - A function that modifies the data (after ssr'ed or loaded, and after instantiated @model if any).
- * @property {Function} [effect] - A function that is called when the data is loaded. The @effect function should return true if the data needs to be reloaded.
- * @property {boolean} [cache=false] - Whether to cache the data.
+ * @property {any} [defval] - The default value for the data.
+ * @property {Function} [loader] - A function that loads the data remotely. You need either {@link loader} or {@link url}.
+ * @property {string} [url] - The URL to load the data from. You need either {@link loader} or {@link url}.
+ * @property {Object} [params] - The parameters to pass to the {@link loader}.
+ * @property {new (...args: any[]) => MioloModel} [model] - A MioloModel class for the data.
+ * @property {Function} [modifier] - A function that modifies the data (after ssr'ed or loaded, and after instantiated {@link model} if any).
+ * @property {Function|boolean} [effect] - A function that is called when the data is loaded. The {@link effect} function should return true if the data needs to be reloaded.
+ * @property {boolean} [cache] - Whether to cache the data.
  * @property {number} [ttl] - The time to live for the cached data in seconds.
- * @property {boolean} [autoRefresh=true] - Whether to automatically refresh the data on cache expiration.
+ * @property {boolean} [autoRefresh] - Whether to automatically refresh the data on cache expiration.
  *
  *
  * @typedef {Object} MioloSSRData
- * @property {MioloModel | MioloArray | any} data - The data state. Generaly defined by @model and/or @modifier options.
+ * @property {MioloModel | MioloArray | any} data - The data state. Generaly defined by {@link model} and/or {@link modifier} options.
  * @property {Function} setData - Set the data state directly.
- * @property {Function} refresh - If needed, remotely reload data (by calling @loader or @url).
- * @property {Function} invalidate - Invalidate the data cache (requires @cache to be true).
+ * @property {Function} refresh - If needed, remotely reload data (by calling {@link loader} or {@link url}).
+ * @property {Function} invalidate - Invalidate the data cache (requires {@link cache} to be true).
  * @property {string|undefined} error - The error message if any.
  *
  * @property {boolean} ok - Status of SSR data, true if everything was ssr'ed or remotely loaded ok.
- * @property {boolean} ready - true when @data is loaded (either ssr'ed or remotely).
+ * @property {boolean} ready - true when {@link data} is loaded (either ssr'ed or remotely).
  */
 
 const globalSocketState = {
@@ -230,7 +230,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     }
   }, [ssrDataFromContext, cacheSet])
 
-  const handlersRef = useRef({})
+  const handlersRef = useRef(/** @type {any} */ ({}))
 
   useEffect(() => {
     handlersRef.current = {
@@ -367,22 +367,24 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     }
   }, [name, cache, socket, logger])
 
-  useOnWindowFocus(() => {
-    if (cache !== true) {
-      return
-    }
-    if (socket === undefined) {
-      return
-    }
-    logger.verbose(
-      `[miolo-react][ssr][${name}] Window focused, checking versions (socket id is ${socket.id})`
-    )
-    const now = Date.now()
-    if (now - globalSocketState.versionsRequestedAt > 500) {
-      globalSocketState.versionsRequestedAt = now
-      socket.emit("ssr-versions")
-    }
-  }, [name, cache, logger, socket])
+  useOnWindowFocus(
+    useCallback(() => {
+      if (cache !== true) {
+        return
+      }
+      if (socket === undefined) {
+        return
+      }
+      logger.verbose(
+        `[miolo-react][ssr][${name}] Window focused, checking versions (socket id is ${socket.id})`
+      )
+      const now = Date.now()
+      if (now - globalSocketState.versionsRequestedAt > 500) {
+        globalSocketState.versionsRequestedAt = now
+        socket.emit("ssr-versions")
+      }
+    }, [name, cache, logger, socket])
+  )
 
   return {
     data: ssrData,

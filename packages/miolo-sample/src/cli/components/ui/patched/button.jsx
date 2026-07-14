@@ -30,6 +30,9 @@ const buttonVariants = cva(
   }
 )
 
+/**
+ * @param {import("react").ButtonHTMLAttributes<HTMLButtonElement> & import("class-variance-authority").VariantProps<typeof buttonVariants> & { asChild?: boolean }} props
+ */
 function Button({ className, variant, size, asChild = false, ...props }) {
   const Comp = asChild ? Slot : "button"
 
