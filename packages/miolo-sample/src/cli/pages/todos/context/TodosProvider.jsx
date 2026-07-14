@@ -5,6 +5,26 @@ import useUIContext from "#cli/context/ui/useUIContext.mjs"
 import TodoList from "#ns/models/TodoList.mjs"
 import TodosContext from "./TodosContext.jsx"
 
+
+/**
+ * @typedef {Object} TodosProviderData
+ * @property {TodoList} todoList - The list of todos.
+ * @property {Function} refreshTodoList - Function to refresh the list of todos.
+ * @property {boolean} loading - Whether the data is loading.
+ * @property {boolean} loaded - Whether the data is loaded.
+ * @property {Function} addTodo - Function to add a todo.
+ * @property {Function} toggleTodo - Function to toggle a todo.
+ * @property {Function} removeTodo - Function to remove a todo.
+ * @property {Function} checkLastHours - Function to check last hours.
+ * @property {Function} insertFakeTodo - Function to insert a fake todo.
+ * @property {boolean} canEdit - Whether the data can be edited.
+ * @property {boolean} useCrud - Whether to use crud.
+ * @property {Function} setUseCrud - Function to set the use crud.
+ * @property {Function} pingSocket - Function to ping the socket.
+ */
+
+
+
 const TodosProvider = ({ children }) => {
   // const [status, setStatus] = useState("loaded")
   const { logger } = useMioloContext()

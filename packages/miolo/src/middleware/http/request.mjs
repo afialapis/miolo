@@ -19,7 +19,19 @@ function _validate_ip(ipaddress) {
 }
 
 const _get_ip = (ctx) => {
-  const chances = [ctx.headers["x-real-ip"], ctx.headers["x-orig-ip"], ctx.ip, "127.0.0.1"]
+  // 1. ctx.ips contiene la cadena de proxies (de más externo a más interno) si app.proxy = true
+  if (ctx.ips && ctx.ips.length > 0) {
+    for (const ip of ctx.ips) {
+      if (_validate_ip(ip)) return ip
+    }
+  }
+
+  const chances = [
+    ctx.ip, // Koa ya procesa X-Forwarded-For aquí de forma nativa
+    ctx.headers["x-real-ip"],
+    ctx.headers["x-orig-ip"],
+    "127.0.0.1"
+  ]
   for (const ch of chances) {
     if (_validate_ip(ch)) {
       return ch

@@ -3,6 +3,27 @@ import { useCallback, /*useEffect,*/ useState } from "react"
 import { useSsrDataOrReload } from "../ssr/useSsrDataOrReload.mjs"
 import Context from "./MioloContext.mjs"
 
+
+/**
+ * @typedef {import('../ssr/useSsrDataOrReload.mjs').MioloSSRData} MioloSSRData
+ * @typedef {import('../ssr/useSsrDataOrReload.mjs').MioloSSRDataOptions} MioloSSRDataOptions
+ * 
+ * @typedef {Object} MioloContextData
+ * @property {Object} user - session's data as in app.ctx
+ * @property {boolean} authenticated - authenticated flag as in app.ctx
+ * @property {Function} updateUser - function to update user
+ * @property {Function} googleLogin - function to login with google
+ * @property {Function} localLogin - function to login with local
+ * @property {Function} logout - function to logout
+ * @property {(name: string, options: MioloSSRDataOptions) => MioloSSRData} useSsrData - function to handle some ssr data
+ * @property {string} authMethod - authentication method
+ */
+
+/**
+ * @param {Object} context - Miolo's app.ctx object
+ * @param {React.ReactNode} children - React children
+ * @returns {React.ReactNode}
+ */
 const MioloContextProvider = ({ context, children }) => {
   const [innerContext, setInnerContext] = useState(context)
   const [mioloObj, _setMioloObj] = useState(miolo_client(context))

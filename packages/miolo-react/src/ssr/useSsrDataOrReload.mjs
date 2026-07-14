@@ -2,39 +2,40 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import getSsrDataFromContext from "./getSsrDataFromContext.mjs"
 import useOnWindowFocus from "./useOnWindowFocus.mjs"
 import usePropsCheck from "./usePropsCheck.mjs"
+import patchHistory from "./patchHistory.mjs"
+import useIndexedDb from "./useIndexedDb.mjs"
 
-const _makeSerializable = (obj) => {
-  try {
-    return JSON.parse(JSON.stringify(obj))
-  } catch (_) {
-    return obj
-  }
-}
 
-let _historyPatched = false
-const patchHistory = () => {
-  if (typeof window === "undefined" || _historyPatched) return
+/**
+ * @typedef {import('miolo-model').MioloModel} MioloModel
+ * @typedef {import('miolo-model').MioloArray} MioloArray
+ * 
+ * 
+ *
+ * @typedef {Object} MioloSSRDataOptions
+ * @property {any} [defval=[]] - The default value for the data.
+ * @property {Function} [loader] - A function that loads the data remotely. You need either @loader or @url.
+ * @property {string} [url] - The URL to load the data from. You need either @loader or @url.
+ * @property {Object} [params] - The parameters to pass to the @loader.
+ * @property {MioloModel} [model] - A MioloModel class for the data.
+ * @property {Function} [modifier] - A function that modifies the data (after ssr'ed or loaded, and after instantiated @model if any).
+ * @property {Function} [effect] - A function that is called when the data is loaded. The @effect function should return true if the data needs to be reloaded.
+ * @property {boolean} [cache=false] - Whether to cache the data.
+ * @property {number} [ttl] - The time to live for the cached data in seconds.
+ * @property {boolean} [autoRefresh=true] - Whether to automatically refresh the data on cache expiration.
+ * 
+ * 
+ * @typedef {Object} MioloSSRData
+ * @property {MioloModel | MioloArray | any} data - The data state. Generaly defined by @model and/or @modifier options.
+ * @property {Function} setData - Set the data state directly.
+ * @property {Function} refresh - If needed, remotely reload data (by calling @loader or @url).
+ * @property {Function} invalidate - Invalidate the data cache (requires @cache to be true).
+ * @property {string|undefined} error - The error message if any.
+ * 
+ * @property {boolean} ok - Status of SSR data, true if everything was ssr'ed or remotely loaded ok.
+ * @property {boolean} ready - true when @data is loaded (either ssr'ed or remotely).
+ */
 
-  const originalPushState = window.history.pushState
-  window.history.pushState = function (...args) {
-    const ret = originalPushState.apply(this, args)
-    window.dispatchEvent(new Event("miolo-navigation"))
-    return ret
-  }
-
-  const originalReplaceState = window.history.replaceState
-  window.history.replaceState = function (...args) {
-    const ret = originalReplaceState.apply(this, args)
-    window.dispatchEvent(new Event("miolo-navigation"))
-    return ret
-  }
-
-  window.addEventListener("popstate", () => {
-    window.dispatchEvent(new Event("miolo-navigation"))
-  })
-
-  _historyPatched = true
-}
 
 const globalSocketState = {
   rooms: new Map(),
@@ -43,6 +44,18 @@ const globalSocketState = {
   versionsRequestedAt: 0
 }
 
+/**
+ * Hook to get some ssr data or reload it if needed.
+ * 
+ * @param {Object} context - The miolo context's state object.
+ * @param {Object} miolo - The miolo client object, that is:
+ *   - @prop {Object} fetcher - The fetcher object.
+ *   - @prop {Object} socket - The socket object.
+ *   - @prop {Object} logger - The logger object.
+ * @param {string} name - The name of the data.
+ * @param {MioloSSRDataOptions} options - The options object:
+ * @returns {MioloSSRData}
+ */
 const useSsrDataOrReload = (context, miolo, name, options) => {
   const { fetcher, socket, logger } = miolo
   const {
@@ -85,47 +98,8 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
   const [error, setError] = useState(undefined)
   const pendingLazyRefreshRef = useRef(false)
 
-  const cacheInvalidate = useCallback(async () => {
-    if (typeof window !== "undefined") {
-      const { del } = await import("idb-keyval")
-      await del(`ssr-cache-${name}`)
-    }
-  }, [name])
-
-  const cacheSet = useCallback(
-    async (data) => {
-      if (cache === true) {
-        if (typeof window !== "undefined") {
-          try {
-            const { set } = await import("idb-keyval")
-            await set(`ssr-cache-${name}`, { data: _makeSerializable(data), ts: Date.now() })
-          } catch (err) {
-            logger.error(`[miolo-react][ssr][${name}] error setting cache for ${name}: ${err}`)
-          }
-        }
-      }
-    },
-    [logger, cache, name]
-  )
-
-  const cacheGet = useCallback(async () => {
-    if (cache === true) {
-      if (typeof window !== "undefined") {
-        try {
-          const { get } = await import("idb-keyval")
-          const cached = await get(`ssr-cache-${name}`)
-          if (cached && cached.data !== undefined) {
-            const expired = ttl !== undefined && Date.now() - cached.ts > ttl * 1000
-            return [cached.data, expired, cached.ts]
-          }
-        } catch (err) {
-          logger.error(`[miolo-react][ssr][${name}] error getting cache for ${name}: ${err}`)
-        }
-      }
-    }
-    return [null, false]
-  }, [logger, cache, name, ttl])
-
+  const { cacheInvalidate, cacheSet, cacheGet } = useIndexedDb(name, logger, cache, ttl)
+  
   const updateSsrData = useCallback(
     (data) => {
       pendingLazyRefreshRef.current = false
@@ -195,7 +169,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
             )
             await cacheInvalidate()
             if (autoRefresh === true) {
-              refreshSsrData()
+              await refreshSsrData()
             }
           } else {
             logger.verbose(`[miolo-react][ssr][${name}] ssr-versions match for ${name}`)
@@ -232,13 +206,13 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
               if (expired) {
                 logger.verbose(`[miolo-react][ssr][${name}] expired cache for ${name}, refreshing`)
-                refreshSsrData()
+                await refreshSsrData()
               } else {
                 setStatus("loaded")
               }
             } else {
               logger.verbose(`[miolo-react][ssr][${name}] no cached data for ${name}, refreshing`)
-              refreshSsrData()
+              await refreshSsrData()
             }
           }
         }
@@ -347,7 +321,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
       await handlersRef.current.cacheInvalidate()
 
       if (!data.lazy) {
-        handlersRef.current.refreshSsrData()
+        await handlersRef.current.refreshSsrData()
       } else {
         if (handlersRef.current.refreshSsrDataLazy) {
           handlersRef.current.refreshSsrDataLazy()

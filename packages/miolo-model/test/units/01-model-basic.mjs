@@ -30,7 +30,7 @@ test("MioloModel basic methods", async (t) => {
 
   await t.test("get_extra_data (empty by default on basic model)", () => {
     const flavour = new Flavour(flavourData)
-    assert.deepStrictEqual(flavour.get_extra_data(), {})
+    assert.deepStrictEqual(flavour._get_extra_data(), {})
   })
 
   await t.test("get_data", () => {

@@ -1,4 +1,10 @@
 import { useContext } from "react"
 import DataContext from "./DataContext.jsx"
 
-export default () => useContext(DataContext)
+/**
+ * @typedef {import('./DataContext.jsx').DataContextData} DataContextData
+ * @returns {DataContextData}
+ */
+const useDataContext = () => useContext(DataContext)
+
+export default useDataContext
