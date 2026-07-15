@@ -32,13 +32,13 @@ src/cli/
 
 ## Context Pattern
 
-Every context follows a three-file pattern:
+Every context follows a strictly-typed three-file pattern to ensure type safety across the application:
 
 ```
 context/feature/
-├── FeatureContext.jsx     # Context definition
-├── FeatureProvider.jsx    # Provider component
-└── useFeatureContext.mjs  # Hook for consuming
+├── FeatureContext.mjs     # Context definition
+├── FeatureProvider.jsx    # Provider component (exports JSDoc types)
+└── useFeatureContext.mjs  # Hook for consuming (returns JSDoc types)
 ```
 
 ### Context Definition
@@ -53,46 +53,33 @@ const SessionContext = createContext()
 export default SessionContext
 ```
 
-### Provider Component
+### Provider Component with JSDoc Types
 
 **File:** `context/session/SessionProvider.jsx`
 
 ```javascript
 import { useState, useEffect } from 'react'
 import SessionContext from './SessionContext.mjs'
+import User from '#ns/model/User.mjs'
+
+/**
+ * Define the structure of your context data so consumers get autocomplete.
+ * 
+ * @typedef {Object} SessionContextData
+ * @property {User} user
+ * @property {boolean} loading
+ * @property {boolean} isAuthenticated
+ * @property {Function} login
+ * @property {Function} logout
+ */
 
 export default function SessionProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    // Fetch current user
-    fetch('/api/user/current')
-      .then(res => res.json())
-      .then(data => {
-        setUser(data.user)
-        setLoading(false)
-      })
-  }, [])
+  // ... implementation ...
 
-  const login = async (credentials) => {
-    const res = await fetch('/api/user/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials)
-    })
-    const data = await res.json()
-    if (data.ok) {
-      setUser(data.user)
-    }
-    return data
-  }
-
-  const logout = async () => {
-    await fetch('/api/user/logout', { method: 'POST' })
-    setUser(null)
-  }
-
+  /** @type {SessionContextData} */
   const value = {
     user,
     loading,
@@ -109,7 +96,7 @@ export default function SessionProvider({ children }) {
 }
 ```
 
-### Consumer Hook
+### Strictly Typed Consumer Hook
 
 **File:** `context/session/useSessionContext.mjs`
 
@@ -117,6 +104,15 @@ export default function SessionProvider({ children }) {
 import { useContext } from 'react'
 import SessionContext from './SessionContext.mjs'
 
+/**
+ * Import the typedef from the Provider
+ * @typedef {import("./SessionProvider.jsx").SessionContextData} SessionContextData
+ */
+
+/**
+ * The hook returns the typed context data
+ * @returns {SessionContextData}
+ */
 export default function useSessionContext() {
   const context = useContext(SessionContext)
   
@@ -134,6 +130,7 @@ export default function useSessionContext() {
 import useSessionContext from '#cli/context/session/useSessionContext.mjs'
 
 export default function Profile() {
+  // Full IDE autocomplete for `user`, `loading`, `logout`!
   const { user, loading, logout } = useSessionContext()
 
   if (loading) return <div>Loading...</div>

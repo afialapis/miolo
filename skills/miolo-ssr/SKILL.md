@@ -423,6 +423,7 @@ const loader = async (ctx) => {
 ## Related Skills
 
 - **miolo-session-context** - Access `useSsrData` from session context
+- **miolo-caching** - Advanced caching, socket invalidation (`exclude_socket_id`), and lazy refreshing.
 - **miolo-fetcher** - Fetcher usage in remote loaders (future skill)
 - **miolo-react-patterns** - Context provider patterns
 

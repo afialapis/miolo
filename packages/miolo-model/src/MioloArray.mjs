@@ -317,6 +317,7 @@ export default class MioloArray extends Array {
    * @param {any} [thisArg]
    * @returns {this}
    */
+  // @ts-expect-error
   filter(predicate, thisArg) {
     // @ts-expect-error
     return super.filter(predicate, thisArg)
@@ -337,6 +338,7 @@ export default class MioloArray extends Array {
    * @param {number} [end]
    * @returns {this}
    */
+  // @ts-expect-error
   slice(start, end) {
     // @ts-expect-error
     return super.slice(start, end)
@@ -348,6 +350,7 @@ export default class MioloArray extends Array {
    * @param {...T} items
    * @returns {this}
    */
+  // @ts-expect-error
   // biome-ignore lint/correctness/noUnusedFunctionParameters: its ok
   splice(start, deleteCount, ...items) {
     // @ts-expect-error
@@ -358,6 +361,7 @@ export default class MioloArray extends Array {
   /**
    * @returns {this}
    */
+  // @ts-expect-error
   reverse() {
     // @ts-expect-error
     return super.reverse()
