@@ -118,11 +118,11 @@ export default class MioloModel extends class {} {
   /**
    * Get a value from the model's data.
    * @param {string} field - The field to get the value from.
-   * @param {any} def - The default value to return if the field is not found.
+   * @param {any} [def=undefined] - The default value to return if the field is not found.
    * @returns {any} The value from the model's data.
    * @public
    */
-  get_value(field, def) {
+  get_value(field, def = undefined) {
     if (this.data !== undefined) {
       if (this.data[field] !== undefined && this.data[field] !== null) {
         return this.data[field]
@@ -134,12 +134,12 @@ export default class MioloModel extends class {} {
   /**
    * Get a value from the model's data.
    * @param {string} field - The field to get the value from.
-   * @param {any} def - The default value to return if the field is not found.
+   * @param {any} [def=undefined] - The default value to return if the field is not found.
    * @returns {any} The value from the model's data.
    * @public
    * @deprecated Use get_value() instead.
    */
-  _get(field, def) {
+  _get(field, def = undefined) {
     return this.get_value(field, def)
   }
 

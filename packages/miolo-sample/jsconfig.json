@@ -6,6 +6,8 @@
     "module": "ES6",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "maxNodeModuleJsDepth": 2,
     "paths": {
       "#cli/*": ["./src/cli/*"],
       "#ns/*": ["./src/ns/*"],
