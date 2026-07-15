@@ -1,6 +1,7 @@
 {
   "extends": "../../jsconfig.base.json",
   "checkJs": true,
+  "lib": ["ES2022", "DOM"],
   "compilerOptions": {
     "paths": { "*": ["./src/*"] }
   },

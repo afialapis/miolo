@@ -23,10 +23,6 @@ export default class MioloArray extends Array {
 
     this.reset_cache()
 
-    if (typeof items === "number") {
-      return
-    }
-
     // Check properties
     if (!itemClass) {
       console.error(`[${this.constructor.name}] MioloArray received no itemClass`)
@@ -34,6 +30,10 @@ export default class MioloArray extends Array {
     }
     /** @type {new (...args: any[]) => T} */
     this.itemClass = itemClass
+
+    if (typeof items === "number") {
+      return
+    }
 
     items.forEach((r, index) => {
       this[index] =
@@ -178,7 +178,7 @@ export default class MioloArray extends Array {
   /**
    * Find the index of the first item in the array that has the given field and value.
    * @param {string} field - The field to search for.
-   * @param {MioloModel} value - The value to search for.
+   * @param {any} value - The value to search for.
    * @returns {number} The index of the first item that has the given field and value, or -1 if not found.
    * @public
    */
@@ -310,5 +310,56 @@ export default class MioloArray extends Array {
     const clone = new Ctor(clonedData)
     // Object.assign(clone, this)
     return clone
+  }
+
+  /**
+   * @param {(value: T, index: number, array: Array<T>) => boolean} predicate
+   * @param {any} [thisArg]
+   * @returns {this}
+   */
+  filter(predicate, thisArg) {
+    // @ts-expect-error
+    return super.filter(predicate, thisArg)
+  }
+
+  /**
+   * @template U
+   * @param {(value: T, index: number, array: Array<T>) => U} callbackfn
+   * @param {any} [thisArg]
+   * @returns {Array<U>}
+   */
+  map(callbackfn, thisArg) {
+    return super.map(callbackfn, thisArg)
+  }
+
+  /**
+   * @param {number} [start]
+   * @param {number} [end]
+   * @returns {this}
+   */
+  slice(start, end) {
+    // @ts-expect-error
+    return super.slice(start, end)
+  }
+
+  /**
+   * @param {number} start
+   * @param {number} [deleteCount]
+   * @param {...T} items
+   * @returns {this}
+   */
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: its ok
+  splice(start, deleteCount, ...items) {
+    // @ts-expect-error
+    // biome-ignore lint/complexity/noArguments: its ok
+    return super.splice.apply(this, arguments)
+  }
+
+  /**
+   * @returns {this}
+   */
+  reverse() {
+    // @ts-expect-error
+    return super.reverse()
   }
 }
