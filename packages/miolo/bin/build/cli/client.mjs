@@ -16,6 +16,10 @@ export async function miolo_build_client(
 
   await build({
     ...viteConfig,
+    define: {
+      ...viteConfig?.define,
+      "import.meta": "{}"
+    },
     build: {
       outDir: path.resolve(pkgPath, cliDest),
       emptyOutDir: false,

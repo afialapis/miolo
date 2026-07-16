@@ -16,5 +16,12 @@ export async function miolo_build_banner(pkgPath) {
  *
  * @license ${pkgJson.license || "MIT"}
  */
-/* eslint-disable */ `
+/* eslint-disable */
+import { fileURLToPath as __miolo_fileURLToPath } from 'node:url';
+import { dirname as __miolo_dirname } from 'node:path';
+import { createRequire as __miolo_createRequire } from 'node:module';
+const __filename = __miolo_fileURLToPath(import.meta.url);
+const __dirname = __miolo_dirname(__filename);
+const require = __miolo_createRequire(import.meta.url);
+`
 }
