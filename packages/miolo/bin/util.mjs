@@ -1,8 +1,11 @@
-import { readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 
 export function cleanFolder(folder) {
+  if (!existsSync(folder)) {
+    return
+  }
   readdirSync(folder).forEach((file) => {
     rmSync(`${folder}/${file}`, { recursive: true, force: true })
   })

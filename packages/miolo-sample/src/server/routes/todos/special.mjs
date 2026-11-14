@@ -1,4 +1,5 @@
 import { intre_now } from "intre"
+import { ch_todo_invalidate } from "#server/io/cache/todos.mjs"
 
 export async function r_todo_count_last_hours(ctx, params) {
   ctx.miolo.logger.verbose(
@@ -40,6 +41,8 @@ export async function r_todo_insert_fake(ctx, params) {
     done: params?.done === true
   }
   const tid = await Todos.insert(d, options)
+
+  await ch_todo_invalidate(ctx)
 
   ctx.miolo.logger.verbose(`[r_todo_insert_fake] Inserted fake todo with id ${tid}`)
 

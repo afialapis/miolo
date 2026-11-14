@@ -1,4 +1,5 @@
 import Joi from "joi"
+import { diffObjs } from "../../../../engines/schema/diffObjs.mjs"
 import { ensure_response_is_ok_data, query_string_to_json } from "../utils.mjs"
 
 function attachQueriesRoutes(router, queriesConfigs, logger) {
@@ -67,22 +68,36 @@ function attachQueriesRoutes(router, queriesConfigs, logger) {
           }
 
           let goon = true
+          let goon_msg = ""
           if (route?.before) {
             if (Array.isArray(route.before)) {
               for (const before of route.before) {
-                goon = await before(ctx)
+                const res = await before(ctx)
+                if (Array.isArray(res)) {
+                  goon = !!res[0]
+                  goon_msg = res[1] || ""
+                } else {
+                  goon = !!res
+                }
                 if (!goon) {
                   break
                 }
               }
             } else {
-              goon = await route.before(ctx)
+              const res = await route.before(ctx)
+              if (Array.isArray(res)) {
+                goon = !!res[0]
+                goon_msg = res[1] || ""
+              } else {
+                goon = !!res
+              }
             }
 
             if (!goon) {
               ctx.body = {
                 ok: false,
-                error: `Route was aborted by a <before> callback (${route.before?.name})`
+                error:
+                  goon_msg || `Route was aborted by a <before> callback (${route.before?.name})`
               }
               return
             }

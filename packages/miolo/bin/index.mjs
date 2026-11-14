@@ -64,21 +64,24 @@ async function main() {
         break
       }
 
-      case "build": {
-        const buildHandler = (await import("./build/build.mjs")).default
-        await buildHandler(
+      case "build-cli": {
+        const buildCliHandler = (await import("./build/build_cli.mjs")).default
+        await buildCliHandler(
           appName,
           cliEntry,
           cliDest,
           cliSuffix,
           htmlFile,
-          srvEntry,
           configEntry,
-          srvDest,
-          srvExt,
           ssrEntry,
           ssrDest
         )
+        break
+      }
+
+      case "build-server": {
+        const buildServerHandler = (await import("./build/build_server.mjs")).default
+        await buildServerHandler(appName, srvEntry, configEntry, srvDest, srvExt)
         break
       }
 
@@ -90,7 +93,7 @@ async function main() {
 
       case "start": {
         const startHandler = (await import("./run/start.mjs")).default
-        await startHandler(appName, srvDest, srvExt)
+        await startHandler(appName, srvEntry)
         break
       }
 
@@ -102,7 +105,7 @@ async function main() {
 
       case "restart": {
         const restartHandler = (await import("./run/restart.mjs")).default
-        await restartHandler(appName, srvDest, srvExt)
+        await restartHandler(appName, srvEntry)
         break
       }
 
@@ -115,7 +118,7 @@ async function main() {
       default:
         console.error(`[miolo] Unknown command: ${command}`)
         console.log(
-          "[miolo] Available commands: create, dev, deb, build, start, stop, restart, create-bin"
+          "[miolo] Available commands: create, dev, deb, build-cli, build-server, build-bin, start, stop, restart, create-bin"
         )
         process.exit(1)
     }

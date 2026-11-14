@@ -1,5 +1,4 @@
 import { intre_locale_init } from "intre"
-import DataProvider from "#cli/context/data/DataProvider.jsx"
 import SessionProvider from "#cli/context/session/SessionProvider.jsx"
 import ThemeProvider from "#cli/context/theme/ThemeProvider.jsx"
 import UIProvider from "#cli/context/ui/UIProvider.jsx"
@@ -13,9 +12,7 @@ const App = () => {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <UIProvider>
         <SessionProvider>
-          <DataProvider>
-            <Index />
-          </DataProvider>
+          <Index />
         </SessionProvider>
       </UIProvider>
     </ThemeProvider>

@@ -266,7 +266,11 @@ export default class MioloModel extends class {} {
       }
       if (value instanceof MioloModel) {
         if (changes[key] !== undefined) {
-          value.update(changes[key])
+          if (changes[key] instanceof MioloModel) {
+            value.update(changes[key].getData())
+          } else {
+            value.update(changes[key])
+          }
         }
       }
     }

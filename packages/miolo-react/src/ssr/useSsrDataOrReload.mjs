@@ -71,6 +71,25 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
   usePropsCheck(loader, effect, modifier, name)
 
+  const ssrDataFromContext = useMemo(() => {
+    return getSsrDataFromContext(context, name)
+  }, [context, name])
+
+  // `params` usually comes as an inline object literal (eg: `{filter: 10}`), so
+  // its reference changes on every render. Serialize it to get a stable key, and
+  // derive a stable params object from that key.
+  const paramsKey = params === undefined ? undefined : JSON.stringify(params)
+  const stableParams = useMemo(() => {
+    const changed =
+      effect === undefined || (typeof effect === "function" && effect() === true) || effect === true
+    if (!changed) {
+      return false
+    }
+
+    return paramsKey === undefined ? undefined : JSON.parse(paramsKey)
+  }, [paramsKey, effect])
+  const [lastParams, setLastParams] = useState(ssrDataFromContext !== undefined ? paramsKey : null)
+
   const parseData = useCallback(
     (value) => {
       let parsed = value
@@ -85,16 +104,17 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     [modifier, model]
   )
 
-  const ssrDataFromContext = useMemo(() => {
-    return getSsrDataFromContext(context, name)
-  }, [context, name])
-
-  const [ssrData, setSsrData] = useState(
-    parseData(ssrDataFromContext !== undefined ? ssrDataFromContext : defval)
+  // Keep the RAW data in state; the parsed data (model + modifier) is derived below,
+  // so it gets recomputed whenever `parseData` deps change (eg: modifier deps).
+  const [rawData, setRawData] = useState(
+    ssrDataFromContext !== undefined ? ssrDataFromContext : defval
   )
+  const ssrData = useMemo(() => parseData(rawData), [rawData, parseData])
   const [status, setStatus] = useState(ssrDataFromContext !== undefined ? "loaded" : "idle")
   const [error, setError] = useState(undefined)
   const pendingLazyRefreshRef = useRef(false)
+  // Incremented on every fetch; lets us discard responses from outdated requests
+  const requestIdRef = useRef(0)
 
   const { cacheInvalidate, cacheSet, cacheGet } = useIndexedDb(name, logger, cache, ttl)
 
@@ -102,49 +122,69 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     (data) => {
       pendingLazyRefreshRef.current = false
       setStatus("loading")
-      setSsrData(parseData(data))
+      setRawData(data)
       setError(undefined)
       setStatus("loaded")
       /*await*/ cacheSet(data)
     },
-    [parseData, cacheSet]
+    [cacheSet]
   )
 
-  const refreshSsrData = useCallback(async () => {
-    if (status === "loading") {
-      return
-    }
+  const fetchSsrData = useCallback(
+    async (force = false) => {
+      if (status === "loading" && !force && !stableParams) {
+        return
+      }
 
-    pendingLazyRefreshRef.current = false
-    setStatus("loading")
-    setError(undefined)
+      const requestId = ++requestIdRef.current
 
-    logger.verbose(`[miolo-react][ssr][${name}] refreshing ssr data`)
+      pendingLazyRefreshRef.current = false
+      setStatus("loading")
+      setError(undefined)
 
-    let newData
+      logger.verbose(`[miolo-react][ssr][${name}] refreshing ssr data`)
 
-    if (loader !== undefined) {
-      newData = await loader(context, fetcher)
-    } else {
-      if (!url) {
-        setError(`No url provided for ${name}`)
+      let newData
+      let newError
+
+      if (loader !== undefined) {
+        newData = await loader(context, fetcher, stableParams)
       } else {
-        const resp = await fetcher.get(url, params)
-        if (resp.ok) {
-          newData = resp?.data
+        if (!url) {
+          newError = `No url provided for ${name}`
         } else {
-          setError(resp?.error || "Unknown error")
+          const resp = await fetcher.get(url, stableParams)
+          if (resp.ok) {
+            newData = resp?.data
+          } else {
+            newError = resp?.error || "Unknown error"
+          }
         }
       }
-    }
 
-    if (newData !== undefined) {
-      setSsrData(parseData(newData))
-      /*await*/ cacheSet(newData)
-    }
+      // A newer request (eg: params changed meanwhile) superseded this one
+      if (requestId !== requestIdRef.current) {
+        logger.verbose(`[miolo-react][ssr][${name}] discarding outdated response`)
+        return
+      }
 
-    setStatus("loaded")
-  }, [status, context, fetcher, loader, url, params, parseData, name, cacheSet, logger])
+      if (newError !== undefined) {
+        setError(newError)
+      }
+
+      if (newData !== undefined) {
+        setRawData(newData)
+        /*await*/ cacheSet(newData)
+      }
+
+      setLastParams(paramsKey)
+      setStatus("loaded")
+    },
+    [status, context, fetcher, loader, url, stableParams, paramsKey, name, cacheSet, logger]
+  )
+
+  // Public refresh: takes no args, so it can safely be used as an event handler
+  const refreshSsrData = useCallback(() => fetchSsrData(false), [fetchSsrData])
 
   const cacheVersionsCheck = useCallback(
     async (versions) => {
@@ -188,6 +228,11 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
       try {
         if (status === "idle") {
+          if (paramsKey === lastParams) {
+            return
+          }
+          setLastParams(paramsKey)
+
           logger.verbose(`[miolo-react][ssr][${name}] getting data for ${name}...`)
 
           const changed =
@@ -200,7 +245,7 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
 
             if (cached) {
               logger.verbose(`[miolo-react][ssr][${name}] read data for ${name} from cache`)
-              setSsrData(parseData(cached))
+              setRawData(cached)
 
               if (expired) {
                 logger.verbose(`[miolo-react][ssr][${name}] expired cache for ${name}, refreshing`)
@@ -222,7 +267,26 @@ const useSsrDataOrReload = (context, miolo, name, options) => {
     return () => {
       mounted = false
     }
-  }, [status, refreshSsrData, effect, name, parseData, cacheGet, logger])
+  }, [status, refreshSsrData, effect, name, cacheGet, logger, paramsKey, lastParams])
+
+  useEffect(() => {
+    if (status !== "loaded") {
+      return
+    }
+    const changed =
+      effect === undefined || (typeof effect === "function" && effect() === true) || effect === true
+    if (!changed) {
+      return
+    }
+
+    if (paramsKey === lastParams) {
+      return
+    }
+    setLastParams(paramsKey)
+
+    logger.verbose(`[miolo-react][ssr][${name}] params changed (${paramsKey}), reloading`)
+    fetchSsrData(true)
+  }, [status, effect, paramsKey, fetchSsrData, name, logger, lastParams])
 
   useEffect(() => {
     if (ssrDataFromContext !== undefined) {

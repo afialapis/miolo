@@ -7,7 +7,7 @@ const __my_filename = fileURLToPath(import.meta.url)
 const __my_dirname = path.dirname(__my_filename)
 
 export default async function (appName, srvDest, srvExt) {
-  // const cbinDestFile = `./${appName}.${srvExt}`
+  const cbinDestFile = `${srvDest}/${appName}.${srvExt}`
 
   const pkgPath = process.cwd()
   console.log(`[${appName}][build][create-bin] Creating bin files...`)
@@ -22,8 +22,8 @@ export default async function (appName, srvDest, srvExt) {
 
   let startContent = readSource("start.mjs")
   startContent = startContent.replace(
-    "(appName, srvDest, srvExt) {",
-    `(appName= '${appName}', srvDest= '${srvDest}', srvExt= '${srvExt}') {`
+    "(appName, srvEntry) {",
+    `(appName= '${appName}', srvEntry= '${cbinDestFile}') {`
   )
   writeDest("start.mjs", startContent)
 
@@ -33,8 +33,8 @@ export default async function (appName, srvDest, srvExt) {
 
   let restartContent = readSource("restart.mjs")
   restartContent = restartContent.replace(
-    "(appName, srvDest, srvExt) {",
-    `(appName= '${appName}', srvDest= '${srvDest}', srvExt= '${srvExt}') {`
+    "(appName, srvEntry) {",
+    `(appName= '${appName}', srvEntry= '${cbinDestFile}') {`
   )
   writeDest("restart.mjs", restartContent)
 

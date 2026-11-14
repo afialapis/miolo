@@ -1,14 +1,14 @@
 import path from "node:path"
 import { pidFileCreate } from "./pid.mjs"
 
-export default async function start(appName, srvDest, srvExt) {
+export default async function start(appName, srvEntry) {
   // Start server
   const pkgPath = process.cwd()
-  const destFile = path.join(pkgPath, `${srvDest}/${appName}.${srvExt}`)
+  const entryFile = path.join(pkgPath, srvEntry)
 
-  console.log(`[${appName}][start] Starting server from ${destFile}...`)
+  console.log(`[${appName}][start] Starting server from ${entryFile}...`)
 
-  const srv_module = await import(destFile)
+  const srv_module = await import(entryFile)
   const server = srv_module.default
 
   const pid = pidFileCreate(appName)

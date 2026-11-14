@@ -114,6 +114,11 @@ export function copyDirectory(src, dest, appName, options = {}) {
         }
 
         fs.writeFileSync(destPath, content, "utf8")
+        if (srcPath.endsWith(".sh")) {
+          try {
+            fs.chmodSync(destPath, 0o755)
+          } catch (_error) {}
+        }
       } else {
         // Binary files - just copy
         fs.copyFileSync(srcPath, destPath)
