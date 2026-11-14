@@ -15,7 +15,10 @@ export default async function (appName, srvDest, srvExt) {
   const readSource = (f) =>
     readFileSync(path.resolve(__my_dirname, "../run", f), { encoding: "utf8" })
   const writeDest = (f, content) =>
-    writeFileSync(path.join(pkgPath, srvDest, f), content, { encoding: "utf8", flag: "w" })
+    writeFileSync(path.join(pkgPath, srvDest, f), content, {
+      encoding: "utf8",
+      flag: "w"
+    })
 
   const pidContent = readSource("pid.mjs")
   writeDest("pid.mjs", pidContent)

@@ -63,7 +63,9 @@ test(`[miolo-test-routes][postgres]`, async (t) => {
   await t.test(
     `[miolo-test-routes][postgres] should fetch test_01 from crud (read, filtered by name) using bodyField`,
     async () => {
-      const { rebody } = await fetcher.read(`rebody/test_01`, { name: "Peter" })
+      const { rebody } = await fetcher.read(`rebody/test_01`, {
+        name: "Peter"
+      })
       assert.strictEqual(rebody.length, TEST01.filter((r) => r.name === "Peter").length)
     }
   )

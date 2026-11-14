@@ -100,7 +100,10 @@ function init_request_middleware(app, config) {
     logger.info(`${sreq} - START`)
     logger.debug(`${sreq} - Body: ${sbody}`)
 
-    const begin_result = await reqConfig.onStart(ctx, { started, description: "pending" })
+    const begin_result = await reqConfig.onStart(ctx, {
+      started,
+      description: "pending"
+    })
 
     await next()
 
@@ -142,7 +145,11 @@ function init_request_middleware(app, config) {
     logger.debug(`${sreq} - Response: ${rbody.slice(0, 150)}...`)
     logger.silly(`${sreq} - Response: ${rbody}`)
 
-    await reqConfig.onDone(ctx, begin_result, { started, elapsed, description: tname })
+    await reqConfig.onDone(ctx, begin_result, {
+      started,
+      elapsed,
+      description: tname
+    })
 
     logger.info(`${sreq} - DONE ${stdesc}${uid_desc} (${tcolor(tname)}: ${tcolor(elapsed)})`)
   }

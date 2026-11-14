@@ -12,7 +12,9 @@ export function init_config(makeConfig) {
   const custom_config = makeConfig()
 
   // isMergeableObject: objects like Joi schemas should be copied not merged
-  const all_config = merge(base_config, custom_config, { isMergeableObject: isPlainObject })
+  const all_config = merge(base_config, custom_config, {
+    isMergeableObject: isPlainObject
+  })
 
   // Some addendum
   all_config.use_catcher = all_config?.http?.catcher_url !== undefined

@@ -33,7 +33,10 @@ export default function SecurityForm({ className, onChangePassword }) {
       ev.preventDefault()
       if (!ready) return
 
-      const { ok, error } = await onChangePassword({ current: current, new: pwdNew })
+      const { ok, error } = await onChangePassword({
+        current: current,
+        new: pwdNew
+      })
 
       if (ok === true) {
         setError(undefined)

@@ -25,7 +25,12 @@ export default [
       { method: "GET", url: "/todo/findone", auth, callback: r_todo_find },
       { method: "POST", url: "/todo/upsave", auth, callback: r_todo_upsave },
       { method: "POST", url: "/todo/delete", auth, callback: r_todo_delete },
-      { method: "POST", url: "/todo/toggle", auth, callback: r_todo_toggle_done },
+      {
+        method: "POST",
+        url: "/todo/toggle",
+        auth,
+        callback: r_todo_toggle_done
+      },
 
       {
         url: "/todo/last_hours",

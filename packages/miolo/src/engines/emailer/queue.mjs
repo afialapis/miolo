@@ -26,7 +26,16 @@ export function email_queue_pop_pendings(_logger = undefined) {
       const key = `${from}_${to}_${subject}`
 
       if (!grouped[key]) {
-        grouped[key] = { to_subject_key: key, from, to, subject, text, html, count: 0, ids: [] }
+        grouped[key] = {
+          to_subject_key: key,
+          from,
+          to,
+          subject,
+          text,
+          html,
+          count: 0,
+          ids: []
+        }
       }
 
       grouped[key].count++

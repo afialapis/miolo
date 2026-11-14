@@ -98,6 +98,7 @@ const MioloContextProvider = ({ context, children }) => {
     })
   }, [])
 
+  // biome-ignore lint/correctness/noComponentHookFactories: just ignore me
   const useSsrData = (name, options) => {
     return useSsrDataOrReload(innerContext, mioloObj, name, options)
   }

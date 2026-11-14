@@ -22,7 +22,10 @@ export default function useIndexedDb(name, logger, cache, ttl) {
         if (typeof window !== "undefined") {
           try {
             const { set } = await import("idb-keyval")
-            await set(`ssr-cache-${name}`, { data: _makeSerializable(data), ts: Date.now() })
+            await set(`ssr-cache-${name}`, {
+              data: _makeSerializable(data),
+              ts: Date.now()
+            })
           } catch (err) {
             logger.error(`[miolo-react][ssr][${name}] error setting cache for ${name}: ${err}`)
           }
