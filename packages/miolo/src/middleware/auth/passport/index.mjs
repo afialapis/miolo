@@ -54,8 +54,18 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
     google_url_callback,
     google_url_logout,
     google_url_login_redirect,
-    google_url_logout_redirect
+    google_url_logout_redirect,
+    after_login_callback,
+    after_session_cookie_callback,
+    before_logout_callback
   } = options
+
+  const browser_session_cookie_key = `${sessionConfig?.options?.key || "koa.sess"}.bsess`
+  const browser_session_cookie_options = {
+    httpOnly: true,
+    secure: sessionConfig?.options?.secure === true,
+    sameSite: sessionConfig?.options?.sameSite || "lax"
+  }
 
   //const local_options = {}
 
@@ -188,6 +198,20 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
     try {
       if (ctx.session.authenticated) {
         ctx.session.user = ctx.state.user
+
+        if (!ctx.cookies.get(browser_session_cookie_key)) {
+          ctx.cookies.set(browser_session_cookie_key, "1", browser_session_cookie_options)
+
+          if (after_session_cookie_callback) {
+            try {
+              await after_session_cookie_callback(ctx)
+            } catch (error) {
+              ctx.miolo.logger.error(
+                `[auth][passport] Error after_session_cookie_callback: ${error}`
+              )
+            }
+          }
+        }
       }
     } catch (_) {}
     await next()
@@ -227,6 +251,7 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         ctx.session.user = user // ctx.state.user
         ctx.session.authenticated = true
         ctx.session.auth_method = "local"
+        ctx.cookies.set(browser_session_cookie_key, "1", browser_session_cookie_options)
 
         ctx.body = {
           ok: true,
@@ -236,6 +261,14 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
             config: {
               auth_method: "local"
             }
+          }
+        }
+
+        if (after_login_callback) {
+          try {
+            await after_login_callback(ctx)
+          } catch (error) {
+            ctx.miolo.logger.error(`[auth][passport] Error after_login_callback: ${error}`)
           }
         }
 
@@ -296,6 +329,7 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         ctx.session.user = user // ctx.state.user
         ctx.session.authenticated = true
         ctx.session.auth_method = "google"
+        ctx.cookies.set(browser_session_cookie_key, "1", browser_session_cookie_options)
 
         // ctx.body = {
         //   ok: true,
@@ -307,6 +341,14 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
         //     }
         //   }
         // }
+
+        if (after_login_callback) {
+          try {
+            await after_login_callback(ctx)
+          } catch (error) {
+            ctx.miolo.logger.error(`[auth][passport] Error after_login_callback: ${error}`)
+          }
+        }
 
         const redirectUrl = ctx.query.state || google_url_login_redirect || "/"
 
@@ -323,10 +365,19 @@ const init_passport_auth_middleware = (app, options, sessionConfig, cacheConfig)
     if (ctx.session.authenticated) {
       ctx.miolo.logger.debug(`[auth][passport] handleLogOut() - logging out...`)
 
+      if (before_logout_callback) {
+        try {
+          await before_logout_callback(ctx)
+        } catch (error) {
+          ctx.miolo.logger.error(`[auth][passport] Error before_logout_callback: ${error}`)
+        }
+      }
+
       ctx.session.user = undefined
       ctx.session.authenticated = false
       ctx.session.auth_method = undefined
       ctx.sessionId = undefined
+      ctx.cookies.set(browser_session_cookie_key, null, browser_session_cookie_options)
 
       ctx.body = {
         ok: true,

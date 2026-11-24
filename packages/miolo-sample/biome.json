@@ -1,7 +1,14 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.6.7/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.9/schema.json",
   "files": {
-    "includes": ["**/*", "!dist", "!build", "!lib", "!libs", "!arredemo"]
+    "includes": [
+      "**/*",
+      "!dist",
+      "!build",
+      "!lib",
+      "!libs",
+      "!arredemo"
+    ]
   },
   "assist": {
     "actions": {

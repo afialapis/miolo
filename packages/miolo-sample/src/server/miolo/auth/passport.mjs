@@ -69,5 +69,19 @@ export default {
   google_url_login: "/auth/google",
   google_url_callback: process.env.MIOLO_AUTH_GOOGLE_CALLBACK_URL || "/auth/google/callback",
   google_url_logout: "/logout",
-  google_url_logout_redirect: "/"
+  google_url_logout_redirect: "/",
+
+  after_login_callback: (ctx) => {
+    ctx.miolo.logger.info(
+      `[after login] User ${ctx.session?.user?.id} authenticated with ${ctx.session.auth_method} auth`
+    )
+  },
+  after_session_cookie_callback: (ctx) => {
+    ctx.miolo.logger.info(
+      `[after session cookie] User ${ctx.session?.user?.id} has started reusing session coookie`
+    )
+  },
+  before_logout_callback: (ctx) => {
+    ctx.miolo.logger.info(`[before logout] User ${ctx.session?.user?.id} is logging out`)
+  }
 }
